@@ -1,0 +1,57 @@
+
+<!doctype html><!doctype html">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TFF-portal – Utbildningar</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Hoppa till innehåll</a>
+
+  <header class="hero hero--compact">
+    <div class="hero__inner">
+      <a class="back" href="index.html">← Tillbaka till portalen</a>
+      <h1 class="hero__title hero__title--small">Utbildningar</h1>
+
+      <form class="searchbar" role="search" aria-label="Sök utbildning">
+        <label class="sr-only" for="q3">Sök utbildning</label>
+        <input id="q3" name="q" type="search" placeholder="Sök utbildning…" />
+        <button type="submit" aria-label="Sök">🔍</button>
+      </form>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    <section class="education" aria-label="Kursstatus">
+      <article class="panel">
+        <div class="panel__bar panel__bar--red" aria-hidden="true"></div>
+        <h2 class="panel__head">Ej påbörjade kurser</h2>
+        <div class="panel__list">
+          <div class="row">Anställningsavtal och anställningsformer</div>
+          <div class="row">Diskriminering i arbetslivet</div>
+          <div class="row">Fysisk arbetsmiljö</div>
+          <div class="row">Kompetensförsörjning – grund</div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel__bar panel__bar--orange" aria-hidden="true"></div>
+        <h2 class="panel__head">Påbörjade kurser</h2>
+        <div class="panel__list">
+          <div class="empty">Inget tillgängligt innehåll</div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel__bar panel__bar--green" aria-hidden="true"></div>
+        <h2 class="panel__head">Godkända kurser</h2>
+        <div class="panel__list">
+          <div class="empty">Inget tillgängligt innehåll</div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
