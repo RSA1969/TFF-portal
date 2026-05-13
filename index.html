@@ -1,11 +1,10 @@
-
 <!doctype html>
 <html lang="sv">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TFF-portal – HR och chefstöd</title>
-  <meta name="description" content="Portal för HR, chefstöd, guider och utbildningar." />
+  <title>TFF-portal – Kunskapsbank</title>
+  <meta name="description" content="Kunskapsbank för TFF medarbetare: guider, utbildningar och stöd." />
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
@@ -14,10 +13,10 @@
 
   <header class="hero" role="banner">
     <div class="hero__inner">
-      <p class="hero__pretitle">TFF-portal</p>
-      <h1 class="hero__title">Kunskapsbank för HR och chefstöd</h1>
+      <a class="back" href="index.html">← Tillbaka till portalen</a>
+      <h1 class="hero__title">Kunskapsbank för TFF<br>medarbetare</h1>
 
-      <form class="searchbar" role="search" aria-label="Sök i portalen" action="#">
+      <form class="searchbar" role="search" aria-label="Sök i portalen">
         <label class="sr-only" for="q">Sök</label>
         <input id="q" name="q" type="search" placeholder="Vad kan vi hjälpa dig med?" />
         <button type="submit" aria-label="Sök">🔍</button>
@@ -26,76 +25,106 @@
   </header>
 
   <main id="main" class="container" role="main">
-    <section class="grid-main" aria-label="Startinnehåll">
-      <article class="card card--big">
-        <div class="card__img card__img--big" aria-hidden="true"></div>
+    <section class="home-grid" aria-label="Startinnehåll">
+
+      <!-- VÄNSTER: Stor bild + textkort -->
+      <article class="card hero-card">
+        <div class="card__img card__img--hero" role="img" aria-label="Illustrationsbild"></div>
         <div class="card__body">
           <h2 class="card__title">Upptäck hur enkelt det kan vara</h2>
           <p class="card__text">
-            Samlad åtkomst till guider, rutiner och utbildningar. Anpassa länkar och innehåll efter era behov.
+            Här finns stöd för både chefer och medarbetare. I kunskapsbanken hittar du guider, digitala utbildningar och kontaktvägar.
           </p>
         </div>
       </article>
 
-      <div class="grid-side" aria-label="Genvägar">
-        <a href="guides.html" class="card card--small" aria-label="Öppna Alla guider">
-          <div class="card__img card__img--small" aria-hidden="true"></div>
-          <div class="card__body card__body--compact">
-            <h3 class="card__title card__title--small">Alla guider</h3>
-            <p class="card__text card__text--small">För våra system</p>
+      <!-- MITTEN: 2×3 tiles -->
+      <section class="tile-grid" aria-label="Genvägar">
+        <a class="tile" href="guides.html">
+          <div class="tile__img tile__img--guides" aria-hidden="true"></div>
+          <div class="tile__body">
+            <h3 class="tile__title">Alla Guider</h3>
+            <p class="tile__meta">För våra system</p>
           </div>
         </a>
 
-        <a href="utbildningar.html" class="card card--small" aria-label="Öppna Digitala utbildningar">
-          <div class="card__img card__img--small" aria-hidden="true"></div>
-          <div class="card__body card__body--compact">
-            <h3 class="card__title card__title--small">Digitala utbildningar</h3>
-            <p class="card__text card__text--small">Översikt per status</p>
+        <a class="tile" href="utbildningar.html">
+          <div class="tile__img tile__img--edu" aria-hidden="true"></div>
+          <div class="tile__body">
+            <h3 class="tile__title">Digitala utbildningar</h3>
+            <p class="tile__meta">För våra system</p>
           </div>
         </a>
 
-        <div class="card card--small" role="article" aria-label="Fråga Vera Plus">
-          <div class="card__img card__img--small" aria-hidden="true"></div>
-          <div class="card__body card__body--compact">
-            <h3 class="card__title card__title--small">Fråga Vera Plus</h3>
-            <p class="card__text card__text--small">Support och svar</p>
+        <a class="tile" href="utbildningar.html">
+          <div class="tile__img tile__img--mandatory" aria-hidden="true"></div>
+          <div class="tile__body">
+            <h3 class="tile__title">Obligatoriska systemutbildningar</h3>
+            <p class="tile__meta">För verksamheten</p>
+          </div>
+        </a>
+
+        <a class="tile" href="utbildningar.html">
+          <div class="tile__img tile__img--chef" aria-hidden="true"></div>
+          <div class="tile__body">
+            <h3 class="tile__title">Chefstödportal</h3>
+            <p class="tile__meta">Obligatoriska grundutbildningar</p>
+          </div>
+        </a>
+
+        <a class="tile" href="utbildningar.html">
+          <div class="tile__img tile__img--status" aria-hidden="true"></div>
+          <div class="tile__body">
+            <h3 class="tile__title">Min status</h3>
+            <p class="tile__meta">Påbörjade/ej påbörjade</p>
+          </div>
+        </a>
+      </section>
+
+      <!-- HÖGER: 2 höga tiles -->
+      <aside class="right-col" aria-label="Stöd och kontakt">
+
+        <div class="tile tile--tall" role="article" aria-label="Fråga Vera Plus">
+          <div class="tile__img tile__img--vera" aria-hidden="true"></div>
+          <div class="tile__body">
+            <h3 class="tile__title">Fråga Vera Plus</h3>
+            <p class="tile__meta">Personal, Lön, Utbildning, System</p>
           </div>
         </div>
 
-        <div class="card card--small" role="article" aria-label="HR-kollegan">
-          <div class="card__img card__img--small" aria-hidden="true"></div>
-          <div class="card__body card__body--compact">
-            <h3 class="card__title card__title--small">HR-kollegan</h3>
-            <p class="card__text card__text--small">Rutiner och arbetsrätt</p>
+        <div class="tile tile--tall" role="article" aria-label="HR-kollegan">
+          <div class="tile__img tile__img--hrkollegan" aria-hidden="true"></div>
+          <div class="tile__body">
+            <h3 class="tile__title">HR-kollegan</h3>
+            <p class="tile__meta">Frågor om rutiner, policyer och HR-relaterade dokument</p>
           </div>
         </div>
-      </div>
+
+      </aside>
     </section>
 
-    <section class="actions" aria-label="Snabbknappar">
-      <button class="btn btn--primary" type="button">Heroma</button>
-      <button class="btn btn--primary" type="button">Kontakta HR-service</button>
-    </section>
-
+    <!-- NEDERDEL: Orange boxar -->
     <section class="info-boxes" aria-label="Mina ytor">
       <article class="info">
-        <h2 class="info__title">Mina favoriter</h2>
-        <div class="chip">Exempel: Rutin A</div>
+        <h2 class="info__title">Mina Favoriter</h2>
+        <div class="placeholder-box" aria-hidden="true"></div>
       </article>
 
       <article class="info">
         <h2 class="info__title">Mina senast visade</h2>
-        <div class="chip">Exempel: Guide B</div>
+        <div class="placeholder-box" aria-hidden="true"></div>
+        <h3 class="info__subtitle">Populära guider</h3>
+        <div class="placeholder-box" aria-hidden="true"></div>
       </article>
 
       <article class="info">
         <h2 class="info__title">Mina utbildningar</h2>
-        <div class="chip">Exempel: Kurs C</div>
+        <div class="placeholder-box" aria-hidden="true"></div>
       </article>
 
       <article class="info">
         <h2 class="info__title">Obligatoriska utbildningar</h2>
-        <div class="chip">Inget tillgängligt innehåll</div>
+        <div class="placeholder-box" aria-hidden="true"></div>
       </article>
     </section>
 
@@ -104,4 +133,3 @@
     </footer>
   </main>
 </body>
-</html>
