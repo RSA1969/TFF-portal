@@ -6,7 +6,7 @@
   <title>TFF-portal – Kunskapsbank</title>
   <meta name="description" content="Kunskapsbank för TFF medarbetare och chefstöd." />
 
-  <!-- ✅ RÄTT: Ladda CSS -->
+  <!-- ✅ KORREKT: CSS-länk -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
@@ -28,9 +28,10 @@
   </header>
 
   <main id="main" class="container" role="main">
+
     <section class="home-grid" aria-label="Startinnehåll">
 
-      <!-- VÄNSTER: Stor bild + textkort -->
+      <!-- VÄNSTER: stor bild + text -->
       <article class="card hero-card" aria-label="Introduktion">
         <div class="card__img card__img--hero" role="img" aria-label="Huvudbild"></div>
         <div class="card__body">
@@ -41,9 +42,9 @@
         </div>
       </article>
 
-      <!-- MITTEN: Tiles (2 kolumner) -->
+      <!-- MITTEN: 2x2 tiles + 1 bred tile -->
       <section class="tile-grid" aria-label="Genvägar">
-        <a class="tile" href="guides.html" aria-label="Alla guider">
+        <a class="tile" href="guides.html">
           <div class="tile__img tile__img--guides" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Alla guider</h3>
@@ -51,7 +52,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html" aria-label="Digitala utbildningar">
+        <a class="tile" href="utbildningar.html">
           <div class="tile__img tile__img--edu" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Digitala utbildningar</h3>
@@ -59,7 +60,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html" aria-label="Obligatoriska systemutbildningar">
+        <a class="tile" href="utbildningar.html">
           <div class="tile__img tile__img--mandatory" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Obligatoriska systemutbildningar</h3>
@@ -67,7 +68,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html" aria-label="Chefstödportal">
+        <a class="tile" href="utbildningar.html">
           <div class="tile__img tile__img--chef" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Chefstödportal</h3>
@@ -75,7 +76,8 @@
           </div>
         </a>
 
-        <a class="tile tile--wide" href="utbildningar.html" aria-label="Min status">
+        <!-- 🔥 BRED: spänner två kolumner -->
+        <a class="tile tile--wide" href="utbildningar.html">
           <div class="tile__img tile__img--status" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Min status</h3>
@@ -84,10 +86,9 @@
         </a>
       </section>
 
-      <!-- HÖGER: Två höga tiles -->
+      <!-- HÖGER: två jämnhöga tiles -->
       <aside class="right-col" aria-label="Stöd och kontakt">
-        <!-- ATLAS (ersätter Fråga Vera Plus) -->
-        <a class="tile tile--tall" href="#" aria-label="Atlas">
+        <a class="tile tile--tall" href="#">
           <div class="tile__img tile__img--atlas" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Atlas</h3>
@@ -95,7 +96,7 @@
           </div>
         </a>
 
-        <a class="tile tile--tall" href="#" aria-label="HR-kollegan">
+        <a class="tile tile--tall" href="#">
           <div class="tile__img tile__img--hrkollegan" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">HR-kollegan</h3>
@@ -106,7 +107,7 @@
 
     </section>
 
-    <!-- NEDERDEL: Orange boxar -->
+    <!-- Orange boxar -->
     <section class="info-boxes" aria-label="Mina ytor">
       <article class="info">
         <h2 class="info__title">Mina favoriter</h2>
@@ -134,6 +135,7 @@
     <footer class="footer" role="contentinfo">
       <p class="footer__text">© TFF-portal – statisk demo. Inga personuppgifter.</p>
     </footer>
+
   </main>
 </body>
 </html>
