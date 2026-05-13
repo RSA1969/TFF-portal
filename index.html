@@ -6,7 +6,8 @@
   <title>TFF-portal – Kunskapsbank</title>
   <meta name="description" content="Kunskapsbank för TFF medarbetare och chefstöd." />
 
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- ✅ RÄTT CSS-LÄNK -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>
@@ -42,7 +43,7 @@
 
       <!-- MITTEN: Tiles (2 kolumner) -->
       <section class="tile-grid" aria-label="Genvägar">
-        <a class="tile" href="guides.html">
+        <a class="tile" href="guides.html" aria-label="Alla guider">
           <div class="tile__img tile__img--guides" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Alla guider</h3>
@@ -50,7 +51,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Digitala utbildningar">
           <div class="tile__img tile__img--edu" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Digitala utbildningar</h3>
@@ -58,7 +59,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Obligatoriska systemutbildningar">
           <div class="tile__img tile__img--mandatory" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Obligatoriska systemutbildningar</h3>
@@ -66,7 +67,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Chefstödportal">
           <div class="tile__img tile__img--chef" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Chefstödportal</h3>
@@ -74,7 +75,7 @@
           </div>
         </a>
 
-        <a class="tile tile--wide" href="utbildningar.html">
+        <a class="tile tile--wide" href="utbildningar.html" aria-label="Min status">
           <div class="tile__img tile__img--status" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Min status</h3>
@@ -104,6 +105,7 @@
 
     </section>
 
+    <!-- NEDERDEL: Orange boxar -->
     <section class="info-boxes" aria-label="Mina ytor">
       <article class="info">
         <h2 class="info__title">Mina favoriter</h2>
