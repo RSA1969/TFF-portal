@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TFF-portal – Kunskapsbank</title>
-  <meta name="description" content="Kunskapsbank för TFF medarbetare: guider, utbildningar och stöd." />
+  <meta name="description" content="Kunskapsbank för TFF medarbetare och chefstöd." />
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
@@ -14,7 +14,7 @@
   <header class="hero" role="banner">
     <div class="hero__inner">
       <a class="back" href="index.html">← Tillbaka till portalen</a>
-      <h1 class="hero__title">Kunskapsbank för TFF<br>medarbetare</h1>
+      <h1 class="hero__title">Kunskapsbank för TFF<br>medarbetare och chefstöd</h1>
 
       <form class="searchbar" role="search" aria-label="Sök i portalen">
         <label class="sr-only" for="q">Sök</label>
@@ -28,8 +28,8 @@
     <section class="home-grid" aria-label="Startinnehåll">
 
       <!-- VÄNSTER: Stor bild + textkort -->
-      <article class="card hero-card">
-        <div class="card__img card__img--hero" role="img" aria-label="Illustrationsbild"></div>
+      <article class="card hero-card" aria-label="Introduktion">
+        <div class="card__img card__img--hero" role="img" aria-label="Huvudbild"></div>
         <div class="card__body">
           <h2 class="card__title">Upptäck hur enkelt det kan vara</h2>
           <p class="card__text">
@@ -38,9 +38,9 @@
         </div>
       </article>
 
-      <!-- MITTEN: 2×3 tiles -->
+      <!-- MITTEN: Tiles (2 kolumner) -->
       <section class="tile-grid" aria-label="Genvägar">
-        <a class="tile" href="guides.html">
+        <a class="tile" href="guides.html" aria-label="Alla guider">
           <div class="tile__img tile__img--guides" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Alla Guider</h3>
@@ -48,7 +48,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Digitala utbildningar">
           <div class="tile__img tile__img--edu" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Digitala utbildningar</h3>
@@ -56,7 +56,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Obligatoriska systemutbildningar">
           <div class="tile__img tile__img--mandatory" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Obligatoriska systemutbildningar</h3>
@@ -64,7 +64,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Chefstödportal">
           <div class="tile__img tile__img--chef" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Chefstödportal</h3>
@@ -72,18 +72,17 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile tile--wide" href="utbildningar.html" aria-label="Min status">
           <div class="tile__img tile__img--status" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Min status</h3>
-            <p class="tile__meta">Påbörjade/ej påbörjade</p>
+            <p class="tile__meta">Påbörjade / ej påbörjade</p>
           </div>
         </a>
       </section>
 
-      <!-- HÖGER: 2 höga tiles -->
+      <!-- HÖGER: Två höga tiles -->
       <aside class="right-col" aria-label="Stöd och kontakt">
-
         <div class="tile tile--tall" role="article" aria-label="Fråga Vera Plus">
           <div class="tile__img tile__img--vera" aria-hidden="true"></div>
           <div class="tile__body">
@@ -96,11 +95,11 @@
           <div class="tile__img tile__img--hrkollegan" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">HR-kollegan</h3>
-            <p class="tile__meta">Frågor om rutiner, policyer och HR-relaterade dokument</p>
+            <p class="tile__meta">Rutiner, policyer och HR-relaterade dokument</p>
           </div>
         </div>
-
       </aside>
+
     </section>
 
     <!-- NEDERDEL: Orange boxar -->
@@ -133,3 +132,4 @@
     </footer>
   </main>
 </body>
+</html>
