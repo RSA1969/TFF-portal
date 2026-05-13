@@ -1,12 +1,9 @@
-<!doctype html>
-<html lang="sv">
+<!doctype html><!doctype html">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TFF-portal – Kunskapsbank</title>
   <meta name="description" content="Kunskapsbank för TFF medarbetare och chefstöd." />
-
-  <!-- ✅ KORREKT: CSS-länk -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
@@ -28,7 +25,6 @@
   </header>
 
   <main id="main" class="container" role="main">
-
     <section class="home-grid" aria-label="Startinnehåll">
 
       <!-- VÄNSTER: stor bild + text -->
@@ -42,9 +38,11 @@
         </div>
       </article>
 
-      <!-- MITTEN: 2x2 tiles + 1 bred tile -->
+      <!-- MITTEN: tiles -->
       <section class="tile-grid" aria-label="Genvägar">
-        <a class="tile" href="guides.html">
+
+        <!-- ✅ ÄNDRING: Alla guider går nu till kurser.html -->
+        <a class="tile" href="kurser.html" aria-label="Alla guider">
           <div class="tile__img tile__img--guides" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Alla guider</h3>
@@ -52,7 +50,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Digitala utbildningar">
           <div class="tile__img tile__img--edu" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Digitala utbildningar</h3>
@@ -60,7 +58,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Obligatoriska systemutbildningar">
           <div class="tile__img tile__img--mandatory" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Obligatoriska systemutbildningar</h3>
@@ -68,7 +66,7 @@
           </div>
         </a>
 
-        <a class="tile" href="utbildningar.html">
+        <a class="tile" href="utbildningar.html" aria-label="Chefstödportal">
           <div class="tile__img tile__img--chef" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Chefstödportal</h3>
@@ -76,19 +74,19 @@
           </div>
         </a>
 
-        <!-- 🔥 BRED: spänner två kolumner -->
-        <a class="tile tile--wide" href="utbildningar.html">
+        <a class="tile tile--wide" href="utbildningar.html" aria-label="Min status">
           <div class="tile__img tile__img--status" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Min status</h3>
             <p class="tile__meta">Påbörjade / ej påbörjade</p>
           </div>
         </a>
+
       </section>
 
-      <!-- HÖGER: två jämnhöga tiles -->
+      <!-- HÖGER -->
       <aside class="right-col" aria-label="Stöd och kontakt">
-        <a class="tile tile--tall" href="#">
+        <a class="tile tile--tall" href="#" aria-label="Atlas">
           <div class="tile__img tile__img--atlas" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">Atlas</h3>
@@ -96,7 +94,7 @@
           </div>
         </a>
 
-        <a class="tile tile--tall" href="#">
+        <a class="tile tile--tall" href="#" aria-label="HR-kollegan">
           <div class="tile__img tile__img--hrkollegan" aria-hidden="true"></div>
           <div class="tile__body">
             <h3 class="tile__title">HR-kollegan</h3>
@@ -135,7 +133,6 @@
     <footer class="footer" role="contentinfo">
       <p class="footer__text">© TFF-portal – statisk demo. Inga personuppgifter.</p>
     </footer>
-
   </main>
 </body>
 </html>
