@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="sv">
 <head>
@@ -6,19 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TFF-portal – Utbildningar</title>
 
-  <!-- Koppla CSS -->
+  <!-- ✅ KORREKT CSS-LÄNK -->
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>
   <a class="skip-link" href="#main">Hoppa till innehåll</a>
 
-  <header class="hero hero--compact">
+  <header class="hero hero--compact" role="banner">
     <div class="hero__inner">
       <a class="back" href="index.html">← Tillbaka till portalen</a>
       <h1 class="hero__title hero__title--small">Utbildningar</h1>
 
-      <form class="searchbar" role="search" aria-label="Sök utbildning">
+      <form class="searchbar" role="search" aria-label="Sök utbildning" onsubmit="return false;">
         <label class="sr-only" for="q3">Sök utbildning</label>
         <input id="q3" name="q" type="search" placeholder="Sök utbildning…" />
         <button type="submit" aria-label="Sök">🔍</button>
@@ -26,10 +25,9 @@
     </div>
   </header>
 
-  <main id="main" class="container">
+  <main id="main" class="container" role="main">
     <section class="education" aria-label="Kursstatus">
 
-      <!-- Ej påbörjade -->
       <article class="panel">
         <div class="panel__bar panel__bar--red" aria-hidden="true"></div>
         <h2 class="panel__head">Ej påbörjade kurser</h2>
@@ -44,7 +42,6 @@
         </div>
       </article>
 
-      <!-- Påbörjade -->
       <article class="panel">
         <div class="panel__bar panel__bar--orange" aria-hidden="true"></div>
         <h2 class="panel__head">Påbörjade kurser</h2>
@@ -55,7 +52,6 @@
         </div>
       </article>
 
-      <!-- Godkända -->
       <article class="panel">
         <div class="panel__bar panel__bar--green" aria-hidden="true"></div>
         <h2 class="panel__head">Godkända kurser</h2>
@@ -68,6 +64,5 @@
 
     </section>
   </main>
-
 </body>
 </html>
