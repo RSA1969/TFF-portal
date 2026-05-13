@@ -1,22 +1,23 @@
-
 <!doctype html>
 <html lang="sv">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TFF-portal – Guider</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
+
+  <!-- ✅ KORREKT CSS-LÄNK -->
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>
   <a class="skip-link" href="#main">Hoppa till innehåll</a>
 
-  <header class="hero hero--compact">
+  <header class="hero hero--compact" role="banner">
     <div class="hero__inner">
       <a class="back" href="index.html">← Tillbaka till portalen</a>
       <h1 class="hero__title hero__title--small">Sök på guider och filmer</h1>
 
-      <form class="searchbar" role="search" aria-label="Sök guider">
+      <form class="searchbar" role="search" aria-label="Sök guider" onsubmit="return false;">
         <label class="sr-only" for="q2">Sök guider</label>
         <input id="q2" name="q" type="search" placeholder="Vad söker du efter?" />
         <button type="submit" aria-label="Sök">🔍</button>
@@ -24,7 +25,7 @@
     </div>
   </header>
 
-  <main id="main" class="container">
+  <main id="main" class="container" role="main">
     <section class="layout" aria-label="Guideöversikt">
       <aside class="sidebar" aria-label="Filter">
         <h2 class="sidebar__title">Filter</h2>
@@ -32,7 +33,7 @@
         <div class="sidebar__block">
           <h3 class="sidebar__heading">Språk</h3>
           <label class="checkbox">
-            <input type="checkbox" checked>
+            <input type="checkbox" checked />
             <span>Swedish</span>
           </label>
         </div>
@@ -52,31 +53,23 @@
         <article class="guide-card">
           <div class="guide-card__thumb" aria-hidden="true"></div>
           <div class="guide-card__body">
-            <h2 class="guide-card__title">Vikarihantering – Guide</h2>
-            <p class="guide-card__meta">Kategori: Heroma</p>
+            <h2 class="guide-card__title">Dokumenthantering i Microsoft 365</h2>
+            <p class="guide-card__meta">Kategori: M365</p>
           </div>
         </article>
 
         <article class="guide-card">
           <div class="guide-card__thumb" aria-hidden="true"></div>
           <div class="guide-card__body">
-            <h2 class="guide-card__title">Klienten – ändra uppgifter</h2>
-            <p class="guide-card__meta">Kategori: HR</p>
-          </div>
-        </article>
-
-        <article class="guide-card">
-          <div class="guide-card__thumb" aria-hidden="true"></div>
-          <div class="guide-card__body">
-            <h2 class="guide-card__title">Beställ resurs</h2>
-            <p class="guide-card__meta">Kategori: HR-service</p>
+            <h2 class="guide-card__title">Lagring: OneDrive, SharePoint och Teams</h2>
+            <p class="guide-card__meta">Kategori: Informationshantering</p>
           </div>
         </article>
 
         <article class="guide-card">
           <div class="guide-card__thumb guide-card__thumb--doc" aria-hidden="true">📄</div>
           <div class="guide-card__body">
-            <h2 class="guide-card__title">Lönesättning – översikt</h2>
+            <h2 class="guide-card__title">GDPR – grundläggande krav</h2>
             <p class="guide-card__meta">Dokument</p>
           </div>
         </article>
@@ -84,7 +77,7 @@
         <article class="guide-card">
           <div class="guide-card__thumb guide-card__thumb--doc" aria-hidden="true">📄</div>
           <div class="guide-card__body">
-            <h2 class="guide-card__title">Löneöversyn – stöd för HR</h2>
+            <h2 class="guide-card__title">NIS2 – översikt och åtgärder</h2>
             <p class="guide-card__meta">Dokument</p>
           </div>
         </article>
@@ -92,8 +85,16 @@
         <article class="guide-card">
           <div class="guide-card__thumb" aria-hidden="true"></div>
           <div class="guide-card__body">
-            <h2 class="guide-card__title">Chef & chefsstöd – introduktion</h2>
-            <p class="guide-card__meta">Kategori: Chefsstöd</p>
+            <h2 class="guide-card__title">Systematiskt arbetsmiljöarbete (SAM)</h2>
+            <p class="guide-card__meta">Kategori: Arbetsmiljö</p>
+          </div>
+        </article>
+
+        <article class="guide-card">
+          <div class="guide-card__thumb" aria-hidden="true"></div>
+          <div class="guide-card__body">
+            <h2 class="guide-card__title">Brandskyddsarbete (SBA)</h2>
+            <p class="guide-card__meta">Kategori: Säkerhet</p>
           </div>
         </article>
       </section>
@@ -108,3 +109,4 @@
   </main>
 </body>
 </html>
+``
