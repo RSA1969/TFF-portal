@@ -11,36 +11,42 @@
 
 <div class="container">
 
-<h1>Modul 1 – Grundläggande dokumentation</h1>
+  <h1>Modul 1 – Grundläggande dokumentation</h1>
 
-<p>Introduktion till dokumentation i TFF.</p>
+  <p>Introduktion till dokumentation i TFF.</p>
 
-<h2>Video</h2>
+  <h2>Video</h2>
 
-<video width="100%" controls>
-  <source src="assets/video/dokumentation_modul1.mp4" type="video/mp4">
-</video>
+  <video controls width="100%">
+    <source src="assets/video/dokumentation_modul1.mp4" type="video/mp4">
+    Din webbläsare stödjer inte video.
+  </video>
 
-<h2>Quiz</h2>
+  <h2>Quiz</h2>
 
-<form>
+  <form id="quiz1">
+    <p>Vad är syftet med dokumentation?</p>
 
-<p>Vad är syftet med dokumentation?</p>
+    <label>
+      <input type="radio" name="q1" value="a">
+      Göra dokument längre
+    </label><br>
 
-<label><input type="radio" name="q1" value="a"> Göra dokument längre</label><br>
-<label><input type="radio" name="q1" value="b"> Skapa struktur och kvalitet</label><br>
+    <label>
+      <input type="radio" name="q1" value="b">
+      Skapa struktur och kvalitet
+    </label><br>
 
-<br>
+    <br>
 
-<button type="button" onclick="rätta()">Rätta</button>
+    <button type="button" onclick="rätta()">Rätta</button>
+  </form>
 
-</form>
+  <p id="resultat"></p>
 
-<p id="resultat"></p>
+  <br>
 
-<br>
-
-<a href="kurs_dokumentation.html">← Tillbaka till kurs</a>
+  <a href="kurs_dokumentation.html">← Tillbaka till kurs</a>
 
 </div>
 
