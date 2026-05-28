@@ -1,708 +1,191 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TFF – Utbildning</title>
-  <style>
-    :root{
-      --bg:#f3f4f6;
-      --surface:#ffffff;
-      --text:#0f2942;
-      --muted:#5f6b7a;
-      --border:#d8dee6;
-      --primary:#1f6cbd;
-      --shadow:0 2px 10px rgba(15,41,66,.08);
-      --radius:16px;
-      --gap:18px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-    .container{
-      max-width:1200px;
-      margin:0 auto;
-      padding:22px;
-    }
-    .topbar{
-      background:#fff;
-      border-bottom:1px solid var(--border);
-    }
-    .topbar__row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:20px;
-      flex-wrap:wrap;
-    }
-    .brand__title{
-      font-weight:800;
-      font-size:20px;
-    }
-    .brand__sub{
-      color:var(--muted);
-      font-size:13px;
-      font-weight:700;
-      margin-top:4px;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      padding:8px 12px;
-      border:1px solid var(--border);
-      border-radius:999px;
-      background:#f7faf8;
-      font-size:13px;
-      font-weight:800;
-      color:var(--text);
-    }
-    .btn{
-      border:1px solid var(--border);
-      background:#fff;
-      color:var(--text);
-      border-radius:14px;
-      padding:12px 16px;
-      font-weight:800;
-      cursor:pointer;
-    }
-    .btn--primary{
-      background:var(--primary);
-      border-color:var(--primary);
-      color:#fff;
-    }
-    .layout{
-      display:grid;
-      grid-template-columns:320px 1fr;
-      gap:18px;
-    }
-    .panel{
-      background:var(--surface);
-      border-radius:20px;
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
-    .muted{
-      color:var(--muted);
-    }
-    .panel__header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      border-bottom:1px solid var(--border);
-      padding-bottom:12px;
-      margin-bottom:14px;
-    }
-    .panel__header h2{
-      margin:0 0 8px 0;
-      font-size:18px;
-    }
-    .rightnote{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:flex-end;
-    }
-    select{
-      width:100%;
-      padding:12px 14px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      background:#fff;
-      font-weight:800;
-      color:var(--text);
-    }
-    .moduleList{
-      list-style:none;
-      padding:0;
-      margin:12px 0 0 0;
-    }
-    .moduleList__item{
-      padding:12px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      margin-bottom:10px;
-      cursor:pointer;
-      background:#fff;
-    }
-    .moduleList__item.is-active{
-      background:#eef9f4;
-      border-color:#b7dfd2;
-    }
-    .moduleList__title{
-      font-weight:800;
-      line-height:1.35;
-      margin-bottom:4px;
-    }
-    .moduleList__meta{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-    }
-    .notice{
-      margin-top:12px;
-      padding:12px;
-      border:1px solid var(--border);
-      border-radius:14px;
-      background:#fff;
-      color:var(--muted);
-      line-height:1.45;
-      font-size:13px;
-    }
-    .videoWrap{
-      margin:14px 0 16px 0;
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:14px;
-      background:#fff;
-    }
-    .videoWrap h3{
-      margin:0 0 10px 0;
-      font-size:14px;
-    }
-    video{
-      width:100%;
-      max-height:440px;
-      border-radius:12px;
-      background:#111;
-    }
-    .videoText{
-      margin-top:8px;
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-    }
-    .twoCol{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:18px;
-    }
-    .subPanel{
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:16px;
-      background:#fff;
-    }
-    .subPanel h3{
-      font-size:14px;
-      margin:0 0 8px 0;
-    }
-    .actionRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:12px;
-    }
-    .navRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:14px;
-      border-top:1px solid var(--border);
-      padding-top:12px;
-    }
-    ul.contentList{
-      margin:0;
-      padding-left:20px;
-    }
-    .footer{
-      margin-top:24px;
-      color:var(--muted);
-      font-size:13px;
-      text-align:left;
-      padding-bottom:24px;
-    }
+<meta charset="UTF-8">
+<title>TFF – Utbildning</title>
 
-    @media (max-width: 980px){
-      .layout{ grid-template-columns:1fr; }
-      .twoCol{ grid-template-columns:1fr; }
-    }
-  </style>
+<style>
+body {
+    font-family: Arial;
+    background:#f3f4f6;
+    margin:0;
+    padding:20px;
+}
+
+.header {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.layout {
+    display:flex;
+    gap:20px;
+}
+
+.sidebar {
+    width:300px;
+    background:white;
+    padding:15px;
+    border-radius:10px;
+}
+
+.module {
+    padding:10px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    margin-bottom:10px;
+    cursor:pointer;
+}
+
+.module.active {
+    background:#e7f5ff;
+    border-color:#339af0;
+}
+
+.content {
+    flex:1;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+video {
+    width:100%;
+    border-radius:10px;
+}
+</style>
+
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="container topbar__row">
-      <div class="brand">
-        <div class="brand__title">TFF – Utbildning</div>
-        <div class="brand__sub">Moduler • Video • Progress • Godkänd</div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <span class="badge" id="pillProgress">Progress: 0%</span>
-        <span class="badge" id="pillApproved">Kurs: Ej godkänd</span>
-        <button class="btn" id="btnReset" type="button">Återställ progress</button>
-        <button class="btn btn--primary" id="btnBack" type="button">Till kurskatalog</button>
-      </div>
-    </div>
-  </header>
 
-  <main class="container">
-    <div class="layout">
-      <aside class="panel">
-        <h2 style="margin:0 0 12px 0;">Kurs</h2>
-        <p class="muted">Välj kurs och navigera via modulerna.</p>
-        <select id="courseSelect"></select>
+<div class="header">
+<h1>TFF – Utbildning</h1>
+<button onclick="location.href='utbildningar.html'">Tillbaka</button>
+</div>
 
-        <h3 style="margin:18px 0 10px 0;font-size:14px;">Moduler</h3>
-        <ul class="moduleList" id="moduleList"></ul>
+<div class="layout">
 
-        <div class="notice">
-          Modulerna använder samma kursfärg. Video visas när videolänk är kopplad till vald modul.
-        </div>
-      </aside>
+<div class="sidebar">
+<h3>Dokumentation (TFF)</h3>
 
-      <section class="panel">
-        <div class="panel__header">
-          <div>
-            <h2 id="courseTitle">—</h2>
-            <p class="muted" id="courseDesc">—</p>
-          </div>
-          <div class="rightnote" id="courseTags"></div>
-        </div>
+<div class="module active" onclick="show(0)">
+1. Modul 1 – Grundläggande dokumentation
+</div>
 
-        <div class="videoWrap">
-          <h3>Video</h3>
-          <video id="moduleVideo" controls playsinline></video>
-          <div class="videoText" id="videoSourceText">Ingen video är kopplad till denna modul ännu.</div>
-        </div>
+<div class="module" onclick="show(1)">
+2. Modul 2 – Struktur
+</div>
 
-        <div class="twoCol">
-          <div class="subPanel">
-            <h3>Modul</h3>
-            <p class="muted" id="moduleTitle">—</p>
+<div class="module" onclick="show(2)">
+3. Modul 3 – M365
+</div>
 
-            <h3 style="margin-top:16px;">Syfte</h3>
-            <p class="muted" id="modulePurpose">—</p>
+<div class="module" onclick="show(3)">
+4. Modul 4 – Efterlevnad
+</div>
 
-            <h3 style="margin-top:16px;">Innehåll</h3>
-            <ul class="contentList" id="moduleContent"></ul>
-          </div>
+<div class="module" onclick="show(4)">
+5. Modul 5 – Praktik
+</div>
 
-          <div class="subPanel">
-            <h3>Progress i modul</h3>
-            <p class="muted" id="moduleProgressText">—</p>
+</div>
 
-            <div class="actionRow">
-              <button class="btn" id="btnMarkModuleDone" type="button">Markera modul som klar</button>
-              <button class="btn" id="btnMarkQuizDone" type="button">Godkänn quiz</button>
-            </div>
+<div class="content">
 
-            <div class="notice">
-              Quiz kan fyllas på senare. Progress sparas lokalt i webbläsaren.
-            </div>
-          </div>
-        </div>
+<h2 id="title">Modul 1 – Grundläggande dokumentation</h2>
 
-        <div class="navRow">
-          <button class="btn" id="btnPrev" type="button">Föregående modul</button>
-          <button class="btn btn--primary" id="btnNext" type="button">Nästa modul</button>
-        </div>
-      </section>
-    </div>
+<h3>Video</h3>
+<video id="video" controls></video>
 
-    <div class="footer">TFF – Portal</div>
-  </main>
+<p id="videotext">Ingen video kopplad ännu</p>
 
-  <script>
-    const COURSE_DATA = [
-      {
-        id:"kurs01_teams",
-        title:"Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT",
-        desc:"Syfte: Rätt användning av Teams i vardagsarbetet.",
-        tags:["Grundutbildning","System"],
-        modules:[
-          { title:"Modul 1 – Vad är Teams (och vad är det inte)", purpose:"Rätt användning av Teams i vardagsarbetet.", content:["Vad Teams är", "Vad Teams inte är", "När Teams ska användas"], video:"" },
-          { title:"Modul 2 – Chat, kanal och möte – rätt val", purpose:"Välja rätt samarbetsyta.", content:["Skillnad mellan chatt, kanal och möte"], video:"" },
-          { title:"Modul 3 – Möten i Teams – roller & praxis", purpose:"Genomföra möten tydligt och korrekt.", content:["Mötesroller", "Grundläggande mötespraxis"], video:"" },
-          { title:"Modul 4 – Filer i Teams (SharePoint i bakgrunden)", purpose:"Förstå filhantering i Teams.", content:["Hur filer lagras", "Samarbete i dokument"], video:"" },
-          { title:"Modul 5 – Vanliga misstag i kommunal Teams-användning", purpose:"Undvika vanliga fel.", content:["Fel kanalval", "Fel filplacering", "Otydlig struktur"], video:"" }
-        ]
-      },
-      {
-        id:"kurs02_transkribering",
-        title:"Kurs 2 – TRANSKRIBERING",
-        desc:"Syfte: Säkerställa korrekt, effektiv och spårbar omvandling av tal till text.",
-        tags:["System"],
-        modules:[
-          { title:"Modul 1 – Grunder i transkribering", purpose:"Förstå syfte och användning.", content:["När och varför transkribering används"], video:"" },
-          { title:"Modul 2 – Kvalitetssäkring av text", purpose:"Säkerställa korrekt innehåll.", content:["Kontrollera fel och luckor"], video:"" },
-          { title:"Modul 3 – Sekretess och hänsyn", purpose:"Hantera information korrekt.", content:["Skydd av känsligt innehåll"], video:"" },
-          { title:"Modul 4 – Arbetsflöde", purpose:"Skapa ett effektivt arbetssätt.", content:["Beställning", "Bearbetning", "Leverans"], video:"" },
-          { title:"Modul 5 – Praktisk tillämpning", purpose:"Använda i verkliga fall.", content:["Exempel från vardagen"], video:"" }
-        ]
-      },
-      {
-        id:"kurs03_dokumentation",
-        title:"Kurs 3 – DOKUMENTATION (TFF)",
-        desc:"Syfte: Säkerställa att information dokumenteras korrekt, strukturerat och enligt regelverk.",
-        tags:["Grundutbildning","Obligatorisk utbildning"],
-        modules:[
-          { title:"Modul 1 – Grundläggande dokumentation", purpose:"Förstå varför korrekt dokumentation är viktig i TFF.", content:["Vad dokumentation är", "Varför dokumentation behövs", "Vanliga brister"], video:"PASTA_IN_DIN_MP4_LÄNK_HÄR" },
-          { title:"Modul 2 – Struktur och standard", purpose:"Arbeta enligt enhetlig struktur.", content:["Namngivning", "Versioner", "Standardiserad uppbyggnad"], video:"" },
-          { title:"Modul 3 – Dokument i Microsoft 365", purpose:"Arbeta rätt i M365-miljön.", content:["SharePoint", "Samredigering", "Versionshantering"], video:"" },
-          { title:"Modul 4 – Efterlevnad", purpose:"Koppla dokumentation till regelverk och styrning.", content:["GDPR", "Informationshantering", "Spårbarhet"], video:"" },
-          { title:"Modul 5 – Praktisk tillämpning", purpose:"Omsätta strukturen i vardagen.", content:["Case", "Checklistor", "Rätt arbetssätt i praktiken"], video:"" }
-        ]
-      },
-      {
-        id:"kurs04_ai_copilot",
-        title:"Kurs 4 – AI & COPILOT: GRUNDERNA",
-        desc:"Syfte: Skapa rätt förväntningar på AI.",
-        tags:["AI och Copilot"],
-        modules:[
-          { title:"Modul 1 – Vad AI är", purpose:"Skapa grundförståelse.", content:["Begrepp", "Användningsområden"], video:"" },
-          { title:"Modul 2 – Copilot i arbete", purpose:"Förstå möjliga användningsfall.", content:["Stöd i text", "Sammanfattning", "Struktur"], video:"" },
-          { title:"Modul 3 – Risker och begränsningar", purpose:"Använda AI ansvarsfullt.", content:["Fel", "Bias", "Kontrollbehov"], video:"" },
-          { title:"Modul 4 – Promptning", purpose:"Ställa tydliga frågor.", content:["Kontext", "Roll", "Format"], video:"" },
-          { title:"Modul 5 – Praktiska exempel", purpose:"Öka nyttan i vardagen.", content:["Exempel för kommunal verksamhet"], video:"" }
-        ]
-      },
-      {
-        id:"kurs05_promptning",
-        title:"Kurs 5 – PROMPTNING I COPILOT (M365)",
-        desc:"Syfte: Lära medarbetare att skriva effektiva prompts.",
-        tags:["AI och Copilot"],
-        modules:[
-          { title:"Modul 1 – Vad en bra prompt innehåller", purpose:"Skapa bättre resultat.", content:["Mål", "Mottagare", "Format"], video:"" },
-          { title:"Modul 2 – Strukturera uppgiften", purpose:"Ge modellen rätt underlag.", content:["Syfte", "Begränsning", "Ton"], video:"" },
-          { title:"Modul 3 – Förbättra svar stegvis", purpose:"Arbeta iterativt.", content:["Följdfrågor", "Förtydligande"], video:"" },
-          { title:"Modul 4 – Fallgropar", purpose:"Undvika otydliga instruktioner.", content:["För breda frågor", "Saknad kontext"], video:"" },
-          { title:"Modul 5 – Praktisk övning", purpose:"Öva på verkliga uppgifter.", content:["Sammanfattning", "Utkast", "Tabell"], video:"" }
-        ]
-      },
-      {
-        id:"kurs06_skapa_spara",
-        title:"Kurs 6 – SKAPA & SPARA DOKUMENT KORREKT",
-        desc:"Syfte: Färre fel, bättre struktur, högre kvalitet.",
-        tags:["Grundutbildning","System"],
-        modules:[
-          { title:"Modul 1 – När du skapar ett dokument", purpose:"Starta rätt.", content:["Mall", "Rubrik", "Syfte"], video:"" },
-          { title:"Modul 2 – Namngivning", purpose:"Säkerställa sökbarhet.", content:["Filnamnsregler", "Versionslogik"], video:"" },
-          { title:"Modul 3 – Lagringsplats", purpose:"Spara på rätt plats.", content:["Teams", "SharePoint", "Lokalt"], video:"" },
-          { title:"Modul 4 – Delning", purpose:"Dela rätt och säkert.", content:["Behörighet", "Länktyper"], video:"" },
-          { title:"Modul 5 – Kvalitetskontroll", purpose:"Minska fel innan publicering.", content:["Checklista", "Slutkontroll"], video:"" }
-        ]
-      },
-      {
-        id:"kurs07_teams_sharepoint",
-        title:"Kurs 7 – TEAMS, SHAREPOINT & BEHÖRIGHETER",
-        desc:"Syfte: Minska risk och kaos kring åtkomst.",
-        tags:["System","Obligatorisk utbildning"],
-        modules:[
-          { title:"Modul 1 – Teams och SharePoint hänger ihop", purpose:"Förstå sambandet.", content:["Team", "Kanal", "Dokumentbibliotek"], video:"" },
-          { title:"Modul 2 – Behörigheter", purpose:"Veta vem som ska ha tillgång.", content:["Medlemmar", "Ägare", "Besökare"], video:"" },
-          { title:"Modul 3 – Delning externt och internt", purpose:"Dela säkert.", content:["Länkar", "Åtkomstnivåer"], video:"" },
-          { title:"Modul 4 – Struktur", purpose:"Skapa tydlig ordning.", content:["Mappar", "Bibliotek", "Standarder"], video:"" },
-          { title:"Modul 5 – Vanliga fel", purpose:"Undvika åtkomstproblem.", content:["För bred delning", "Fel lagringsplats"], video:"" }
-        ]
-      },
-      {
-        id:"kurs08_gdpr_infoklass",
-        title:"Kurs 8 – INFORMATIONSKLASSNING & GDPR I M365",
-        desc:"Syfte: Rätt information på rätt plats.",
-        tags:["Obligatorisk utbildning","System"],
-        modules:[
-          { title:"Modul 1 – Vad är informationsklassning", purpose:"Förstå klassningens roll.", content:["Skyddsvärde", "Riktighet", "Tillgänglighet"], video:"" },
-          { title:"Modul 2 – Personuppgifter i vardagen", purpose:"Hantera personuppgifter korrekt.", content:["Vad som är personuppgift", "Vanliga exempel"], video:"" },
-          { title:"Modul 3 – Lagring och delning", purpose:"Minska risker.", content:["Rätt plats", "Rätt behörighet"], video:"" },
-          { title:"Modul 4 – Märkning och rutiner", purpose:"Skapa tydlighet.", content:["Klassning", "Skydd", "Rutiner"], video:"" },
-          { title:"Modul 5 – Praktiska exempel", purpose:"Tillämpa bedömning.", content:["Case och bedömning"], video:"" }
-        ]
-      },
-      {
-        id:"kurs09_ratt_verktyg",
-        title:"Kurs 9 – RÄTT VERKTYG FÖR RÄTT ÄRENDE",
-        desc:"Syfte: Minska dubbelarbete och informationsförlust.",
-        tags:["Grundutbildning","System"],
-        modules:[
-          { title:"Modul 1 – Vad ska ligga var", purpose:"Välja rätt verktyg.", content:["E-post", "Teams", "SharePoint", "Ärende"], video:"" },
-          { title:"Modul 2 – När e-post inte räcker", purpose:"Förstå begränsningar.", content:["Spårbarhet", "Sökbarhet"], video:"" },
-          { title:"Modul 3 – Samarbete i rätt yta", purpose:"Skapa ordning.", content:["Gemensamma dokument", "Kommunikation"], video:"" },
-          { title:"Modul 4 – Beslut och ärenden", purpose:"Hålla isär processer.", content:["Formellt kontra informellt arbete"], video:"" },
-          { title:"Modul 5 – Praktiska scenarier", purpose:"Använda rätt verktyg i vardagen.", content:["Scenarioövningar"], video:"" }
-        ]
-      },
-      {
-        id:"kurs10_moteskultur",
-        title:"Kurs 10 – DIGITAL MÖTESKULTUR",
-        desc:"Syfte: Kortare möten – bättre resultat.",
-        tags:["Grundutbildning"],
-        modules:[
-          { title:"Modul 1 – Syfte före möte", purpose:"Skapa bättre förutsättningar.", content:["Mål", "Agenda", "Deltagare"], video:"" },
-          { title:"Modul 2 – Roller i mötet", purpose:"Tydliggöra ansvar.", content:["Mötesledare", "Deltagare", "Dokumentation"], video:"" },
-          { title:"Modul 3 – Teknik och rutiner", purpose:"Minska störningar.", content:["Ljud", "Kamera", "Chat"], video:"" },
-          { title:"Modul 4 – Beslut och uppföljning", purpose:"Få effekt efter mötet.", content:["Beslut", "Åtgärder", "Ansvar"], video:"" },
-          { title:"Modul 5 – God mötesdisciplin", purpose:"Skapa hållbara mötesvanor.", content:["Tidsramar", "Respekt för syfte"], video:"" }
-        ]
-      },
-      {
-        id:"kurs11_chatt_till_struktur",
-        title:"Kurs 11 – FRÅN CHATT TILL STRUKTUR",
-        desc:"Syfte: Göra kunskap beständig och återanvändbar.",
-        tags:["System"],
-        modules:[
-          { title:"Modul 1 – När chatt räcker", purpose:"Avgränsa rätt.", content:["Snabb koordinering"], video:"" },
-          { title:"Modul 2 – När struktur behövs", purpose:"Flytta information rätt.", content:["Beslut", "Riktlinjer", "Underlag"], video:"" },
-          { title:"Modul 3 – Från konversation till dokument", purpose:"Dokumentera det viktiga.", content:["Sammanfattning", "Lagring"], video:"" },
-          { title:"Modul 4 – Roller och ansvar", purpose:"Säkerställa ägarskap.", content:["Vem dokumenterar", "Vem följer upp"], video:"" },
-          { title:"Modul 5 – Praktiska exempel", purpose:"Skapa vana i vardagen.", content:["Exempel på omvandling"], video:"" }
-        ]
-      },
-      {
-        id:"kurs12_diarie_arkiv",
-        title:"Kurs 12 – DIARIEFÖRING OCH ARKIVERING (TFF)",
-        desc:"Syfte: Säkerställa korrekt hantering av allmänna handlingar och ärenden.",
-        tags:["Obligatorisk utbildning"],
-        modules:[
-          { title:"Modul 1 – Allmän handling", purpose:"Förstå vad som omfattas.", content:["Begrepp", "Exempel"], video:"" },
-          { title:"Modul 2 – När något ska diarieföras", purpose:"Avgöra korrekt hantering.", content:["Inkommande", "Upprättade handlingar"], video:"" },
-          { title:"Modul 3 – Arkivering", purpose:"Förstå bevarande och ordning.", content:["Arkivkrav", "Struktur"], video:"" },
-          { title:"Modul 4 – Digital hantering", purpose:"Arbeta rätt i digital miljö.", content:["System och klassning"], video:"" },
-          { title:"Modul 5 – Praktisk tillämpning", purpose:"Omsätta regler i arbete.", content:["Case och bedömningar"], video:"" }
-        ]
-      },
-      {
-        id:"kurs13_styrning",
-        title:"Kurs 13 – STYRNING & GOVERNANCE I M365",
-        desc:"Syfte: Förstå hur styrning skapar ordning, säkerhet och hållbar förvaltning.",
-        tags:["System","Fördjupning"],
-        modules:[
-          { title:"Modul 1 – Vad governance är", purpose:"Skapa grundförståelse.", content:["Roller", "Regler", "Ramar"], video:"" },
-          { title:"Modul 2 – Livscykel för team och ytor", purpose:"Hantera skapande och avveckling.", content:["Beställning", "Namnstandard", "Städning"], video:"" },
-          { title:"Modul 3 – Ägarskap", purpose:"Säkerställa ansvar.", content:["Ägare", "Förvaltning", "Uppföljning"], video:"" },
-          { title:"Modul 4 – Risker vid svag styrning", purpose:"Identifiera konsekvenser.", content:["Överdelning", "Dubbelstruktur"], video:"" },
-          { title:"Modul 5 – Praktisk modell", purpose:"Skapa tillämpbar styrning.", content:["Checklista och ansvar"], video:"" }
-        ]
-      },
-      {
-        id:"kurs14_informationshantering",
-        title:"Kurs 14 – INFORMATIONSHANTERING",
-        desc:"Syfte: Skapa struktur, sökbarhet och kontroll över information.",
-        tags:["Grundutbildning","Obligatorisk utbildning"],
-        modules:[
-          { title:"Modul 1 – Vad informationshantering innebär", purpose:"Skapa helhetsförståelse.", content:["Skapa", "Lagra", "Dela", "Gallra"], video:"" },
-          { title:"Modul 2 – Metadata och struktur", purpose:"Öka sökbarhet och ordning.", content:["Taggar", "Kolumner", "Mapplogik"], video:"" },
-          { title:"Modul 3 – Kvalitet i information", purpose:"Säkerställa riktighet.", content:["Version", "Ägarskap", "Aktualitet"], video:"" },
-          { title:"Modul 4 – Risker och brister", purpose:"Minska informationsförlust.", content:["Dubbletter", "Fel lagringsplats"], video:"" },
-          { title:"Modul 5 – Praktisk tillämpning", purpose:"Använda struktur i vardagen.", content:["Case och förbättringar"], video:"" }
-        ]
-      },
-      {
-        id:"kurs15_processarbete",
-        title:"Kurs 15 – ARBETA PROCESSBASERAT I M365",
-        desc:"Syfte: Skapa tydligare arbetssätt med stöd av processer och digital struktur.",
-        tags:["Fördjupning","System"],
-        modules:[
-          { title:"Modul 1 – Vad ett processbaserat arbetssätt är", purpose:"Skapa förståelse för processlogik.", content:["Start", "Flöde", "Ansvar", "Resultat"], video:"" },
-          { title:"Modul 2 – Process och dokumentation", purpose:"Koppla styrning till vardagsarbete.", content:["Rutiner", "Stöd", "Spårbarhet"], video:"" },
-          { title:"Modul 3 – Digitalt stöd i M365", purpose:"Använda rätt verktyg i processen.", content:["Teams", "SharePoint", "Listor"], video:"" },
-          { title:"Modul 4 – Uppföljning", purpose:"Mäta och förbättra.", content:["Status", "Ansvar", "Lärdomar"], video:"" },
-          { title:"Modul 5 – Praktisk tillämpning", purpose:"Tillämpa processyn i en verklig situation.", content:["Exempel och förbättringar"], video:"" }
-        ]
-      }
-    ];
+<h3>Syfte</h3>
+<p id="purpose">Förstå dokumentation</p>
 
-    function escapeHtml(text){
-      return String(text || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
+<h3>Innehåll</h3>
+<ul id="content">
+<li>Vad dokumentation är</li>
+<li>Varför det är viktigt</li>
+</ul>
 
-    function storageKey(courseId){
-      return "tff_progress_" + courseId;
-    }
+</div>
 
-    function defaultProgress(course){
-      return {
-        moduleIndex: 0,
-        moduleDone: Array(course.modules.length).fill(false),
-        quizDone: Array(course.modules.length).fill(false)
-      };
-    }
+</div>
 
-    function loadProgress(course){
-      try{
-        const raw = localStorage.getItem(storageKey(course.id));
-        if(!raw) return defaultProgress(course);
+<script>
 
-        const parsed = JSON.parse(raw);
-        const base = defaultProgress(course);
+const modules = [
 
-        if(!Array.isArray(parsed.moduleDone)) parsed.moduleDone = base.moduleDone;
-        if(!Array.isArray(parsed.quizDone)) parsed.quizDone = base.quizDone;
-        if(typeof parsed.moduleIndex !== "number") parsed.moduleIndex = 0;
+{
+title:"Modul 1 – Grundläggande dokumentation",
+purpose:"Förstå dokumentation",
+content:["Vad dokumentation är","Varför det är viktigt"],
+video:""
+},
 
-        parsed.moduleDone = parsed.moduleDone.slice(0, course.modules.length);
-        parsed.quizDone = parsed.quizDone.slice(0, course.modules.length);
+{
+title:"Modul 2 – Struktur",
+purpose:"Skapa struktur",
+content:["Namngivning","Version"],
+video:""
+},
 
-        while(parsed.moduleDone.length < course.modules.length) parsed.moduleDone.push(false);
-        while(parsed.quizDone.length < course.modules.length) parsed.quizDone.push(false);
+{
+title:"Modul 3 – M365",
+purpose:"Arbeta i system",
+content:["SharePoint","Filhantering"],
+video:""
+},
 
-        if(parsed.moduleIndex < 0) parsed.moduleIndex = 0;
-        if(parsed.moduleIndex > course.modules.length - 1) parsed.moduleIndex = 0;
+{
+title:"Modul 4 – Efterlevnad",
+purpose:"Följa regler",
+content:["GDPR","NIS2"],
+video:""
+},
 
-        return parsed;
-      }catch(e){
-        return defaultProgress(course);
-      }
-    }
+{
+title:"Modul 5 – Praktik",
+purpose:"Använd i vardagen",
+content:["Case"],
+video:""
+}
 
-    function saveProgress(course, progress){
-      localStorage.setItem(storageKey(course.id), JSON.stringify(progress));
-    }
+];
 
-    function getProgressPercent(progress){
-      const total = progress.moduleDone.length * 2;
-      const done = progress.moduleDone.filter(Boolean).length + progress.quizDone.filter(Boolean).length;
-      return Math.round((done / total) * 100);
-    }
+function show(i){
 
-    function isApproved(progress){
-      return progress.moduleDone.every(Boolean) && progress.quizDone.every(Boolean);
-    }
+document.querySelectorAll(".module").forEach(m=>m.classList.remove("active"));
+document.querySelectorAll(".module")[i].classList.add("active");
 
-    const params = new URLSearchParams(window.location.search);
-    const startCourseId = params.get("course") || "kurs03_dokumentation";
+document.getElementById("title").innerText = modules[i].title;
+document.getElementById("purpose").innerText = modules[i].purpose;
 
-    let currentCourse = COURSE_DATA.find(c => c.id === startCourseId) || COURSE_DATA[0];
-    let progress = loadProgress(currentCourse);
+let ul=document.getElementById("content");
+ul.innerHTML="";
 
-    const courseSelect = document.getElementById("courseSelect");
-    const moduleList = document.getElementById("moduleList");
-    const courseTitle = document.getElementById("courseTitle");
-    const courseDesc = document.getElementById("courseDesc");
-    const courseTags = document.getElementById("courseTags");
-    const pillProgress = document.getElementById("pillProgress");
-    const pillApproved = document.getElementById("pillApproved");
+modules[i].content.forEach(c=>{
+let li=document.createElement("li");
+li.innerText=c;
+ul.appendChild(li);
+});
 
-    const moduleTitle = document.getElementById("moduleTitle");
-    const modulePurpose = document.getElementById("modulePurpose");
-    const moduleContent = document.getElementById("moduleContent");
-    const moduleProgressText = document.getElementById("moduleProgressText");
-    const moduleVideo = document.getElementById("moduleVideo");
-    const videoSourceText = document.getElementById("videoSourceText");
+let video=document.getElementById("video");
 
-    function populateCourseSelect(){
-      courseSelect.innerHTML = COURSE_DATA.map(course => `
-        <option value="${escapeHtml(course.id)}">${escapeHtml(course.title)}</option>
-      `).join("");
-      courseSelect.value = currentCourse.id;
-    }
+if(modules[i].video){
+video.src = modules[i].video;
+document.getElementById("videotext").innerText="";
+}else{
+video.removeAttribute("src");
+document.getElementById("videotext").innerText="Ingen video kopplad ännu";
+}
 
-    function renderHeader(){
-      courseTitle.textContent = currentCourse.title;
-      courseDesc.textContent = currentCourse.desc;
-      courseTags.innerHTML = currentCourse.tags.map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join("");
-      pillProgress.textContent = "Progress: " + getProgressPercent(progress) + "%";
-      pillApproved.textContent = isApproved(progress) ? "Kurs: Godkänd" : "Kurs: Ej godkänd";
-    }
+}
 
-    function renderModuleList(){
-      moduleList.innerHTML = currentCourse.modules.map((m, i) => `
-        <li class="moduleList__item ${i === progress.moduleIndex ? "is-active" : ""}" data-index="${i}">
-          <div class="moduleList__title">${i + 1}. ${escapeHtml(m.title)}</div>
-          <div class="moduleList__meta">
-            ${progress.moduleDone[i] ? "Modul: klar" : "Modul ej klar"} • ${progress.quizDone[i] ? "Quiz: godkänd" : "Quiz: Ej godkänd"}
-          </div>
-        </li>
-      `).join("");
+</script>
 
-      moduleList.querySelectorAll(".moduleList__item").forEach(item => {
-        item.addEventListener("click", () => {
-          progress.moduleIndex = Number(item.dataset.index);
-          saveProgress(currentCourse, progress);
-          renderAll();
-        });
-      });
-    }
-
-    function renderModuleView(){
-      const module = currentCourse.modules[progress.moduleIndex];
-
-      moduleTitle.textContent = module.title;
-      modulePurpose.textContent = module.purpose;
-      moduleContent.innerHTML = module.content.map(item => `<li>${escapeHtml(item)}</li>`).join("");
-      moduleProgressText.textContent =
-        (progress.moduleDone[progress.moduleIndex] ? "Modul: klar" : "Modul: ej klar") +
-        " • " +
-        (progress.quizDone[progress.moduleIndex] ? "Quiz: godkänd" : "Quiz: Ej godkänd");
-
-      if(module.video && module.video.trim() && module.video !== "PASTA_IN_DIN_MP4_LÄNK_HÄR"){
-        moduleVideo.src = module.video;
-        videoSourceText.textContent = "Video kopplad till vald modul.";
-      }else{
-        moduleVideo.removeAttribute("src");
-        moduleVideo.load();
-        videoSourceText.textContent = "Ingen video är kopplad till denna modul ännu.";
-      }
-
-      document.getElementById("btnPrev").disabled = progress.moduleIndex === 0;
-      document.getElementById("btnNext").disabled = progress.moduleIndex === currentCourse.modules.length - 1;
-    }
-
-    function renderAll(){
-      populateCourseSelect();
-      renderHeader();
-      renderModuleList();
-      renderModuleView();
-
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.set("course", currentCourse.id);
-      history.replaceState({}, "", newUrl.toString());
-    }
-
-    courseSelect.addEventListener("change", () => {
-      currentCourse = COURSE_DATA.find(c => c.id === courseSelect.value) || COURSE_DATA[0];
-      progress = loadProgress(currentCourse);
-      renderAll();
-    });
-
-    document.getElementById("btnPrev").addEventListener("click", () => {
-      if(progress.moduleIndex > 0){
-        progress.moduleIndex -= 1;
-        saveProgress(currentCourse, progress);
-        renderAll();
-      }
-    });
-
-    document.getElementById("btnNext").addEventListener("click", () => {
-      if(progress.moduleIndex < currentCourse.modules.length - 1){
-        progress.moduleIndex += 1;
-        saveProgress(currentCourse, progress);
-        renderAll();
-      }
-    });
-
-    document.getElementById("btnMarkModuleDone").addEventListener("click", () => {
-      progress.moduleDone[progress.moduleIndex] = true;
-      saveProgress(currentCourse, progress);
-      renderAll();
-    });
-
-    document.getElementById("btnMarkQuizDone").addEventListener("click", () => {
-      progress.quizDone[progress.moduleIndex] = true;
-      saveProgress(currentCourse, progress);
-      renderAll();
-    });
-
-    document.getElementById("btnReset").addEventListener("click", () => {
-      progress = defaultProgress(currentCourse);
-      saveProgress(currentCourse, progress);
-      renderAll();
-    });
-
-    document.getElementById("btnBack").addEventListener("click", () => {
-      location.href = "utbildningar.html";
-    });
-
-    renderAll();
-  </script>
 </body>
 </html>
