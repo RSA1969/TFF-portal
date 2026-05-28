@@ -1,60 +1,180 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kurs – Dokumentation</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
+<meta charset="UTF-8">
+<title>Dokumentation (TFF)</title>
+
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<style>
+.layout {
+    display:flex;
+    gap:20px;
+}
+
+.sidebar {
+    width:300px;
+    background:#fff;
+    padding:15px;
+    border-radius:12px;
+}
+
+.module {
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    margin-bottom:10px;
+    cursor:pointer;
+}
+
+.module.active {
+    border:2px solid #4caf50;
+    background:#f1f8e9;
+}
+
+.content {
+    flex:1;
+    background:#fff;
+    padding:20px;
+    border-radius:12px;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<header class="topbar">
+    <div class="container topbar__row">
+        <div class="brand">
+            <div class="brand__title">TFF – Utbildning</div>
+            <div class="brand__sub">Moduler • Progress • Godkänd</div>
+        </div>
 
-    <h1>Dokumentation (TFF)</h1>
+        <div>
+            <span id="progress">Progress: 0%</span>
+            <button onclick="reset()">Återställ</button>
+            <button onclick="location.href='utbildningar.html'">Till kurskatalog</button>
+        </div>
+    </div>
+</header>
 
-    <p>
-      Denna kurs handlar om hur dokumentation ska hanteras korrekt inom TFF 
-      – med fokus på struktur, kvalitet och efterlevnad.
-    </p>
+<div class="container">
 
-    <h2>Moduler</h2>
+<div class="layout">
 
-    <ul>
+<!-- SIDOMENY -->
+<div class="sidebar">
 
-      <li>
-        <a href="modul_dokumentation_1.html">
-          Modul 1 – Grundläggande dokumentation
-        </a>
-      </li>
+<h3>Kurs</h3>
+<p>Dokumentation (TFF)</p>
 
-      <li>
-        <a href="modul_dokumentation_2.html">
-          Modul 2 – Struktur och standard
-        </a>
-      </li>
+<h4>Moduler</h4>
 
-      <li>
-        <a href="modul_dokumentation_3.html">
-          Modul 3 – Dokument i Microsoft 365
-        </a>
-      </li>
+<div class="module active" onclick="show(0)">
+1. Modul 1 – Grundläggande dokumentation
+</div>
 
-      <li>
-        <a href="modul_dokumentation_4.html">
-          Modul 4 – Efterlevnad
-        </a>
-      </li>
+<div class="module" onclick="show(1)">
+2. Modul 2 – Struktur och standard
+</div>
 
-      <li>
-        <a href="modul_dokumentation_5.html">
-          Modul 5 – Praktisk tillämpning
-        </a>
-      </li>
+<div class="module" onclick="show(2)">
+3. Modul 3 – Dokument i M365
+</div>
 
-    </ul>
+<div class="module" onclick="show(3)">
+4. Modul 4 – Efterlevnad
+</div>
 
-  </div>
+<div class="module" onclick="show(4)">
+5. Modul 5 – Praktisk tillämpning
+</div>
+
+</div>
+
+<!-- HUVUDINNEHÅLL -->
+<div class="content">
+
+<h2 id="titel">Modul 1 – Grundläggande dokumentation</h2>
+
+<p id="syfte">
+Säkerställa korrekt dokumentation enligt regler.
+</p>
+
+<h3>Innehåll</h3>
+
+<ul id="innehall">
+<li>Vad är dokumentation</li>
+<li>Varför det är viktigt</li>
+</ul>
+
+<br>
+
+<button onclick="klar()">Markera som klar</button>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+const moduler = [
+{
+title: "Modul 1 – Grundläggande dokumentation",
+syfte: "Säkerställa korrekt dokumentation",
+innehall: ["Vad är dokumentation", "Varför det är viktigt"]
+},
+{
+title: "Modul 2 – Struktur och standard",
+syfte: "Skapa enhetlig struktur",
+innehall: ["Namngivning", "Mallar"]
+},
+{
+title: "Modul 3 – Dokument i M365",
+syfte: "Rätt arbete i system",
+innehall: ["SharePoint", "Versionshantering"]
+},
+{
+title: "Modul 4 – Efterlevnad",
+syfte: "Följa regelverk",
+innehall: ["GDPR", "NIS2"]
+},
+{
+title: "Modul 5 – Praktisk tillämpning",
+syfte: "Använda i vardagen",
+innehall: ["Case", "Exempel"]
+}
+];
+
+function show(i) {
+
+document.querySelectorAll(".module").forEach(m => m.classList.remove("active"));
+document.querySelectorAll(".module")[i].classList.add("active");
+
+document.getElementById("titel").innerText = moduler[i].title;
+document.getElementById("syfte").innerText = moduler[i].syfte;
+
+const ul = document.getElementById("innehall");
+ul.innerHTML = "";
+
+moduler[i].innehall.forEach(item => {
+const li = document.createElement("li");
+li.innerText = item;
+ul.appendChild(li);
+});
+
+}
+
+function klar() {
+alert("Modul markerad som klar");
+}
+
+function reset() {
+location.reload();
+}
+
+</script>
 
 </body>
 </html>
