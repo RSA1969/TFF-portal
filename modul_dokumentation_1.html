@@ -1,1 +1,65 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modul 1 – Grundläggande dokumentation</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
 
+<body>
+
+<div class="container">
+
+<h1>Modul 1 – Grundläggande dokumentation</h1>
+
+<p>Introduktion till dokumentation i TFF.</p>
+
+<h2>Video</h2>
+
+<video width="100%" controls>
+  <source src="assets/video/dokumentation_modul1.mp4" type="video/mp4">
+</video>
+
+<h2>Quiz</h2>
+
+<form>
+
+<p>Vad är syftet med dokumentation?</p>
+
+<label><input type="radio" name="q1" value="a"> Göra dokument längre</label><br>
+<label><input type="radio" name="q1" value="b"> Skapa struktur och kvalitet</label><br>
+
+<br>
+
+<button type="button" onclick="rätta()">Rätta</button>
+
+</form>
+
+<p id="resultat"></p>
+
+<br>
+
+<a href="kurs_dokumentation.html">← Tillbaka till kurs</a>
+
+</div>
+
+<script>
+function rätta() {
+  var svar = document.querySelector('input[name="q1"]:checked');
+
+  if (!svar) {
+    document.getElementById("resultat").innerHTML = "Välj svar";
+    return;
+  }
+
+  if (svar.value === "b") {
+    document.getElementById("resultat").innerHTML = "✅ Rätt";
+  } else {
+    document.getElementById("resultat").innerHTML = "❌ Fel";
+  }
+}
+</script>
+
+</body>
+</html>
