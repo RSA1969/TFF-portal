@@ -2,210 +2,60 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>TFF – Kurskatalog</title>
+<title>TFF – Portal</title>
 
 <style>
+body { font-family:Arial; background:#f3f4f6; margin:0 }
+.container { max-width:1000px; margin:auto; padding:30px }
 
-body {
-    margin:0;
-    font-family: Arial;
-    background:#f3f4f6;
-}
-
-/* HEADER */
-.header {
+.hero {
     background:white;
-    padding:20px;
-    border-bottom:1px solid #ddd;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-
-.title {
-    font-weight:bold;
-}
-
-.subtitle {
-    font-size:12px;
-    color:#666;
-}
-
-/* SEARCH */
-.controls {
-    display:flex;
-    gap:10px;
-}
-
-input {
-    padding:10px;
+    padding:30px;
     border-radius:10px;
-    border:1px solid #ccc;
 }
 
 button {
-    padding:10px 14px;
-    border-radius:10px;
+    padding:12px 16px;
+    border-radius:8px;
     border:none;
     cursor:pointer;
 }
 
-.primary {
-    background:#1f6cbd;
-    color:white;
-}
-
-.secondary {
-    background:#eee;
-}
-
-/* PANEL */
-.panel {
-    background:white;
-    margin:20px;
-    border-radius:10px;
-    padding:20px;
-}
-
-/* GRID */
-.grid {
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:20px;
-}
-
-/* CARD */
-.card {
-    background:white;
-    border-radius:15px;
-    padding:15px;
-    cursor:pointer;
-    border-left:6px solid #ccc;
-    box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-
-.card h3 {
-    margin:0 0 10px 0;
-    font-size:16px;
-}
-
-.card p {
-    font-size:14px;
-    color:#444;
-}
-
-/* BADGE */
-.badge {
-    display:inline-block;
-    margin-top:8px;
-    padding:4px 10px;
-    background:#eee;
-    border-radius:20px;
-    font-size:12px;
-}
-
-/* COLORS */
-.k1 { border-left-color:#cde7e2; }
-.k2 { border-left-color:#cde7e2; }
-.k3 { border-left-color:#f3d7c4; }
-.k4 { border-left-color:#cde7e2; }
-.k5 { border-left-color:#f1d4e4; }
-.k6 { border-left-color:#ded7f6; }
-.k7 { border-left-color:#f1d4e4; }
-.k8 { border-left-color:#f1d4e4; }
-.k9 { border-left-color:#ded7f6; }
-.k10 { border-left-color:#f8e4c2; }
-.k11 { border-left-color:#cde7e2; }
-.k12 { border-left-color:#d9f2d0; }
-.k13 { border-left-color:#e5ddd3; }
-.k14 { border-left-color:#dff0d8; }
-.k15 { border-left-color:#cfd8dc; }
-
+.primary { background:#1f6cbd; color:white }
+.secondary { background:#eee }
 </style>
 </head>
 
 <body>
 
-<div class="header">
+<div class="container">
 
-<div>
-<div class="title">TFF – Kurskatalog</div>
-<div class="subtitle">Pastellfärg per kurs • Filter och sök</div>
+<h1>TFF – Digital utbildningsportal</h1>
+
+<div class="hero">
+
+<h2>Välkommen</h2>
+
+<ul>
+<li>Struktur</li>
+<li>Dokumentation</li>
+<li>Informationshantering</li>
+<li>Microsoft 365</li>
+</ul>
+
+<button class="primary"
+onclick="location.href='utbildningar.html'">
+Öppna kurskatalog
+</button>
+
+<button class="secondary"
+onclick="location.href='utbildning.html?course=kurs01_teams'">
+Starta direkt
+</button>
+
 </div>
 
-<div class="controls">
-<input id="search" placeholder="Sök kurs...">
-<button class="primary" onclick="searchCourses()">Sök</button>
 </div>
-
-</div>
-
-<div class="panel">
-
-<h3>Kurser</h3>
-
-<div id="courses" class="grid"></div>
-
-</div>
-
-<script>
-
-const courses = [
-{ id:"kurs01_teams", cls:"k1", name:"Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT", desc:"Rätt användning av Teams i vardagsarbetet" },
-{ id:"kurs02_transkribering", cls:"k2", name:"Kurs 2 – TRANSKRIBERING", desc:"Effektiv omvandling av tal till text" },
-{ id:"kurs03_dokumentation", cls:"k3", name:"Kurs 3 – DOKUMENTATION (TFF)", desc:"Strukturerad dokumentation" },
-{ id:"kurs04_ai_copilot", cls:"k4", name:"Kurs 4 – AI & COPILOT: GRUNDERNA", desc:"Skapa rätt förväntningar på AI" },
-{ id:"kurs05_promptning", cls:"k5", name:"Kurs 5 – PROMPTNING I COPILOT (M365)", desc:"Effektiva prompts" },
-{ id:"kurs06_skapa_spara", cls:"k6", name:"Kurs 6 – SKAPA & SPARA DOKUMENT KORREKT", desc:"Dokumentstruktur" },
-{ id:"kurs07_teams_sharepoint", cls:"k7", name:"Kurs 7 – TEAMS, SHAREPOINT & BEHÖRIGHETER", desc:"Behörigheter" },
-{ id:"kurs08_gdpr", cls:"k8", name:"Kurs 8 – INFORMATIONSKLASSNING & GDPR I M365", desc:"Rätt information" },
-{ id:"kurs09_verktyg", cls:"k9", name:"Kurs 9 – RÄTT VERKTYG FÖR RÄTT ÄRENDE", desc:"Välj rätt system" },
-{ id:"kurs10_mote", cls:"k10", name:"Kurs 10 – DIGITAL MÖTESKULTUR", desc:"Effektiva möten" },
-{ id:"kurs11_struktur", cls:"k11", name:"Kurs 11 – FRÅN CHATT TILL STRUKTUR", desc:"Skapa ordning" },
-{ id:"kurs12_diarium", cls:"k12", name:"Kurs 12 – DIARIEFÖRING OCH ARKIVERING (TFF)", desc:"Arkivering och diarieföring" },
-{ id:"kurs13_governance", cls:"k13", name:"Kurs 13 – STYRNING & GOVERNANCE I M365", desc:"Governance" },
-{ id:"kurs14_info", cls:"k14", name:"Kurs 14 – INFORMATIONENS LIVSCYKEL", desc:"Informationsflöde" },
-{ id:"kurs15_process", cls:"k15", name:"Kurs 15 – ARBETA PROCESSBASERAT I M365", desc:"Processer" }
-];
-
-const container = document.getElementById("courses");
-
-function render(list){
-    container.innerHTML = "";
-
-    list.forEach(c => {
-        let card = document.createElement("div");
-        card.className = "card " + c.cls;
-
-        card.onclick = () => {
-            window.location.href = "utbildning.html?course=" + c.id;
-        };
-
-        card.innerHTML = `
-            <h3>${c.name}</h3>
-            <p>Syfte: ${c.desc}</p>
-            <div class="badge">5 moduler</div>
-        `;
-
-        container.appendChild(card);
-    });
-}
-
-function searchCourses(){
-    const val = document.getElementById("search").value.toLowerCase();
-
-    const filtered = courses.filter(c =>
-        c.name.toLowerCase().includes(val)
-    );
-
-    render(filtered);
-}
-
-render(courses);
-
-</script>
 
 </body>
 </html>
