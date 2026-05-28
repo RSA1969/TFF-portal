@@ -1,48 +1,392 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>TFF – Kurs</title>
-<link rel="stylesheet" href="assets/css/styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TFF – Utbildningar</title>
+  <style>
+    :root{
+      --bg:#f3f4f6;
+      --surface:#ffffff;
+      --text:#0f2942;
+      --muted:#5f6b7a;
+      --border:#d8dee6;
+      --primary:#1f6cbd;
+      --shadow:0 2px 10px rgba(15,41,66,.08);
+      --radius:16px;
+      --gap:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    .container{
+      max-width:1200px;
+      margin:0 auto;
+      padding:22px;
+    }
+    .topbar{
+      background:#fff;
+      border-bottom:1px solid var(--border);
+    }
+    .topbar__row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+    .brand__title{
+      font-weight:800;
+      font-size:20px;
+    }
+    .brand__sub{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+      margin-top:4px;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 16px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .btn--primary{
+      background:var(--primary);
+      border-color:var(--primary);
+      color:#fff;
+    }
+    .panel{
+      background:var(--surface);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-bottom:18px;
+    }
+    .panel__header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:14px;
+      padding-bottom:10px;
+      border-bottom:1px solid var(--border);
+    }
+    .panel__header h2{
+      margin:0;
+      font-size:18px;
+    }
+    .rightnote{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+    }
+    .searchWrap{
+      display:flex;
+      justify-content:center;
+      margin-bottom:18px;
+    }
+    .searchWrap input{
+      width:min(100%, 820px);
+      padding:15px 18px;
+      border:1px solid var(--border);
+      border-radius:16px;
+      font-size:16px;
+      outline:none;
+      background:#fff;
+    }
+    .filterRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .filterBtn.is-active{
+      background:var(--primary);
+      border-color:var(--primary);
+      color:#fff;
+    }
+    .statusBox{
+      background:#fff;
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:16px 18px;
+      margin-bottom:14px;
+      border-top:6px solid transparent;
+    }
+    .statusBox h3{
+      margin:0 0 8px 0;
+      font-size:16px;
+    }
+    .statusBox p{
+      margin:0;
+      color:var(--text);
+      line-height:1.45;
+    }
+    .status-red{ border-top-color:#df2d2d; }
+    .status-orange{ border-top-color:#f59e0b; }
+    .status-green{ border-top-color:#16a34a; }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:18px;
+    }
+    .card{
+      display:block;
+      text-decoration:none;
+      color:inherit;
+      background:#fff;
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:18px;
+      min-height:220px;
+      border-left:8px solid var(--course-color, #d9e6ef);
+      transition:transform .12s ease, box-shadow .12s ease;
+    }
+    .card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 8px 20px rgba(15,41,66,.12);
+    }
+    .card h3{
+      margin:0 0 14px 0;
+      font-size:18px;
+      line-height:1.35;
+    }
+    .card p{
+      margin:0 0 14px 0;
+      color:var(--muted);
+      line-height:1.5;
+      min-height:74px;
+    }
+    .badgeRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      padding:7px 12px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:#f7faf8;
+      font-size:12px;
+      font-weight:800;
+      color:var(--text);
+    }
+    .footer{
+      margin-top:24px;
+      color:var(--muted);
+      font-size:13px;
+      text-align:left;
+      padding-bottom:24px;
+    }
+
+    @media (max-width: 1100px){
+      .grid{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 620px){
+      .grid{ grid-template-columns:1fr; }
+      .container{ padding:14px; }
+      .card{ min-height:auto; }
+      .card p{ min-height:auto; }
+    }
+  </style>
 </head>
-
 <body>
+  <header class="topbar">
+    <div class="container topbar__row">
+      <div class="brand">
+        <div class="brand__title">Utbildningar</div>
+        <div class="brand__sub">Sök, filtrera och öppna kurs</div>
+      </div>
+      <div>
+        <button class="btn" type="button" onclick="location.href='index.html'">Tillbaka till portalen</button>
+      </div>
+    </div>
+  </header>
 
-<h1>TFF – Utbildning</h1>
+  <main class="container">
+    <div class="searchWrap">
+      <input id="searchInput" type="search" placeholder="Sök utbildning..." />
+    </div>
 
-<select id="courseSelect"></select>
+    <section class="panel">
+      <div class="panel__header">
+        <h2>Filter</h2>
+        <div class="rightnote">Välj en eller flera</div>
+      </div>
+      <div class="filterRow" id="filterRow"></div>
+    </section>
 
-<div style="display:flex; gap:20px;">
+    <div class="statusBox status-red">
+      <h3>Ej påbörjade kurser</h3>
+      <p id="notStartedText">Laddar …</p>
+    </div>
 
-<!-- SIDOMENY -->
-<div style="width:250px;">
-<h3>Moduler</h3>
-<ul id="moduleList"></ul>
-</div>
+    <div class="statusBox status-orange">
+      <h3>Påbörjade kurser</h3>
+      <p id="startedText">Laddar …</p>
+    </div>
 
-<!-- HUVUD -->
-<div style="flex:1;">
+    <div class="statusBox status-green">
+      <h3>Godkända kurser</h3>
+      <p id="approvedText">Laddar …</p>
+    </div>
 
-<h2 id="courseTitle"></h2>
-<p id="courseDesc"></p>
+    <section class="panel">
+      <div class="panel__header">
+        <h2>Kurser</h2>
+        <div class="rightnote">Öppna en kurs</div>
+      </div>
+      <div class="grid" id="courseGrid"></div>
+    </section>
 
-<h3>Video</h3>
-<video id="moduleVideo" controls width="600"></video>
+    <div class="footer">TFF – Portal</div>
+  </main>
 
-<h3 id="moduleTitle"></h3>
+  <script>
+    const COURSES = [
+      { id:"kurs01_teams", title:"Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT", desc:"Syfte: Rätt användning av Teams i vardagsarbetet.", color:"#dff4ee", tags:["Grundutbildning","System"] },
+      { id:"kurs02_transkribering", title:"Kurs 2 – TRANSKRIBERING", desc:"Syfte: Säkerställa korrekt, effektiv och spårbar omvandling av tal till text.", color:"#e4f4f1", tags:["System"] },
+      { id:"kurs03_dokumentation", title:"Kurs 3 – DOKUMENTATION (TFF)", desc:"Syfte: Säkerställa att information dokumenteras korrekt, strukturerat och enligt regelverk.", color:"#fde8d7", tags:["Grundutbildning","Obligatorisk utbildning"] },
+      { id:"kurs04_ai_copilot", title:"Kurs 4 – AI & COPILOT: GRUNDERNA", desc:"Syfte: Skapa rätt förväntningar på AI.", color:"#dff4ee", tags:["AI och Copilot"] },
+      { id:"kurs05_promptning", title:"Kurs 5 – PROMPTNING I COPILOT (M365)", desc:"Syfte: Lära medarbetare att skriva effektiva prompts.", color:"#f8ddea", tags:["AI och Copilot"] },
+      { id:"kurs06_skapa_spara", title:"Kurs 6 – SKAPA & SPARA DOKUMENT KORREKT", desc:"Syfte: Färre fel, bättre struktur, högre kvalitet.", color:"#e9e1fb", tags:["Grundutbildning","System"] },
+      { id:"kurs07_teams_sharepoint", title:"Kurs 7 – TEAMS, SHAREPOINT & BEHÖRIGHETER", desc:"Syfte: Minska risk och kaos kring åtkomst.", color:"#f9ddea", tags:["System","Obligatorisk utbildning"] },
+      { id:"kurs08_gdpr_infoklass", title:"Kurs 8 – INFORMATIONSKLASSNING & GDPR I M365", desc:"Syfte: Rätt information på rätt plats.", color:"#f9ddea", tags:["Obligatorisk utbildning","System"] },
+      { id:"kurs09_ratt_verktyg", title:"Kurs 9 – RÄTT VERKTYG FÖR RÄTT ÄRENDE", desc:"Syfte: Minska dubbelarbete och informationsförlust.", color:"#e8e1fb", tags:["Grundutbildning","System"] },
+      { id:"kurs10_moteskultur", title:"Kurs 10 – DIGITAL MÖTESKULTUR", desc:"Syfte: Kortare möten – bättre resultat.", color:"#fff1cc", tags:["Grundutbildning"] },
+      { id:"kurs11_chatt_till_struktur", title:"Kurs 11 – FRÅN CHATT TILL STRUKTUR", desc:"Syfte: Göra kunskap beständig och återanvändbar.", color:"#dff4ee", tags:["System"] },
+      { id:"kurs12_diarie_arkiv", title:"Kurs 12 – DIARIEFÖRING OCH ARKIVERING (TFF)", desc:"Syfte: Säkerställa korrekt hantering av allmänna handlingar och ärenden.", color:"#f1f8de", tags:["Obligatorisk utbildning"] },
+      { id:"kurs13_styrning", title:"Kurs 13 – STYRNING & GOVERNANCE I M365", desc:"Syfte: Förstå hur styrning skapar ordning, säkerhet och hållbar förvaltning.", color:"#efe7dd", tags:["System","Fördjupning"] },
+      { id:"kurs14_informationshantering", title:"Kurs 14 – INFORMATIONSHANTERING", desc:"Syfte: Skapa struktur, sökbarhet och kontroll över information.", color:"#fbe9e2", tags:["Grundutbildning","Obligatorisk utbildning"] },
+      { id:"kurs15_processarbete", title:"Kurs 15 – ARBETA PROCESSBASERAT I M365", desc:"Syfte: Skapa tydligare arbetssätt med stöd av processer och digital struktur.", color:"#eceff1", tags:["Fördjupning","System"] }
+    ];
 
-<p><b>Syfte</b></p>
-<p id="modulePurpose"></p>
+    const FILTERS = ["Grundutbildning","Fördjupning","System","AI och Copilot","Obligatorisk utbildning"];
+    let activeFilters = [];
 
-<p><b>Innehåll</b></p>
-<ul id="moduleContent"></ul>
+    function escapeHtml(text){
+      return String(text || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
 
-</div>
+    function progressKey(courseId){
+      return "tff_progress_" + courseId;
+    }
 
-</div>
+    function getCourseState(courseId){
+      const raw = localStorage.getItem(progressKey(courseId));
+      if(!raw){
+        return { started:false, approved:false };
+      }
+      try{
+        const data = JSON.parse(raw);
+        const modDone = Array.isArray(data.moduleDone) ? data.moduleDone.some(Boolean) : false;
+        const quizDone = Array.isArray(data.quizDone) ? data.quizDone.every(Boolean) && data.quizDone.length > 0 : false;
+        const approved = Array.isArray(data.moduleDone) && Array.isArray(data.quizDone)
+          ? data.moduleDone.length > 0 && data.moduleDone.every(Boolean) && data.quizDone.every(Boolean)
+          : false;
+        return {
+          started: modDone || quizDone,
+          approved
+        };
+      }catch(e){
+        return { started:false, approved:false };
+      }
+    }
 
-<script src="assets/js/kurser-data.js"></script>
-<script src="assets/js/kurser-app.js"></script>
+    function renderStatusBoxes(){
+      const notStarted = [];
+      const started = [];
+      const approved = [];
 
+      COURSES.forEach(course => {
+        const state = getCourseState(course.id);
+        if(state.approved){
+          approved.push(course.title);
+        }else if(state.started){
+          started.push(course.title);
+        }else{
+          notStarted.push(course.title);
+        }
+      });
+
+      document.getElementById("notStartedText").textContent = notStarted.length ? notStarted.join(" • ") : "Inga kurser.";
+      document.getElementById("startedText").textContent = started.length ? started.join(" • ") : "Inga kurser.";
+      document.getElementById("approvedText").textContent = approved.length ? approved.join(" • ") : "Inga kurser.";
+    }
+
+    function renderFilters(){
+      const wrap = document.getElementById("filterRow");
+      wrap.innerHTML = FILTERS.map(f => `
+        <button class="btn filterBtn ${activeFilters.includes(f) ? "is-active" : ""}" data-filter="${escapeHtml(f)}" type="button">${escapeHtml(f)}</button>
+      `).join("");
+
+      wrap.querySelectorAll(".filterBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const value = btn.dataset.filter;
+          if(activeFilters.includes(value)){
+            activeFilters = activeFilters.filter(f => f !== value);
+          }else{
+            activeFilters.push(value);
+          }
+          renderFilters();
+          renderCourses();
+        });
+      });
+    }
+
+    function renderCourses(){
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      const grid = document.getElementById("courseGrid");
+
+      const visible = COURSES.filter(course => {
+        const hay = (course.title + " " + course.desc + " " + course.tags.join(" ")).toLowerCase();
+        const searchOk = !q || hay.includes(q);
+        const filterOk = activeFilters.length === 0 || activeFilters.every(f => course.tags.includes(f));
+        return searchOk && filterOk;
+      });
+
+      grid.innerHTML = visible.map(course => `
+        <a class="card" href="utbildning.html?course=${encodeURIComponent(course.id)}" style="--course-color:${course.color}">
+          <h3>${escapeHtml(course.title)}</h3>
+          <p>${escapeHtml(course.desc)}</p>
+          <div class="badgeRow">
+            ${course.tags.map(tag => `<span class="badge">${escapeHtml(tag)}</span>`).join("")}
+          </div>
+          <div class="badgeRow">
+            <span class="badge">5 moduler</span>
+          </div>
+        </a>
+      `).join("");
+
+      if(!visible.length){
+        grid.innerHTML = `<div class="panel" style="grid-column:1/-1;">Ingen kurs matchar sökning eller valda filter.</div>`;
+      }
+    }
+
+    document.getElementById("searchInput").addEventListener("input", renderCourses);
+
+    renderFilters();
+    renderStatusBoxes();
+    renderCourses();
+  </script>
 </body>
 </html>
