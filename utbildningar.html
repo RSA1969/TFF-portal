@@ -54,4 +54,111 @@ h1 {
 /* GRID */
 .grid {
     display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(250px,1fr));
+    gap:15px;
+}
 
+/* CARD */
+.card {
+    background:white;
+    border-radius:12px;
+    padding:15px;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+.card:hover {
+    transform:scale(1.02);
+}
+
+.tag {
+    display:inline-block;
+    padding:4px 10px;
+    background:#eee;
+    border-radius:15px;
+    font-size:12px;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Utbildningar</h1>
+
+<div class="search">
+    <input type="text" placeholder="Sök utbildning...">
+</div>
+
+<div class="filter">
+    <button>Grundutbildning</button>
+    <button>Fördjupning</button>
+    <button>System</button>
+    <button>AI och Copilot</button>
+    <button>Obligatorisk</button>
+</div>
+
+<div class="status-box röd">
+    <b>Ej påbörjade kurser</b><br>
+    Dokumentation • Informationshantering • GDPR & NIS2
+</div>
+
+<div class="status-box orange">
+    <b>Påbörjade kurser</b><br>
+    SharePoint struktur • Behörigheter
+</div>
+
+<div class="status-box grön">
+    <b>Godkända kurser</b><br>
+    Intro Microsoft 365
+</div>
+
+<h2>Kurser</h2>
+
+<div class="grid" id="kurser"></div>
+
+<script>
+const kurser = [
+    {
+        id: "kurs01",
+        namn: "Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT",
+        syfte: "Rätt användning av Teams i vardagsarbetet"
+    },
+    {
+        id: "kurs02",
+        namn: "Kurs 2 – TRANSKRIBERING",
+        syfte: "Effektiv omvandling av tal till text"
+    },
+    {
+        id: "kurs03",
+        namn: "Kurs 3 – DOKUMENTATION (TFF)",
+        syfte: "Säkerställa korrekt dokumentation"
+    },
+    {
+        id: "kurs04",
+        namn: "Kurs 4 – AI & COPILOT",
+        syfte: "Skapa rätt förväntningar på AI"
+    }
+];
+
+const container = document.getElementById("kurser");
+
+kurser.forEach(kurs => {
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.onclick = () => {
+        window.location.href = "kurs_dokumentation.html";
+    };
+
+    div.innerHTML = `
+        <h3>${kurs.namn}</h3>
+        <p>Syfte: ${kurs.syfte}</p>
+        <div class="tag">5 moduler</div>
+    `;
+
+    container.appendChild(div);
+});
+</script>
+
+</body>
+</html>
