@@ -1,140 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TFF – Utbildning</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <style>
-    .moduleList__item {
-      list-style:none;
-      padding:12px;
-      border:1px solid var(--border);
-      border-radius:12px;
-      margin-bottom:10px;
-      cursor:pointer;
-      background:#fff;
-    }
-    .moduleList__item.is-active {
-      border-color:#b7dfd2;
-      background:#eef9f4;
-    }
-    .moduleList__title {
-      font-weight:800;
-      margin-bottom:4px;
-    }
-    .moduleList__meta {
-      font-size:12px;
-      color:#5f6b7a;
-      font-weight:700;
-    }
-    #videoWrap {
-      margin:14px 0 16px 0;
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:14px;
-      background:#fff;
-    }
-    #moduleVideo {
-      width:100%;
-      max-height:420px;
-      border-radius:12px;
-      background:#000;
-    }
-    #videoSourceText {
-      margin-top:8px;
-      font-size:12px;
-      color:#5f6b7a;
-      font-weight:700;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>TFF – Kurs</title>
+<link rel="stylesheet" href="assets/css/styles.css">
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="container topbar__row">
-      <div class="brand">
-        <div class="brand__title">TFF – Utbildning</div>
-        <div class="brand__sub">Moduler • Video • Progress • Godkänd</div>
-      </div>
-      <div class="right">
-        <span class="badge" id="pillProgress">Progress: 0%</span>
-        <span class="badge" id="pillApproved">Kurs: Ej godkänd</span>
-        <button class="btn btn--ghost" id="btnReset" type="button">Återställ progress</button>
-        <button class="btn btn--primary" id="btnBack" type="button">Till kurskatalog</button>
-      </div>
-    </div>
-  </header>
 
-  <main class="container">
-    <div class="layout">
-      <aside class="panel">
-        <h2>Kurs</h2>
-        <p class="muted">Välj kurs och navigera via modulerna.</p>
-        <select id="courseSelect" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#fff;font-weight:800"></select>
+<h1>TFF – Utbildning</h1>
 
-        <h3 style="margin:14px 0 6px 0;font-size:14px;">Moduler</h3>
-        <ul class="moduleList" id="moduleList"></ul>
+<select id="courseSelect"></select>
 
-        <div class="notice">
-          Video visas per modul när den är kopplad i datafilen.
-        </div>
-      </aside>
+<div style="display:flex; gap:20px;">
 
-      <section class="panel">
-        <div class="panel__header" style="border-bottom:1px solid var(--border);padding-bottom:12px;">
-          <div>
-            <h2 id="courseTitle">—</h2>
-            <p class="muted" id="courseDesc">—</p>
-          </div>
-          <div class="rightnote" id="courseTags" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
-        </div>
+<!-- SIDOMENY -->
+<div style="width:250px;">
+<h3>Moduler</h3>
+<ul id="moduleList"></ul>
+</div>
 
-        <div id="videoWrap">
-          <h3 style="margin:0 0 10px 0;font-size:14px;">Video</h3>
-          <video id="moduleVideo" controls playsinline></video>
-          <div id="videoSourceText">Ingen video är kopplad till denna modul ännu.</div>
-        </div>
+<!-- HUVUD -->
+<div style="flex:1;">
 
-        <div class="grid" style="grid-template-columns:1fr 1fr;gap:var(--gap);">
-          <div class="panel" style="margin:0;box-shadow:none;">
-            <h3 style="margin:0 0 6px 0;font-size:14px;">Modul</h3>
-            <p class="muted" id="moduleTitle">—</p>
+<h2 id="courseTitle"></h2>
+<p id="courseDesc"></p>
 
-            <h3 style="margin:14px 0 6px 0;font-size:14px;">Syfte</h3>
-            <p class="muted" id="modulePurpose">—</p>
+<h3>Video</h3>
+<video id="moduleVideo" controls width="600"></video>
 
-            <h3 style="margin:14px 0 6px 0;font-size:14px;">Innehåll</h3>
-            <ul id="moduleContent"></ul>
-          </div>
+<h3 id="moduleTitle"></h3>
 
-          <div class="panel" style="margin:0;box-shadow:none;">
-            <h3 style="margin:0 0 6px 0;font-size:14px;">Progress i modul</h3>
-            <p class="muted" id="moduleProgressText">—</p>
+<p><b>Syfte</b></p>
+<p id="modulePurpose"></p>
 
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
-              <button class="btn" id="btnMarkModuleDone" type="button">Markera modul som klar</button>
-              <button class="btn" id="btnMarkQuizDone" type="button">Godkänn quiz</button>
-            </div>
+<p><b>Innehåll</b></p>
+<ul id="moduleContent"></ul>
 
-            <div class="notice" style="margin-top:12px;">
-              Quiz kan fyllas på senare. Progress sparas lokalt i webbläsaren.
-            </div>
-          </div>
-        </div>
+</div>
 
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;border-top:1px solid var(--border);padding-top:12px;">
-          <button class="btn" id="btnPrev" type="button">Föregående modul</button>
-          <button class="btn btn--primary" id="btnNext" type="button">Nästa modul</button>
-        </div>
-      </section>
-    </div>
-  </main>
+</div>
 
-  <footer class="footer">
-    <div class="container"><small>TFF – Portal</small></div>
-  </footer>
+<script src="assets/js/kurser-data.js"></script>
+<script src="assets/js/kurser-app.js"></script>
 
-  <script src="assets/js/kurser-data.js"></script>
-  <script src="assets/js/kurser-app.js"></script>
 </body>
 </html>
