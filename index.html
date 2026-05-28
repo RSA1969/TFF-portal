@@ -16,12 +16,9 @@ body {
 
 /* HEADER */
 .header {
-    background:#fff;
+    background:white;
     padding:20px;
     border-bottom:1px solid #ddd;
-}
-
-.header-top {
     display:flex;
     justify-content:space-between;
     align-items:center;
@@ -36,12 +33,13 @@ body {
     color:#666;
 }
 
-.header-controls {
+/* SEARCH */
+.controls {
     display:flex;
     gap:10px;
 }
 
-.header input {
+input {
     padding:10px;
     border-radius:10px;
     border:1px solid #ccc;
@@ -65,7 +63,7 @@ button {
 
 /* PANEL */
 .panel {
-    background:#fff;
+    background:white;
     margin:20px;
     border-radius:10px;
     padding:20px;
@@ -80,7 +78,7 @@ button {
 
 /* CARD */
 .card {
-    background:#fff;
+    background:white;
     border-radius:15px;
     padding:15px;
     cursor:pointer;
@@ -100,15 +98,15 @@ button {
 
 /* BADGE */
 .badge {
-    margin-top:10px;
     display:inline-block;
+    margin-top:8px;
     padding:4px 10px;
     background:#eee;
-    border-radius:15px;
+    border-radius:20px;
     font-size:12px;
 }
 
-/* FÄRGER */
+/* COLORS */
 .k1 { border-left-color:#cde7e2; }
 .k2 { border-left-color:#cde7e2; }
 .k3 { border-left-color:#f3d7c4; }
@@ -132,18 +130,14 @@ button {
 
 <div class="header">
 
-<div class="header-top">
-
 <div>
 <div class="title">TFF – Kurskatalog</div>
 <div class="subtitle">Pastellfärg per kurs • Filter och sök</div>
 </div>
 
-<div class="header-controls">
-<input type="text" placeholder="Sök kurs...">
-<button class="primary">Sök</button>
-</div>
-
+<div class="controls">
+<input id="search" placeholder="Sök kurs...">
+<button class="primary" onclick="searchCourses()">Sök</button>
 </div>
 
 </div>
@@ -152,47 +146,64 @@ button {
 
 <h3>Kurser</h3>
 
-<div class="grid" id="courses"></div>
+<div id="courses" class="grid"></div>
 
 </div>
 
 <script>
 
 const courses = [
-["k1","Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT"],
-["k2","Kurs 2 – TRANSKRIBERING"],
-["k3","Kurs 3 – DOKUMENTATION (TFF)"],
-["k4","Kurs 4 – AI & COPILOT: GRUNDERNA"],
-["k5","Kurs 5 – PROMPTNING I COPILOT (M365)"],
-["k6","Kurs 6 – SKAPA & SPARA DOKUMENT KORREKT"],
-["k7","Kurs 7 – TEAMS, SHAREPOINT & BEHÖRIGHETER"],
-["k8","Kurs 8 – INFORMATIONSKLASSNING & GDPR I M365"],
-["k9","Kurs 9 – RÄTT VERKTYG FÖR RÄTT ÄRENDE"],
-["k10","Kurs 10 – DIGITAL MÖTESKULTUR"],
-["k11","Kurs 11 – FRÅN CHATT TILL STRUKTUR"],
-["k12","Kurs 12 – DIARIEFÖRING OCH ARKIVERING (TFF)"],
-["k13","Kurs 13 – STYRNING & GOVERNANCE I M365"],
-["k14","Kurs 14 – INFORMATIONENS LIVSCYKEL"],
-["k15","Kurs 15 – ARBETA PROCESSBASERAT I M365"]
+{ id:"kurs01_teams", cls:"k1", name:"Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT", desc:"Rätt användning av Teams i vardagsarbetet" },
+{ id:"kurs02_transkribering", cls:"k2", name:"Kurs 2 – TRANSKRIBERING", desc:"Effektiv omvandling av tal till text" },
+{ id:"kurs03_dokumentation", cls:"k3", name:"Kurs 3 – DOKUMENTATION (TFF)", desc:"Strukturerad dokumentation" },
+{ id:"kurs04_ai_copilot", cls:"k4", name:"Kurs 4 – AI & COPILOT: GRUNDERNA", desc:"Skapa rätt förväntningar på AI" },
+{ id:"kurs05_promptning", cls:"k5", name:"Kurs 5 – PROMPTNING I COPILOT (M365)", desc:"Effektiva prompts" },
+{ id:"kurs06_skapa_spara", cls:"k6", name:"Kurs 6 – SKAPA & SPARA DOKUMENT KORREKT", desc:"Dokumentstruktur" },
+{ id:"kurs07_teams_sharepoint", cls:"k7", name:"Kurs 7 – TEAMS, SHAREPOINT & BEHÖRIGHETER", desc:"Behörigheter" },
+{ id:"kurs08_gdpr", cls:"k8", name:"Kurs 8 – INFORMATIONSKLASSNING & GDPR I M365", desc:"Rätt information" },
+{ id:"kurs09_verktyg", cls:"k9", name:"Kurs 9 – RÄTT VERKTYG FÖR RÄTT ÄRENDE", desc:"Välj rätt system" },
+{ id:"kurs10_mote", cls:"k10", name:"Kurs 10 – DIGITAL MÖTESKULTUR", desc:"Effektiva möten" },
+{ id:"kurs11_struktur", cls:"k11", name:"Kurs 11 – FRÅN CHATT TILL STRUKTUR", desc:"Skapa ordning" },
+{ id:"kurs12_diarium", cls:"k12", name:"Kurs 12 – DIARIEFÖRING OCH ARKIVERING (TFF)", desc:"Arkivering och diarieföring" },
+{ id:"kurs13_governance", cls:"k13", name:"Kurs 13 – STYRNING & GOVERNANCE I M365", desc:"Governance" },
+{ id:"kurs14_info", cls:"k14", name:"Kurs 14 – INFORMATIONENS LIVSCYKEL", desc:"Informationsflöde" },
+{ id:"kurs15_process", cls:"k15", name:"Kurs 15 – ARBETA PROCESSBASERAT I M365", desc:"Processer" }
 ];
 
 const container = document.getElementById("courses");
 
-courses.forEach((c,i)=>{
-    let div = document.createElement("div");
-    div.className = "card " + c[0];
+function render(list){
+    container.innerHTML = "";
 
-    div.onclick = () => {
-        window.location.href = "utbildning.html?course=kurs" + (i+1);
-    };
+    list.forEach(c => {
+        let card = document.createElement("div");
+        card.className = "card " + c.cls;
 
-    div.innerHTML = `
-        <h3>${c[1]}</h3>
-        <div class="badge">5 moduler</div>
-    `;
+        card.onclick = () => {
+            window.location.href = "utbildning.html?course=" + c.id;
+        };
 
-    container.appendChild(div);
-});
+        card.innerHTML = `
+            <h3>${c.name}</h3>
+            <p>Syfte: ${c.desc}</p>
+            <div class="badge">5 moduler</div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+function searchCourses(){
+    const val = document.getElementById("search").value.toLowerCase();
+
+    const filtered = courses.filter(c =>
+        c.name.toLowerCase().includes(val)
+    );
+
+    render(filtered);
+}
+
+render(courses);
 
 </script>
 
