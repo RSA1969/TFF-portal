@@ -1,173 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>Utbildningar</title>
-
-<style>
-body {
-    font-family: Arial;
-    background:#f3f4f6;
-    margin:0;
-    padding:20px;
-}
-
-h1 { text-align:center; }
-
-/* SÖK */
-.search {
-    max-width:600px;
-    margin:20px auto;
-}
-.search input {
-    width:100%;
-    padding:12px;
-    border-radius:10px;
-    border:1px solid #ccc;
-}
-
-/* FILTER */
-.filter {
-    margin:20px 0;
-}
-.filter button {
-    margin:5px;
-    padding:8px 12px;
-    border-radius:20px;
-    border:1px solid #ccc;
-    background:white;
-}
-
-/* STATUS */
-.status-box {
-    background:white;
-    border-radius:10px;
-    padding:15px;
-    margin-bottom:15px;
-}
-.röd { border-top:6px solid #d32f2f; }
-.orange { border-top:6px solid #f57c00; }
-.grön { border-top:6px solid #2e7d32; }
-
-/* GRID */
-.grid {
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-}
-
-/* CARD */
-.card {
-    border-radius:12px;
-    padding:15px;
-    cursor:pointer;
-    background:white;
-    box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-
-/* FÄRGER PER KURS */
-.k1 { background:#e3f2fd; }
-.k2 { background:#e0f2f1; }
-.k3 { background:#fff3e0; }
-.k4 { background:#e8f5e9; }
-.k5 { background:#fce4ec; }
-.k6 { background:#ede7f6; }
-.k7 { background:#f3e5f5; }
-.k8 { background:#f1f8e9; }
-.k9 { background:#e8eaf6; }
-.k10 { background:#fff8e1; }
-.k11 { background:#e0f7fa; }
-.k12 { background:#f9fbe7; }
-.k13 { background:#efebe9; }
-.k14 { background:#fbe9e7; }
-.k15 { background:#eceff1; }
-
-.tag {
-    display:inline-block;
-    padding:4px 10px;
-    background:white;
-    border-radius:15px;
-    font-size:12px;
-    margin-top:10px;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TFF – Utbildning</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <style>
+    .moduleList__item {
+      list-style:none;
+      padding:12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      margin-bottom:10px;
+      cursor:pointer;
+      background:#fff;
+    }
+    .moduleList__item.is-active {
+      border-color:#b7dfd2;
+      background:#eef9f4;
+    }
+    .moduleList__title {
+      font-weight:800;
+      margin-bottom:4px;
+    }
+    .moduleList__meta {
+      font-size:12px;
+      color:#5f6b7a;
+      font-weight:700;
+    }
+    #videoWrap {
+      margin:14px 0 16px 0;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      background:#fff;
+    }
+    #moduleVideo {
+      width:100%;
+      max-height:420px;
+      border-radius:12px;
+      background:#000;
+    }
+    #videoSourceText {
+      margin-top:8px;
+      font-size:12px;
+      color:#5f6b7a;
+      font-weight:700;
+    }
+  </style>
 </head>
-
 <body>
+  <header class="topbar">
+    <div class="container topbar__row">
+      <div class="brand">
+        <div class="brand__title">TFF – Utbildning</div>
+        <div class="brand__sub">Moduler • Video • Progress • Godkänd</div>
+      </div>
+      <div class="right">
+        <span class="badge" id="pillProgress">Progress: 0%</span>
+        <span class="badge" id="pillApproved">Kurs: Ej godkänd</span>
+        <button class="btn btn--ghost" id="btnReset" type="button">Återställ progress</button>
+        <button class="btn btn--primary" id="btnBack" type="button">Till kurskatalog</button>
+      </div>
+    </div>
+  </header>
 
-<h1>Utbildningar</h1>
+  <main class="container">
+    <div class="layout">
+      <aside class="panel">
+        <h2>Kurs</h2>
+        <p class="muted">Välj kurs och navigera via modulerna.</p>
+        <select id="courseSelect" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:#fff;font-weight:800"></select>
 
-<div class="search">
-<input type="text" placeholder="Sök utbildning...">
-</div>
+        <h3 style="margin:14px 0 6px 0;font-size:14px;">Moduler</h3>
+        <ul class="moduleList" id="moduleList"></ul>
 
-<div class="filter">
-<button>Grundutbildning</button>
-<button>Fördjupning</button>
-<button>System</button>
-<button>AI och Copilot</button>
-<button>Obligatorisk</button>
-</div>
+        <div class="notice">
+          Video visas per modul när den är kopplad i datafilen.
+        </div>
+      </aside>
 
-<div class="status-box röd">
-<b>Ej påbörjade kurser</b><br>
-Dokumentation • Informationshantering • GDPR & NIS2
-</div>
+      <section class="panel">
+        <div class="panel__header" style="border-bottom:1px solid var(--border);padding-bottom:12px;">
+          <div>
+            <h2 id="courseTitle">—</h2>
+            <p class="muted" id="courseDesc">—</p>
+          </div>
+          <div class="rightnote" id="courseTags" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        </div>
 
-<div class="status-box orange">
-<b>Påbörjade kurser</b><br>
-SharePoint struktur • Behörigheter
-</div>
+        <div id="videoWrap">
+          <h3 style="margin:0 0 10px 0;font-size:14px;">Video</h3>
+          <video id="moduleVideo" controls playsinline></video>
+          <div id="videoSourceText">Ingen video är kopplad till denna modul ännu.</div>
+        </div>
 
-<div class="status-box grön">
-<b>Godkända kurser</b><br>
-Intro Microsoft 365
-</div>
+        <div class="grid" style="grid-template-columns:1fr 1fr;gap:var(--gap);">
+          <div class="panel" style="margin:0;box-shadow:none;">
+            <h3 style="margin:0 0 6px 0;font-size:14px;">Modul</h3>
+            <p class="muted" id="moduleTitle">—</p>
 
-<h2>Kurser</h2>
+            <h3 style="margin:14px 0 6px 0;font-size:14px;">Syfte</h3>
+            <p class="muted" id="modulePurpose">—</p>
 
-<div class="grid" id="kurser"></div>
+            <h3 style="margin:14px 0 6px 0;font-size:14px;">Innehåll</h3>
+            <ul id="moduleContent"></ul>
+          </div>
 
-<script>
+          <div class="panel" style="margin:0;box-shadow:none;">
+            <h3 style="margin:0 0 6px 0;font-size:14px;">Progress i modul</h3>
+            <p class="muted" id="moduleProgressText">—</p>
 
-const kurser = [
-{ id:"1", css:"k1", namn:"Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT", syfte:"Rätt användning av Teams i vardagsarbetet" },
-{ id:"2", css:"k2", namn:"Kurs 2 – TRANSKRIBERING", syfte:"Omvandla tal till text" },
-{ id:"3", css:"k3", namn:"Kurs 3 – DOKUMENTATION (TFF)", syfte:"Säker dokumentation" },
-{ id:"4", css:"k4", namn:"Kurs 4 – AI & COPILOT", syfte:"Grundförståelse AI" },
-{ id:"5", css:"k5", namn:"Kurs 5 – PROMPTNING I COPILOT", syfte:"Skriva effektiva prompts" },
-{ id:"6", css:"k6", namn:"Kurs 6 – SKAPA & SPARA DOKUMENT", syfte:"Arbeta korrekt i dokument" },
-{ id:"7", css:"k7", namn:"Kurs 7 – TEAMS & SHAREPOINT", syfte:"Behörigheter och struktur" },
-{ id:"8", css:"k8", namn:"Kurs 8 – GDPR & INFOKLASSNING", syfte:"Rätt information" },
-{ id:"9", css:"k9", namn:"Kurs 9 – RÄTT VERKTYG", syfte:"Välj rätt system" },
-{ id:"10", css:"k10", namn:"Kurs 10 – MÖTESKULTUR", syfte:"Effektiva möten" },
-{ id:"11", css:"k11", namn:"Kurs 11 – FRÅN CHATT TILL STRUKTUR", syfte:"Skapa ordning" },
-{ id:"12", css:"k12", namn:"Kurs 12 – DIARIEFÖRING", syfte:"Arkivering korrekt" },
-{ id:"13", css:"k13", namn:"Kurs 13 – STYRNING", syfte:"Governance i M365" },
-{ id:"14", css:"k14", namn:"Kurs 14 – INFORMATIONSHANTERING", syfte:"Struktur och kontroll" },
-{ id:"15", css:"k15", namn:"Kurs 15 – PROCESSARBETE", syfte:"Arbeta processbaserat" }
-];
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+              <button class="btn" id="btnMarkModuleDone" type="button">Markera modul som klar</button>
+              <button class="btn" id="btnMarkQuizDone" type="button">Godkänn quiz</button>
+            </div>
 
-const container = document.getElementById("kurser");
+            <div class="notice" style="margin-top:12px;">
+              Quiz kan fyllas på senare. Progress sparas lokalt i webbläsaren.
+            </div>
+          </div>
+        </div>
 
-kurser.forEach(kurs => {
-    const div = document.createElement("div");
-    div.className = "card " + kurs.css;
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;border-top:1px solid var(--border);padding-top:12px;">
+          <button class="btn" id="btnPrev" type="button">Föregående modul</button>
+          <button class="btn btn--primary" id="btnNext" type="button">Nästa modul</button>
+        </div>
+      </section>
+    </div>
+  </main>
 
-    div.onclick = () => {
-        window.location.href = "kurs_dokumentation.html";
-    };
+  <footer class="footer">
+    <div class="container"><small>TFF – Portal</small></div>
+  </footer>
 
-    div.innerHTML = `
-        <h3>${kurs.namn}</h3>
-        <p>Syfte: ${kurs.syfte}</p>
-        <div class="tag">5 moduler</div>
-    `;
-
-    container.appendChild(div);
-});
-
-</script>
-
+  <script src="assets/js/kurser-data.js"></script>
+  <script src="assets/js/kurser-app.js"></script>
 </body>
 </html>
