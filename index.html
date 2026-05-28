@@ -1,137 +1,160 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="utf<br>medarbetare och chefstöd</h1>  <meta charset="utf-8" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-      <form class="searchbar" role="search" aria-label="Sök i portalen" onsubmit="return false;">
-        <label class="sr-only" for="q">Sök</label>
-        <input id="q" name="q" type="search" placeholder="Vad kan vi hjälpa dig med?" />
-        <button type="submit" aria-label="Sök">🔍</button>
-      </form>
-    </div>
-  </header>
+<title>TFF – Portal</title>
 
-  <main id="main" class="container" role="main">
-    <section class="home-grid" aria-label="Startinnehåll">
+<style>
+body {
+    font-family: Arial;
+    margin:0;
+    background:#f3f4f6;
+}
 
-      <article class="card hero-card" aria-label="Introduktion">
-        <div class="card__img card__img--hero" role="img" aria-label="Huvudbild"></div>
-        <div class="card__body">
-          <h2 class="card__title">Upptäck hur enkelt det kan vara</h2>
-          <p class="card__text">
-            Här finns stöd för både chefer och medarbetare. I kunskapsbanken hittar du guider, digitala utbildningar och kontaktvägar.
-          </p>
-        </div>
-      </article>
+/* HEADER */
+.header {
+    background:white;
+    padding:20px;
+    border-bottom:1px solid #ddd;
+}
 
-      <section class="tile-grid" aria-label="Genvägar">
+.header h1 {
+    margin:0;
+}
 
-        <!-- ✅ Alla guider -> Kurser -->
-        <a class="tile" href="kurser.html">
-          <div class="tile__img tile__img--guides" aria-hidden="true"></div>
-          <div class="tile__body">
-            <h3 class="tile__title">Alla guider</h3>
-            <p class="tile__meta">Kurser och moduler för TFF</p>
-          </div>
-        </a>
+.header p {
+    margin:5px 0 0 0;
+    color:#666;
+}
 
-        <a class="tile" href="utbildningar.html">
-          <div class="tile__img tile__img--edu" aria-hidden="true"></div>
-          <div class="tile__body">
-            <h3 class="tile__title">Digitala utbildningar</h3>
-            <p class="tile__meta">För våra system</p>
-          </div>
-        </a>
+/* MAIN */
+.container {
+    padding:30px;
+    max-width:1100px;
+    margin:auto;
+}
 
-        <a class="tile" href="utbildningar.html">
-          <div class="tile__img tile__img--mandatory" aria-hidden="true"></div>
-          <div class="tile__body">
-            <h3 class="tile__title">Obligatoriska systemutbildningar</h3>
-            <p class="tile__meta">För verksamheten</p>
-          </div>
-        </a>
+.hero {
+    background:white;
+    padding:30px;
+    border-radius:10px;
+}
 
-        <a class="tile" href="utbildningar.html">
-          <div class="tile__img tile__img--chef" aria-hidden="true"></div>
-          <div class="tile__body">
-            <h3 class="tile__title">Chefstödportal</h3>
-            <p class="tile__meta">Obligatoriska grundutbildningar</p>
-          </div>
-        </a>
+.hero h2 {
+    margin-top:0;
+}
 
-        <a class="tile tile--wide" href="utbildningar.html">
-          <div class="tile__img tile__img--status" aria-hidden="true"></div>
-          <div class="tile__body">
-            <h3 class="tile__title">Min status</h3>
-            <p class="tile__meta">Påbörjade / ej påbörjade</p>
-          </div>
-        </a>
+/* BUTTONS */
+.buttons {
+    margin-top:20px;
+}
 
-      </section>
+button {
+    padding:12px 18px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+}
 
-      <aside class="right-col" aria-label="Stöd och kontakt">
-        <a class="tile tile--tall" href="#">
-          <div class="tile__img tile__img--atlas" aria-hidden="true"></div>
-          <div class="tile__body">
-            <h3 class="tile__title">Atlas</h3>
-            <p class="tile__meta">Processer, Utbildning, Regler</p>
-          </div>
-        </a>
+.primary {
+    background:#1f6cbd;
+    color:white;
+    font-weight:bold;
+}
 
-        <a class="tile tile--tall" href="#">
-          <div class="tile__img tile__img--hrkollegan" aria-hidden="true"></div>
-          <div class="tile__body">
-            <h3 class="tile__title">HR-kollegan</h3>
-            <p class="tile__meta">Rutiner, policyer och HR-relaterade dokument</p>
-          </div>
-        </a>
-      </aside>
+.secondary {
+    background:#eee;
+}
 
-    </section>
+/* CARDS */
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:15px;
+    margin-top:20px;
+}
 
-    <section class="info-boxes" aria-label="Mina ytor">
-      <article class="info">
-        <h2 class="info__title">Mina favoriter</h2>
-        <div class="placeholder-box" aria-hidden="true"></div>
-      </article>
+.card {
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    cursor:pointer;
+}
 
-      <article class="info">
-        <h2 class="info__title">Mina senast visade</h2>
-        <div class="placeholder-box" aria-hidden="true"></div>
-        <h3 class="info__subtitle">Populära guider</h3>
-        <div class="placeholder-box" aria-hidden="true"></div>
-      </article>
+.card:hover {
+    transform:scale(1.02);
+}
+</style>
 
-      <article class="info">
-        <h2 class="info__title">Mina utbildningar</h2>
-        <div class="placeholder-box" aria-hidden="true"></div>
-      </article>
-
-      <article class="info">
-        <h2 class="info__title">Obligatoriska utbildningar</h2>
-        <div class="placeholder-box" aria-hidden="true"></div>
-      </article>
-    </section>
-
-    <footer class="footer" role="contentinfo">
-      <p class="footer__text">© TFF-portal – statisk demo. Inga personuppgifter.</p>
-    </footer>
-  </main>
-</body>
-</html>
-``
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TFF-portal – Kunskapsbank</title>
-  <meta name="description" content="Kunskapsbank för TFF medarbetare och chefstöd." />
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>
-  <a class="skip-link" href="#main">Hoppa till innehåll</a>
 
-  <header class="hero" role="banner">
-    <div class="hero__inner">
-      <a class="back" href="index.html">← Tillbaka till portalen</a>
+<div class="header">
+    <h1>TFF – Digital utbildningsportal</h1>
+    <p>Kurser • Moduler • Progress</p>
+</div>
 
+<div class="container">
+
+<div class="hero">
+
+<h2>Välkommen</h2>
+
+<p>
+Denna portal innehåller kurser för TFF med fokus på:
+</p>
+
+<ul>
+<li>Struktur</li>
+<li>Dokumentation</li>
+<li>Informationshantering</li>
+<li>Microsoft 365</li>
+</ul>
+
+<div class="buttons">
+
+<button class="primary"
+onclick="location.href='utbildningar.html'">
+Öppna kurskatalog
+</button>
+
+<button class="secondary"
+onclick="location.href='utbildning.html?course=kurs01_teams'">
+Starta direkt (Testkurs)
+</button>
+
+</div>
+
+</div>
+
+<h2 style="margin-top:30px;">Snabbval</h2>
+
+<div class="grid">
+
+<div class="card"
+onclick="location.href='utbildning.html?course=kurs01_teams'">
+<h3>Kurs 1 – Teams</h3>
+<p>Grund & arbetssätt</p>
+</div>
+
+<div class="card"
+onclick="location.href='utbildning.html?course=kurs03_dokumentation'">
+<h3>Kurs 3 – Dokumentation</h3>
+<p>Struktur och efterlevnad</p>
+</div>
+
+<div class="card"
+onclick="location.href='utbildning.html?course=kurs04_ai_copilot'">
+<h3>Kurs 4 – AI & Copilot</h3>
+<p>Grundförståelse</p>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
