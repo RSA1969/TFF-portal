@@ -2,45 +2,126 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>TFF – Portal</title>
 
 <style>
-body { font-family:Arial; background:#f3f4f6; margin:0 }
-.container { max-width:1000px; margin:auto; padding:30px }
 
-.hero {
-    background:white;
-    padding:30px;
-    border-radius:10px;
+body {
+    margin:0;
+    font-family: Arial;
+    background:#f3f4f6;
 }
 
+/* TOP BAR */
+.topbar {
+    background:#165c8d;
+    color:white;
+    padding:30px;
+    text-align:center;
+    border-radius:0 0 10px 10px;
+}
+
+.topbar h1 {
+    margin:0;
+}
+
+.search {
+    margin-top:15px;
+}
+
+.search input {
+    width:400px;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+}
+
+/* CONTENT */
+.container {
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+/* HERO */
+.hero {
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+/* GRID */
+.grid {
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:15px;
+}
+
+/* CARDS */
+.card {
+    background:white;
+    border-radius:10px;
+    padding:15px;
+    cursor:pointer;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card h3 {
+    margin:10px 0;
+}
+
+/* BUTTON */
 button {
     padding:12px 16px;
-    border-radius:8px;
     border:none;
+    border-radius:10px;
     cursor:pointer;
 }
 
-.primary { background:#1f6cbd; color:white }
-.secondary { background:#eee }
+.primary {
+    background:#1f6cbd;
+    color:white;
+}
+
+.secondary {
+    background:#eee;
+}
+
+/* BIG CARD */
+.big {
+    grid-row: span 3;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- HEADER -->
+<div class="topbar">
+<h1>Kunskapsportal TFF</h1>
+
+<div class="search">
+<input placeholder="Vad vill du lära dig?">
+</div>
+</div>
+
 <div class="container">
 
-<h1>TFF – Digital utbildningsportal</h1>
-
+<!-- HERO -->
 <div class="hero">
-
 <h2>Välkommen</h2>
 
+<p>Denna portal innehåller utbildningar för TFF:</p>
+
 <ul>
-<li>Struktur</li>
 <li>Dokumentation</li>
 <li>Informationshantering</li>
 <li>Microsoft 365</li>
+<li>Processarbete</li>
 </ul>
 
 <button class="primary"
@@ -55,7 +136,48 @@ Starta direkt
 
 </div>
 
+<!-- GRID -->
+<div class="grid">
+
+<div class="card big"
+onclick="location.href='utbildningar.html'">
+<h3>Digitala utbildningar</h3>
+<p>Alla kurser och moduler inom TFF</p>
+</div>
+
+<div class="card"
+onclick="location.href='utbildningar.html'">
+<h3>Alla kurser</h3>
+<p>Öppna hela katalogen</p>
+</div>
+
+<div class="card"
+onclick="location.href='utbildning.html?course=kurs03_dokumentation'">
+<h3>Dokumentation</h3>
+<p>Struktur och efterlevnad</p>
+</div>
+
+<div class="card"
+onclick="location.href='utbildning.html?course=kurs04_ai_copilot'">
+<h3>AI & Copilot</h3>
+<p>Grundförståelse</p>
+</div>
+
+<div class="card"
+onclick="location.href='utbildningar.html'">
+<h3>Obligatoriska utbildningar</h3>
+<p>Se alla obligatoriska kurser</p>
+</div>
+
+<div class="card">
+<h3>HR‑kollegan</h3>
+<p>Stöd och hjälp</p>
+</div>
+
+</div>
+
 </div>
 
 </body>
 </html>
+``
