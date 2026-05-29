@@ -2,198 +2,67 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>TFF – Kurskatalog</title>
+<title>Kurskatalog</title>
 
 <style>
+body{font-family:Arial;background:#f3f4f6;margin:0}
 
-body {
-    margin:0;
-    font-family: Arial;
-    background:#f3f4f6;
+.grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+padding:20px;
 }
 
-/* HEADER */
-.header {
-    background:#fff;
-    padding:20px;
-    border-bottom:1px solid #ddd;
+.card{
+background:white;
+padding:15px;
+border-radius:10px;
+cursor:pointer;
+border-left:6px solid #ccc;
 }
 
-.header-top {
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
+.badge{
+background:#eee;
+padding:4px 8px;
+border-radius:10px;
+font-size:12px;
 }
-
-.title {
-    font-weight:bold;
-}
-
-.subtitle {
-    font-size:12px;
-    color:#666;
-}
-
-.header-controls {
-    display:flex;
-    gap:10px;
-}
-
-.header input {
-    padding:10px;
-    border-radius:10px;
-    border:1px solid #ccc;
-}
-
-button {
-    padding:10px 14px;
-    border-radius:10px;
-    border:none;
-    cursor:pointer;
-}
-
-.primary {
-    background:#1f6cbd;
-    color:white;
-}
-
-.secondary {
-    background:#eee;
-}
-
-/* PANEL */
-.panel {
-    background:#fff;
-    margin:20px;
-    border-radius:10px;
-    padding:20px;
-}
-
-/* GRID */
-.grid {
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:20px;
-}
-
-/* CARD */
-.card {
-    background:#fff;
-    border-radius:15px;
-    padding:15px;
-    cursor:pointer;
-    border-left:6px solid #ccc;
-    box-shadow:0 2px 6px rgba(0,0,0,0.1);
-}
-
-.card h3 {
-    margin:0 0 10px 0;
-    font-size:16px;
-}
-
-.card p {
-    font-size:14px;
-    color:#444;
-}
-
-/* BADGE */
-.badge {
-    margin-top:10px;
-    display:inline-block;
-    padding:4px 10px;
-    background:#eee;
-    border-radius:15px;
-    font-size:12px;
-}
-
-/* FÄRGER */
-.k1 { border-left-color:#cde7e2; }
-.k2 { border-left-color:#cde7e2; }
-.k3 { border-left-color:#f3d7c4; }
-.k4 { border-left-color:#cde7e2; }
-.k5 { border-left-color:#f1d4e4; }
-.k6 { border-left-color:#ded7f6; }
-.k7 { border-left-color:#f1d4e4; }
-.k8 { border-left-color:#f1d4e4; }
-.k9 { border-left-color:#ded7f6; }
-.k10 { border-left-color:#f8e4c2; }
-.k11 { border-left-color:#cde7e2; }
-.k12 { border-left-color:#d9f2d0; }
-.k13 { border-left-color:#e5ddd3; }
-.k14 { border-left-color:#dff0d8; }
-.k15 { border-left-color:#cfd8dc; }
-
 </style>
 </head>
 
 <body>
 
-<div class="header">
-
-<div class="header-top">
-
-<div>
-<div class="title">TFF – Kurskatalog</div>
-<div class="subtitle">Pastellfärg per kurs • Filter och sök</div>
-</div>
-
-<div class="header-controls">
-<input type="text" placeholder="Sök kurs...">
-<button class="primary">Sök</button>
-<button class="secondary" onclick="location.href='index.html'">Start</button>
-</div>
-
-</div>
-
-</div>
-
-<div class="panel">
-
-<h3>Kurser</h3>
+<h1 style="padding:20px">Kurser</h1>
 
 <div class="grid" id="courses"></div>
 
-</div>
-
 <script>
 
-const courses = [
-["k1","Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT","Rätt användning av Teams i vardagsarbetet"],
-["k2","Kurs 2 – TRANSKRIBERING","Omvandling av tal till text"],
-["k3","Kurs 3 – DOKUMENTATION (TFF)","Strukturerad dokumentation"],
-["k4","Kurs 4 – AI & COPILOT: GRUNDERNA","Grundförståelse AI"],
-["k5","Kurs 5 – PROMPTNING I COPILOT","Effektiva prompts"],
-["k6","Kurs 6 – SKAPA & SPARA DOKUMENT","Dokumentstruktur"],
-["k7","Kurs 7 – TEAMS & SHAREPOINT","Behörigheter"],
-["k8","Kurs 8 – GDPR & INFOKLASSNING","Rätt information"],
-["k9","Kurs 9 – RÄTT VERKTYG","Välj rätt system"],
-["k10","Kurs 10 – DIGITAL MÖTESKULTUR","Effektiva möten"],
-["k11","Kurs 11 – FRÅN CHATT TILL STRUKTUR","Struktur"],
-["k12","Kurs 12 – DIARIEFÖRING","Arkivering"],
-["k13","Kurs 13 – STYRNING & GOVERNANCE","M365 governance"],
-["k14","Kurs 14 – INFORMATIONENS LIVSCYKEL","Informationsflöde"],
-["k15","Kurs 15 – PROCESSARBETE","Processbaserat arbete"]
-];
+const kurser = [];
 
-const container = document.getElementById("courses");
+for(let i=1;i<=15;i++){
+kurser.push({
+id:"kurs"+i,
+name:"Kurs "+i,
+desc:"Beskrivning kurs "+i
+});
+}
 
-courses.forEach((c,i)=>{
-    let div = document.createElement("div");
-    div.className = "card " + c[0];
+const container=document.getElementById("courses");
 
-    div.onclick = () => {
-        window.location.href = "utbildning.html?course=kurs" + (i+1);
-    };
+kurser.forEach(k=>{
+let div=document.createElement("div");
+div.className="card";
+div.onclick=()=>location.href="utbildning.html?course="+k.id;
 
-    div.innerHTML = `
-        <h3>${c[1]}</h3>
-        <p>Syfte: ${c[2]}</p>
-        <div class="badge">5 moduler</div>
-    `;
+div.innerHTML=`
+<h3>${k.name}</h3>
+<p>${k.desc}</p>
+<span class="badge">5 moduler</span>
+`;
 
-    container.appendChild(div);
+container.appendChild(div);
 });
 
 </script>
