@@ -6,480 +6,221 @@
 <title>TFF – Portal</title>
 
 <style>
-    * { box-sizing: border-box; }
+body {
+    margin:0;
+    font-family: Arial;
+    background:#f3f4f6;
+}
 
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f3f4f6;
-        color: #0f2942;
-    }
+/* HEADER */
+.topbar {
+    background:#165c8d;
+    color:white;
+    padding:30px;
+    text-align:center;
+    border-radius:0 0 12px 12px;
+}
 
-    .topbar {
-        background: #0f5f97;
-        color: white;
-        padding: 28px 20px 30px;
-        border-radius: 0 0 14px 14px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-    }
+.topbar h1 { margin:0; }
 
-    .topbar-inner {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+.search { margin-top:15px; }
 
-    .back-link {
-        font-size: 12px;
-        font-weight: bold;
-        margin-bottom: 8px;
-        opacity: 0.95;
-    }
+.search input {
+    width:500px;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+}
 
-    .portal-title {
-        font-size: 26px;
-        font-weight: bold;
-        line-height: 1.1;
-        text-align: center;
-        margin: 0 0 12px 0;
-    }
+/* CONTENT */
+.container {
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
 
-    .search-wrap {
-        display: flex;
-        justify-content: center;
-    }
+/* GRID */
+.grid {
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:15px;
+}
 
-    .search-box {
-        width: 100%;
-        max-width: 700px;
-        display: flex;
-        align-items: center;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        border: 1px solid #d6dce3;
-    }
+/* CARDS */
+.card {
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    cursor:pointer;
+}
 
-    .search-box input {
-        flex: 1;
-        border: none;
-        outline: none;
-        padding: 14px 16px;
-        font-size: 14px;
-    }
+.card img {
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
 
-    .search-btn {
-        border: none;
-        background: white;
-        padding: 0 16px;
-        cursor: pointer;
-        font-weight: bold;
-        color: #0f2942;
-    }
+.big img {
+    height:450px;
+}
 
-    .container {
-        max-width: 1200px;
-        margin: 18px auto 28px;
-        padding: 0 16px;
-    }
+.card-body {
+    padding:10px;
+    text-align:center;
+}
 
-    .grid {
-        display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
-        gap: 12px;
-    }
+/* BUTTONS */
+.buttons {
+    display:flex;
+    gap:15px;
+    margin-top:15px;
+}
 
-    .card {
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-        cursor: pointer;
-        border: 1px solid #d8dee6;
-        transition: transform 0.12s ease, box-shadow 0.12s ease;
-    }
+.button-block {
+    flex:1;
+    background:#165c8d;
+    color:white;
+    padding:20px;
+    text-align:center;
+    border-radius:10px;
+    cursor:pointer;
+}
 
-    .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 14px rgba(0,0,0,0.10);
-    }
+/* PANELS */
+.panels {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-top:20px;
+}
 
-    .card-image {
-        width: 100%;
-        display: block;
-        object-fit: cover;
-        background: linear-gradient(135deg, #9fd0e6, #d7edf4);
-    }
+.panel {
+    background:#f4b27a;
+    padding:10px;
+    border-radius:10px;
+}
 
-    .card-image.large {
-        height: 420px;
-    }
+.panel-item {
+    background:white;
+    padding:8px;
+    margin:5px 0;
+    border-radius:6px;
+    font-size:12px;
+}
 
-    .card-image.small {
-        height: 110px;
-    }
-
-    .card-image.medium {
-        height: 130px;
-    }
-
-    .card-body {
-        padding: 10px 12px 12px;
-        text-align: center;
-    }
-
-    .card h3 {
-        margin: 0 0 4px 0;
-        font-size: 15px;
-        line-height: 1.2;
-    }
-
-    .card p {
-        margin: 0;
-        font-size: 12px;
-        color: #4f6172;
-        line-height: 1.35;
-    }
-
-    .large-card {
-        grid-row: span 4;
-    }
-
-    .cta-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        margin-top: 12px;
-    }
-
-    .cta {
-        background: #0f5f97;
-        color: white;
-        border-radius: 8px;
-        min-height: 140px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        font-weight: bold;
-        padding: 20px;
-        border: 1px solid #0d5689;
-        cursor: pointer;
-    }
-
-    .panel-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        gap: 12px;
-        margin-top: 12px;
-    }
-
-    .panel {
-        background: #f1b279;
-        border-radius: 8px;
-        min-height: 170px;
-        border: 1px solid #dfa06a;
-        padding: 10px;
-    }
-
-    .panel h4 {
-        margin: 0 0 8px 0;
-        font-size: 12px;
-    }
-
-    .panel-item {
-        background: white;
-        border-radius: 6px;
-        padding: 8px;
-        font-size: 11px;
-        margin-bottom: 8px;
-        border: 1px solid #ead8c8;
-        line-height: 1.3;
-        cursor: pointer;
-    }
-
-    .section-note {
-        font-size: 11px;
-        color: #5d6c7a;
-        margin-top: 6px;
-        line-height: 1.35;
-    }
-
-    @media (max-width: 1024px) {
-        .grid {
-            grid-template-columns: 1fr 1fr;
-        }
-        .large-card {
-            grid-row: span 2;
-        }
-        .panel-row {
-            grid-template-columns: 1fr 1fr;
-        }
-    }
-
-    @media (max-width: 700px) {
-        .grid,
-        .cta-row,
-        .panel-row {
-            grid-template-columns: 1fr;
-        }
-
-        .large-card {
-            grid-row: span 1;
-        }
-
-        .card-image.large {
-            height: 240px;
-        }
-    }
 </style>
 </head>
+
 <body>
 
-<header class="topbar">
-    <div class="topbar-inner">
-        <div class="back-link">← Tillbaka till portalen</div>
-        <h1 class="portal-title">Kunskapsportal för TFF</h1>
+<div class="topbar">
+<h1>Kunskapsportal för TFF</h1>
 
-        <div class="search-wrap">
-            <div class="search-box">
-                <input id="portalSearch" type="text" placeholder="Vad kan vi hjälpa dig med?" />
-                <button class="search-btn" type="button" onclick="goToCatalog()">Sök</button>
-            </div>
-        </div>
-    </div>
-</header>
+<div class="search">
+<input placeholder="Vad kan vi hjälpa dig med?">
+</div>
+</div>
 
-<main class="container">
+<div class="container">
 
-    <section class="grid">
-        <!-- Stor vänster -->
-        <article class="card large-card" onclick="goToCatalog()">
-            <svg class="card-image large" viewBox="0 0 800 900" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="800" height="900" fill="#9fd8e8"/>
-                <rect y="520" width="800" height="380" fill="#2d94b8"/>
-                <rect y="640" width="800" height="260" fill="#3c9f5d"/>
-                <rect x="0" y="720" width="800" height="180" fill="#6aa84f"/>
-                <rect x="40" y="760" width="720" height="120" fill="#d94c31"/>
-                <rect x="70" y="500" width="210" height="300" fill="#d94c31"/>
-                <rect x="250" y="430" width="120" height="370" fill="#d94c31"/>
-                <polygon points="250,430 310,320 370,430" fill="#274b69"/>
-                <rect x="150" y="565" width="34" height="90" fill="#274b69"/>
-                <rect x="290" y="585" width="35" height="140" fill="#274b69"/>
-                <rect x="500" y="575" width="110" height="225" fill="#ef6b47"/>
-                <rect x="640" y="620" width="70" height="180" fill="#ef6b47"/>
-                <circle cx="642" cy="728" r="8" fill="#274b69"/>
-                <rect x="638" y="620" width="8" height="108" fill="#274b69"/>
-                <rect x="560" y="755" width="18" height="45" fill="#274b69"/>
-                <circle cx="115" cy="792" r="10" fill="#f2c94c"/>
-                <ellipse cx="420" cy="150" rx="70" ry="16" fill="#f7f4e8"/>
-                <ellipse cx="280" cy="190" rx="55" ry="12" fill="#f7f4e8"/>
-                <rect x="55" y="0" width="18" height="900" fill="#21556d"/>
-                <rect x="75" y="0" width="10" height="900" fill="#2e6b84"/>
-                <rect x="315" y="0" width="22" height="900" fill="#21556d"/>
-                <rect x="337" y="0" width="10" height="900" fill="#2e6b84"/>
-                <rect x="660" y="120" width="15" height="240" fill="#f1c644"/>
-                <!-- tulpaner -->
-                <g>
-                    <circle cx="130" cy="740" r="10" fill="#f44336"/><rect x="128" y="748" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="170" cy="770" r="10" fill="#ff9800"/><rect x="168" y="778" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="210" cy="750" r="10" fill="#e91e63"/><rect x="208" y="758" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="250" cy="782" r="10" fill="#f44336"/><rect x="248" y="790" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="290" cy="752" r="10" fill="#ff9800"/><rect x="288" y="760" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="330" cy="774" r="10" fill="#e91e63"/><rect x="328" y="782" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="370" cy="748" r="10" fill="#f44336"/><rect x="368" y="756" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="410" cy="784" r="10" fill="#ff9800"/><rect x="408" y="792" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="450" cy="752" r="10" fill="#e91e63"/><rect x="448" y="760" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="490" cy="778" r="10" fill="#f44336"/><rect x="488" y="786" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="530" cy="748" r="10" fill="#ff9800"/><rect x="528" y="756" width="4" height="28" fill="#2f7d32"/>
-                    <circle cx="570" cy="776" r="10" fill="#e91e63"/><rect x="568" y="784" width="4" height="28" fill="#2f7d32"/>
-                </g>
-            </svg>
-            <div class="card-body">
-                <h3>Upptäck hur enkelt det kan vara</h3>
-                <p>
-                    HR och TFF använder digitala kurser, guider och visualiseringar för att göra lärandet mer tillgängligt.
-                    Öppna kurskatalogen för att se alla utbildningar.
-                </p>
-            </div>
-        </article>
+<div class="grid">
 
-        <!-- Höger kolumn kort -->
-        <article class="card" onclick="goToCatalog()">
-            <svg class="card-image small" viewBox="0 0 400 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="400" height="220" fill="#cde6ef"/>
-                <rect y="150" width="400" height="70" fill="#ead7ca"/>
-                <rect x="120" y="70" width="120" height="26" rx="6" fill="#f4b14c"/>
-                <rect x="110" y="96" width="140" height="24" rx="6" fill="#d8892f"/>
-                <rect x="100" y="122" width="160" height="24" rx="6" fill="#f4b14c"/>
-                <line x1="100" y1="146" x2="260" y2="146" stroke="#7a5a3d" stroke-width="2"/>
-                <g fill="#ffffff" opacity="0.45">
-                    <ellipse cx="40" cy="40" rx="28" ry="10"/>
-                    <ellipse cx="340" cy="35" rx="28" ry="10"/>
-                </g>
-            </svg>
-            <div class="card-body">
-                <h3>Alla Guider</h3>
-                <p>Öppna hela kurskatalogen och se samtliga utbildningar.</p>
-            </div>
-        </article>
+<!-- STOR -->
+<div class="card big" onclick="goCatalog()">
+<img src="assets/img/hero-left.jpg">
+<div class="card-body">
+<h3>Upptäck hur enkelt det kan vara</h3>
+</div>
+</div>
 
-        <article class="card" onclick="openCourse('kurs04_ai_copilot')">
-            <svg class="card-image medium" viewBox="0 0 320 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="320" height="320" fill="#bdd7e9"/>
-                <circle cx="160" cy="130" r="52" fill="#f7f7f7" stroke="#28435b" stroke-width="6"/>
-                <circle cx="142" cy="126" r="9" fill="#15a4e0"/>
-                <circle cx="178" cy="126" r="9" fill="#15a4e0"/>
-                <rect x="130" y="148" width="60" height="24" rx="10" fill="#28435b"/>
-                <rect x="118" y="190" width="84" height="58" rx="12" fill="#e9f2f7" stroke="#28435b" stroke-width="5"/>
-                <rect x="136" y="206" width="48" height="22" rx="6" fill="#2fa9df"/>
-                <line x1="160" y1="76" x2="160" y2="40" stroke="#28435b" stroke-width="6"/>
-                <circle cx="160" cy="28" r="10" fill="#28435b"/>
-                <line x1="106" y1="124" x2="88" y2="124" stroke="#28435b" stroke-width="6"/>
-                <line x1="214" y1="124" x2="232" y2="124" stroke="#28435b" stroke-width="6"/>
-                <line x1="134" y1="248" x2="120" y2="294" stroke="#28435b" stroke-width="6"/>
-                <line x1="186" y1="248" x2="200" y2="294" stroke="#28435b" stroke-width="6"/>
-                <line x1="118" y1="210" x2="82" y2="244" stroke="#28435b" stroke-width="6"/>
-                <line x1="202" y1="210" x2="238" y2="244" stroke="#28435b" stroke-width="6"/>
-            </svg>
-            <div class="card-body">
-                <h3>Fråga Vera Plus</h3>
-                <p>Öppna AI &amp; Copilot-kursen direkt.</p>
-            </div>
-        </article>
+<!-- HÖGER -->
+<div class="card" onclick="goCatalog()">
+<img src="assets/img/tile-guides.jpg">
+<div class="card-body">
+<h3>Alla Guider</h3>
+</div>
+</div>
 
-        <article class="card" onclick="goToCatalog()">
-            <svg class="card-image medium" viewBox="0 0 400 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="400" height="220" fill="#ead7ca"/>
-                <circle cx="85" cy="70" r="26" fill="#d8c1af"/>
-                <rect x="55" y="98" width="70" height="90" rx="20" fill="#f5c59a"/>
-                <rect x="135" y="55" width="190" height="110" rx="8" fill="#f8f5ef" stroke="#b9a89b"/>
-                <rect x="150" y="72" width="70" height="42" fill="#d9ebf4" stroke="#8fa9b5"/>
-                <rect x="228" y="72" width="78" height="42" fill="#f2dfd4" stroke="#c9aa97"/>
-                <line x1="150" y1="128" x2="306" y2="128" stroke="#b9a89b"/>
-                <line x1="150" y1="142" x2="286" y2="142" stroke="#b9a89b"/>
-            </svg>
-            <div class="card-body">
-                <h3>Digitala utbildningar</h3>
-                <p>För våra system och arbetssätt.</p>
-            </div>
-        </article>
+<div class="card" onclick="goCourse('kurs04_ai_copilot')">
+<img src="assets/img/tile-hrkollegan.jpg">
+<div class="card-body">
+<h3>Fråga Vera Plus</h3>
+</div>
+</div>
 
-        <article class="card" onclick="goToCatalog('obligatorisk')">
-            <svg class="card-image medium" viewBox="0 0 400 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="400" height="220" fill="#f0d9b0"/>
-                <rect x="240" y="20" width="100" height="140" rx="8" fill="#d8eef0"/>
-                <rect x="35" y="30" width="120" height="160" rx="12" fill="#9bc6d2"/>
-                <circle cx="95" cy="72" r="26" fill="#d7b78b"/>
-                <rect x="60" y="98" width="70" height="80" rx="18" fill="#7cb879"/>
-                <rect x="200" y="60" width="24" height="85" fill="#8d6e63"/>
-                <ellipse cx="212" cy="150" rx="26" ry="10" fill="#6ca36a"/>
-                <ellipse cx="296" cy="53" rx="18" ry="6" fill="#ffffff" opacity="0.55"/>
-            </svg>
-            <div class="card-body">
-                <h3>Obligatoriska systemutbildningar</h3>
-                <p>Gå direkt till obligatoriska kurser.</p>
-            </div>
-        </article>
+<div class="card" onclick="goCatalog()">
+<img src="assets/img/tile-edu.jpg">
+<div class="card-body">
+<h3>Digitala utbildningar</h3>
+</div>
+</div>
 
-        <article class="card" onclick="goToCatalog('obligatorisk')">
-            <svg class="card-image medium" viewBox="0 0 400 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="400" height="220" fill="#dce8ef"/>
-                <line x1="200" y1="50" x2="200" y2="160" stroke="#325e87" stroke-width="8"/>
-                <line x1="110" y1="75" x2="290" y2="75" stroke="#325e87" stroke-width="8"/>
-                <line x1="110" y1="75" x2="60" y2="130" stroke="#325e87" stroke-width="4"/>
-                <line x1="290" y1="75" x2="340" y2="130" stroke="#325e87" stroke-width="4"/>
-                <line x1="200" y1="160" x2="140" y2="206" stroke="#325e87" stroke-width="8"/>
-                <line x1="200" y1="160" x2="260" y2="206" stroke="#325e87" stroke-width="8"/>
-                <ellipse cx="60" cy="130" rx="40" ry="14" fill="#f4c542"/>
-                <ellipse cx="340" cy="130" rx="40" ry="14" fill="#f4c542"/>
-            </svg>
-            <div class="card-body">
-                <h3>Chefsutbildningsportal</h3>
-                <p>Öppna chefs- och ledningsrelaterat innehåll.</p>
-            </div>
-        </article>
+<div class="card" onclick="goCatalog()">
+<img src="assets/img/tile-mandatory.jpg">
+<div class="card-body">
+<h3>Obligatoriska systemutbildningar</h3>
+</div>
+</div>
 
-        <article class="card" onclick="openCourse('kurs10_moteskultur')">
-            <svg class="card-image medium" viewBox="0 0 320 320" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="320" height="320" fill="#d8edf4"/>
-                <circle cx="160" cy="125" r="54" fill="#f6f6f6" stroke="#24435a" stroke-width="6"/>
-                <circle cx="143" cy="121" r="9" fill="#0ca2df"/>
-                <circle cx="177" cy="121" r="9" fill="#0ca2df"/>
-                <rect x="130" y="145" width="60" height="20" rx="10" fill="#24435a"/>
-                <rect x="122" y="184" width="76" height="56" rx="12" fill="#f2f8fb" stroke="#24435a" stroke-width="5"/>
-                <rect x="137" y="198" width="46" height="18" rx="6" fill="#1fb6f0"/>
-                <circle cx="72" cy="80" r="12" fill="#ffd54f"/>
-                <line x1="72" y1="98" x2="72" y2="120" stroke="#ffd54f" stroke-width="4"/>
-                <line x1="54" y1="88" x2="42" y2="80" stroke="#ffd54f" stroke-width="4"/>
-                <line x1="90" y1="88" x2="102" y2="80" stroke="#ffd54f" stroke-width="4"/>
-                <rect x="225" y="160" width="44" height="70" fill="#ffffff" stroke="#9db6c4"/>
-                <line x1="234" y1="175" x2="258" y2="175" stroke="#9db6c4" />
-                <line x1="234" y1="189" x2="258" y2="189" stroke="#9db6c4" />
-                <line x1="234" y1="203" x2="258" y2="203" stroke="#9db6c4" />
-            </svg>
-            <div class="card-body">
-                <h3>HR-kollegan</h3>
-                <p>Öppna kurs om möteskultur och struktur.</p>
-            </div>
-        </article>
-    </section>
+<div class="card" onclick="goCatalog()">
+<img src="assets/img/tile-chef.jpg">
+<div class="card-body">
+<h3>Chefsutbildningsportal</h3>
+</div>
+</div>
 
-    <section class="cta-row">
-        <div class="cta" onclick="openCourse('kurs06_skapa_spara')">Heroma</div>
-        <div class="cta" onclick="goToCatalog()">Kontakta HR-service</div>
-    </section>
+<div class="card" onclick="goCourse('kurs10_moteskultur')">
+<img src="assets/img/tile-status.jpg">
+<div class="card-body">
+<h3>HR‑kollegan</h3>
+</div>
+</div>
 
-    <section class="panel-row">
-        <div class="panel">
-            <h4>★ Mina Favoriter</h4>
-            <div class="panel-item" onclick="openCourse('kurs03_dokumentation')">Reseräkning</div>
-        </div>
+</div>
 
-        <div class="panel">
-            <h4>◔ Mina senast visade</h4>
-            <div class="panel-item" onclick="openCourse('kurs02_transkribering')">KIA - incident- och riskhantering</div>
-            <div class="panel-item" onclick="openCourse('kurs07_teams_sharepoint')">Hur medarbetare anmäler incident</div>
-            <div class="panel-item" onclick="openCourse('kurs13_styrning')">Chef &amp; chefsstöd Guidesamling</div>
-            <div class="panel-item" onclick="openCourse('kurs09_ratt_verktyg')">Digital arbetsmiljö</div>
-        </div>
+<!-- BUTTONS -->
+<div class="buttons">
+<div class="button-block" onclick="goCourse('kurs06_skapa_spara')">Heroma</div>
+<div class="button-block" onclick="goCatalog()">Kontakta HR-service</div>
+</div>
 
-        <div class="panel">
-            <h4>◫ Mina utbildningar</h4>
-            <div class="panel-item" onclick="openCourse('kurs02_transkribering')">
-                KIA - incident- och riskhanteringssystem
-                <div class="section-note">Utbildning i KIA som är ett verktyg för att rapportera incidenter och identifiera risker.</div>
-            </div>
-            <div class="panel-item" onclick="openCourse('kurs04_ai_copilot')">Påbörjad (av 15)</div>
-        </div>
+<!-- PANELS -->
+<div class="panels">
 
-        <div class="panel">
-            <h4>◫ Obligatoriska utbildningar</h4>
-            <div class="panel-item" onclick="openCourse('kurs03_dokumentation')">Dokumentation (TFF)</div>
-            <div class="panel-item" onclick="openCourse('kurs08_gdpr_infoklass')">Informationsklassning &amp; GDPR</div>
-            <div class="panel-item" onclick="openCourse('kurs12_diarie_arkiv')">Diarieföring och arkivering</div>
-        </div>
-    </section>
+<div class="panel">
+<b>Mina Favoriter</b>
+<div class="panel-item" onclick="goCourse('kurs03_dokumentation')">Reseräkning</div>
+</div>
 
-</main>
+<div class="panel">
+<b>Mina senast visade</b>
+<div class="panel-item">KIA</div>
+<div class="panel-item">Incident</div>
+</div>
+
+<div class="panel">
+<b>Mina utbildningar</b>
+<div class="panel-item">Påbörjad</div>
+</div>
+
+<div class="panel">
+<b>Obligatoriska utbildningar</b>
+<div class="panel-item" onclick="goCourse('kurs03_dokumentation')">Dokumentation</div>
+<div class="panel-item" onclick="goCourse('kurs08_gdpr_infoklass')">GDPR</div>
+</div>
+
+</div>
+
+</div>
 
 <script>
-    function goToCatalog(filter = "") {
-        if (filter === "obligatorisk") {
-            window.location.href = "utbildningar.html?filter=obligatorisk";
-            return;
-        }
-        window.location.href = "utbildningar.html";
-    }
+function goCatalog(){
+    window.location.href = "utbildningar.html";
+}
 
-    function openCourse(courseId) {
-        window.location.href = "utbildning.html?course=" + encodeURIComponent(courseId);
-    }
-
-    document.getElementById("portalSearch").addEventListener("keydown", function(e) {
-        if (e.key === "Enter") {
-            goToCatalog();
-        }
-    });
+function goCourse(id){
+    window.location.href = "utbildning.html?course=" + id;
+}
 </script>
 
 </body>
