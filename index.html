@@ -6,108 +6,65 @@
 <title>TFF – Portal</title>
 
 <style>
-body {
-    margin:0;
-    font-family: Arial;
-    background:#f3f4f6;
-}
+body{margin:0;font-family:Arial;background:#f3f4f6}
 
 /* HEADER */
-.topbar {
-    background:#165c8d;
-    color:white;
-    padding:30px;
-    text-align:center;
-    border-radius:0 0 12px 12px;
+.topbar{
+background:#165c8d;
+color:white;
+padding:30px;
+text-align:center;
 }
 
-.topbar h1 { margin:0; }
-
-.search { margin-top:15px; }
-
-.search input {
-    width:500px;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-}
-
-/* CONTENT */
-.container {
-    max-width:1200px;
-    margin:auto;
-    padding:20px;
+.search input{
+width:500px;
+padding:12px;
+border-radius:10px;
+border:none;
 }
 
 /* GRID */
-.grid {
-    display:grid;
-    grid-template-columns:2fr 1fr 1fr;
-    gap:15px;
+.container{max-width:1200px;margin:auto;padding:20px}
+
+.grid{
+display:grid;
+grid-template-columns:2fr 1fr 1fr;
+gap:15px;
 }
 
-/* CARDS */
-.card {
-    background:white;
-    border-radius:10px;
-    overflow:hidden;
-    cursor:pointer;
+.card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+cursor:pointer;
 }
 
-.card img {
-    width:100%;
-    height:180px;
-    object-fit:cover;
+.card img{
+width:100%;
+height:150px;
+object-fit:cover;
 }
 
-.big img {
-    height:450px;
-}
+.big img{height:420px}
 
-.card-body {
-    padding:10px;
-    text-align:center;
-}
+.card-body{padding:10px;text-align:center}
 
 /* BUTTONS */
-.buttons {
-    display:flex;
-    gap:15px;
-    margin-top:15px;
+.buttons{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:10px;
 }
 
-.button-block {
-    flex:1;
-    background:#165c8d;
-    color:white;
-    padding:20px;
-    text-align:center;
-    border-radius:10px;
-    cursor:pointer;
+.btn{
+background:#165c8d;
+color:white;
+padding:20px;
+text-align:center;
+border-radius:10px;
+cursor:pointer;
 }
-
-/* PANELS */
-.panels {
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:15px;
-    margin-top:20px;
-}
-
-.panel {
-    background:#f4b27a;
-    padding:10px;
-    border-radius:10px;
-}
-
-.panel-item {
-    background:white;
-    padding:8px;
-    margin:5px 0;
-    border-radius:6px;
-    font-size:12px;
-}
-
 </style>
 </head>
 
@@ -115,9 +72,9 @@ body {
 
 <div class="topbar">
 <h1>Kunskapsportal för TFF</h1>
-
 <div class="search">
-<input placeholder="Vad kan vi hjälpa dig med?">
+<input placeholder="Vad kan vi hjälpa dig med?"
+onkeydown="if(event.key==='Enter') window.location.href='utbildningar.html'">
 </div>
 </div>
 
@@ -125,7 +82,6 @@ body {
 
 <div class="grid">
 
-<!-- STOR -->
 <div class="card big" onclick="goCatalog()">
 <img src="assets/img/hero-left.jpg">
 <div class="card-body">
@@ -133,93 +89,52 @@ body {
 </div>
 </div>
 
-<!-- HÖGER -->
 <div class="card" onclick="goCatalog()">
 <img src="assets/img/tile-guides.jpg">
-<div class="card-body">
-<h3>Alla Guider</h3>
-</div>
+<div class="card-body"><h3>Alla guider</h3></div>
 </div>
 
-<div class="card" onclick="goCourse('kurs04_ai_copilot')">
+<div class="card" onclick="goCourse('kurs04_ai')">
 <img src="assets/img/tile-hrkollegan.jpg">
-<div class="card-body">
-<h3>Fråga Vera Plus</h3>
-</div>
+<div class="card-body"><h3>Fråga Vera</h3></div>
 </div>
 
 <div class="card" onclick="goCatalog()">
 <img src="assets/img/tile-edu.jpg">
-<div class="card-body">
-<h3>Digitala utbildningar</h3>
-</div>
+<div class="card-body"><h3>Digitala utbildningar</h3></div>
 </div>
 
-<div class="card" onclick="goCatalog()">
+<div class="card" onclick="goCatalog('obligatorisk')">
 <img src="assets/img/tile-mandatory.jpg">
-<div class="card-body">
-<h3>Obligatoriska systemutbildningar</h3>
-</div>
+<div class="card-body"><h3>Obligatoriska</h3></div>
 </div>
 
 <div class="card" onclick="goCatalog()">
 <img src="assets/img/tile-chef.jpg">
-<div class="card-body">
-<h3>Chefsutbildningsportal</h3>
-</div>
+<div class="card-body"><h3>Chef</h3></div>
 </div>
 
-<div class="card" onclick="goCourse('kurs10_moteskultur')">
+<div class="card" onclick="goCourse('kurs10')">
 <img src="assets/img/tile-status.jpg">
-<div class="card-body">
-<h3>HR‑kollegan</h3>
-</div>
+<div class="card-body"><h3>HR‑kollegan</h3></div>
 </div>
 
 </div>
 
-<!-- BUTTONS -->
 <div class="buttons">
-<div class="button-block" onclick="goCourse('kurs06_skapa_spara')">Heroma</div>
-<div class="button-block" onclick="goCatalog()">Kontakta HR-service</div>
-</div>
-
-<!-- PANELS -->
-<div class="panels">
-
-<div class="panel">
-<b>Mina Favoriter</b>
-<div class="panel-item" onclick="goCourse('kurs03_dokumentation')">Reseräkning</div>
-</div>
-
-<div class="panel">
-<b>Mina senast visade</b>
-<div class="panel-item">KIA</div>
-<div class="panel-item">Incident</div>
-</div>
-
-<div class="panel">
-<b>Mina utbildningar</b>
-<div class="panel-item">Påbörjad</div>
-</div>
-
-<div class="panel">
-<b>Obligatoriska utbildningar</b>
-<div class="panel-item" onclick="goCourse('kurs03_dokumentation')">Dokumentation</div>
-<div class="panel-item" onclick="goCourse('kurs08_gdpr_infoklass')">GDPR</div>
-</div>
-
+<div class="btn" onclick="goCourse('kurs06')">Heroma</div>
+<div class="btn" onclick="goCatalog()">Kontakta HR</div>
 </div>
 
 </div>
 
 <script>
 function goCatalog(){
-    window.location.href = "utbildningar.html";
+window.location.href="utbildningar.html";
 }
 
 function goCourse(id){
-    window.location.href = "utbildning.html?course=" + id;
+window.location.href="utbildning.html?course="+id;
 }
 </script>
 
