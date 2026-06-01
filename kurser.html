@@ -4,124 +4,311 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kurs</title>
-
-<!-- ✅ KORREKT SCRIPT (DETTA SKA VARA EXAKT SÅHÄR) -->
 <script src="assets/js/kurser-data.js"></script>
-
 <style>
-body {
-    font-family: Arial;
-    margin:0;
-    background:#f4f6f8;
-}
+:root{ --color:#82c7b8; }
 
-.container {
-    display:flex;
-    padding:20px;
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#f4f6f8;
+  color:#111;
 }
-
-.sidebar {
-    width:300px;
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 30px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+  flex-wrap:wrap;
+  gap:10px;
 }
-
-.module {
-    background:white;
-    margin:10px 0;
-    padding:12px;
-    cursor:pointer;
-    border-radius:8px;
+.header-right{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
 }
-
-.module.active {
-    border-left:6px solid var(--color);
+.pill{
+  padding:10px 14px;
+  border-radius:20px;
+  background:#eef2f5;
+  font-weight:bold;
 }
-
-.main {
-    flex:1;
-    padding-left:20px;
+.btn{
+  display:inline-block;
+  text-decoration:none;
+  padding:10px 16px;
+  border-radius:8px;
+  font-weight:bold;
 }
-
-.quiz-btn {
-    display:inline-block;
-    margin-top:20px;
-    padding:12px;
-    background:var(--color);
-    color:white;
-    text-decoration:none;
-    border-radius:8px;
+.btn-primary{
+  background:#1b5ea6;
+  color:#fff;
+}
+.btn-course{
+  background:var(--color);
+  color:#111;
+}
+.page{
+  display:flex;
+  gap:20px;
+  padding:20px;
+}
+.sidebar{
+  width:320px;
+}
+.sidebar-box,
+.main-box{
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+.sidebar-box{
+  position:sticky;
+  top:20px;
+}
+.module{
+  background:#fff;
+  border:1px solid #ddd;
+  margin-top:10px;
+  padding:12px;
+  border-radius:10px;
+  cursor:pointer;
+}
+.module.active{
+  border-left:6px solid var(--color);
+  background:#f8fbfb;
+}
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+.tags{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+.tag{
+  padding:8px 12px;
+  border-radius:20px;
+  background:#eef2f5;
+  font-weight:bold;
+}
+.video-placeholder{
+  min-height:220px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border:1px dashed #ccc;
+  border-radius:12px;
+  color:#666;
+  background:#fafafa;
+  padding:20px;
+}
+.action-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+.nav-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+@media(max-width:960px){
+  .page{flex-direction:column;}
+  .sidebar{width:100%;}
 }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="header">
+  <div>
+    <h2 style="margin:0;">TFF – Kurs</h2>
+    <div>Moduler • Quiz • Progress</div>
+  </div>
 
-<div class="sidebar">
-<h3>Moduler</h3>
-<div id="modules"></div>
+  <div class="header-right">
+    <div id="progressPill" class="pill">Progress: 0%</div>
+    <div id="statusPill" class="pill">Kurs: Ej godkänd</div>
+    <button id="resetBtn" class="btn btn-course" type="button">Återställ progress</button>
+    <a href="utbildningar.html" class="btn btn-primary">Till utbildningar</a>
+  </div>
 </div>
 
-<div class="main">
-<h2 id="title"></h2>
-<h3 id="moduleTitle"></h3>
-<p id="content"></p>
+<div class="page">
+  <div class="sidebar">
+    <div class="sidebar-box">
+      <h3 style="margin-top:0;">Moduler</h3>
+      <div id="moduleList"></div>
+    </div>
+  </div>
 
-<a id="quizBtn" class="quiz-btn">Starta Quiz</a>
+  <div class="main">
+    <div class="main-box">
+      <h1 id="courseTitle" style="margin-top:0;"></h1>
+      <p id="coursePurpose"></p>
+      <div class="tags">
+        <div class="tag" id="moduleTag">Modul</div>
+        <div class="tag" id="quizTag">Quiz</div>
+      </div>
+    </div>
 
-</div>
+    <div class="main-box">
+      <h2 id="moduleTitle" style="margin-top:0;"></h2>
+      <p id="modulePurpose"></p>
+      <h3>Innehåll</h3>
+      <ul id="moduleContent"></ul>
 
+      <div class="action-row">
+        <button id="markCompleteBtn" class="btn btn-course" type="button">Markera modul som klar</button>
+        <a id="quizBtn" class="btn btn-primary" href="#">Starta Quiz</a>
+      </div>
+
+      <p id="moduleProgressText" style="margin-top:16px;font-weight:bold;"></p>
+    </div>
+
+    <div class="main-box">
+      <h2 style="margin-top:0;">Video</h2>
+      <div id="videoContainer" class="video-placeholder">
+        Ingen video länkad ännu för denna modul.
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button id="prevBtn" class="btn btn-course" type="button">Föregående modul</button>
+      <button id="nextBtn" class="btn btn-primary" type="button">Nästa modul</button>
+    </div>
+  </div>
 </div>
 
 <script>
-
-// Hämta course från URL
 const params = new URLSearchParams(window.location.search);
-const courseId = params.get("course");
+let currentCourseId = Number(params.get("course")) || 1;
+let currentModuleId = Number(params.get("module")) || 1;
 
-// fallback
-const course = courses.find(c => c.id == courseId) || courses[0];
-
-// sätt färg
-document.documentElement.style.setProperty("--color", course.color);
-
-// titel
-document.getElementById("title").innerText = course.title;
-
-// moduler
-const modules = document.getElementById("modules");
-
-modules.innerHTML = course.modules.map(m => `
-<div class="module" data-id="${m.id}">
-${m.title}
-</div>
-`).join("");
-
-// klick
-document.querySelectorAll(".module").forEach(el => {
-    el.onclick = () => loadModule(el.dataset.id, el);
-});
-
-// ladda modul
-function loadModule(id, el){
-    const m = course.modules.find(x => x.id == id);
-
-    document.getElementById("moduleTitle").innerText = m.title;
-    document.getElementById("content").innerText = m.content.join(" | ");
-
-    document.getElementById("quizBtn").href =
-        `quiz.html?course=${course.id}&module=${m.id}`;
-
-    document.querySelectorAll(".module").forEach(e=>e.classList.remove("active"));
-    el.classList.add("active");
+function setColor(color){
+  document.documentElement.style.setProperty("--color", color);
 }
 
-// ✅ KRITISK
-const first = document.querySelector(".module");
-if(first){
-    loadModule(course.modules[0].id, first);
+function getCourseProgressPercent(course){
+  const completed = course.modules.filter(m => {
+    const state = PortalData.getModuleProgress(course.id, m.id);
+    return state.completed && state.quizPassed;
+  }).length;
+
+  return Math.round((completed / course.modules.length) * 100);
 }
 
+function isCoursePassed(course){
+  return getCourseProgressPercent(course) === 100;
+}
+
+function renderModules(course){
+  const moduleList = document.getElementById("moduleList");
+  moduleList.innerHTML = course.modules.map(module => {
+    const state = PortalData.getModuleProgress(course.id, module.id);
+    const text = `Modul: ${state.completed ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "godkänd" : "ej godkänd"}`;
+    return `
+      <div class="module ${module.id === currentModuleId ? "active" : ""}" data-id="${module.id}">
+        <strong>${module.title}</strong><br>
+        <small>${text}</small>
+      </div>
+    `;
+  }).join("");
+
+  document.querySelectorAll(".module").forEach(el => {
+    el.onclick = () => {
+      currentModuleId = Number(el.dataset.id);
+      syncUrl();
+      render();
+    };
+  });
+}
+
+function render(){
+  const course = PortalData.getCourse(currentCourseId) || PortalData.getCourses()[0];
+  const module = PortalData.getModule(course.id, currentModuleId) || course.modules[0];
+
+  currentCourseId = course.id;
+  currentModuleId = module.id;
+
+  setColor(course.color);
+
+  document.getElementById("courseTitle").textContent = course.title;
+  document.getElementById("coursePurpose").textContent = "Syfte: " + course.purpose;
+  document.getElementById("moduleTitle").textContent = module.title;
+  document.getElementById("modulePurpose").textContent = module.purpose;
+  document.getElementById("moduleContent").innerHTML = module.content.map(item => `<li>${item}</li>`).join("");
+  document.getElementById("moduleTag").textContent = module.title;
+  document.getElementById("quizTag").textContent = `${module.questions.length} frågor`;
+  document.getElementById("quizBtn").href = `quiz.html?course=${course.id}&module=${module.id}`;
+
+  const progress = PortalData.getModuleProgress(course.id, module.id);
+  document.getElementById("moduleProgressText").textContent =
+    `Status: modul ${progress.completed ? "klar" : "ej klar"} • quiz ${progress.quizPassed ? "godkänd" : "ej godkänd"}${progress.total ? ` • resultat ${progress.score}/${progress.total}` : ""}`;
+
+  const courseProgress = getCourseProgressPercent(course);
+  document.getElementById("progressPill").textContent = `Progress: ${courseProgress}%`;
+  document.getElementById("statusPill").textContent = `Kurs: ${isCoursePassed(course) ? "Godkänd" : "Ej godkänd"}`;
+
+  if(module.video){
+    document.getElementById("videoContainer").innerHTML = `
+      <iframe src="${module.video}" style="width:100%;height:420px;border:none;border-radius:12px;" allowfullscreen></iframe>
+    `;
+  } else {
+    document.getElementById("videoContainer").innerHTML = `Ingen video länkad ännu för denna modul.`;
+  }
+
+  document.getElementById("prevBtn").disabled = currentModuleId === 1;
+  document.getElementById("nextBtn").disabled = currentModuleId === course.modules.length;
+
+  renderModules(course);
+}
+
+function syncUrl(){
+  const url = new URL(window.location.href);
+  url.searchParams.set("course", currentCourseId);
+  url.searchParams.set("module", currentModuleId);
+  history.replaceState({}, "", url);
+}
+
+document.getElementById("markCompleteBtn").onclick = () => {
+  PortalData.setModuleProgress(currentCourseId, currentModuleId, { completed: true });
+  render();
+};
+
+document.getElementById("resetBtn").onclick = () => {
+  PortalData.resetCourseProgress(currentCourseId);
+  render();
+};
+
+document.getElementById("prevBtn").onclick = () => {
+  if(currentModuleId > 1){
+    currentModuleId--;
+    syncUrl();
+    render();
+  }
+};
+
+document.getElementById("nextBtn").onclick = () => {
+  const course = PortalData.getCourse(currentCourseId);
+  if(currentModuleId < course.modules.length){
+    currentModuleId++;
+    syncUrl();
+    render();
+  }
+};
+
+render();
 </script>
 
 </body>
