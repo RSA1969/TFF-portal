@@ -2,15 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const coursesGrid = document.getElementById("coursesGrid");
 
-  // Om vi inte är på rätt sida → avbryt
   if (!coursesGrid || !window.PortalData) return;
 
   const courses = PortalData.getCourses();
 
-  // Rensa grid
   coursesGrid.innerHTML = "";
 
-  // ✅ Koppling bilder → dina befintliga img-filer
   const imageMap = {
     1: "assets/img/tile-mandatory.jpg",
     2: "assets/img/tile-status.jpg",
@@ -31,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
   courses.forEach(course => {
 
-    // ✅ Hämta progress
     const progress = PortalData.getProgress();
     const courseProgress = progress[course.id] || {};
 
@@ -45,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
       ? Math.round((completedModules / totalModules) * 100)
       : 0;
 
-    // ✅ Skapa kort
     const card = document.createElement("article");
     card.className = "course-card";
 
@@ -53,7 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="course-card__image-wrap">
         <img src="${imageMap[course.id]}" class="course-card__image">
       </div>
-
       <div class="course-card__body">
         <h3>${course.title}</h3>
         <p>${course.purpose}</p>
@@ -67,3 +61,18 @@ document.addEventListener("DOMContentLoaded", function () {
           </div>
         </div>
 
+        <button class="btn btn-primary">Öppna kurs</button>
+      </div>
+    `;
+
+    card.querySelector("button").addEventListener("click", function () {
+      localStorage.setItem("selectedCourseId", course.id);
+      window.location.href = "kurser.html?course=" + course.id;
+    });
+
+    coursesGrid.appendChild(card);
+
+  });
+
+});
+``
