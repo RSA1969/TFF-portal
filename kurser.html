@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>Kurser</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
 
@@ -12,9 +11,27 @@
 <div id="courses"></div>
 
 <script src="assets/js/kurser-data.js"></script>
-<script src="assets/js/kurser-app.js"></script>
-
 <script>
+function loadCourses() {
+  const container = document.getElementById("courses");
+
+  kurserData.forEach(course => {
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+      <h2>${course.title}</h2>
+      <button onclick="openCourse('${course.id}')">Öppna</button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+function openCourse(id) {
+  localStorage.setItem("selectedCourse", id);
+  window.location.href = "utbildningar.html";
+}
+
 loadCourses();
 </script>
 
