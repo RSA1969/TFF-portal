@@ -1,65 +1,69 @@
-<script src="assets/js/kurser-data.js"></script>
-
-<script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  // ✅ 1. Läs från URL först
-  const urlParams = new URLSearchParams(window.location.search);
-  let courseId = urlParams.get("course");
+  const coursesGrid = document.getElementById("coursesGrid");
 
-  // ✅ 2. Om inget i URL → använd localStorage
-  if (!courseId) {
-    courseId = localStorage.getItem("selectedCourseId");
-  } else {
-    // ✅ Spara så resten av systemet funkar
-    localStorage.setItem("selectedCourseId", courseId);
-  }
+  // Om vi inte är på rätt sida → avbryt
+  if (!coursesGrid || !window.PortalData) return;
 
-  const course = PortalData.getCourse(courseId);
+  const courses = PortalData.getCourses();
 
-  // ✅ 3. FELSÄKERHET
-  if (!course) {
-    document.getElementById("courseTitle").textContent = "Ingen kurs vald";
-    document.getElementById("coursePurpose").textContent = "Gå tillbaka och välj en kurs.";
-    return;
-  }
+  // Rensa grid
+  coursesGrid.innerHTML = "";
 
-  // ✅ 4. Visa kurs
-  document.getElementById("courseTitle").textContent = course.title;
-  document.getElementById("coursePurpose").textContent = course.purpose;
+  // ✅ Koppling bilder → dina befintliga img-filer
+  const imageMap = {
+    1: "assets/img/tile-mandatory.jpg",
+    2: "assets/img/tile-status.jpg",
+    3: "assets/img/tile-guides.jpg",
+    4: "assets/img/tile-chief.jpg",
+    5: "assets/img/tile-edu.jpg",
+    6: "assets/img/tile-hrkollegan.jpg",
+    7: "assets/img/tile-atlas.jpg",
+    8: "assets/img/tile-chief.jpg",
+    9: "assets/img/tile-guides.jpg",
+    10: "assets/img/tile-status.jpg",
+    11: "assets/img/tile-mandatory.jpg",
+    12: "assets/img/tile-edu.jpg",
+    13: "assets/img/tile-atlas.jpg",
+    14: "assets/img/tile-hrkollegan.jpg",
+    15: "assets/img/tile-chief.jpg"
+  };
 
-  const modulesGrid = document.getElementById("modulesGrid");
-  modulesGrid.innerHTML = "";
+  courses.forEach(course => {
 
-  course.modules.forEach((module, index) => {
+    // ✅ Hämta progress
+    const progress = PortalData.getProgress();
+    const courseProgress = progress[course.id] || {};
 
-    const progress = PortalData.getModuleProgress(course.id, module.id);
-    const modulePage = `modul_dokumentation_${index + 1}.html`;
+    const completedModules = Object.values(courseProgress)
+      .filter(m => m.quizPassed)
+      .length;
 
+    const totalModules = course.modules.length;
+
+    const percent = totalModules > 0
+      ? Math.round((completedModules / totalModules) * 100)
+      : 0;
+
+    // ✅ Skapa kort
     const card = document.createElement("article");
-    card.className = "module-card";
+    card.className = "course-card";
 
     card.innerHTML = `
-      <div class="module-card__header">
-        <span class="module-card__number">Modul ${index + 1}</span>
-        <span class="status-pill ${progress.quizPassed ? "status-pill--done" : "status-pill--todo"}">
-          ${progress.quizPassed ? "Klar" : "Ej klar"}
-        </span>
+      <div class="course-card__image-wrap">
+        <img src="${imageMap[course.id]}" class="course-card__image">
       </div>
-      <h3>${module.title}</h3>
-      <p>${module.purpose}</p>
-      <div class="module-card__actions">
-        <button class="btn btn-primary">Öppna modul</button>
-      </div>
-    `;
 
-    card.querySelector("button").addEventListener("click", function () {
-      localStorage.setItem("selectedModuleId", module.id);
-      window.location.href = modulePage;
-    });
+      <div class="course-card__body">
+        <h3>${course.title}</h3>
+        <p>${course.purpose}</p>
 
-    modulesGrid.appendChild(card);
-  });
+        <div class="course-progress">
+          <div class="course-progress__label">
+            Progress: ${completedModules}/${totalModules} moduler
+          </div>
+          <div class="progress-bar">
+            <div class="progress-bar__fill" style="width:${percent}%"></div>
+          </div>
+        </div>
 
-});
-</script>
