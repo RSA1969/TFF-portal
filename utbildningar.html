@@ -2,49 +2,38 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Utbildningar – TFF Portal</title>
-
-  <!-- ✅ RÄTT CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <title>Moduler</title>
 </head>
-
 <body>
 
-  <!-- HEADER -->
-  <header class="topbar">
-    <div class="container topbar__inner">
-      <a href="index.html" class="brand">TFF Digitala Kurser</a>
+<h1>Moduler</h1>
 
-      <nav class="topnav">
-        <a href="index.html">Start</a>
-        <a href="utbildningar.html" class="active">Utbildningar</a>
-        <a href="guides.html">Guider</a>
-        <a href="kurs_dokumentation.html">Dokumentation</a>
-      </nav>
-    </div>
-  </header>
+<div id="modules"></div>
 
-  <!-- MAIN -->
-  <main class="container page">
+<script src="assets/js/kurser-data.js"></script>
 
-    <section class="hero">
-      <div class="hero__content">
-        <p class="eyebrow">TFF Digitala Kurser</p>
-        <h1>Välj utbildning</h1>
-        <p>Klicka på en kurs för att öppna moduler och quiz.</p>
-      </div>
-    </section>
+<script>
+const courseId = localStorage.getItem("selectedCourse");
+const course = kurserData.find(c => c.id === courseId);
 
-    <section class="section">
-      <div id="coursesGrid" class="courses-grid"></div>
-    </section>
+const container = document.getElementById("modules");
 
-  </main>
+course.modules.forEach(module => {
+  const div = document.createElement("div");
 
-  <!-- ✅ RÄTT SCRIPT (DETTA FIXAR PROBLEMET) -->
-  <script src="assets/js/kurser-data.js"></script>
-  <script src="assets/js/kurser-app.js"></script>
+  div.innerHTML = `
+    <h3>${module.title}</h3>
+    <button onclick="playModule('${module.id}')">Starta</button>
+  `;
+
+  container.appendChild(div);
+});
+
+function playModule(moduleId) {
+  localStorage.setItem("selectedModule", moduleId);
+  window.location.href = "quiz.html";
+}
+</script>
 
 </body>
 </html>
