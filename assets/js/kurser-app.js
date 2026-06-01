@@ -1,78 +1,124 @@
-document.addEventListener("DOMContentLoaded", function () {
+let DATA = null;
+const container = document.getElementById("courses");
 
-  const coursesGrid = document.getElementById("coursesGrid");
+// Ladda JSON
+fetch("assets/data/kurser-data.json")
+.then(res => res.json())
+.then(data => {
+    DATA = data;
+    renderCourses();
+});
 
-  if (!coursesGrid || !window.PortalData) return;
+// =========================
+// KURSER
+// =========================
+function renderCourses() {
 
-  const courses = PortalData.getCourses();
+    container.innerHTML = "<h1>Utbildningar</h1>";
 
-  coursesGrid.innerHTML = "";
+    DATA.courses
+    .filter(c => c.active === "Ja")
+    .forEach(course => {
 
-  const imageMap = {
-    1: "assets/img/tile-mandatory.jpg",
-    2: "assets/img/tile-status.jpg",
-    3: "assets/img/tile-guides.jpg",
-    4: "assets/img/tile-chief.jpg",
-    5: "assets/img/tile-edu.jpg",
-    6: "assets/img/tile-hrkollegan.jpg",
-    7: "assets/img/tile-atlas.jpg",
-    8: "assets/img/tile-chief.jpg",
-    9: "assets/img/tile-guides.jpg",
-    10: "assets/img/tile-status.jpg",
-    11: "assets/img/tile-mandatory.jpg",
-    12: "assets/img/tile-edu.jpg",
-    13: "assets/img/tile-atlas.jpg",
-    14: "assets/img/tile-hrkollegan.jpg",
-    15: "assets/img/tile-chief.jpg"
-  };
+        container.innerHTML += `
+            <div class="card" style="background:${course.color}">
+                <h3>${course.title}</h3>
+                <p>${course.purpose}</p>
+                <button onclick="openCourse(${course.courseId})">Öppna</button>
+            </div>
+        `;
+    });
+}
 
-  courses.forEach(course => {
+// =========================
+// KURS
+// =========================
+function openCourse(courseId) {
 
-    const progress = PortalData.getProgress();
-    const courseProgress = progress[course.id] || {};
+    const course = DATA.courses.find(c => c.courseId == courseId);
 
-    const completedModules = Object.values(courseProgress)
-      .filter(m => m.quizPassed)
-      .length;
-
-    const totalModules = course.modules.length;
-
-    const percent = totalModules > 0
-      ? Math.round((completedModules / totalModules) * 100)
-      : 0;
-
-    const card = document.createElement("article");
-    card.className = "course-card";
-
-    card.innerHTML = `
-      <div class="course-card__image-wrap">
-        <img src="${imageMap[course.id]}" class="course-card__image">
-      </div>
-      <div class="course-card__body">
-        <h3>${course.title}</h3>
-        <p>${course.purpose}</p>
-
-        <div class="course-progress">
-          <div class="course-progress__label">
-            Progress: ${completedModules}/${totalModules} moduler
-          </div>
-          <div class="progress-bar">
-            <div class="progress-bar__fill" style="width:${percent}%"></div>
-          </div>
-        </div>
-
-        <button class="btn btn-primary">Öppna kurs</button>
-      </div>
+    container.innerHTML = `
+        <h2>${course.title}</h2>
+        <button onclick="renderCourses()">← Tillbaka</button>
+        <div id="modules"></div>
     `;
 
-    card.querySelector("button").addEventListener("click", function () {
-      localStorage.setItem("selectedCourseId", course.id);
-      window.location.href = "kurser.html?course=" + course.id;
+    const modules = DATA.modules.filter(m => m.courseId == courseId);
+
+    modules.forEach(m => {
+        document.getElementById("modules").innerHTML += `
+            <div class="card">
+                <h3>${m.title}</h3>
+                <button onclick="openModule(${courseId}, ${m.moduleId})">Starta</button>
+            </div>
+        `;
     });
+}
 
-    coursesGrid.appendChild(card);
+// =========================
+// MODUL
+// =========================
+function openModule(courseId, moduleId) {
 
-  });
+    const module = DATA.modules.find(m => m.moduleId == moduleId);
 
-});
-``
+    container.innerHTML = `
+        <h2>${module.title}</h2>
+        <button onclick="openCourse(${courseId})">← Tillbaka</button>
+
+        <video width="100%" controls>
+            <source src="${module.video}" type="video/mp4">
+        </video>
+
+        <div id="questions"></div>
+    `;
+
+    const questions = DATA.questions.filter(q => q.moduleId == moduleId);
+
+    renderQuestions(questions);
+}
+
+// =========================
+// FRÅGOR
+// =========================
+function renderQuestions(questions) {
+
+    const qDiv = document.getElementById("questions");
+
+    questions.forEach(q => {
+
+        // slumpa ordning
+        const options = [
+            {text: q.option1, key: 1},
+            {text: q.option2, key: 2},
+            {text: q.option3, key: 3},
+            {text: q.option4, key: 4}
+        ];
+
+        options.sort(() => Math.random() - 0.5);
+
+        let html = `<div class="card"><p>${q.question}</p>`;
+
+        options.forEach(o => {
+            html += `<button onclick="checkAnswer(${o.key}, ${q.correct}, this)">
+                ${o.text}
+            </button>`;
+        });
+
+        html += "</div>";
+
+        qDiv.innerHTML += html;
+    });
+}
+
+// =========================
+// SVAR
+// =========================
+function checkAnswer(selected, correct, btn) {
+
+    if (selected == correct) {
+        btn.style.backgroundColor = "green";
+    } else {
+        btn.style.backgroundColor = "red";
+    }
+}
