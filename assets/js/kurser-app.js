@@ -1,75 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-const data = window.TFF_DATA.courses;
+  const container = document.getElementById("courses");
 
-const select = document.getElementById("courseSelect");
-const list = document.getElementById("moduleList");
+  if (!container) return;
 
-const title = document.getElementById("courseTitle");
-const desc = document.getElementById("courseDesc");
+  DATA.courses.forEach(course => {
 
-const mTitle = document.getElementById("moduleTitle");
-const mPurpose = document.getElementById("modulePurpose");
-const mContent = document.getElementById("moduleContent");
+    const card = document.createElement("div");
+    card.className = "card";
 
-const video = document.getElementById("moduleVideo");
+    card.innerHTML = `
+      <img src="${course.image}" style="width:100%; border-radius:8px;">
+      <h2>${course.name}</h2>
+      <p>${course.description}</p>
+    `;
 
-// fyll dropdown
-data.forEach(c => {
-  const opt = document.createElement("option");
-  opt.value = c.id;
-  opt.textContent = c.title;
-  select.appendChild(opt);
-});
+    card.onclick = () => {
+      localStorage.setItem("courseId", course.id);
+      window.location.href = "kurser.html";
+    };
 
-let currentCourse = data[0];
-let currentModule = 0;
+    container.appendChild(card);
 
-function loadCourse() {
-  const id = select.value;
-  currentCourse = data.find(c => c.id === id);
-
-  title.textContent = currentCourse.title;
-  desc.textContent = currentCourse.desc;
-
-  renderModules();
-  loadModule(0);
-}
-
-function renderModules() {
-  list.innerHTML = "";
-
-  currentCourse.modules.forEach((m, i) => {
-    const li = document.createElement("li");
-    li.textContent = (i+1) + ". " + m.title;
-    li.onclick = () => loadModule(i);
-    list.appendChild(li);
   });
-}
-
-function loadModule(i) {
-  currentModule = i;
-  const m = currentCourse.modules[i];
-
-  mTitle.textContent = m.title;
-  mPurpose.textContent = m.purpose;
-
-  mContent.innerHTML = "";
-  m.content.forEach(c => {
-    let li = document.createElement("li");
-    li.textContent = c;
-    mContent.appendChild(li);
-  });
-
-  if (m.video) {
-    video.src = m.video;
-  } else {
-    video.removeAttribute("src");
-  }
-}
-
-select.addEventListener("change", loadCourse);
-
-loadCourse();
 
 });
