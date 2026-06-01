@@ -4,61 +4,101 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Utbildningar</title>
-
-<link rel="stylesheet" href="assets/css/styles.css">
 <script src="assets/js/kurser-data.js"></script>
-
 <style>
-body {
-    font-family: "Segoe UI", Arial;
-    background: #f4f6f8;
-    margin: 0;
-    padding: 30px;
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#f4f6f8;
+  color:#111;
 }
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 30px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
 }
-
-.course-card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    text-decoration: none;
-    color: black;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+.header a{
+  text-decoration:none;
+  background:#1b5ea6;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:8px;
+  margin-left:10px;
 }
-
-.course-card h3 {
-    margin: 0 0 10px 0;
+.page{
+  padding:30px;
 }
-
-.badge {
-    margin-top: 10px;
-    display: inline-block;
-    padding: 6px 12px;
-    background: #eef;
-    border-radius: 20px;
-    font-size: 12px;
+h1{
+  margin-top:0;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+}
+.card{
+  display:block;
+  text-decoration:none;
+  color:#111;
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+  min-height:200px;
+}
+.card h3{
+  margin-top:0;
+  margin-bottom:10px;
+}
+.badge{
+  display:inline-block;
+  margin-top:15px;
+  padding:6px 12px;
+  background:#eef2f5;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+@media (max-width:1100px){
+  .grid{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:800px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
-
 <body>
 
-<h1>Alla utbildningar</h1>
+<div class="header">
+  <div>
+    <h2 style="margin:0;">TFF – Utbildningar</h2>
+    <div>Alla kurser</div>
+  </div>
+  <div>
+    <a href="admin.html">Admin</a>
+  </div>
+</div>
 
-<div id="courseContainer" class="grid"></div>
+<div class="page">
+  <h1>Alla utbildningar</h1>
+  <div id="courseGrid" class="grid"></div>
+</div>
 
 <script>
-document.getElementById("courseContainer").innerHTML = courses.map(course => `
-<a href="kurs.html?course=${course.id}" class="course-card" style="border-left:6px solid ${course.color}">
+const courses = PortalData.getCourses();
+
+document.getElementById("courseGrid").innerHTML = courses.map(course => `
+  <a href="kurser.html?course=${course.id}" class="card" style="border-left:6px solid ${course.color}">
     <h3>${course.title}</h3>
     <p>Syfte: ${course.purpose}</p>
-    <div class="badge">5 moduler</div>
-</a>
+    <div class="badge">${course.modules.length} moduler</div>
+  </a>
 `).join("");
 </script>
 
