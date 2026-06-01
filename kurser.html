@@ -1,78 +1,107 @@
-document.addEventListener("DOMContentLoaded", function () {
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kurser – TFF Portal</title>
 
-  const coursesGrid = document.getElementById("coursesGrid");
+  <!-- ✅ CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
 
-  if (!coursesGrid || !window.PortalData) return;
+<body>
 
-  const courses = PortalData.getCourses();
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a href="index.html" class="brand">TFF Digitala Kurser</a>
 
-  coursesGrid.innerHTML = "";
+      <nav class="topnav">
+        <a href="index.html">Start</a>
+        <a href="utbildningar.html">Utbildningar</a>
+        <a href="guides.html">Guider</a>
+        <a href="kurs_dokumentation.html">Dokumentation</a>
+      </nav>
+    </div>
+  </header>
 
-  const imageMap = {
-    1: "assets/img/tile-mandatory.jpg",
-    2: "assets/img/tile-status.jpg",
-    3: "assets/img/tile-guides.jpg",
-    4: "assets/img/tile-chief.jpg",
-    5: "assets/img/tile-edu.jpg",
-    6: "assets/img/tile-hrkollegan.jpg",
-    7: "assets/img/tile-atlas.jpg",
-    8: "assets/img/tile-chief.jpg",
-    9: "assets/img/tile-guides.jpg",
-    10: "assets/img/tile-status.jpg",
-    11: "assets/img/tile-mandatory.jpg",
-    12: "assets/img/tile-edu.jpg",
-    13: "assets/img/tile-atlas.jpg",
-    14: "assets/img/tile-hrkollegan.jpg",
-    15: "assets/img/tile-chief.jpg"
-  };
+  <!-- MAIN -->
+  <main class="container page">
 
-  courses.forEach(course => {
-
-    const progress = PortalData.getProgress();
-    const courseProgress = progress[course.id] || {};
-
-    const completedModules = Object.values(courseProgress)
-      .filter(m => m.quizPassed)
-      .length;
-
-    const totalModules = course.modules.length;
-
-    const percent = totalModules > 0
-      ? Math.round((completedModules / totalModules) * 100)
-      : 0;
-
-    const card = document.createElement("article");
-    card.className = "course-card";
-
-    card.innerHTML = `
-      <div class="course-card__image-wrap">
-        <img src="${imageMap[course.id]}" class="course-card__image">
+    <section class="hero hero--small">
+      <div class="hero__content">
+        <p class="eyebrow">Kursöversikt</p>
+        <h1 id="courseTitle">Laddar kurs...</h1>
+        <p id="coursePurpose"></p>
       </div>
-      <div class="course-card__body">
-        <h3>${course.title}</h3>
-        <p>${course.purpose}</p>
+    </section>
 
-        <div class="course-progress">
-          <div class="course-progress__label">
-            Progress: ${completedModules}/${totalModules} moduler
-          </div>
-          <div class="progress-bar">
-            <div class="progress-bar__fill" style="width:${percent}%"></div>
-          </div>
-        </div>
-
-        <button class="btn btn-primary">Öppna kurs</button>
+    <section class="section">
+      <div class="section__header">
+        <h2>Moduler</h2>
+        <a href="utbildningar.html" class="btn btn-secondary">Tillbaka</a>
       </div>
-    `;
 
-    card.querySelector("button").addEventListener("click", function () {
-      localStorage.setItem("selectedCourseId", course.id);
-      window.location.href = "kurser.html?course=" + course.id;
+      <div id="modulesGrid" class="module-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- ✅ SCRIPT SKA VARA KORREKT -->
+  <script src="assets/js/kurser-data.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      // ✅ Läs course från URL
+      const params = new URLSearchParams(window.location.search);
+      let courseId = params.get("course");
+
+      // fallback localStorage
+      if (!courseId) {
+        courseId = localStorage.getItem("selectedCourseId");
+      } else {
+        localStorage.setItem("selectedCourseId", courseId);
+      }
+
+      const course = PortalData.getCourse(courseId);
+
+      if (!course) {
+        document.getElementById("courseTitle").textContent = "Ingen kurs vald";
+        return;
+      }
+
+      document.getElementById("courseTitle").textContent = course.title;
+      document.getElementById("coursePurpose").textContent = course.purpose;
+
+      const grid = document.getElementById("modulesGrid");
+      grid.innerHTML = "";
+
+      course.modules.forEach((module, index) => {
+
+        const card = document.createElement("article");
+        card.className = "module-card";
+
+        card.innerHTML = `
+          <h3>${module.title}</h3>
+          <p>${module.purpose}</p>
+          <button class="btn btn-primary">Öppna modul</button>
+        `;
+
+        card.querySelector("button").addEventListener("click", function () {
+
+          localStorage.setItem("selectedModuleId", module.id);
+
+          window.location.href = 
+            "modul_dokumentation_" + (index + 1) + ".html";
+
+        });
+
+        grid.appendChild(card);
+      });
+
     });
+  </script>
 
-    coursesGrid.appendChild(card);
-
-  });
-
-});
-``
+</body>
+</html>
