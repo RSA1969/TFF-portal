@@ -1,271 +1,126 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz</title>
-<script src="assets/js/kurser-data.js"></script>
-<style>
-:root{ --color:#82c7b8; }
-
-body{
-  font-family:Arial,sans-serif;
-  margin:0;
-  background:#f4f6f8;
-  color:#111;
-}
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px 30px;
-  background:#fff;
-  border-bottom:1px solid #ddd;
-  flex-wrap:wrap;
-  gap:10px;
-}
-.header-right{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.pill{
-  padding:10px 14px;
-  border-radius:20px;
-  background:#eef2f5;
-  font-weight:bold;
-}
-.btn{
-  display:inline-block;
-  text-decoration:none;
-  padding:10px 16px;
-  border-radius:8px;
-  font-weight:bold;
-  border:none;
-  cursor:pointer;
-}
-.btn-primary{
-  background:#1b5ea6;
-  color:#fff;
-}
-.btn-course{
-  background:var(--color);
-  color:#111;
-}
-.page{
-  max-width:1200px;
-  margin:0 auto;
-  padding:30px;
-}
-.box{
-  background:#fff;
-  border-radius:14px;
-  padding:24px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.08);
-}
-.options{
-  display:grid;
-  gap:12px;
-  margin-top:20px;
-}
-.option{
-  background:#fff;
-  border:1px solid #ddd;
-  border-radius:12px;
-  padding:14px;
-  cursor:pointer;
-  text-align:left;
-  font-size:16px;
-}
-.option.selected{
-  border-color:#1b5ea6;
-  background:#edf4fb;
-}
-.feedback{
-  margin-top:18px;
-  padding:14px;
-  border-radius:12px;
-  background:#f7f7f7;
-}
-.nav{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:20px;
-}
-.score{
-  font-size:28px;
-  font-weight:bold;
-  margin-top:10px;
-}
-.pass{
-  color:green;
-  font-weight:bold;
-}
-.fail{
-  color:#b00020;
-  font-weight:bold;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz – TFF Portal</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-
-<div class="header">
-  <div>
-    <h2 style="margin:0;">TFF – Quiz</h2>
-    <div>10 frågor per modul</div>
-  </div>
-
-  <div class="header-right">
-    <div id="progressPill" class="pill">Besvarade: 0/10</div>
-    <div id="resultPill" class="pill">Ej rättat</div>
-    <button id="restartBtn" class="btn btn-course" type="button">Börja om</button>
-    <a id="backBtn" href="#" class="btn btn-primary">Till kurs</a>
-  </div>
-</div>
-
-<div class="page">
-  <div class="box">
-    <h1 id="courseTitle" style="margin-top:0;"></h1>
-    <h2 id="moduleTitle"></h2>
-    <div id="counter"></div>
-
-    <h3 id="question"></h3>
-
-    <div id="options" class="options"></div>
-
-    <div id="feedback" class="feedback">Välj ett svar.</div>
-
-    <div class="nav">
-      <button id="prevBtn" class="btn btn-course" type="button">Föregående</button>
-      <button id="nextBtn" class="btn btn-primary" type="button">Nästa</button>
-      <button id="submitBtn" class="btn btn-course" type="button">Rätta quiz</button>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="index.html">TFF Digitala Kurser</a>
+      <nav class="topnav">
+        <a href="index.html">Start</a>
+        <a href="utbildningar.html">Utbildningar</a>
+        <a href="guides.html">Guider</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="score" id="scoreText">0 / 10</div>
-    <div id="passFailText"></div>
-  </div>
-</div>
+  <main class="container page">
+    <section class="hero hero--small">
+      <div class="hero__content">
+        <p class="eyebrow">Kunskapstest</p>
+        <h1 id="quizTitle">Quiz</h1>
+        <p>Svara på alla frågor och skicka in resultatet.</p>
+      </div>
+    </section>
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const courseId = Number(params.get("course")) || 1;
-const moduleId = Number(params.get("module")) || 1;
+    <section class="section">
+      <form id="quizForm" class="quiz-form"></form>
 
-const course = PortalData.getCourse(courseId) || PortalData.getCourses()[0];
-const module = PortalData.getModule(course.id, moduleId) || course.modules[0];
+      <div class="actions-row">
+        <button id="submitQuizBtn" class="btn btn-primary" type="button">Skicka quiz</button>
+        <a class="btn btn-secondary" href="kurser.html">Tillbaka till kurs</a>
+      </div>
 
-document.documentElement.style.setProperty("--color", course.color);
+      <div id="quizResult" class="content-card" style="display:none; margin-top: 24px;"></div>
+    </section>
+  </main>
 
-document.getElementById("courseTitle").textContent = course.title;
-document.getElementById("moduleTitle").textContent = module.title;
-document.getElementById("backBtn").href = `kurser.html?course=${course.id}&module=${module.id}`;
+  <script src="assets/js/kurser-data.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const courseId = localStorage.getItem("selectedCourseId");
+      const moduleId = localStorage.getItem("selectedModuleId");
 
-let currentIndex = 0;
-let answers = new Array(module.questions.length).fill(null);
+      const course = PortalData.getCourse(courseId);
+      const module = PortalData.getModule(courseId, moduleId);
 
-function answeredCount(){
-  return answers.filter(a => a !== null).length;
-}
+      const quizTitle = document.getElementById("quizTitle");
+      const quizForm = document.getElementById("quizForm");
+      const resultBox = document.getElementById("quizResult");
 
-function calculateScore(){
-  let score = 0;
-  module.questions.forEach((q, i) => {
-    if(answers[i] === q.correct){
-      score++;
-    }
-  });
-  return score;
-}
+      if (!course || !module) {
+        quizTitle.textContent = "Ingen quiz vald";
+        quizForm.innerHTML = "<p>Ingen modul är vald.</p>";
+        return;
+      }
 
-function renderQuestion(){
-  const q = module.questions[currentIndex];
+      quizTitle.textContent = `${course.title} – ${module.title}`;
 
-  document.getElementById("counter").textContent = `Fråga ${currentIndex + 1} av ${module.questions.length}`;
-  document.getElementById("question").textContent = q.q;
-  document.getElementById("progressPill").textContent = `Besvarade: ${answeredCount()}/${module.questions.length}`;
-  document.getElementById("scoreText").textContent = `${calculateScore()} / ${module.questions.length}`;
+      module.questions.forEach((question, qIndex) => {
+        const block = document.createElement("section");
+        block.className = "quiz-question";
+        block.innerHTML = `<h3>${qIndex + 1}. ${question.q}</h3>`;
 
-  document.getElementById("options").innerHTML = q.options.map((option, index) => `
-    <button class="option ${answers[currentIndex] === index ? "selected" : ""}" data-index="${index}" type="button">
-      ${option}
-    </button>
-  `).join("");
+        question.options.forEach((option, oIndex) => {
+          const label = document.createElement("label");
+          label.className = "quiz-option";
+          label.innerHTML = `
+            <input type="radio" name="q${qIndex}" value="${oIndex}">
+            <span>${option}</span>
+          `;
+          block.appendChild(label);
+        });
 
-  document.querySelectorAll(".option").forEach(btn => {
-    btn.onclick = () => {
-      answers[currentIndex] = Number(btn.dataset.index);
-      document.getElementById("feedback").textContent = "Svar registrerat.";
-      renderQuestion();
-    };
-  });
+        quizForm.appendChild(block);
+      });
 
-  document.getElementById("prevBtn").disabled = currentIndex === 0;
-  document.getElementById("nextBtn").disabled = currentIndex === module.questions.length - 1;
-}
+      document.getElementById("submitQuizBtn").addEventListener("click", function () {
+        let score = 0;
+        const total = module.questions.length;
 
-function submitQuiz(){
-  if(answeredCount() !== module.questions.length){
-    document.getElementById("feedback").textContent = "Du måste besvara alla frågor innan rättning.";
-    return;
-  }
+        module.questions.forEach((question, qIndex) => {
+          const selected = quizForm.querySelector(`input[name="q${qIndex}"]:checked`);
+          if (selected && Number(selected.value) === question.correct) {
+            score++;
+          }
+        });
 
-  const score = calculateScore();
-  const passed = score >= 8;
+        const passed = total > 0 ? score >= Math.ceil(total * 0.8) : false;
 
-  PortalData.setModuleProgress(course.id, module.id, {
-    quizPassed: passed,
-    score: score,
-    total: module.questions.length
-  });
+        PortalData.setModuleProgress(courseId, moduleId, {
+          completed: true,
+          quizPassed: passed,
+          score,
+          total
+        });
 
-  PortalData.saveResult({
-    courseId: course.id,
-    courseTitle: course.title,
-    moduleId: module.id,
-    moduleTitle: module.title,
-    score: score,
-    total: module.questions.length,
-    passed: passed,
-    timestamp: new Date().toISOString()
-  });
+        PortalData.saveResult({
+          courseId: Number(courseId),
+          moduleId: Number(moduleId),
+          courseTitle: course.title,
+          moduleTitle: module.title,
+          score,
+          total,
+          passed,
+          createdAt: new Date().toISOString()
+        });
 
-  document.getElementById("resultPill").textContent = passed ? "Godkänd" : "Ej godkänd";
-  document.getElementById("passFailText").innerHTML = passed
-    ? `<span class="pass">Godkänd – ${score}/${module.questions.length}</span>`
-    : `<span class="fail">Ej godkänd – ${score}/${module.questions.length}</span>`;
-
-  document.getElementById("feedback").textContent = "Quiz rättat och resultat sparat.";
-  document.getElementById("scoreText").textContent = `${score} / ${module.questions.length}`;
-}
-
-document.getElementById("prevBtn").onclick = () => {
-  if(currentIndex > 0){
-    currentIndex--;
-    renderQuestion();
-  }
-};
-
-document.getElementById("nextBtn").onclick = () => {
-  if(currentIndex < module.questions.length - 1){
-    currentIndex++;
-    renderQuestion();
-  }
-};
-
-document.getElementById("submitBtn").onclick = submitQuiz;
-
-document.getElementById("restartBtn").onclick = () => {
-  answers = new Array(module.questions.length).fill(null);
-  currentIndex = 0;
-  document.getElementById("resultPill").textContent = "Ej rättat";
-  document.getElementById("passFailText").textContent = "";
-  document.getElementById("feedback").textContent = "Quiz återställt.";
-  renderQuestion();
-};
-
-renderQuestion();
-</script>
-
+        resultBox.style.display = "block";
+        resultBox.innerHTML = `
+          <h2>Resultat</h2>
+          <p><strong>Poäng:</strong> ${score} / ${total}</p>
+          <p><strong>Status:</strong> ${passed ? "Godkänd" : "Inte godkänd"}</p>
+          <div class="actions-row" style="margin-top:16px;">
+            <a class="btn btn-primary" href="kurser.html">Tillbaka till kurs</a>
+            <a class="btn btn-secondary" href="utbildningar.html">Till utbildningar</a>
+          </div>
+        `;
+      });
+    });
+  </script>
 </body>
 </html>
