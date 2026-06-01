@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Quiz</title>
 
-assets/js/kurser-data.jsscript>
+<script src="assets/js/kurser-data.js"></script>
 
 <style>
 body { font-family: Arial; padding:30px;}
@@ -23,49 +23,49 @@ body { font-family: Arial; padding:30px;}
 <button onclick="next()">Nästa</button>
 
 <script>
-const p = new URLSearchParams(window.location.search)
+const p = new URLSearchParams(window.location.search);
 
-const course = courses.find(c=>c.id==p.get("course"))
-const module = course.modules.find(m=>m.id==p.get("module"))
+const course = courses.find(c=>c.id==p.get("course")) || courses[0];
+const module = course.modules.find(m=>m.id==p.get("module")) || course.modules[0];
 
-let i=0
-let score=0
+let i=0;
+let score=0;
 
 function show() {
 
-const q = module.questions[i]
+const q = module.questions[i];
 
 document.getElementById("question").innerText =
-`Fråga ${i+1}: ` + q.q
+`Fråga ${i+1}: ` + q.q;
 
 document.getElementById("options").innerHTML =
 q.options.map((o,index)=>`
-<div class="option" onclick="answer(${index})">${o}</div>
-`).join("")
+<div class="option" onclick="answer(${index}, this)">${o}</div>
+`).join("");
 }
 
-function answer(index){
+function answer(index, el){
 
-const correct = module.questions[i].correct
+const correct = module.questions[i].correct;
 
 if(index==correct){
-score++
-alert("Rätt")
+score++;
+el.classList.add("correct");
 }else{
-alert("Fel")
+el.classList.add("wrong");
 }
 }
 
 function next(){
-i++
+i++;
 if(i < module.questions.length){
-show()
+show();
 }else{
-document.body.innerHTML = "<h1>Resultat: "+score+"/10</h1>"
+document.body.innerHTML = `<h1>Resultat: ${score}/${module.questions.length}</h1>`;
 }
 }
 
-show()
+show();
 </script>
 
 </body>
