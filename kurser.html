@@ -11,9 +11,15 @@
 <div id="courses"></div>
 
 <script src="assets/js/kurser-data.js"></script>
+
 <script>
 function loadCourses() {
   const container = document.getElementById("courses");
+
+  if (!window.kurserData) {
+    container.innerHTML = "<p>Ingen data laddad</p>";
+    return;
+  }
 
   kurserData.forEach(course => {
     const div = document.createElement("div");
