@@ -1,1 +1,211 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin</title>
+<script src="assets/js/kurser-data.js"></script>
+<style>
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#f4f6f8;
+  color:#111;
+}
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 30px;
+  background:#fff;
+  border-bottom:1px solid #ddd;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.header a{
+  text-decoration:none;
+  background:#1b5ea6;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:8px;
+}
+.page{
+  padding:30px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+.box{
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+textarea{
+  width:100%;
+  min-height:420px;
+  font-family:Consolas, monospace;
+  font-size:13px;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  box-sizing:border-box;
+}
+.btn{
+  display:inline-block;
+  text-decoration:none;
+  padding:10px 16px;
+  border-radius:8px;
+  font-weight:bold;
+  border:none;
+  cursor:pointer;
+  margin-right:8px;
+  margin-top:10px;
+}
+.btn-primary{
+  background:#1b5ea6;
+  color:#fff;
+}
+.btn-danger{
+  background:#c62828;
+  color:#fff;
+}
+.btn-neutral{
+  background:#e9eef2;
+  color:#111;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th, td{
+  border-bottom:1px solid #ddd;
+  padding:8px;
+  text-align:left;
+  vertical-align:top;
+}
+small{
+  color:#666;
+}
+@media(max-width:1100px){
+  .page{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
 
+<div class="header">
+  <div>
+    <h2 style="margin:0;">TFF – Admin</h2>
+    <div>Kurser, moduler, frågor och resultat</div>
+  </div>
+  <div>
+    <a href="utbildningar.html">Till utbildningar</a>
+  </div>
+</div>
+
+<div class="page">
+  <div class="box">
+    <h3 style="margin-top:0;">Admin-data (JSON)</h3>
+    <p>
+      Redigera kurser, moduler, video och frågor här. Klicka sedan på <strong>Spara JSON</strong>.
+      Portalen läser därefter den sparade datan automatiskt.
+    </p>
+
+    <textarea id="jsonEditor"></textarea>
+
+    <div>
+      <button id="saveBtn" class="btn btn-primary" type="button">Spara JSON</button>
+      <button id="resetBtn" class="btn btn-neutral" type="button">Återställ standard</button>
+      <button id="exportBtn" class="btn btn-neutral" type="button">Exportera JSON</button>
+      <button id="clearResultsBtn" class="btn btn-danger" type="button">Rensa resultat</button>
+    </div>
+
+    <p><small>Obs: I denna GitHub Pages-version lagras admin-data och resultat i samma webbläsare via localStorage.</small></p>
+  </div>
+
+  <div class="box">
+    <h3 style="margin-top:0;">Resultatlogg</h3>
+    <div id="resultsContainer"></div>
+  </div>
+</div>
+
+<script>
+function loadEditor(){
+  const courses = PortalData.getCourses();
+  document.getElementById("jsonEditor").value = JSON.stringify(courses, null, 2);
+}
+
+function renderResults(){
+  const results = PortalData.getResults();
+
+  if(!results.length){
+    document.getElementById("resultsContainer").innerHTML = "<p>Inga resultat sparade ännu.</p>";
+    return;
+  }
+
+  document.getElementById("resultsContainer").innerHTML = `
+    <table>
+      <thead>
+        <tr>
+          <th>Kurs</th>
+          <th>Modul</th>
+          <th>Resultat</th>
+          <th>Status</th>
+          <th>Tid</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${results.map(r => `
+          <tr>
+            <td>${r.courseTitle}</td>
+            <td>${r.moduleTitle}</td>
+            <td>${r.score}/${r.total}</td>
+            <td>${r.passed ? "Godkänd" : "Ej godkänd"}</td>
+            <td>${r.timestamp || ""}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+document.getElementById("saveBtn").onclick = () => {
+  try{
+    const parsed = JSON.parse(document.getElementById("jsonEditor").value);
+    PortalData.saveCourses(parsed);
+    alert("JSON sparad.");
+  }catch(e){
+    alert("Ogiltig JSON. Kontrollera syntaxen.");
+  }
+};
+
+document.getElementById("resetBtn").onclick = () => {
+  PortalData.resetCourses();
+  loadEditor();
+  alert("Standarddata återställd.");
+};
+
+document.getElementById("exportBtn").onclick = () => {
+  const blob = new Blob([document.getElementById("jsonEditor").value], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "tff-kurser.json";
+  a.click();
+  URL.revokeObjectURL(url);
+};
+
+document.getElementById("clearResultsBtn").onclick = () => {
+  PortalData.clearResults();
+  localStorage.removeItem(PortalData.PROGRESS_KEY);
+  renderResults();
+  alert("Resultat och progress rensades.");
+};
+
+loadEditor();
+renderResults();
+</script>
+
+</body>
+</html>
