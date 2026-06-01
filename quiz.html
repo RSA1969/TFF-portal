@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>Quiz</title>
 
-<script src="assets/js/kurser-data.js"></script>
+assets/js/kurser-data.jsscript>
 
 <style>
 body { font-family: Arial; padding:30px;}
@@ -17,22 +17,18 @@ body { font-family: Arial; padding:30px;}
 <body>
 
 <h2 id="question"></h2>
-
 <div id="options"></div>
 
-<button onclick="next()">Nästa</button>
+<button onclick="next()">Next</button>
 
 <script>
-const p = new URLSearchParams(window.location.search);
-
-const course = courses.find(c=>c.id==p.get("course")) || courses[0];
-const module = course.modules.find(m=>m.id==p.get("module")) || course.modules[0];
+const course = courses[0];
+const module = course.modules[0];
 
 let i=0;
 let score=0;
 
-function show() {
-
+function show(){
 const q = module.questions[i];
 
 document.getElementById("question").innerText =
@@ -45,10 +41,7 @@ q.options.map((o,index)=>`
 }
 
 function answer(index, el){
-
-const correct = module.questions[i].correct;
-
-if(index==correct){
+if(index==module.questions[i].correct){
 score++;
 el.classList.add("correct");
 }else{
@@ -58,10 +51,10 @@ el.classList.add("wrong");
 
 function next(){
 i++;
-if(i < module.questions.length){
+if(i<module.questions.length){
 show();
 }else{
-document.body.innerHTML = `<h1>Resultat: ${score}/${module.questions.length}</h1>`;
+document.body.innerHTML = `<h1>Resultat: ${score}/10</h1>`;
 }
 }
 
@@ -70,3 +63,4 @@ show();
 
 </body>
 </html>
+``
