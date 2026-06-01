@@ -2,16 +2,13 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kurs</title>
 
-<script src="assets/js/kurser-data.js"></script>
+assets/js/kurser-data.jsscript>
 
 <style>
-body { font-family: Arial; margin:0; background:#f4f6f8;}
-
+body { font-family: Arial; background:#f4f6f8; }
 .container { display:flex; padding:20px; }
-
 .sidebar { width:300px; }
 
 .module {
@@ -19,7 +16,6 @@ body { font-family: Arial; margin:0; background:#f4f6f8;}
     margin:10px 0;
     padding:10px;
     cursor:pointer;
-    border-radius:8px;
 }
 
 .module.active {
@@ -31,15 +27,12 @@ body { font-family: Arial; margin:0; background:#f4f6f8;}
 .quiz-btn {
     display:inline-block;
     margin-top:20px;
-    padding:12px 20px;
+    padding:10px;
     background:var(--color);
     color:white;
     text-decoration:none;
-    border-radius:8px;
-    font-weight:bold;
 }
 </style>
-
 </head>
 
 <body>
@@ -53,9 +46,7 @@ body { font-family: Arial; margin:0; background:#f4f6f8;}
 
 <div class="main">
 <h2 id="title"></h2>
-
 <h3 id="moduleTitle"></h3>
-
 <p id="content"></p>
 
 <a id="quizBtn" class="quiz-btn">Starta Quiz</a>
@@ -65,46 +56,36 @@ body { font-family: Arial; margin:0; background:#f4f6f8;}
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-const id = params.get("course");
-
-// fallback så sidan inte blir tom
-const course = courses.find(c => c.id == id) || courses[0];
+const p = new URLSearchParams(window.location.search);
+const course = courses[0]; // TEST – tvingar visning
 
 document.documentElement.style.setProperty("--color", course.color);
 
 document.getElementById("title").innerText = course.title;
 
-// skapa moduler
 document.getElementById("modules").innerHTML =
-course.modules.map(m => `
-<div class="module" data-id="${m.id}">
+course.modules.map(m=>`
+<div class="module" onclick="loadModule(${m.id}, this)">
 ${m.title}
 </div>
 `).join("");
 
-// klickfunktion för moduler
-document.querySelectorAll(".module").forEach(el => {
-  el.onclick = () => loadModule(el.dataset.id, el);
-});
-
 function loadModule(id, el){
 
-const m = course.modules.find(x => x.id == id);
+const m = course.modules.find(x=>x.id==id);
 
 document.getElementById("moduleTitle").innerText = m.title;
-document.getElementById("content").innerText = m.content.join(", ");
+document.getElementById("content").innerText = m.content.join(" | ");
 
 document.getElementById("quizBtn").href =
 `quiz.html?course=${course.id}&module=${m.id}`;
 
-// mark active
 document.querySelectorAll(".module").forEach(e=>e.classList.remove("active"));
 el.classList.add("active");
 }
 
-// AUTO start första modul → detta var problemet hos dig
-loadModule(course.modules[0].id, document.querySelector(".module"));
+// auto load
+loadModule(1, document.querySelector(".module"));
 </script>
 
 </body>
