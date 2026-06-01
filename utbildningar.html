@@ -2,69 +2,64 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<title>Kurskatalog</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utbildningar</title>
+
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/kurser-data.js"></script>
 
 <style>
-body{font-family:Arial;background:#f3f4f6;margin:0}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:15px;
-padding:20px;
+body {
+    font-family: "Segoe UI", Arial;
+    background: #f4f6f8;
+    margin: 0;
+    padding: 30px;
 }
 
-.card{
-background:white;
-padding:15px;
-border-radius:10px;
-cursor:pointer;
-border-left:6px solid #ccc;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
 }
 
-.badge{
-background:#eee;
-padding:4px 8px;
-border-radius:10px;
-font-size:12px;
+.course-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.course-card h3 {
+    margin: 0 0 10px 0;
+}
+
+.badge {
+    margin-top: 10px;
+    display: inline-block;
+    padding: 6px 12px;
+    background: #eef;
+    border-radius: 20px;
+    font-size: 12px;
 }
 </style>
 </head>
 
 <body>
 
-<h1 style="padding:20px">Kurser</h1>
+<h1>Alla utbildningar</h1>
 
-<div class="grid" id="courses"></div>
+<div id="courseContainer" class="grid"></div>
 
 <script>
-
-const kurser = [];
-
-for(let i=1;i<=15;i++){
-kurser.push({
-id:"kurs"+i,
-name:"Kurs "+i,
-desc:"Beskrivning kurs "+i
-});
-}
-
-const container=document.getElementById("courses");
-
-kurser.forEach(k=>{
-let div=document.createElement("div");
-div.className="card";
-div.onclick=()=>location.href="utbildning.html?course="+k.id;
-
-div.innerHTML=`
-<h3>${k.name}</h3>
-<p>${k.desc}</p>
-<span class="badge">5 moduler</span>
-`;
-
-container.appendChild(div);
-});
-
+document.getElementById("courseContainer").innerHTML = courses.map(course => `
+<a href="kurs.html?course=${course.id}" class="course-card" style="border-left:6px solid ${course.color}">
+    <h3>${course.title}</h3>
+    <p>Syfte: ${course.purpose}</p>
+    <div class="badge">5 moduler</div>
+</a>
+`).join("");
 </script>
 
 </body>
