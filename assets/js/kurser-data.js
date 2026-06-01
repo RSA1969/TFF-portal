@@ -9,49 +9,25 @@ const courses = [
     {
       id: 1,
       title: "Modul 1 – Varför chatt inte är arkiv",
-      content: ["Varför chatt inte är arkiv","Risker","Struktur"],
-
+      content: [
+        "Varför chatt inte är arkiv",
+        "Risker med chatt",
+        "Struktur behövs"
+      ],
       questions: [
-        {q:"Vad är problemet?", options:["A","B","C","D"], correct:1},
-        {q:"Vad ska göras?", options:["A","B","C","D"], correct:0},
-        {q:"Var sparas info?", options:["A","B","C","D"], correct:2},
-        {q:"Risk?", options:["A","B","C","D"], correct:3},
-        {q:"Syfte?", options:["A","B","C","D"], correct:0},
-        {q:"Fel arbetssätt?", options:["A","B","C","D"], correct:2},
-        {q:"Rätt metod?", options:["A","B","C","D"], correct:1},
-        {q:"Varför struktur?", options:["A","B","C","D"], correct:0},
-        {q:"Vad saknas annars?", options:["A","B","C","D"], correct:2},
-        {q:"Effekt?", options:["A","B","C","D"], correct:1}
+        {q:"1. Vad är chatt?", options:["A dialog","Arkiv","System","Process"], correct:0},
+        {q:"2. Är chatt ett arkiv?", options:["Ja","Nej","Ibland","Vet ej"], correct:1},
+        {q:"3. Risk?", options:["Ordning","Tappad info","Struktur","Control"], correct:1},
+        {q:"4. Vad ska göras?", options:["Spara rätt","Radera","Ignore","Maila"], correct:0},
+        {q:"5. Var lagras info?", options:["Dokument","Chatt","Minne","Epost"], correct:0},
+        {q:"6. Problem med chatt?", options:["För mycket","Spritt","Rent","Kort"], correct:1},
+        {q:"7. Vad krävs?", options:["Struktur","Slump","Filer","Mail"], correct:0},
+        {q:"8. Vad ska undvikas?", options:["Chatt","Dokument","Process","System"], correct:0},
+        {q:"9. Effekt?", options:["Kaos","Ordning","Kontroll","Fokus"], correct:0},
+        {q:"10. Rätt metod?", options:["Struktur","Chatt","Mail","Noter"], correct:0}
       ]
-    },
-
-    {
-      id: 2,
-      title: "Modul 2 – Fånga beslut",
-      content: ["Beslut","Dokumentation","Spårbarhet"],
-      questions: new Array(10).fill({q:"Exempel fråga", options:["A","B","C","D"], correct:1})
-    },
-
-    {
-      id: 3,
-      title: "Modul 3 – Skapa struktur",
-      content: ["Struktur","Ordning"],
-      questions: new Array(10).fill({q:"Exempel fråga", options:["A","B","C","D"], correct:1})
-    },
-
-    {
-      id: 4,
-      title: "Modul 4 – Dela rätt",
-      content: ["Behörighet","Säkerhet"],
-      questions: new Array(10).fill({q:"Exempel fråga", options:["A","B","C","D"], correct:1})
-    },
-
-    {
-      id: 5,
-      title: "Modul 5 – Nytta",
-      content: ["Effekt","Verksamhetsnytta"],
-      questions: new Array(10).fill({q:"Exempel fråga", options:["A","B","C","D"], correct:1})
     }
   ]
 }
 ];
+``
