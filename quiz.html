@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h1>Modul</h1>
+<h1>Quiz</h1>
 
 <video id="video" width="600" controls></video>
 
@@ -18,8 +18,8 @@
 <script src="assets/js/kurser-data.js"></script>
 
 <script>
-const courseId = localStorage.getItem("selectedCourse");
-const moduleId = localStorage.getItem("selectedModule");
+const courseId = localStorage.getItem("selectedCourse") || "kurs1";
+const moduleId = localStorage.getItem("selectedModule") || "k1m1";
 
 const course = kurserData.find(c => c.id === courseId);
 const module = course.modules.find(m => m.id === moduleId);
@@ -68,4 +68,3 @@ loadQuestion();
 
 </body>
 </html>
-``
