@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kurs</title>
 
-<link rel="stylesheet" href="assets/css/styles.css">
 <script src="assets/js/kurser-data.js"></script>
 
 <style>
@@ -29,9 +28,15 @@ body { font-family: Arial; margin:0; background:#f4f6f8;}
 
 .main { flex:1; padding-left:20px;}
 
-button {
-    padding:10px;
-    margin-top:10px;
+.quiz-btn {
+    display:inline-block;
+    margin-top:20px;
+    padding:12px 20px;
+    background:var(--color);
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
 }
 </style>
 
@@ -49,13 +54,11 @@ button {
 <div class="main">
 <h2 id="title"></h2>
 
-<p id="moduleTitle"></p>
+<h3 id="moduleTitle"></h3>
 
 <p id="content"></p>
 
-<a id="quizBtn">
-<button>Starta Quiz</button>
-</a>
+<a id="quizBtn" class="quiz-btn">Starta Quiz</a>
 
 </div>
 
@@ -65,40 +68,43 @@ button {
 const params = new URLSearchParams(window.location.search);
 const id = params.get("course");
 
-const course = courses.find(c => c.id == id)
+// fallback så sidan inte blir tom
+const course = courses.find(c => c.id == id) || courses[0];
 
-if(!course){
-document.body.innerHTML = "Ingen kurs vald"
-}
+document.documentElement.style.setProperty("--color", course.color);
 
-document.documentElement.style.setProperty("--color", course.color)
+document.getElementById("title").innerText = course.title;
 
-document.getElementById("title").innerText = course.title
-
+// skapa moduler
 document.getElementById("modules").innerHTML =
 course.modules.map(m => `
-<div class="module" onclick="loadModule(${m.id}, this)">
+<div class="module" data-id="${m.id}">
 ${m.title}
 </div>
-`).join("")
+`).join("");
+
+// klickfunktion för moduler
+document.querySelectorAll(".module").forEach(el => {
+  el.onclick = () => loadModule(el.dataset.id, el);
+});
 
 function loadModule(id, el){
 
-const m = course.modules.find(x => x.id == id)
+const m = course.modules.find(x => x.id == id);
 
-document.getElementById("moduleTitle").innerText = m.title
-document.getElementById("content").innerText = m.content.join(", ")
+document.getElementById("moduleTitle").innerText = m.title;
+document.getElementById("content").innerText = m.content.join(", ");
 
 document.getElementById("quizBtn").href =
-`quiz.html?course=${course.id}&module=${m.id}`
+`quiz.html?course=${course.id}&module=${m.id}`;
 
 // mark active
-document.querySelectorAll(".module").forEach(e=>e.classList.remove("active"))
-el.classList.add("active")
+document.querySelectorAll(".module").forEach(e=>e.classList.remove("active"));
+el.classList.add("active");
 }
 
-// load first module automatically
-loadModule(1, document.querySelector(".module"))
+// AUTO start första modul → detta var problemet hos dig
+loadModule(course.modules[0].id, document.querySelector(".module"));
 </script>
 
 </body>
