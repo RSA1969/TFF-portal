@@ -13,27 +13,32 @@
 <script src="assets/js/kurser-data.js"></script>
 
 <script>
-const courseId = localStorage.getItem("selectedCourse");
-const course = kurserData.find(c => c.id === courseId);
+const courseId = localStorage.getItem("selectedCourse") || "kurs1";
 
+const course = kurserData.find(c => c.id === courseId);
 const container = document.getElementById("modules");
 
-course.modules.forEach(module => {
-  const div = document.createElement("div");
+if (!course) {
+  container.innerHTML = "<p>Ingen kurs hittades</p>";
+} else {
+  course.modules.forEach(m => {
+    const div = document.createElement("div");
 
-  div.innerHTML = `
-    <h3>${module.title}</h3>
-    <button onclick="playModule('${module.id}')">Starta</button>
-  `;
+    div.innerHTML = `
+      <h3>${m.title}</h3>
+      <button onclick="startModule('${m.id}')">Starta</button>
+    `;
 
-  container.appendChild(div);
-});
+    container.appendChild(div);
+  });
+}
 
-function playModule(moduleId) {
-  localStorage.setItem("selectedModule", moduleId);
+function startModule(id) {
+  localStorage.setItem("selectedModule", id);
   window.location.href = "quiz.html";
 }
 </script>
 
 </body>
 </html>
+
