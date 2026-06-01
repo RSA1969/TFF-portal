@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kurs</title>
 
-<!-- ✅ KORREKT SCRIPT (DETTA VAR FELET) -->
+<!-- ✅ KORREKT SCRIPT (DETTA SKA VARA EXAKT SÅHÄR) -->
 <script src="assets/js/kurser-data.js"></script>
 
 <style>
@@ -44,12 +44,11 @@ body {
 .quiz-btn {
     display:inline-block;
     margin-top:20px;
-    padding:12px 20px;
+    padding:12px;
     background:var(--color);
     color:white;
     text-decoration:none;
     border-radius:8px;
-    font-weight:bold;
 }
 </style>
 </head>
@@ -65,9 +64,7 @@ body {
 
 <div class="main">
 <h2 id="title"></h2>
-
 <h3 id="moduleTitle"></h3>
-
 <p id="content"></p>
 
 <a id="quizBtn" class="quiz-btn">Starta Quiz</a>
@@ -78,36 +75,35 @@ body {
 
 <script>
 
-// ✅ LÄS URL (course=11)
+// Hämta course från URL
 const params = new URLSearchParams(window.location.search);
 const courseId = params.get("course");
 
-// ✅ fallback så sidan aldrig blir tom
+// fallback
 const course = courses.find(c => c.id == courseId) || courses[0];
 
-// ✅ sätt färg globalt
+// sätt färg
 document.documentElement.style.setProperty("--color", course.color);
 
-// ✅ visa titel
+// titel
 document.getElementById("title").innerText = course.title;
 
-// ✅ skapa modul-lista
-const moduleContainer = document.getElementById("modules");
+// moduler
+const modules = document.getElementById("modules");
 
-moduleContainer.innerHTML = course.modules.map(m => `
+modules.innerHTML = course.modules.map(m => `
 <div class="module" data-id="${m.id}">
 ${m.title}
 </div>
 `).join("");
 
-// ✅ klick på modul
+// klick
 document.querySelectorAll(".module").forEach(el => {
     el.onclick = () => loadModule(el.dataset.id, el);
 });
 
-// ✅ LADDA MODUL
+// ladda modul
 function loadModule(id, el){
-
     const m = course.modules.find(x => x.id == id);
 
     document.getElementById("moduleTitle").innerText = m.title;
@@ -116,19 +112,17 @@ function loadModule(id, el){
     document.getElementById("quizBtn").href =
         `quiz.html?course=${course.id}&module=${m.id}`;
 
-    // markera aktiv
     document.querySelectorAll(".module").forEach(e=>e.classList.remove("active"));
     el.classList.add("active");
 }
 
-// ✅ KRITISK – laddar första modul automatiskt
-const firstModule = document.querySelector(".module");
-if(firstModule){
-    loadModule(course.modules[0].id, firstModule);
+// ✅ KRITISK
+const first = document.querySelector(".module");
+if(first){
+    loadModule(course.modules[0].id, first);
 }
 
 </script>
 
 </body>
 </html>
-``
