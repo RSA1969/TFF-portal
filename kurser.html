@@ -1,315 +1,89 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kurs</title>
-<script src="assets/js/kurser-data.js"></script>
-<style>
-:root{ --color:#82c7b8; }
-
-body{
-  font-family:Arial,sans-serif;
-  margin:0;
-  background:#f4f6f8;
-  color:#111;
-}
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:20px 30px;
-  background:#fff;
-  border-bottom:1px solid #ddd;
-  flex-wrap:wrap;
-  gap:10px;
-}
-.header-right{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.pill{
-  padding:10px 14px;
-  border-radius:20px;
-  background:#eef2f5;
-  font-weight:bold;
-}
-.btn{
-  display:inline-block;
-  text-decoration:none;
-  padding:10px 16px;
-  border-radius:8px;
-  font-weight:bold;
-}
-.btn-primary{
-  background:#1b5ea6;
-  color:#fff;
-}
-.btn-course{
-  background:var(--color);
-  color:#111;
-}
-.page{
-  display:flex;
-  gap:20px;
-  padding:20px;
-}
-.sidebar{
-  width:320px;
-}
-.sidebar-box,
-.main-box{
-  background:#fff;
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 2px 6px rgba(0,0,0,0.08);
-}
-.sidebar-box{
-  position:sticky;
-  top:20px;
-}
-.module{
-  background:#fff;
-  border:1px solid #ddd;
-  margin-top:10px;
-  padding:12px;
-  border-radius:10px;
-  cursor:pointer;
-}
-.module.active{
-  border-left:6px solid var(--color);
-  background:#f8fbfb;
-}
-.main{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-}
-.tags{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:10px;
-}
-.tag{
-  padding:8px 12px;
-  border-radius:20px;
-  background:#eef2f5;
-  font-weight:bold;
-}
-.video-placeholder{
-  min-height:220px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  border:1px dashed #ccc;
-  border-radius:12px;
-  color:#666;
-  background:#fafafa;
-  padding:20px;
-}
-.action-row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:14px;
-}
-.nav-row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-@media(max-width:960px){
-  .page{flex-direction:column;}
-  .sidebar{width:100%;}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kurser – TFF Portal</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-
-<div class="header">
-  <div>
-    <h2 style="margin:0;">TFF – Kurs</h2>
-    <div>Moduler • Quiz • Progress</div>
-  </div>
-
-  <div class="header-right">
-    <div id="progressPill" class="pill">Progress: 0%</div>
-    <div id="statusPill" class="pill">Kurs: Ej godkänd</div>
-    <button id="resetBtn" class="btn btn-course" type="button">Återställ progress</button>
-    <a href="utbildningar.html" class="btn btn-primary">Till utbildningar</a>
-  </div>
-</div>
-
-<div class="page">
-  <div class="sidebar">
-    <div class="sidebar-box">
-      <h3 style="margin-top:0;">Moduler</h3>
-      <div id="moduleList"></div>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="index.html">TFF Digitala Kurser</a>
+      <nav class="topnav">
+        <a href="index.html">Start</a>
+        <a href="utbildningar.html">Utbildningar</a>
+        <a href="guides.html">Guider</a>
+        <a href="kurs_dokumentation.html">Dokumentation</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="main">
-    <div class="main-box">
-      <h1 id="courseTitle" style="margin-top:0;"></h1>
-      <p id="coursePurpose"></p>
-      <div class="tags">
-        <div class="tag" id="moduleTag">Modul</div>
-        <div class="tag" id="quizTag">Quiz</div>
+  <main class="container page">
+    <section class="hero hero--small">
+      <div class="hero__content">
+        <p class="eyebrow">Kursöversikt</p>
+        <h1 id="courseTitle">Kurs</h1>
+        <p id="coursePurpose">Syfte</p>
       </div>
-    </div>
+    </section>
 
-    <div class="main-box">
-      <h2 id="moduleTitle" style="margin-top:0;"></h2>
-      <p id="modulePurpose"></p>
-      <h3>Innehåll</h3>
-      <ul id="moduleContent"></ul>
-
-      <div class="action-row">
-        <button id="markCompleteBtn" class="btn btn-course" type="button">Markera modul som klar</button>
-        <a id="quizBtn" class="btn btn-primary" href="#">Starta Quiz</a>
+    <section class="section">
+      <div class="section__header">
+        <h2>Moduler</h2>
+        <a class="btn btn-secondary" href="utbildningar.html">Tillbaka till utbildningar</a>
       </div>
 
-      <p id="moduleProgressText" style="margin-top:16px;font-weight:bold;"></p>
-    </div>
+      <div id="modulesGrid" class="module-grid"></div>
+    </section>
+  </main>
 
-    <div class="main-box">
-      <h2 style="margin-top:0;">Video</h2>
-      <div id="videoContainer" class="video-placeholder">
-        Ingen video länkad ännu för denna modul.
-      </div>
-    </div>
+  <script src="assets/js/kurser-data.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const courseId = localStorage.getItem("selectedCourseId");
+      const course = PortalData.getCourse(courseId);
 
-    <div class="nav-row">
-      <button id="prevBtn" class="btn btn-course" type="button">Föregående modul</button>
-      <button id="nextBtn" class="btn btn-primary" type="button">Nästa modul</button>
-    </div>
-  </div>
-</div>
+      if (!course) {
+        document.getElementById("courseTitle").textContent = "Ingen kurs vald";
+        document.getElementById("coursePurpose").textContent = "Gå tillbaka och välj en kurs.";
+        return;
+      }
 
-<script>
-const params = new URLSearchParams(window.location.search);
-let currentCourseId = Number(params.get("course")) || 1;
-let currentModuleId = Number(params.get("module")) || 1;
+      document.getElementById("courseTitle").textContent = course.title;
+      document.getElementById("coursePurpose").textContent = course.purpose;
 
-function setColor(color){
-  document.documentElement.style.setProperty("--color", color);
-}
+      const modulesGrid = document.getElementById("modulesGrid");
+      modulesGrid.innerHTML = "";
 
-function getCourseProgressPercent(course){
-  const completed = course.modules.filter(m => {
-    const state = PortalData.getModuleProgress(course.id, m.id);
-    return state.completed && state.quizPassed;
-  }).length;
+      course.modules.forEach((module, index) => {
+        const progress = PortalData.getModuleProgress(course.id, module.id);
+        const modulePage = `modul_dokumentation_${index + 1}.html`;
 
-  return Math.round((completed / course.modules.length) * 100);
-}
+        const card = document.createElement("article");
+        card.className = "module-card";
+        card.innerHTML = `
+          <div class="module-card__header">
+            <span class="module-card__number">Modul ${index + 1}</span>
+            <span class="status-pill ${progress.quizPassed ? "status-pill--done" : "status-pill--todo"}">
+              ${progress.quizPassed ? "Klar" : "Ej klar"}
+            </span>
+          </div>
+          <h3>${module.title}</h3>
+          <p>${module.purpose}</p>
+          <div class="module-card__actions">
+            <button class="btn btn-primary">Öppna modul</button>
+          </div>
+        `;
 
-function isCoursePassed(course){
-  return getCourseProgressPercent(course) === 100;
-}
+        card.querySelector("button").addEventListener("click", function () {
+          localStorage.setItem("selectedModuleId", module.id);
+          window.location.href = modulePage;
+        });
 
-function renderModules(course){
-  const moduleList = document.getElementById("moduleList");
-  moduleList.innerHTML = course.modules.map(module => {
-    const state = PortalData.getModuleProgress(course.id, module.id);
-    const text = `Modul: ${state.completed ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "godkänd" : "ej godkänd"}`;
-    return `
-      <div class="module ${module.id === currentModuleId ? "active" : ""}" data-id="${module.id}">
-        <strong>${module.title}</strong><br>
-        <small>${text}</small>
-      </div>
-    `;
-  }).join("");
-
-  document.querySelectorAll(".module").forEach(el => {
-    el.onclick = () => {
-      currentModuleId = Number(el.dataset.id);
-      syncUrl();
-      render();
-    };
-  });
-}
-
-function render(){
-  const course = PortalData.getCourse(currentCourseId) || PortalData.getCourses()[0];
-  const module = PortalData.getModule(course.id, currentModuleId) || course.modules[0];
-
-  currentCourseId = course.id;
-  currentModuleId = module.id;
-
-  setColor(course.color);
-
-  document.getElementById("courseTitle").textContent = course.title;
-  document.getElementById("coursePurpose").textContent = "Syfte: " + course.purpose;
-  document.getElementById("moduleTitle").textContent = module.title;
-  document.getElementById("modulePurpose").textContent = module.purpose;
-  document.getElementById("moduleContent").innerHTML = module.content.map(item => `<li>${item}</li>`).join("");
-  document.getElementById("moduleTag").textContent = module.title;
-  document.getElementById("quizTag").textContent = `${module.questions.length} frågor`;
-  document.getElementById("quizBtn").href = `quiz.html?course=${course.id}&module=${module.id}`;
-
-  const progress = PortalData.getModuleProgress(course.id, module.id);
-  document.getElementById("moduleProgressText").textContent =
-    `Status: modul ${progress.completed ? "klar" : "ej klar"} • quiz ${progress.quizPassed ? "godkänd" : "ej godkänd"}${progress.total ? ` • resultat ${progress.score}/${progress.total}` : ""}`;
-
-  const courseProgress = getCourseProgressPercent(course);
-  document.getElementById("progressPill").textContent = `Progress: ${courseProgress}%`;
-  document.getElementById("statusPill").textContent = `Kurs: ${isCoursePassed(course) ? "Godkänd" : "Ej godkänd"}`;
-
-  if(module.video){
-    document.getElementById("videoContainer").innerHTML = `
-      <iframe src="${module.video}" style="width:100%;height:420px;border:none;border-radius:12px;" allowfullscreen></iframe>
-    `;
-  } else {
-    document.getElementById("videoContainer").innerHTML = `Ingen video länkad ännu för denna modul.`;
-  }
-
-  document.getElementById("prevBtn").disabled = currentModuleId === 1;
-  document.getElementById("nextBtn").disabled = currentModuleId === course.modules.length;
-
-  renderModules(course);
-}
-
-function syncUrl(){
-  const url = new URL(window.location.href);
-  url.searchParams.set("course", currentCourseId);
-  url.searchParams.set("module", currentModuleId);
-  history.replaceState({}, "", url);
-}
-
-document.getElementById("markCompleteBtn").onclick = () => {
-  PortalData.setModuleProgress(currentCourseId, currentModuleId, { completed: true });
-  render();
-};
-
-document.getElementById("resetBtn").onclick = () => {
-  PortalData.resetCourseProgress(currentCourseId);
-  render();
-};
-
-document.getElementById("prevBtn").onclick = () => {
-  if(currentModuleId > 1){
-    currentModuleId--;
-    syncUrl();
-    render();
-  }
-};
-
-document.getElementById("nextBtn").onclick = () => {
-  const course = PortalData.getCourse(currentCourseId);
-  if(currentModuleId < course.modules.length){
-    currentModuleId++;
-    syncUrl();
-    render();
-  }
-};
-
-render();
-</script>
-
+        modulesGrid.appendChild(card);
+      });
+    });
+  </script>
 </body>
 </html>
