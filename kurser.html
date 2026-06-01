@@ -1,71 +1,105 @@
-<!doctype html>
-<html lang=" <meta name="viewport" content="width=device-width, initial-scale=1" /><html lang="sv">
-  <title>TFF-portal – Kurser</title>
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurs</title>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="assets/css/styles.css" />
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/kurser-data.js"></script>
+
+<style>
+body { font-family: Arial; margin:0; background:#f4f6f8;}
+
+.container { display:flex; padding:20px; }
+
+.sidebar { width:300px; }
+
+.module {
+    background:white;
+    margin:10px 0;
+    padding:10px;
+    cursor:pointer;
+    border-radius:8px;
+}
+
+.module.active {
+    border-left:5px solid var(--color);
+}
+
+.main { flex:1; padding-left:20px;}
+
+button {
+    padding:10px;
+    margin-top:10px;
+}
+</style>
+
 </head>
 
 <body>
-  <a class="skip-link" href="#main">Hoppa till innehåll</a>
 
-  <header class="hero hero--compact" role="banner">
-    <div class="hero__inner">
-      <a class="back" href="index.html">← Tillbaka till portalen</a>
+<div class="container">
 
-      <h1 class="hero__title hero__title--small">
-        Sök på alla kurser och moduler för TFF
-      </h1>
+<div class="sidebar">
+<h3>Moduler</h3>
+<div id="modules"></div>
+</div>
 
-      <form class="searchbar" role="search" aria-label="Sök kurs" onsubmit="return false;">
-        <label class="sr-only" for="courseSearch">Sök</label>
-        <input id="courseSearch" type="search" placeholder="Vad söker du efter?" />
-        <button type="button" aria-label="Sök">🔍</button>
-      </form>
-    </div>
-  </header>
+<div class="main">
+<h2 id="title"></h2>
 
-  <main id="main" class="container" role="main">
-    <section class="courses-layout" aria-label="Kurser och filter">
+<p id="moduleTitle"></p>
 
-      <aside class="courses-sidebar" aria-label="Filter">
-        <h2 class="sidebar__title">Filter</h2>
+<p id="content"></p>
 
-        <div class="sidebar__block">
-          <h3 class="sidebar__heading">Språk</h3>
-          <label class="checkbox checkbox--stack">
-            <input type="checkbox" id="langSv" checked />
-            <span>Swedish</span>
-          </label>
-        </div>
+<a id="quizBtn">
+<button>Starta Quiz</button>
+</a>
 
-        <div class="sidebar__block">
-          <h3 class="sidebar__heading">Kategorier</h3>
-          <div id="categoryList" class="category-list"></div>
-        </div>
+</div>
 
-        <div class="sidebar__block">
-          <button class="btn btn--secondary" type="button" id="resetFilters">Rensa filter</button>
-        </div>
-      </aside>
+</div>
 
-      <section aria-label="Kurskort">
-        <div class="courses-toolbar">
-          <div class="muted" id="resultCount">0 träffar</div>
-        </div>
+<script>
+const params = new URLSearchParams(window.location.search);
+const id = params.get("course");
 
-        <div class="courses-grid" id="coursesGrid"></div>
+const course = courses.find(c => c.id == id)
 
-        <nav class="pagination" aria-label="Sidnavigering" id="pagination"></nav>
-      </section>
+if(!course){
+document.body.innerHTML = "Ingen kurs vald"
+}
 
-    </section>
-  </main>
+document.documentElement.style.setProperty("--color", course.color)
 
-  <!-- Data + app -->
-  <script src="assets/js/kurser-data.js"></script>
-  <script src="assets/js/kurser-app.js"></script>
+document.getElementById("title").innerText = course.title
+
+document.getElementById("modules").innerHTML =
+course.modules.map(m => `
+<div class="module" onclick="loadModule(${m.id}, this)">
+${m.title}
+</div>
+`).join("")
+
+function loadModule(id, el){
+
+const m = course.modules.find(x => x.id == id)
+
+document.getElementById("moduleTitle").innerText = m.title
+document.getElementById("content").innerText = m.content.join(", ")
+
+document.getElementById("quizBtn").href =
+`quiz.html?course=${course.id}&module=${m.id}`
+
+// mark active
+document.querySelectorAll(".module").forEach(e=>e.classList.remove("active"))
+el.classList.add("active")
+}
+
+// load first module automatically
+loadModule(1, document.querySelector(".module"))
+</script>
+
 </body>
 </html>
-<head>
-  <meta charset="utf-8" />
