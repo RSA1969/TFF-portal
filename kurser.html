@@ -2,108 +2,21 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kurs – TFF Portal</title>
-
-  <!-- ✅ CSS -->
+  <title>Kurser</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
-
 <body>
 
-  <!-- HEADER -->
-  <header class="topbar">
-    <div class="container topbar__inner">
-      <a href="index.html" class="brand">TFF Digitala Kurser</a>
+<h1>Kurser</h1>
 
-      <nav class="topnav">
-        <a href="index.html">Start</a>
-        <a href="utbildningar.html">Utbildningar</a>
-        <a href="guides.html">Guider</a>
-        <a href="kurs_dokumentation.html">Dokumentation</a>
-      </nav>
-    </div>
-  </header>
+<div id="courses"></div>
 
-  <!-- MAIN -->
-  <main class="container page">
+<script src="assets/js/kurser-data.js"></script>
+<script src="assets/js/kurser-app.js"></script>
 
-    <section class="hero hero--small">
-      <div class="hero__content">
-        <p class="eyebrow">Kursöversikt</p>
-        <h1 id="courseTitle">Laddar kurs...</h1>
-        <p id="coursePurpose"></p>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="section__header">
-        <h2>Moduler</h2>
-        <a href="utbildningar.html" class="btn btn-secondary">Tillbaka</a>
-      </div>
-
-      <div id="modulesGrid" class="module-grid"></div>
-    </section>
-
-  </main>
-
-  <!-- ✅ VIKTIGT: RÄTT SCRIPT -->
-  <script src="assets/js/kurser-data.js"></script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-      // ✅ Läs course från URL
-      const params = new URLSearchParams(window.location.search);
-      let courseId = params.get("course");
-
-      // fallback
-      if (!courseId) {
-        courseId = localStorage.getItem("selectedCourseId");
-      } else {
-        localStorage.setItem("selectedCourseId", courseId);
-      }
-
-      const course = PortalData.getCourse(courseId);
-
-      if (!course) {
-        document.getElementById("courseTitle").textContent = "Ingen kurs vald";
-        return;
-      }
-
-      document.getElementById("courseTitle").textContent = course.title;
-      document.getElementById("coursePurpose").textContent = course.purpose;
-
-      const grid = document.getElementById("modulesGrid");
-      grid.innerHTML = "";
-
-      course.modules.forEach((module, index) => {
-
-        const card = document.createElement("article");
-        card.className = "module-card";
-
-        card.innerHTML = `
-          <h3>${module.title}</h3>
-          <p>${module.purpose}</p>
-          <button class="btn btn-primary">Öppna modul</button>
-        `;
-
-        card.querySelector("button").addEventListener("click", function () {
-
-          localStorage.setItem("selectedModuleId", module.id);
-
-          window.location.href =
-            "modul_dokumentation_" + (index + 1) + ".html";
-
-        });
-
-        grid.appendChild(card);
-
-      });
-
-    });
-  </script>
+<script>
+loadCourses();
+</script>
 
 </body>
 </html>
-``
