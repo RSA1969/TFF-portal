@@ -1,89 +1,65 @@
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kurser – TFF Portal</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
-</head>
-<body>
-  <header class="topbar">
-    <div class="container topbar__inner">
-      <a class="brand" href="index.html">TFF Digitala Kurser</a>
-      <nav class="topnav">
-        <a href="index.html">Start</a>
-        <a href="utbildningar.html">Utbildningar</a>
-        <a href="guides.html">Guider</a>
-        <a href="kurs_dokumentation.html">Dokumentation</a>
-      </nav>
-    </div>
-  </header>
+<script src="assets/js/kurser-data.js"></script>
 
-  <main class="container page">
-    <section class="hero hero--small">
-      <div class="hero__content">
-        <p class="eyebrow">Kursöversikt</p>
-        <h1 id="courseTitle">Kurs</h1>
-        <p id="coursePurpose">Syfte</p>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // ✅ 1. Läs från URL först
+  const urlParams = new URLSearchParams(window.location.search);
+  let courseId = urlParams.get("course");
+
+  // ✅ 2. Om inget i URL → använd localStorage
+  if (!courseId) {
+    courseId = localStorage.getItem("selectedCourseId");
+  } else {
+    // ✅ Spara så resten av systemet funkar
+    localStorage.setItem("selectedCourseId", courseId);
+  }
+
+  const course = PortalData.getCourse(courseId);
+
+  // ✅ 3. FELSÄKERHET
+  if (!course) {
+    document.getElementById("courseTitle").textContent = "Ingen kurs vald";
+    document.getElementById("coursePurpose").textContent = "Gå tillbaka och välj en kurs.";
+    return;
+  }
+
+  // ✅ 4. Visa kurs
+  document.getElementById("courseTitle").textContent = course.title;
+  document.getElementById("coursePurpose").textContent = course.purpose;
+
+  const modulesGrid = document.getElementById("modulesGrid");
+  modulesGrid.innerHTML = "";
+
+  course.modules.forEach((module, index) => {
+
+    const progress = PortalData.getModuleProgress(course.id, module.id);
+    const modulePage = `modul_dokumentation_${index + 1}.html`;
+
+    const card = document.createElement("article");
+    card.className = "module-card";
+
+    card.innerHTML = `
+      <div class="module-card__header">
+        <span class="module-card__number">Modul ${index + 1}</span>
+        <span class="status-pill ${progress.quizPassed ? "status-pill--done" : "status-pill--todo"}">
+          ${progress.quizPassed ? "Klar" : "Ej klar"}
+        </span>
       </div>
-    </section>
-
-    <section class="section">
-      <div class="section__header">
-        <h2>Moduler</h2>
-        <a class="btn btn-secondary" href="utbildningar.html">Tillbaka till utbildningar</a>
+      <h3>${module.title}</h3>
+      <p>${module.purpose}</p>
+      <div class="module-card__actions">
+        <button class="btn btn-primary">Öppna modul</button>
       </div>
+    `;
 
-      <div id="modulesGrid" class="module-grid"></div>
-    </section>
-  </main>
-
-  <script src="assets/js/kurser-data.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const courseId = localStorage.getItem("selectedCourseId");
-      const course = PortalData.getCourse(courseId);
-
-      if (!course) {
-        document.getElementById("courseTitle").textContent = "Ingen kurs vald";
-        document.getElementById("coursePurpose").textContent = "Gå tillbaka och välj en kurs.";
-        return;
-      }
-
-      document.getElementById("courseTitle").textContent = course.title;
-      document.getElementById("coursePurpose").textContent = course.purpose;
-
-      const modulesGrid = document.getElementById("modulesGrid");
-      modulesGrid.innerHTML = "";
-
-      course.modules.forEach((module, index) => {
-        const progress = PortalData.getModuleProgress(course.id, module.id);
-        const modulePage = `modul_dokumentation_${index + 1}.html`;
-
-        const card = document.createElement("article");
-        card.className = "module-card";
-        card.innerHTML = `
-          <div class="module-card__header">
-            <span class="module-card__number">Modul ${index + 1}</span>
-            <span class="status-pill ${progress.quizPassed ? "status-pill--done" : "status-pill--todo"}">
-              ${progress.quizPassed ? "Klar" : "Ej klar"}
-            </span>
-          </div>
-          <h3>${module.title}</h3>
-          <p>${module.purpose}</p>
-          <div class="module-card__actions">
-            <button class="btn btn-primary">Öppna modul</button>
-          </div>
-        `;
-
-        card.querySelector("button").addEventListener("click", function () {
-          localStorage.setItem("selectedModuleId", module.id);
-          window.location.href = modulePage;
-        });
-
-        modulesGrid.appendChild(card);
-      });
+    card.querySelector("button").addEventListener("click", function () {
+      localStorage.setItem("selectedModuleId", module.id);
+      window.location.href = modulePage;
     });
-  </script>
-</body>
-</html>
+
+    modulesGrid.appendChild(card);
+  });
+
+});
+</script>
