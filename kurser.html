@@ -2,35 +2,54 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kurs</title>
 
-assets/js/kurser-data.jsscript>
+<!-- ✅ KORREKT SCRIPT (DETTA VAR FELET) -->
+<script src="assets/js/kurser-data.js"></script>
 
 <style>
-body { font-family: Arial; background:#f4f6f8; }
-.container { display:flex; padding:20px; }
-.sidebar { width:300px; }
+body {
+    font-family: Arial;
+    margin:0;
+    background:#f4f6f8;
+}
+
+.container {
+    display:flex;
+    padding:20px;
+}
+
+.sidebar {
+    width:300px;
+}
 
 .module {
     background:white;
     margin:10px 0;
-    padding:10px;
+    padding:12px;
     cursor:pointer;
+    border-radius:8px;
 }
 
 .module.active {
-    border-left:5px solid var(--color);
+    border-left:6px solid var(--color);
 }
 
-.main { flex:1; padding-left:20px;}
+.main {
+    flex:1;
+    padding-left:20px;
+}
 
 .quiz-btn {
     display:inline-block;
     margin-top:20px;
-    padding:10px;
+    padding:12px 20px;
     background:var(--color);
     color:white;
     text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
 }
 </style>
 </head>
@@ -46,7 +65,9 @@ body { font-family: Arial; background:#f4f6f8; }
 
 <div class="main">
 <h2 id="title"></h2>
+
 <h3 id="moduleTitle"></h3>
+
 <p id="content"></p>
 
 <a id="quizBtn" class="quiz-btn">Starta Quiz</a>
@@ -56,37 +77,58 @@ body { font-family: Arial; background:#f4f6f8; }
 </div>
 
 <script>
-const p = new URLSearchParams(window.location.search);
-const course = courses[0]; // TEST – tvingar visning
 
+// ✅ LÄS URL (course=11)
+const params = new URLSearchParams(window.location.search);
+const courseId = params.get("course");
+
+// ✅ fallback så sidan aldrig blir tom
+const course = courses.find(c => c.id == courseId) || courses[0];
+
+// ✅ sätt färg globalt
 document.documentElement.style.setProperty("--color", course.color);
 
+// ✅ visa titel
 document.getElementById("title").innerText = course.title;
 
-document.getElementById("modules").innerHTML =
-course.modules.map(m=>`
-<div class="module" onclick="loadModule(${m.id}, this)">
+// ✅ skapa modul-lista
+const moduleContainer = document.getElementById("modules");
+
+moduleContainer.innerHTML = course.modules.map(m => `
+<div class="module" data-id="${m.id}">
 ${m.title}
 </div>
 `).join("");
 
+// ✅ klick på modul
+document.querySelectorAll(".module").forEach(el => {
+    el.onclick = () => loadModule(el.dataset.id, el);
+});
+
+// ✅ LADDA MODUL
 function loadModule(id, el){
 
-const m = course.modules.find(x=>x.id==id);
+    const m = course.modules.find(x => x.id == id);
 
-document.getElementById("moduleTitle").innerText = m.title;
-document.getElementById("content").innerText = m.content.join(" | ");
+    document.getElementById("moduleTitle").innerText = m.title;
+    document.getElementById("content").innerText = m.content.join(" | ");
 
-document.getElementById("quizBtn").href =
-`quiz.html?course=${course.id}&module=${m.id}`;
+    document.getElementById("quizBtn").href =
+        `quiz.html?course=${course.id}&module=${m.id}`;
 
-document.querySelectorAll(".module").forEach(e=>e.classList.remove("active"));
-el.classList.add("active");
+    // markera aktiv
+    document.querySelectorAll(".module").forEach(e=>e.classList.remove("active"));
+    el.classList.add("active");
 }
 
-// auto load
-loadModule(1, document.querySelector(".module"));
+// ✅ KRITISK – laddar första modul automatiskt
+const firstModule = document.querySelector(".module");
+if(firstModule){
+    loadModule(course.modules[0].id, firstModule);
+}
+
 </script>
 
 </body>
 </html>
+``
