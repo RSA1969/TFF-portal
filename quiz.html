@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Quiz</title>
 
+assets/js/kurser-data.jsscript>
+
+<style>
+body { font-family: Arial; padding:30px;}
+.option { margin:10px; padding:10px; border:1px solid #ccc; cursor:pointer;}
+.correct { background:lightgreen;}
+.wrong { background:pink;}
+</style>
+</head>
+
+<body>
+
+<h2 id="question"></h2>
+
+<div id="options"></div>
+
+<button onclick="next()">Nästa</button>
+
+<script>
+const p = new URLSearchParams(window.location.search)
+
+const course = courses.find(c=>c.id==p.get("course"))
+const module = course.modules.find(m=>m.id==p.get("module"))
+
+let i=0
+let score=0
+
+function show() {
+
+const q = module.questions[i]
+
+document.getElementById("question").innerText =
+`Fråga ${i+1}: ` + q.q
+
+document.getElementById("options").innerHTML =
+q.options.map((o,index)=>`
+<div class="option" onclick="answer(${index})">${o}</div>
+`).join("")
+}
+
+function answer(index){
+
+const correct = module.questions[i].correct
+
+if(index==correct){
+score++
+alert("Rätt")
+}else{
+alert("Fel")
+}
+}
+
+function next(){
+i++
+if(i < module.questions.length){
+show()
+}else{
+document.body.innerHTML = "<h1>Resultat: "+score+"/10</h1>"
+}
+}
+
+show()
+</script>
+
+</body>
+</html>
