@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+
   const coursesGrid = document.getElementById("coursesGrid");
+
   if (!coursesGrid || !window.PortalData) return;
 
   const courses = PortalData.getCourses();
@@ -25,24 +27,35 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   courses.forEach(course => {
+
     const progress = PortalData.getProgress();
     const courseProgress = progress[course.id] || {};
-    const completedModules = Object.values(courseProgress).filter(m => m.quizPassed).length;
+
+    const completedModules = Object.values(courseProgress)
+      .filter(m => m.quizPassed)
+      .length;
+
     const totalModules = course.modules.length;
-    const percent = totalModules > 0 ? Math.round((completedModules / totalModules) * 100) : 0;
+
+    const percent = totalModules > 0
+      ? Math.round((completedModules / totalModules) * 100)
+      : 0;
 
     const card = document.createElement("article");
     card.className = "course-card";
+
     card.innerHTML = `
       <div class="course-card__image-wrap">
-        <img class="course-card__image" src="${imageMap[course.id] || "assets/img/tile-mandatory.jpg"}" alt="${course.title}">
+        <img src="${imageMap[course.id]}" class="course-card__image">
       </div>
       <div class="course-card__body">
         <h3>${course.title}</h3>
         <p>${course.purpose}</p>
 
         <div class="course-progress">
-          <div class="course-progress__label">Progress: ${completedModules}/${totalModules} moduler</div>
+          <div class="course-progress__label">
+            Progress: ${completedModules}/${totalModules} moduler
+          </div>
           <div class="progress-bar">
             <div class="progress-bar__fill" style="width:${percent}%"></div>
           </div>
@@ -54,9 +67,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     card.querySelector("button").addEventListener("click", function () {
       localStorage.setItem("selectedCourseId", course.id);
-      window.location.href = "kurser.html";
+      window.location.href = "kurser.html?course=" + course.id;
     });
 
     coursesGrid.appendChild(card);
+
   });
+
 });
+``
