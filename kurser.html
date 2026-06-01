@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kurser – TFF Portal</title>
+  <title>Kurs – TFF Portal</title>
 
   <!-- ✅ CSS -->
   <link rel="stylesheet" href="assets/css/styles.css">
@@ -47,7 +47,7 @@
 
   </main>
 
-  <!-- ✅ SCRIPT SKA VARA KORREKT -->
+  <!-- ✅ VIKTIGT: RÄTT SCRIPT -->
   <script src="assets/js/kurser-data.js"></script>
 
   <script>
@@ -57,7 +57,7 @@
       const params = new URLSearchParams(window.location.search);
       let courseId = params.get("course");
 
-      // fallback localStorage
+      // fallback
       if (!courseId) {
         courseId = localStorage.getItem("selectedCourseId");
       } else {
@@ -92,12 +92,13 @@
 
           localStorage.setItem("selectedModuleId", module.id);
 
-          window.location.href = 
+          window.location.href =
             "modul_dokumentation_" + (index + 1) + ".html";
 
         });
 
         grid.appendChild(card);
+
       });
 
     });
@@ -105,3 +106,4 @@
 
 </body>
 </html>
+``
