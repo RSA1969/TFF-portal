@@ -1,14 +1,94 @@
-<div style="margin-top:20px;">
-    <a href="https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQByGYqWZlXLTK8CeB4XHpN3AVzE8VHdCL3LYzaVyBMZAb0?e=w4chd0" target="_blank">
-        <button style="
-            padding:14px 20px;
-            font-size:16px;
-            background:#0b57a4;
-            color:white;
-            border:none;
-            border-radius:10px;
-            cursor:pointer;">
-            ▶ Spela video
-        </button>
-    </a>
-</div>
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul – TFF Portal</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="index.html">TFF Digitala Kurser</a>
+      <nav class="topnav">
+        <a href="index.html">Start</a>
+        <a href="utbildningar.html">Utbildningar</a>
+        <a href="guides.html">Guider</a>
+        <a href="kurs_dokumentation.html">Dokumentation</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page">
+    <section class="hero hero--small">
+      <div class="hero__content">
+        <p class="eyebrow">Modul</p>
+        <h1 id="moduleTitle">Modultitel</h1>
+        <p id="modulePurpose">Syfte med modulen</p>
+      </div>
+    </section>
+
+    <section class="section section--two-col">
+      <div class="content-card">
+        <h2>Innehåll</h2>
+        <div id="moduleContent"></div>
+      </div>
+
+      <div class="content-card">
+        <h2>Video</h2>
+        <video id="moduleVideo" controls width="100%">
+          <source src="" type="video/mp4">
+          Din webbläsare stödjer inte video.
+        </video>
+
+        <div class="actions-stack" style="margin-top: 16px;">
+          <button id="startQuizBtn" class="btn btn-primary">Starta quiz</button>
+          <a class="btn btn-secondary" href="kurser.html">Tillbaka till kurs</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/kurser-data.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const courseId = localStorage.getItem("selectedCourseId");
+      const moduleId = localStorage.getItem("selectedModuleId");
+
+      const course = PortalData.getCourse(courseId);
+      const module = PortalData.getModule(courseId, moduleId);
+
+      if (!course || !module) {
+        document.getElementById("moduleTitle").textContent = "Ingen modul vald";
+        document.getElementById("modulePurpose").textContent = "Gå tillbaka och välj modul.";
+        return;
+      }
+
+      document.getElementById("moduleTitle").textContent = module.title;
+      document.getElementById("modulePurpose").textContent = module.purpose;
+
+      const contentContainer = document.getElementById("moduleContent");
+      contentContainer.innerHTML = "";
+
+      module.content.forEach(text => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        contentContainer.appendChild(p);
+      });
+
+      const video = document.getElementById("moduleVideo");
+      if (module.video && module.video.trim() !== "") {
+        video.querySelector("source").src = module.video;
+        video.load();
+      } else {
+        video.style.display = "none";
+      }
+
+      document.getElementById("startQuizBtn").addEventListener("click", function () {
+        window.location.href = "quiz.html";
+      });
+    });
+  </script>
+</body>
+</html>
+``
