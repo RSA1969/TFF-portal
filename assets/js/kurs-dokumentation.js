@@ -1,4 +1,4 @@
-let courses = [];
+let dataGlobal = null;
 let currentCourse = null;
 let currentModuleIndex = 0;
 
@@ -30,26 +30,25 @@ function renderCourseSelect(data) {
     ).join("");
 
     select.onchange = () => {
-        loadCourse(select.value, data);
+        loadCourse(select.value);
     };
 }
 
 // ===============================
-function loadCourse(id, data) {
+function loadCourse(id) {
 
-    currentCourse = data.kurser.find(c => c.id === id);
-
+    currentCourse = dataGlobal.kurser.find(c => c.id === id);
     currentModuleIndex = 0;
 
     renderModules();
     renderModule();
 
-    // sätt dropdown rätt
     document.getElementById("courseSelect").value = id;
 }
 
 // ===============================
 function renderModules() {
+
     const list = document.getElementById("moduleList");
 
     list.innerHTML = currentCourse.modules.map((m, i) => `
@@ -86,7 +85,7 @@ function renderModule() {
 
         ${video ? `
             <video controls>
-                ${video}
+                <source src="${video}" type="video/mp4">
             </video>
         ` : ""}
 
@@ -118,18 +117,15 @@ function prevModule() {
 // ===============================
 async function init() {
 
-    const data = await loadData();
+    dataGlobal = await loadData();
 
-    // fyll dropdown
-    renderCourseSelect(data);
+    renderCourseSelect(dataGlobal);
 
-    // ✅ HÄR ÄR FIXEN
-    const urlCourseId = getCourseId();
+    const urlId = getCourseId();
 
-    const courseId = urlCourseId || data.kurser[0].id;
+    const courseId = urlId || dataGlobal.kurser[0].id;
 
-    loadCourse(courseId, data);
+    loadCourse(courseId);
 }
 
 init();
-``
