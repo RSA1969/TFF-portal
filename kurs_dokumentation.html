@@ -1,88 +1,86 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <title>TFF – Utbildning</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>TFF – Utbildning</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body { font-family: Arial; margin: 0; background: #f5f6f8; }
+<style>
+body { font-family: Arial; margin: 0; background: #f5f6f8; }
 
-        .topbar {
-            padding: 15px 30px;
-            background: white;
-            border-bottom: 1px solid #ddd;
-        }
+.topbar {
+    padding: 15px 30px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+}
 
-        .layout {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-        }
+.layout {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+}
 
-        .sidebar {
-            width: 300px;
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-        }
+.sidebar {
+    width: 300px;
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+}
 
-        .module-item {
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
+.module-item {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
 
-        .module-item.active {
-            border-color: #4caf50;
-            background: #eef6f0;
-        }
+.module-item.active {
+    border-color: #4caf50;
+    background: #eef6f0;
+}
 
-        .content {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-        }
+.content {
+    flex: 1;
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+}
 
-        .button {
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            background: #2b6cb0;
-            color: white;
-        }
+video {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 15px;
+}
 
-        video {
-            width: 100%;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-    </style>
+button {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 15px;
+    background: #2b6cb0;
+    color: white;
+}
+</style>
+
 </head>
 
 <body>
 
-<div class="topbar">
-    <strong>TFF – Utbildning</strong>
-</div>
+<div class="topbar">TFF – Utbildning</div>
 
 <div class="layout">
 
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <h3>Kurs</h3>
-
         <select id="courseSelect"></select>
 
         <h4>Moduler</h4>
         <div id="moduleList"></div>
     </div>
 
-    <!-- CONTENT -->
     <div class="content" id="contentArea">
         <h2>Välj en modul</h2>
     </div>
