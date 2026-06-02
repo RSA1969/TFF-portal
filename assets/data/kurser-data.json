@@ -1,48 +1,17 @@
 {
-  "courses": [
+  "kurser": [
     {
-      "courseId": 1,
-      "title": "Kurs 1 – MICROSOFT TEAMS",
-      "purpose": "Rätt användning av Teams i vardagsarbetet.",
-      "color": "#82c7b8",
-      "active": "Ja"
+      "titel": "Kurs 1 – Microsoft Teams",
+      "beskrivning": "Rätt användning av Teams i vardagsarbetet."
     },
     {
-      "courseId": 2,
-      "title": "Kurs 2 – TRANSKRIBERING",
-      "purpose": "Effektiv och spårbar omvandling av tal till text.",
-      "color": "#a7d8f5",
-      "active": "Ja"
+      "titel": "Kurs 2 – Transkribering",
+      "beskrivning": "Effektiv och spårbar omvandling av tal till text."
     },
     {
-      "courseId": 3,
-      "title": "Kurs 3 – DOKUMENTATION",
-      "purpose": "Strukturerad dokumentation enligt regelverk.",
-      "color": "#f3c9a9",
-      "active": "Ja"
+      "titel": "Kurs 3 – Dokumentation",
+      "beskrivning": "Strukturerad dokumentation enligt regelverk."
     }
-  ],
-
-  "modules": [
-    {
-      "moduleId": 1,
-      "courseId": 1,
-      "title": "Modul 1 – Vad är Teams",
-      "video": "assets/video/kurs1_modul1.mp4"
-    },
-    {
-      "moduleId": 2,
-      "courseId": 1,
-      "title": "Modul 2 – Chatt och möten",
-      "video": "assets/video/kurs1_modul2.mp4"
-    },
-    {
-      "moduleId": 3,
-      "courseId": 2,
-      "title": "Modul 1 – Transkribering",
-      "video": "assets/video/kurs2_modul1.mp4"
-    }
-  ],
-
-  "questions": []
+  ]
 }
+``
