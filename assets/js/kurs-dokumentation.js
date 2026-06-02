@@ -281,3 +281,111 @@ function renderModule() {
             ${courseDescription ? `<p class="section-text">${escapeHtml(courseDescription)}</p>` : ""}
         </div>
 
+        <h3>Modul ${currentModuleIndex + 1} – ${escapeHtml(moduleTitle)}</h3>
+
+        <div class="content-text">
+            ${moduleText ? `<p>${escapeHtml(moduleText)}</p>` : `<p>Ingen modultext angiven.</p>`}
+        </div>
+
+        ${
+            videoPath
+                ? `
+                <div class="video-wrap">
+                    <h3>Video</h3>
+                    <video controls preload="metadata">
+                        <source src="${escapeAttribute(videoPath)}" type="video/mp4">
+                        Din webbläsare stödjer inte video.
+                    </video>
+                </div>
+                `
+                : `
+                <div class="muted-box">
+                    Ingen video angiven för denna modul.
+                </div>
+                `
+        }
+
+        <div class="nav-buttons">
+            <button class="btn" onclick="prevModule()">Föregående modul</button>
+            <button class="btn primary" onclick="nextModule()">Nästa modul</button>
+        </div>
+    `;
+}
+
+// ===============================
+// TOMT INNEHÅLL
+// ===============================
+function renderEmptyContent(message) {
+    const contentArea = document.getElementById("contentArea");
+    contentArea.innerHTML = `<h2 class="empty-state">${escapeHtml(message)}</h2>`;
+}
+
+// ===============================
+// NAVIGATION
+// ===============================
+function prevModule() {
+    const modules = getModulesArray(currentCourse);
+
+    if (!modules.length) return;
+
+    if (currentModuleIndex > 0) {
+        currentModuleIndex--;
+        renderModules();
+        renderModule();
+    }
+}
+
+function nextModule() {
+    const modules = getModulesArray(currentCourse);
+
+    if (!modules.length) return;
+
+    if (currentModuleIndex < modules.length - 1) {
+        currentModuleIndex++;
+        renderModules();
+        renderModule();
+    }
+}
+
+// ===============================
+// ESCAPE
+// ===============================
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function escapeAttribute(value) {
+    return String(value ?? "").replaceAll('"', "&quot;");
+}
+
+// ===============================
+// INIT
+// ===============================
+async function init() {
+    try {
+        dataGlobal = await loadData();
+
+        renderCourseSelect();
+
+        const courses = getCoursesArray(dataGlobal);
+
+        if (!courses.length) {
+            renderEmptyContent("JSON-filen innehåller inga kurser.");
+            return;
+        }
+
+        const urlId = getCourseIdFromUrl();
+        loadCourse(urlId || getCourseId(courses[0], 0));
+
+    } catch (error) {
+        console.error(error);
+        renderEmptyContent("Kunde inte läsa kursdata. Kontrollera JSON-strukturen i assets/data/kurser-data.json.");
+    }
+}
+
+init();
