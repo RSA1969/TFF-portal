@@ -1,42 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TFF – Kurskatalog</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+<meta charset="UTF-8">
+<title>TFF – Kurskatalog</title>
+
+<link rel="stylesheet" href="assets/css/styles.css">
+
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar__row">
-      <div class="brand">
-        <div class="brand__title">TFF – Kurskatalog</div>
-        <div class="brand__sub">Pastellfärg per kurs • Filter och sök</div>
-      </div>
 
-      <div class="right topbar__actions">
-        <input id="q" type="search" placeholder="Sök kurs..." class="searchInput" />
-        <button class="btn btn--primary" id="btnSearch" type="button">Sök</button>
-        <button class="btn btn--ghost" type="button" onclick="location.href='index.html'">Start</button>
-      </div>
-    </div>
-  </header>
+<h1>TFF – Kurskatalog</h1>
 
-  <main class="container">
-    <section class="panel">
-      <div class="panel__header">
-        <h2>Kurser</h2>
-        <div class="rightnote">Öppna en kurs</div>
-      </div>
+<div>
+    <input id="q" placeholder="Sök kurs...">
+    <button id="btnSearch">Sök</button>
+</div>
 
-      <div id="courseGrid" class="grid grid--cards"></div>
-    </section>
-  </main>
+<!-- ✅ KRITISK -->
+<div id="courseGrid" class="grid grid--cards"></div>
 
-  <footer class="footer">
-    <div class="container"><small>TFF – Portal</small></div>
-  </footer>
+<script src="assets/js/kurser-app.js"></script>
 
-  <script src="assets/js/kurser-app.js"></script>
 </body>
 </html>
