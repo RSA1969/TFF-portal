@@ -4,111 +4,25 @@
       "id": "kurs1",
       "titel": "Kurs 1 – Microsoft Teams",
       "beskrivning": "Rätt användning av Teams i vardagsarbetet",
-
       "videor": [
         {
-          "namn": "Modul 1 – Vad är Teams",
+          "namn": "Modul 1",
           "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%201%20Vad%20%C3%A4r%20Teams%20(och%20vad%20%C3%A4r%20det%20inte).mp4?download=1"
         },
         {
-          "namn": "Modul 2 – Chat, kanal och möte",
+          "namn": "Modul 2",
           "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%202%20Chat,%20kanal%20och%20m%C3%B6te%20%E2%80%93%20r%C3%A4tt%20val.mp4?download=1"
         },
         {
-          "namn": "Modul 3 – Möten i Teams",
+          "namn": "Modul 3",
           "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%203%20M%C3%B6ten%20i%20Teams%20%E2%80%93%20roller%20%26%20praxis.mp4?download=1"
         },
         {
-          "namn": "Modul 4 – Filer i Teams",
+          "namn": "Modul 4",
           "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%204%20Filer%20i%20Teams%20(SharePoint%20i%20bakgrunden).mp4?download=1"
         }
       ],
-
       "moduler": [
-        {
-          "id": "m1",
-          "titel": "Vad är Teams",
-          "text": "Introduktion till Microsoft Teams",
-          "videoIndex": 0
-        },
-        {
-          "id": "m2",
-          "titel": "Chat, kanal och möte",
-          "text": "Hur du väljer rätt arbetssätt",
-          "videoIndex": 1
-        },
-        {
-          "id": "m3",
-          "titel": "Möten i Teams",
-          "text": "Roller och arbetssätt",
-          "videoIndex": 2
-        },
-        {
-          "id": "m4",
-          "titel": "Filer i Teams",
-          "text": "Dokumenthantering via SharePoint",
-          "videoIndex": 3
-        },
-        {
-          "id": "m5",
-          "titel": "Sammanfattning",
-          "text": "Repetition av kursens innehåll",
-          "videoIndex": 0
-        }
-      ],
-
-      "quiz": [
-        {
-          "fråga": "Vad är Teams främst till för?",
-          "alternativ": [
-            "Ekonomi",
-            "Kommunikation och samarbete",
-            "Backup",
-            "HR"
-          ],
-          "rättSvar": 1
-        },
-        {
-          "fråga": "Vad är en kanal?",
-          "alternativ": [
-            "En plats för diskussion",
-            "En fil",
-            "En server",
-            "En användare"
-          ],
-          "rättSvar": 0
-        },
-        {
-          "fråga": "Var lagras filer i Teams?",
-          "alternativ": [
-            "USB",
-            "SharePoint",
-            "Lokalt",
-            "E-post"
-          ],
-          "rättSvar": 1
-        },
-        {
-          "fråga": "Vad används möten till?",
-          "alternativ": [
-            "Backup",
-            "Video och samarbete",
-            "Loggning",
-            "Export"
-          ],
-          "rättSvar": 1
-        },
-        {
-          "fråga": "Kan du dela filer i Teams?",
-          "alternativ": [
-            "Nej",
-            "Ja",
-            "Endast admin",
-            "Endast chef"
-          ],
-          "rättSvar": 1
-        }
-      ]
-    }
-  ]
-}
+        { "id": "m1", "titel": "Vad är Teams", "videoIndex": 0 },
+        { "id": "m2", "titel": "Chat och kanaler", "videoIndex": 1 },
+        { "id": "m3", "titel": "Möten", "videoIndex": 2 },
