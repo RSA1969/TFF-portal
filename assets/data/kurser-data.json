@@ -4,56 +4,9 @@
       "id": "kurs1",
       "titel": "Kurs 1 – Microsoft Teams",
       "beskrivning": "Rätt användning av Teams i vardagsarbetet",
-      "videor": [
-        { "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%201%20Vad%20%C3%A4r%20Teams%20(och%20vad%20%C3%A4r%20det%20inte).mp4?download=1" },
-        { "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%202%20Chat,%20kanal%20och%20m%C3%B6te%20%E2%80%93%20r%C3%A4tt%20val.mp4?download=1" },
-        { "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%203%20M%C3%B6ten%20i%20Teams%20%E2%80%93%20roller%20%26%20praxis.mp4?download=1" },
-        { "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%204%20Filer%20i%20Teams%20(SharePoint%20i%20bakgrunden).mp4?download=1" }
-      ],
-      "moduler": [
-        { "titel": "Vad är Teams", "videoIndex": 0 },
-        { "titel": "Chat och kanaler", "videoIndex": 1 },
-        { "titel": "Möten", "videoIndex": 2 },
-        { "titel": "Filer", "videoIndex": 3 },
-        { "titel": "Sammanfattning", "videoIndex": 0 }
-      ],
-      "quiz": [
-        { "fråga": "Vad används Teams till?", "alternativ": ["Ekonomi","Kommunikation","HR","Backup"], "rättSvar": 1 },
-        { "fråga": "Var lagras filer?", "alternativ": ["USB","SharePoint","Mail","Lokalt"], "rättSvar": 1 }
-      ]
-    },
-
-    {
-      "id": "kurs2",
-      "titel": "Kurs 2",
-      "beskrivning": "Standardkurs",
-      "videor": [
-        { "url": "" },{ "url": "" },{ "url": "" },{ "url": "" }
-      ],
-      "moduler": [
-        { "titel": "Modul 1", "videoIndex": 0 },
-        { "titel": "Modul 2", "videoIndex": 1 },
-        { "titel": "Modul 3", "videoIndex": 2 },
-        { "titel": "Modul 4", "videoIndex": 3 },
-        { "titel": "Modul 5", "videoIndex": 0 }
-      ],
-      "quiz": [
-        { "fråga": "Fråga 1", "alternativ": ["A","B","C","D"], "rättSvar": 0 }
-      ]
-    },
-
-    { "id": "kurs3", "titel": "Kurs 3", "beskrivning": "Standard", "videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":1}]},
-    { "id": "kurs4", "titel": "Kurs 4", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":2}]},
-    { "id": "kurs5", "titel": "Kurs 5", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":3}]},
-    { "id": "kurs6", "titel": "Kurs 6", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":0}]},
-    { "id": "kurs7", "titel": "Kurs 7", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":1}]},
-    { "id": "kurs8", "titel": "Kurs 8", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":2}]},
-    { "id": "kurs9", "titel": "Kurs 9", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":3}]},
-    { "id": "kurs10", "titel": "Kurs 10", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":0}]},
-    { "id": "kurs11", "titel": "Kurs 11", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":1}]},
-    { "id": "kurs12", "titel": "Kurs 12", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":2}]},
-    { "id": "kurs13", "titel": "Kurs 13", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":3}]},
-    { "id": "kurs14", "titel": "Kurs 14", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":0}]},
-    { "id": "kurs15", "titel": "Kurs 15", "beskrivning": "Standard","videor":[{"url":""},{"url":""},{"url":""},{"url":""}],"moduler":[{"titel":"Modul 1","videoIndex":0},{"titel":"Modul 2","videoIndex":1},{"titel":"Modul 3","videoIndex":2},{"titel":"Modul 4","videoIndex":3},{"titel":"Modul 5","videoIndex":0}],"quiz":[{"fråga":"Fråga","alternativ":["A","B","C","D"],"rättSvar":1}]}
+      "videor": [],
+      "moduler": [],
+      "quiz": []
+    }
   ]
 }
