@@ -1,49 +1,24 @@
-const urlParams = new URLSearchParams(window.location.search);
-const kursId = urlParams.get("id");
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>Kurs</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
 
-fetch("assets/data/kurser-data.json")
-  .then(res => res.json())
-  .then(data => {
+<body>
 
-    const kurs = data.kurser.find(k => k.id === kursId);
+<h1 id="kursTitel"></h1>
+<p id="kursText"></p>
 
-    if (!kurs) {
-      document.body.innerHTML = "Kurs saknas";
-      return;
-    }
+<h2>Moduler</h2>
+<div id="moduler"></div>
 
-    // ===== TITEL =====
-    document.querySelector("h1").textContent = kurs.titel;
+<h2>Video</h2>
+<video id="video" controls width="600"></video>
 
-    // ===== SYFTE =====
-    document.querySelector("p").textContent =
-      kurs.syfte || kurs.beskrivning || "";
+<!-- ✅ ENDA ENDA SCRIPTET -->
+<script src="assets/js/kurs-dokumentation.js"></script>
 
-    // ===== MODULER =====
-    const modDiv = document.getElementById("moduler");
-    modDiv.innerHTML = "";
-
-    kurs.moduler.forEach((modul, index) => {
-      const btn = document.createElement("button");
-      btn.textContent = `${index + 1}. ${modul.titel}`;
-
-      btn.onclick = () => visaModul(modul);
-
-      modDiv.appendChild(btn);
-    });
-
-    // ===== VISA FÖRSTA =====
-    if (kurs.moduler.length > 0) {
-      visaModul(kurs.moduler[0]);
-    }
-  });
-
-function visaModul(modul) {
-
-  const video = document.querySelector("video");
-
-  if (video && modul.video) {
-    video.src = modul.video;
-  }
-
-}
+</body>
+</html>
