@@ -3,7 +3,7 @@
     {
       "id": "kurs1",
       "titel": "Kurs 1 – MICROSOFT TEAMS",
-      "beskrivning": "Rätt användning av Teams i vardagsarbetet",
+      "beskrivning": "Rätt användning av Teams",
       "moduler": [
         {"id":"k1m1","titel":"Modul 1","video":"video/kurs1_modul1.mp4","quiz":[]},
         {"id":"k1m2","titel":"Modul 2","video":"video/kurs1_modul2.mp4","quiz":[]},
@@ -15,7 +15,7 @@
     {
       "id": "kurs2",
       "titel": "Kurs 2 – TRANSKRIBERING",
-      "beskrivning": "Effektiv och spårbar omvandling av tal till text",
+      "beskrivning": "Tal till text",
       "moduler": [
         {"id":"k2m1","titel":"Modul 1","video":"video/kurs2_modul1.mp4","quiz":[]},
         {"id":"k2m2","titel":"Modul 2","video":"video/kurs2_modul2.mp4","quiz":[]},
@@ -24,10 +24,11 @@
         {"id":"k2m5","titel":"Modul 5","video":"video/kurs2_modul5.mp4","quiz":[]}
       ]
     },
+
     {
       "id": "kurs3",
       "titel": "Kurs 3 – DOKUMENTATION",
-      "beskrivning": "Strukturerad dokumentation enligt regelverk",
+      "beskrivning": "Dokumentation",
       "moduler": [
         {"id":"k3m1","titel":"Modul 1","video":"video/kurs3_modul1.mp4","quiz":[]},
         {"id":"k3m2","titel":"Modul 2","video":"video/kurs3_modul2.mp4","quiz":[]},
@@ -36,10 +37,11 @@
         {"id":"k3m5","titel":"Modul 5","video":"video/kurs3_modul5.mp4","quiz":[]}
       ]
     },
+
     {
       "id": "kurs4",
       "titel": "Kurs 4 – AI & COPILOT",
-      "beskrivning": "Grunderna i AI och Copilot i arbetet",
+      "beskrivning": "AI",
       "moduler": [
         {"id":"k4m1","titel":"Modul 1","video":"video/kurs4_modul1.mp4","quiz":[]},
         {"id":"k4m2","titel":"Modul 2","video":"video/kurs4_modul2.mp4","quiz":[]},
@@ -48,10 +50,11 @@
         {"id":"k4m5","titel":"Modul 5","video":"video/kurs4_modul5.mp4","quiz":[]}
       ]
     },
+
     {
       "id": "kurs5",
       "titel": "Kurs 5 – PROMPTNING",
-      "beskrivning": "Skriva effektiva prompts i Microsoft 365",
+      "beskrivning": "Prompt",
       "moduler": [
         {"id":"k5m1","titel":"Modul 1","video":"video/kurs5_modul1.mp4","quiz":[]},
         {"id":"k5m2","titel":"Modul 2","video":"video/kurs5_modul2.mp4","quiz":[]},
@@ -60,123 +63,87 @@
         {"id":"k5m5","titel":"Modul 5","video":"video/kurs5_modul5.mp4","quiz":[]}
       ]
     },
+
     {
       "id": "kurs6",
-      "titel": "Kurs 6 – SKAPA OCH SPARA DOKUMENT",
-      "beskrivning": "Korrekt dokumenthantering i vardagen",
+      "titel": "Kurs 6",
+      "beskrivning": "",
       "moduler": [
-        {"id":"k6m1","titel":"Modul 1","video":"video/kurs6_modul1.mp4","quiz":[]},
-        {"id":"k6m2","titel":"Modul 2","video":"video/kurs6_modul2.mp4","quiz":[]},
-        {"id":"k6m3","titel":"Modul 3","video":"video/kurs6_modul3.mp4","quiz":[]},
-        {"id":"k6m4","titel":"Modul 4","video":"video/kurs6_modul4.mp4","quiz":[]},
-        {"id":"k6m5","titel":"Modul 5","video":"video/kurs6_modul5.mp4","quiz":[]}
+        {"id":"k6m1","titel":"Modul 1","video":"video/kurs6_modul1.mp4","quiz":[]}
       ]
     },
     {
       "id": "kurs7",
-      "titel": "Kurs 7 – TEAMS & SHAREPOINT",
-      "beskrivning": "Struktur och behörigheter",
+      "titel": "Kurs 7",
+      "beskrivning": "",
       "moduler": [
-        {"id":"k7m1","titel":"Modul 1","video":"video/kurs7_modul1.mp4","quiz":[]},
-        {"id":"k7m2","titel":"Modul 2","video":"video/kurs7_modul2.mp4","quiz":[]},
-        {"id":"k7m3","titel":"Modul 3","video":"video/kurs7_modul3.mp4","quiz":[]},
-        {"id":"k7m4","titel":"Modul 4","video":"video/kurs7_modul4.mp4","quiz":[]},
-        {"id":"k7m5","titel":"Modul 5","video":"video/kurs7_modul5.mp4","quiz":[]}
+        {"id":"k7m1","titel":"Modul 1","video":"video/kurs7_modul1.mp4","quiz":[]}
       ]
     },
     {
       "id": "kurs8",
-      "titel": "Kurs 8 – GDPR",
-      "beskrivning": "Personuppgiftshantering",
+      "titel": "Kurs 8",
+      "beskrivning": "",
       "moduler": [
-        {"id":"k8m1","titel":"Modul 1","video":"video/kurs8_modul1.mp4","quiz":[]},
-        {"id":"k8m2","titel":"Modul 2","video":"video/kurs8_modul2.mp4","quiz":[]},
-        {"id":"k8m3","titel":"Modul 3","video":"video/kurs8_modul3.mp4","quiz":[]},
-        {"id":"k8m4","titel":"Modul 4","video":"video/kurs8_modul4.mp4","quiz":[]},
-        {"id":"k8m5","titel":"Modul 5","video":"video/kurs8_modul5.mp4","quiz":[]}
+        {"id":"k8m1","titel":"Modul 1","video":"video/kurs8_modul1.mp4","quiz":[]}
       ]
     },
     {
       "id": "kurs9",
-      "titel": "Kurs 9 – RÄTT VERKTYG",
-      "beskrivning": "Välja rätt verktyg",
+      "titel": "Kurs 9",
+      "beskrivning": "",
       "moduler": [
-        {"id":"k9m1","titel":"Modul 1","video":"video/kurs9_modul1.mp4","quiz":[]},
-        {"id":"k9m2","titel":"Modul 2","video":"video/kurs9_modul2.mp4","quiz":[]},
-        {"id":"k9m3","titel":"Modul 3","video":"video/kurs9_modul3.mp4","quiz":[]},
-        {"id":"k9m4","titel":"Modul 4","video":"video/kurs9_modul4.mp4","quiz":[]},
-        {"id":"k9m5","titel":"Modul 5","video":"video/kurs9_modul5.mp4","quiz":[]}
+        {"id":"k9m1","titel":"Modul 1","video":"video/kurs9_modul1.mp4","quiz":[]}
       ]
     },
     {
       "id": "kurs10",
-      "titel": "Kurs 10 – MÖTESKULTUR",
-      "beskrivning": "Effektiva möten",
+      "titel": "Kurs 10",
+      "beskrivning": "",
       "moduler": [
-        {"id":"k10m1","titel":"Modul 1","video":"video/kurs10_modul1.mp4","quiz":[]},
-        {"id":"k10m2","titel":"Modul 2","video":"video/kurs10_modul2.mp4","quiz":[]},
-        {"id":"k10m3","titel":"Modul 3","video":"video/kurs10_modul3.mp4","quiz":[]},
-        {"id":"k10m4","titel":"Modul 4","video":"video/kurs10_modul4.mp4","quiz":[]},
-        {"id":"k10m5","titel":"Modul 5","video":"video/kurs10_modul5.mp4","quiz":[]}
+        {"id":"k10m1","titel":"Modul 1","video":"video/kurs10_modul1.mp4","quiz":[]}
       ]
     },
     {
       "id": "kurs11",
-      "titel": "Kurs 11 – FRÅN CHATT TILL STRUKTUR",
-      "beskrivning": "Skapa struktur",
+      "titel": "Kurs 11",
+      "beskrivning": "",
       "moduler": [
-        {"id":"k11m1","titel":"Modul 1","video":"video/kurs11_modul1.mp4","quiz":[]},
-        {"id":"k11m2","titel":"Modul 2","video":"video/kurs11_modul2.mp4","quiz":[]},
-        {"id":"k11m3","titel":"Modul 3","video":"video/kurs11_modul3.mp4","quiz":[]},
-        {"id":"k11m4","titel":"Modul 4","video":"video/kurs11_modul4.mp4","quiz":[]},
-        {"id":"k11m5","titel":"Modul 5","video":"video/kurs11_modul5.mp4","quiz":[]}
+        {"id":"k11m1","titel":"Modul 1","video":"video/kurs11_modul1.mp4","quiz":[]}
       ]
     },
     {
       "id": "kurs12",
-      "titel": "Kurs 12 – DIARIEFÖRING",
-      "beskrivning": "Allmänna handlingar",
+      "titel": "Kurs 12",
+      "beskrivning": "",
       "moduler": [
-        {"id":"k12m1","titel":"Modul 1","video":"video/kurs12_modul1.mp4","quiz":[]},
-        {"id":"k12m2","titel":"Modul 2","video":"video/kurs12_modul2.mp4","quiz":[]},
-        {"id":"k12m3","titel":"Modul 3","video":"video/kurs12_modul3.mp4","quiz":[]},
-        {"id":"k12m4","titel":"Modul 4","video":"video/kurs12_modul4.mp4","quiz":[]},
-        {"id":"k12m5","titel":"Modul 5","video":"video/kurs12_modul5.mp4","quiz":[]}
+        {"id":"k12m1","titel":"Modul 1","video":"video/kurs12_modul1.mp4","quiz":[]}
       ]
     },
     {
-  "id": "kurs13",
-  "titel": "Kurs 13 – GOVERNANCE",
-  "beskrivning": "Styrning, struktur och uppföljning i M365",
-  "moduler": [
-    {"id":"k13m1","titel":"Modul 1","video":"video/kurs13_modul1.mp4","quiz":[]},
-    {"id":"k13m2","titel":"Modul 2","video":"video/kurs13_modul2.mp4","quiz":[]},
-    {"id":"k13m3","titel":"Modul 3","video":"video/kurs13_modul3.mp4","quiz":[]},
-    {"id":"k13m4","titel":"Modul 4","video":"video/kurs13_modul4.mp4","quiz":[]},
-    {"id":"k13m5","titel":"Modul 5","video":"video/kurs13_modul5.mp4","quiz":[]}
-  ]
-},
-{
-  "id": "kurs14",
-  "titel": "Kurs 14 – LIVSCYKEL",
-  "beskrivning": "Informationshantering genom hela livscykeln",
-  "moduler": [
-    {"id":"k14m1","titel":"Modul 1","video":"video/kurs14_modul1.mp4","quiz":[]},
-    {"id":"k14m2","titel":"Modul 2","video":"video/kurs14_modul2.mp4","quiz":[]},
-    {"id":"k14m3","titel":"Modul 3","video":"video/kurs14_modul3.mp4","quiz":[]},
-    {"id":"k14m4","titel":"Modul 4","video":"video/kurs14_modul4.mp4","quiz":[]},
-    {"id":"k14m5","titel":"Modul 5","video":"video/kurs14_modul5.mp4","quiz":[]}
-  ]
-},
-{
-  "id": "kurs15",
-  "titel": "Kurs 15 – PROCESSARBETE",
-  "beskrivning": "Processbaserat arbetssätt i digital miljö",
-  "moduler": [
-    {"id":"k15m1","titel":"Modul 1","video":"video/kurs15_modul1.mp4","quiz":[]},
-    {"id":"k15m2","titel":"Modul 2","video":"video/kurs15_modul2.mp4","quiz":[]},
-    {"id":"k15m3","titel":"Modul 3","video":"video/kurs15_modul3.mp4","quiz":[]},
-    {"id":"k15m4","titel":"Modul 4","video":"video/kurs15_modul4.mp4","quiz":[]},
-    {"id":"k15m5","titel":"Modul 5","video":"video/kurs15_modul5.mp4","quiz":[]}
+      "id": "kurs13",
+      "titel": "Kurs 13",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k13m1","titel":"Modul 1","video":"video/kurs13_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs14",
+      "titel": "Kurs 14",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k14m1","titel":"Modul 1","video":"video/kurs14_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs15",
+      "titel": "Kurs 15",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k15m1","titel":"Modul 1","video":"video/kurs15_modul1.mp4","quiz":[]}
+      ]
+    }
   ]
 }
+``
