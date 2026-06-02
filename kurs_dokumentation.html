@@ -1,73 +1,95 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>Kurs</title>
+    <meta charset="UTF-8">
+    <title>TFF – Utbildning</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body { font-family: Arial; margin: 0; background: #f5f6f8; }
 
-<style>
-.container {
-  display: flex;
-  gap: 20px;
-}
+        .topbar {
+            padding: 15px 30px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+        }
 
-.sidebar {
-  width: 300px;
-}
+        .layout {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+        }
 
-.content {
-  flex: 1;
-}
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+        }
 
-button {
-  display: block;
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  text-align: left;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  background: #f5f5f5;
-}
-button:hover {
-  background: #e6f0ff;
-}
+        .module-item {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
 
-ul {
-  margin-top: 10px;
-}
-</style>
+        .module-item.active {
+            border-color: #4caf50;
+            background: #eef6f0;
+        }
 
+        .content {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .button {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: #2b6cb0;
+            color: white;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 
 <body>
 
-<h1 id="kursTitel"></h1>
-<p id="kursText"></p>
+<div class="topbar">
+    <strong>TFF – Utbildning</strong>
+</div>
 
-<div class="container">
+<div class="layout">
 
-  <div class="sidebar">
-    <h2>Moduler</h2>
-    <div id="moduler"></div>
-  </div>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <h3>Kurs</h3>
 
-  <div class="content">
-    <h2 id="modulTitel"></h2>
-    <p id="modulSyfte"></p>
+        <select id="courseSelect"></select>
 
-    <h3>Innehåll</h3>
-    <ul id="modulInnehall"></ul>
+        <h4>Moduler</h4>
+        <div id="moduleList"></div>
+    </div>
 
-    <h3>Video</h3>
-    <video id="video" controls width="600"></video>
-  </div>
+    <!-- CONTENT -->
+    <div class="content" id="contentArea">
+        <h2>Välj en modul</h2>
+    </div>
 
 </div>
 
-<script src="assets/js/kurs_dokumentation.js"></script>
+<script src="assets/js/kurs-dokumentation.js"></script>
 
 </body>
 </html>
