@@ -41,7 +41,7 @@ function renderCourse(course) {
                 <h3>Video</h3>
 
                 <video controls width="100%">
-                    <source src="${resolveVideo(course.modules[0].video)}" type="video/mp4">
+                    ${resolveVideo(course.modules[0].video)}
                 </video>
             </div>
 
