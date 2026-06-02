@@ -1,16 +1,22 @@
 let DATA = null;
 const container = document.getElementById("courses");
 
-// Ladda JSON
-fetch("assets/data/kurser-data.json")
+// =========================
+// LÄS DATA FRÅN SHAREPOINT
+// =========================
+fetch("https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek-PUBLICERING/Delade%20dokument/data/kurser-data.json")
 .then(res => res.json())
 .then(data => {
     DATA = data;
     renderCourses();
+})
+.catch(err => {
+    container.innerHTML = "Fel vid laddning av data – kontrollera länk och behörighet";
+    console.error(err);
 });
 
 // =========================
-// KURSER
+// VISA KURSER
 // =========================
 function renderCourses() {
 
@@ -31,7 +37,7 @@ function renderCourses() {
 }
 
 // =========================
-// KURS
+// VISA MODULER
 // =========================
 function openCourse(courseId) {
 
@@ -49,14 +55,14 @@ function openCourse(courseId) {
         document.getElementById("modules").innerHTML += `
             <div class="card">
                 <h3>${m.title}</h3>
-                <button onclick="openModule(${courseId}, ${m.moduleId})">Starta</button>
+                <button onclick="openModule(${courseId}, ${m.moduleId})">Starta modul</button>
             </div>
         `;
     });
 }
 
 // =========================
-// MODUL
+// MODUL + VIDEO + FRÅGOR
 // =========================
 function openModule(courseId, moduleId) {
 
@@ -84,11 +90,11 @@ function openModule(courseId, moduleId) {
 function renderQuestions(questions) {
 
     const qDiv = document.getElementById("questions");
+    qDiv.innerHTML = "";
 
     questions.forEach(q => {
 
-        // slumpa ordning
-        const options = [
+        let options = [
             {text: q.option1, key: 1},
             {text: q.option2, key: 2},
             {text: q.option3, key: 3},
@@ -112,7 +118,7 @@ function renderQuestions(questions) {
 }
 
 // =========================
-// SVAR
+// RÄTT/FEL
 // =========================
 function checkAnswer(selected, correct, btn) {
 
@@ -122,3 +128,4 @@ function checkAnswer(selected, correct, btn) {
         btn.style.backgroundColor = "red";
     }
 }
+``
