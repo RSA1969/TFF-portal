@@ -10,44 +10,15 @@
 
 <body>
 
-<header class="topbar">
-  <div class="container topbar__row">
+<h1>TFF – Kurskatalog</h1>
 
-    <div class="brand">
-      <div class="brand__title">TFF – Kurskatalog</div>
-      <div class="brand__sub">Pastellfärg per kurs • Filter och sök</div>
-    </div>
+<div>
+    <input id="q" placeholder="Sök kurs..." />
+    <button id="btnSearch">Sök</button>
+</div>
 
-    <div class="right">
-      <input id="q" type="search" placeholder="Sök kurs…" />
-      <button class="btn btn--primary" id="btnSearch">Sök</button>
-      <button class="btn btn--ghost" onclick="location.href='index.html'">Start</button>
-    </div>
-
-  </div>
-</header>
-
-<main class="container">
-
-  <section class="panel">
-
-    <div class="panel__header">
-      <h2>Kurser</h2>
-      <div class="rightnote">Öppna en kurs</div>
-    </div>
-
-    <!-- ✅ DENNA ÄR KRITISK -->
-    <div class="grid grid--cards" id="courseGrid"></div>
-
-  </section>
-
-</main>
-
-<footer class="footer">
-  <div class="container">
-    <small>TFF – Portal</small>
-  </div>
-</footer>
+<!-- 🔥 DENNA RAD ÄR KRITISK -->
+<div id="courseGrid" class="grid grid--cards"></div>
 
 <script src="assets/js/kurser-app.js"></script>
 
