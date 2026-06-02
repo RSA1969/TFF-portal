@@ -12,42 +12,34 @@ fetch("assets/data/kurser-data.json")
       return;
     }
 
-    // ======= RUBRIK =======
+    // ===== Titel =====
     document.querySelector("h1").textContent = kurs.titel;
 
-    // ======= SYFTE / BESKRIVNING =======
-    const textElement = document.querySelector("p");
+    // ===== Text =====
+    document.querySelector("p").textContent =
+      kurs.syfte || kurs.beskrivning || "";
 
-    // ✅ FIX – fallback så inget blir undefined
-    textElement.textContent = kurs.syfte || kurs.beskrivning || "";
+    // ===== Moduler =====
+    const modDiv = document.getElementById("moduler");
+    modDiv.innerHTML = "";
 
-    // ======= MODULER =======
-    const modulerDiv = document.querySelector("#moduler");
-    modulerDiv.innerHTML = "";
-
-    kurs.moduler.forEach((modul, index) => {
-
+    kurs.moduler.forEach((m, i) => {
       const btn = document.createElement("button");
-      btn.textContent = modul.titel;
-
-      btn.onclick = () => visaModul(modul);
-
-      modulerDiv.appendChild(btn);
+      btn.textContent = `${i + 1}. ${m.titel}`;
+      btn.onclick = () => visaModul(m);
+      modDiv.appendChild(btn);
     });
 
-    // ======= VISA FÖRSTA MODUL =======
+    // Visa första modul
     if (kurs.moduler.length > 0) {
       visaModul(kurs.moduler[0]);
     }
   });
 
 function visaModul(modul) {
-
-  // ======= VIDEO =======
   const video = document.querySelector("video");
-
   if (video && modul.video) {
     video.src = modul.video;
   }
-
 }
+``
