@@ -2,39 +2,58 @@ let DATA = null;
 const container = document.getElementById("courses");
 
 // =========================
-// LÄS DATA FRÅN SHAREPOINT
+// HÄMTA DATA FRÅN SHAREPOINT
 // =========================
 fetch("https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek-PUBLICERING/Delade%20dokument/data/kurser-data.json")
-.then(res => res.json())
+.then(res => {
+    if (!res.ok) {
+        throw new Error("Kunde inte läsa JSON – kontrollera länk och behörighet");
+    }
+    return res.json();
+})
 .then(data => {
     DATA = data;
     renderCourses();
 })
-.catch(err => {
-    container.innerHTML = "Fel vid laddning av data – kontrollera länk och behörighet";
-    console.error(err);
+.catch(error => {
+    container.innerHTML = `
+        <h2>Fel vid laddning</h2>
+        <p>Kontrollera:</p>
+        <ul>
+            <li>Att länken är korrekt</li>
+            <li>Att filen är delad (Alla med länken)</li>
+        </ul>
+    `;
+    console.error(error);
 });
 
+
 // =========================
-// VISA KURSER
+// VISA ALLA KURSER
 // =========================
 function renderCourses() {
 
-    container.innerHTML = "<h1>Utbildningar</h1>";
+    container.innerHTML = `
+        <h1>Utbildningar</h1>
+        <div id="courseGrid"></div>
+    `;
+
+    const grid = document.getElementById("courseGrid");
 
     DATA.courses
     .filter(c => c.active === "Ja")
     .forEach(course => {
 
-        container.innerHTML += `
+        grid.innerHTML += `
             <div class="card" style="background:${course.color}">
                 <h3>${course.title}</h3>
                 <p>${course.purpose}</p>
-                <button onclick="openCourse(${course.courseId})">Öppna</button>
+                <button onclick="openCourse(${course.courseId})">Öppna kurs</button>
             </div>
         `;
     });
 }
+
 
 // =========================
 // VISA MODULER
@@ -49,20 +68,28 @@ function openCourse(courseId) {
         <div id="modules"></div>
     `;
 
-    const modules = DATA.modules.filter(m => m.courseId == courseId);
+    const modulesDiv = document.getElementById("modules");
+
+    const modules = DATA.modules
+        .filter(m => m.courseId == courseId)
+        .sort((a,b) => a.moduleId - b.moduleId);
 
     modules.forEach(m => {
-        document.getElementById("modules").innerHTML += `
+
+        modulesDiv.innerHTML += `
             <div class="card">
                 <h3>${m.title}</h3>
-                <button onclick="openModule(${courseId}, ${m.moduleId})">Starta modul</button>
+                <button onclick="openModule(${courseId}, ${m.moduleId})">
+                    Starta modul
+                </button>
             </div>
         `;
     });
 }
 
+
 // =========================
-// MODUL + VIDEO + FRÅGOR
+// VISA MODUL + VIDEO + FRÅGOR
 // =========================
 function openModule(courseId, moduleId) {
 
@@ -72,7 +99,7 @@ function openModule(courseId, moduleId) {
         <h2>${module.title}</h2>
         <button onclick="openCourse(${courseId})">← Tillbaka</button>
 
-        <video width="100%" controls>
+        <video controls>
             <source src="${module.video}" type="video/mp4">
         </video>
 
@@ -84,15 +111,16 @@ function openModule(courseId, moduleId) {
     renderQuestions(questions);
 }
 
+
 // =========================
 // FRÅGOR
 // =========================
 function renderQuestions(questions) {
 
     const qDiv = document.getElementById("questions");
-    qDiv.innerHTML = "";
+    qDiv.innerHTML = "<h3>Frågor</h3>";
 
-    questions.forEach(q => {
+    questions.forEach((q, index) => {
 
         let options = [
             {text: q.option1, key: 1},
@@ -101,14 +129,20 @@ function renderQuestions(questions) {
             {text: q.option4, key: 4}
         ];
 
+        // slumpa svar
         options.sort(() => Math.random() - 0.5);
 
-        let html = `<div class="card"><p>${q.question}</p>`;
+        let html = `
+            <div class="card">
+                <p>${index + 1}. ${q.question}</p>
+        `;
 
         options.forEach(o => {
-            html += `<button onclick="checkAnswer(${o.key}, ${q.correct}, this)">
-                ${o.text}
-            </button>`;
+            html += `
+                <button onclick="checkAnswer(${o.key}, ${q.correct}, this)">
+                    ${o.text}
+                </button>
+            `;
         });
 
         html += "</div>";
@@ -117,8 +151,9 @@ function renderQuestions(questions) {
     });
 }
 
+
 // =========================
-// RÄTT/FEL
+// KONTROLLERA SVAR
 // =========================
 function checkAnswer(selected, correct, btn) {
 
@@ -127,5 +162,6 @@ function checkAnswer(selected, correct, btn) {
     } else {
         btn.style.backgroundColor = "red";
     }
+
+    btn.disabled = true;
 }
-``
