@@ -17,125 +17,7 @@ function setCourseIdInUrl(courseId) {
 }
 
 // ===============================
-// DATA
-// ===============================
-async function loadData() {
-    const response = await fetch("assets/data/kurser-data.json?nocache=" + Date.now());
-
-    if (!response.ok) {
-        throw new Error("Kunde inte läsa assets/data/kurser-data.json");
-    }
-
-    return await response.json();
-}
-
-function getCoursesArray(data) {
-    if (Array.isArray(data)) return data;
-    if (Array.isArray(data?.kurser)) return data.kurser;
-    if (Array.isArray(data?.courses)) return data.courses;
-    return [];
-}
-
-// ===============================
-// HJÄLPFUNKTIONER - KURS
-// ===============================
-function getCourseId(course, fallbackIndex) {
-    return String(
-        course?.id ??
-        course?.kursId ??
-        course?.kursID ??
-        course?.kursid ??
-        course?.slug ??
-        ("kurs" + (fallbackIndex + 1))
-    );
-}
-
-function getCourseTitle(course, fallbackIndex) {
-    return String(
-        course?.title ??
-        course?.titel ??
-        course?.kursTitel ??
-        course?.kurstitel ??
-        course?.name ??
-        course?.namn ??
-        ("Kurs " + (fallbackIndex + 1))
-    );
-}
-
-function getCourseDescription(course) {
-    return String(
-        course?.description ??
-        course?.beskrivning ??
-        course?.text ??
-        course?.kursText ??
-        course?.kurstext ??
-        ""
-    );
-}
-
-// ===============================
-// HJÄLPFUNKTIONER - MODUL
-// ===============================
-function getModulesArray(course) {
-    if (Array.isArray(course?.modules)) return course.modules;
-    if (Array.isArray(course?.moduler)) return course.moduler;
-    return [];
-}
-
-function getModuleTitle(module, fallbackIndex) {
-    return String(
-        module?.title ??
-        module?.titel ??
-        module?.modulTitel ??
-        module?.modultitel ??
-        module?.name ??
-        module?.namn ??
-        ("Modul " + (fallbackIndex + 1))
-    );
-}
-
-function getModuleText(module) {
-    return String(
-        module?.text ??
-        module?.innehall ??
-        module?.innehåll ??
-        module?.beskrivning ??
-        module?.syfte ??
-        module?.content ??
-        ""
-    );
-}
-
-function getModuleVideo(module) {
-    return String(
-        module?.video ??
-        module?.videoUrl ??
-        module?.videourl ??
-        module?.film ??
-        module?.url ??
-        ""
-    );
-}
-
-// ===============================
-// VIDEO
-// ===============================
-function resolveVideoPath(videoValue) {
-    if (!videoValue) return "";
-
-    if (
-        videoValue.startsWith("http://") ||
-        videoValue.startsWith("https://") ||
-        videoValue.startsWith("//")
-    ) {
-        return videoValue;
-    }
-
-    return "video/" + videoValue.replace(/^\/+/, "");
-}
-
-// ===============================
-// HTML ESCAPE
+// HJÄLP - HTML escape
 // ===============================
 function escapeHtml(value) {
     return String(value ?? "")
@@ -147,17 +29,186 @@ function escapeHtml(value) {
 }
 
 // ===============================
-// UI - TOMT INNEHÅLL
+// LADDA DATA
+// ===============================
+async function loadData() {
+    const response = await fetch("assets/data/kurser-data.json?nocache=" + Date.now());
+
+    if (!response.ok) {
+        throw new Error("Kunde inte läsa assets/data/kurser-data.json");
+    }
+
+    return await response.json();
+}
+
+// ===============================
+// NORMALISERING - ROOT
+// ===============================
+function getCoursesArray(data) {
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data?.kurser)) return data.kurser;
+    if (Array.isArray(data?.courses)) return data.courses;
+    return [];
+}
+
+// ===============================
+// NORMALISERING - KURSFÄLT
+// Anpassad efter din JSON
+// ===============================
+function getCourseId(course, index = 0) {
+    return String(
+        course?.id ??
+        course?.kursId ??
+        course?.kursID ??
+        ("kurs" + (index + 1))
+    );
+}
+
+function getCourseTitle(course, index = 0) {
+    return String(
+        course?.titel ??
+        course?.title ??
+        ("Kurs " + (index + 1))
+    );
+}
+
+function getCoursePurpose(course) {
+    return String(
+        course?.syfte ??
+        course?.purpose ??
+        ""
+    );
+}
+
+function getCourseDescription(course) {
+    return String(
+        course?.beskrivning ??
+        course?.description ??
+        ""
+    );
+}
+
+function getCourseImage(course) {
+    return String(
+        course?.image ??
+        course?.bild ??
+        ""
+    );
+}
+
+function getCourseColor(course) {
+    return String(
+        course?.color ??
+        ""
+    );
+}
+
+function getCourseActive(course) {
+    return String(
+        course?.active ??
+        ""
+    );
+}
+
+function getCourseModules(course) {
+    if (Array.isArray(course?.moduler)) return course.moduler;
+    if (Array.isArray(course?.modules)) return course.modules;
+    return [];
+}
+
+// ===============================
+// NORMALISERING - MODULFÄLT
+// Anpassad efter din JSON
+// ===============================
+function getModuleId(module, index = 0) {
+    return String(
+        module?.id ??
+        ("m" + (index + 1))
+    );
+}
+
+function getModuleTitle(module, index = 0) {
+    return String(
+        module?.titel ??
+        module?.title ??
+        ("Modul " + (index + 1))
+    );
+}
+
+function getModulePurpose(module) {
+    return String(
+        module?.syfte ??
+        module?.purpose ??
+        ""
+    );
+}
+
+function getModuleDescription(module) {
+    return String(
+        module?.beskrivning ??
+        module?.description ??
+        ""
+    );
+}
+
+function getModuleContentList(module) {
+    if (Array.isArray(module?.innehall)) return module.innehall;
+    if (Array.isArray(module?.innehåll)) return module.innehåll;
+    if (Array.isArray(module?.content)) return module.content;
+    return [];
+}
+
+function getModuleVideo(module) {
+    return String(
+        module?.video ??
+        module?.videoUrl ??
+        ""
+    );
+}
+
+function getModuleQuiz(module) {
+    if (Array.isArray(module?.quiz)) return module.quiz;
+    if (Array.isArray(module?.questions)) return module.questions;
+    if (Array.isArray(module?.frågor)) return module.frågor;
+    return [];
+}
+
+// ===============================
+// VIDEO-PATH
+// ===============================
+function resolveVideoPath(videoValue) {
+    if (!videoValue) return "";
+
+    const value = String(videoValue).trim();
+
+    if (
+        value.startsWith("http://") ||
+        value.startsWith("https://") ||
+        value.startsWith("//") ||
+        value.startsWith("video/") ||
+        value.startsWith("/video/") ||
+        value.startsWith("assets/")
+    ) {
+        return value;
+    }
+
+    return "video/" + value.replace(/^\/+/, "");
+}
+
+// ===============================
+// TOMT INNEHÅLL
 // ===============================
 function renderEmptyContent(message) {
     const contentArea = document.getElementById("contentArea");
     if (!contentArea) return;
 
-    contentArea.innerHTML = "<h2 class=\"empty-state\">" + escapeHtml(message) + "</h2>";
+    contentArea.innerHTML = `
+        <h2 class="empty-state">${escapeHtml(message)}</h2>
+    `;
 }
 
 // ===============================
-// UI - DROPDOWN
+// DROPDOWN
 // ===============================
 function renderCourseSelect() {
     const select = document.getElementById("courseSelect");
@@ -166,21 +217,17 @@ function renderCourseSelect() {
     const courses = getCoursesArray(dataGlobal);
 
     if (!courses.length) {
-        select.innerHTML = "<option value=\"\">Inga kurser hittades</option>";
+        select.innerHTML = `<option value="">Inga kurser hittades</option>`;
         return;
     }
 
-    let html = "";
-
-    for (let i = 0; i < courses.length; i++) {
-        const course = courses[i];
-        const courseId = getCourseId(course, i);
-        const courseTitle = getCourseTitle(course, i);
-
-        html += "<option value=\"" + escapeHtml(courseId) + "\">" + escapeHtml(courseTitle) + "</option>";
-    }
-
-    select.innerHTML = html;
+    select.innerHTML = courses
+        .map((course, index) => {
+            const id = getCourseId(course, index);
+            const title = getCourseTitle(course, index);
+            return `<option value="${escapeHtml(id)}">${escapeHtml(title)}</option>`;
+        })
+        .join("");
 
     select.onchange = function () {
         loadCourse(this.value);
@@ -188,35 +235,36 @@ function renderCourseSelect() {
 }
 
 // ===============================
-// UI - LADDA KURS
+// LADDA KURS
 // ===============================
 function loadCourse(requestedId) {
     const courses = getCoursesArray(dataGlobal);
 
     if (!courses.length) {
         currentCourse = null;
+        currentModuleIndex = 0;
         renderModules();
         renderEmptyContent("Inga kurser hittades i JSON-filen.");
         return;
     }
 
     let selectedCourse = null;
-    let selectedCourseId = null;
+    let selectedId = null;
 
     for (let i = 0; i < courses.length; i++) {
         const course = courses[i];
-        const courseId = getCourseId(course, i);
+        const id = getCourseId(course, i);
 
-        if (String(courseId) === String(requestedId)) {
+        if (String(id) === String(requestedId)) {
             selectedCourse = course;
-            selectedCourseId = courseId;
+            selectedId = id;
             break;
         }
     }
 
     if (!selectedCourse) {
         selectedCourse = courses[0];
-        selectedCourseId = getCourseId(courses[0], 0);
+        selectedId = getCourseId(courses[0], 0);
     }
 
     currentCourse = selectedCourse;
@@ -224,17 +272,17 @@ function loadCourse(requestedId) {
 
     const select = document.getElementById("courseSelect");
     if (select) {
-        select.value = selectedCourseId;
+        select.value = selectedId;
     }
 
-    setCourseIdInUrl(selectedCourseId);
+    setCourseIdInUrl(selectedId);
 
     renderModules();
     renderModule();
 }
 
 // ===============================
-// UI - MODULLISTA
+// MODULLISTA
 // ===============================
 function renderModules() {
     const list = document.getElementById("moduleList");
@@ -245,163 +293,16 @@ function renderModules() {
         return;
     }
 
-    const modules = getModulesArray(currentCourse);
+    const modules = getCourseModules(currentCourse);
 
     if (!modules.length) {
-        list.innerHTML = "<div class=\"muted-box\">Inga moduler hittades för vald kurs.</div>";
+        list.innerHTML = `<div class="note-box">Inga moduler hittades för vald kurs.</div>`;
         return;
     }
 
-    let html = "";
-
-    for (let i = 0; i < modules.length; i++) {
-        const module = modules[i];
-        const title = getModuleTitle(module, i);
-        const activeClass = i === currentModuleIndex ? " active" : "";
-
-        html += ""
-            + "<div class=\"module-item" + activeClass + "\" onclick=\"selectModule(" + i + ")\">"
-            + "  <div class=\"module-item-title\">" + (i + 1) + ". " + escapeHtml(title) + "</div>"
-            + "  <div class=\"module-item-status\">Modul ej klar • Quiz: Ej godkänd</div>"
-            + "</div>";
-    }
-
-    list.innerHTML = html;
-}
-
-// ===============================
-// UI - VÄLJ MODUL
-// ===============================
-function selectModule(index) {
-    currentModuleIndex = index;
-    renderModules();
-    renderModule();
-}
-
-// ===============================
-// UI - MODULINNEHÅLL
-// ===============================
-function renderModule() {
-    const contentArea = document.getElementById("contentArea");
-    if (!contentArea) return;
-
-    if (!currentCourse) {
-        renderEmptyContent("Ingen kurs vald.");
-        return;
-    }
-
-    const courseTitle = getCourseTitle(currentCourse, 0);
-    const courseDescription = getCourseDescription(currentCourse);
-    const modules = getModulesArray(currentCourse);
-
-    if (!modules.length) {
-        renderEmptyContent("Vald kurs saknar moduler.");
-        return;
-    }
-
-    const module = modules[currentModuleIndex];
-
-    if (!module) {
-        renderEmptyContent("Vald modul kunde inte läsas.");
-        return;
-    }
-
-    const moduleTitle = getModuleTitle(module, currentModuleIndex);
-    const moduleText = getModuleText(module);
-    const rawVideo = getModuleVideo(module);
-    const videoPath = resolveVideoPath(rawVideo);
-
-    let html = "";
-
-    html += "<div class=\"content-header\">";
-    html += "  <h2 class=\"content-title\">" + escapeHtml(courseTitle) + "</h2>";
-
-    if (courseDescription) {
-        html += "  <p class=\"section-text\">" + escapeHtml(courseDescription) + "</p>";
-    }
-
-    html += "</div>";
-
-    html += "<h3>Modul " + (currentModuleIndex + 1) + " – " + escapeHtml(moduleTitle) + "</h3>";
-
-    if (moduleText) {
-        html += "<div class=\"content-text\"><p>" + escapeHtml(moduleText) + "</p></div>";
-    } else {
-        html += "<div class=\"content-text\"><p>Ingen modultext angiven.</p></div>";
-    }
-
-    if (videoPath) {
-        html += "<div class=\"video-wrap\">";
-        html += "  <h3>Video</h3>";
-        html += "  <video controls preload=\"metadata\">";
-        html += "      <source src=\"" + escapeHtml(videoPath) + "\" type=\"video/mp4\">";
-        html += "      Din webbläsare stödjer inte video.";
-        html += "  </video>";
-        html += "</div>";
-    } else {
-        html += "<div class=\"muted-box\">Ingen video angiven för denna modul.</div>";
-    }
-
-    html += "<div class=\"nav-buttons\">";
-    html += "  <button class=\"btn\" onclick=\"prevModule()\">Föregående modul</button>";
-    html += "  <button class=\"btn primary\" onclick=\"nextModule()\">Nästa modul</button>";
-    html += "</div>";
-
-    contentArea.innerHTML = html;
-}
-
-// ===============================
-// UI - NAVIGATION
-// ===============================
-function prevModule() {
-    const modules = currentCourse ? getModulesArray(currentCourse) : [];
-
-    if (!modules.length) return;
-
-    if (currentModuleIndex > 0) {
-        currentModuleIndex--;
-        renderModules();
-        renderModule();
-    }
-}
-
-function nextModule() {
-    const modules = currentCourse ? getModulesArray(currentCourse) : [];
-
-    if (!modules.length) return;
-
-    if (currentModuleIndex < modules.length - 1) {
-        currentModuleIndex++;
-        renderModules();
-        renderModule();
-    }
-}
-
-// ===============================
-// INIT
-// ===============================
-async function init() {
-    try {
-        dataGlobal = await loadData();
-
-        renderCourseSelect();
-
-        const courses = getCoursesArray(dataGlobal);
-
-        if (!courses.length) {
-            renderEmptyContent("JSON-filen innehåller inga kurser.");
-            return;
-        }
-
-        const urlId = getCourseIdFromUrl();
-        const firstCourseId = getCourseId(courses[0], 0);
-
-        loadCourse(urlId || firstCourseId);
-    } catch (error) {
-        console.error(error);
-        renderEmptyContent("Kunde inte läsa kursdata. Kontrollera JSON-strukturen i assets/data/kurser-data.json.");
-    }
-}
-
-init();
-``
+    list.innerHTML = modules
+        .map((module, index) => {
+            const title = getModuleTitle(module, index);
+            const quizCount = getModuleQuiz(module).length;
+            const activeClass = index === currentModuleIndex ? "active" : "";
+            const quizText =
