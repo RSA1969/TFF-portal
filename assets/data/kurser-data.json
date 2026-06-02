@@ -1,17 +1,22 @@
 {
   "kurser": [
     {
+      "id": "kurs1",
       "titel": "Kurs 1 – Microsoft Teams",
-      "beskrivning": "Rätt användning av Teams i vardagsarbetet."
+      "beskrivning": "Rätt användning av Teams i vardagsarbetet.",
+      "moduler": []
     },
     {
+      "id": "kurs2",
       "titel": "Kurs 2 – Transkribering",
-      "beskrivning": "Effektiv och spårbar omvandling av tal till text."
+      "beskrivning": "Effektiv och spårbar omvandling av tal till text.",
+      "moduler": []
     },
     {
+      "id": "kurs3",
       "titel": "Kurs 3 – Dokumentation",
-      "beskrivning": "Strukturerad dokumentation enligt regelverk."
+      "beskrivning": "Strukturerad dokumentation enligt regelverk.",
+      "moduler": []
     }
   ]
 }
-``
