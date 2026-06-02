@@ -1,13 +1,11 @@
 let DATA = null;
 const container = document.getElementById("courses");
 
-// =========================
-// HÄMTA JSON
-// =========================
-fetch("./assets/data/kurser-data.json")
+// ✅ ABSOLUT PATH – detta var ditt fel
+fetch("/TFF-portal/assets/data/kurser-data.json")
 .then(res => {
     if (!res.ok) {
-        throw new Error("JSON hittades inte");
+        throw new Error("Kan inte läsa JSON");
     }
     return res.json();
 })
@@ -19,7 +17,7 @@ fetch("./assets/data/kurser-data.json")
     container.innerHTML = `
         <h2>Fel vid laddning</h2>
         <p>Kontrollera att filen finns här:</p>
-        <p><b>assets/data/kurser-data.json</b></p>
+        <b>/assets/data/kurser-data.json</b>
     `;
     console.error(error);
 });
@@ -36,19 +34,18 @@ function renderCourses() {
 
     const grid = document.getElementById("courseGrid");
 
-    DATA.courses
-    .filter(c => c.active === "Ja")
-    .forEach(course => {
-
-        grid.innerHTML += `
-            <div class="card" style="background:${course.color}">
-                <h3>${course.title}</h3>
-                <p>${course.purpose}</p>
-                <button onclick="openCourse(${course.courseId})">
-                    Öppna kurs
-                </button>
-            </div>
-        `;
+    DATA.courses.forEach(course => {
+        if (course.active === "Ja") {
+            grid.innerHTML += `
+                <div class="card" style="background:${course.color}">
+                    <h3>${course.title}</h3>
+                    <p>${course.purpose}</p>
+                    <button onclick="openCourse(${course.courseId})">
+                        Öppna kurs
+                    </button>
+                </div>
+            `;
+        }
     });
 }
 
@@ -67,9 +64,10 @@ function openCourse(courseId) {
 
     const modulesDiv = document.getElementById("modules");
 
-    const modules = DATA.modules.filter(m => m.courseId == courseId);
+    DATA.modules
+    .filter(m => m.courseId == courseId)
+    .forEach(m => {
 
-    modules.forEach(m => {
         modulesDiv.innerHTML += `
             <div class="card">
                 <h3>${m.title}</h3>
@@ -92,7 +90,7 @@ function openModule(courseId, moduleId) {
         <h2>${module.title}</h2>
         <button onclick="openCourse(${courseId})">← Tillbaka</button>
 
-        <video controls>
+        <video width="100%" controls>
             <source src="${module.video}" type="video/mp4">
         </video>
 
@@ -110,7 +108,6 @@ function openModule(courseId, moduleId) {
 function renderQuestions(questions) {
 
     const qDiv = document.getElementById("questions");
-    qDiv.innerHTML = "<h3>Frågor</h3>";
 
     questions.forEach((q, index) => {
 
@@ -143,11 +140,11 @@ function renderQuestions(questions) {
 }
 
 // =========================
-// RÄTT
+// SVAR
 // =========================
 function checkAnswer(selected, correct, btn) {
 
-    if (selected == correct) {
+    if (selected === correct) {
         btn.style.backgroundColor = "green";
     } else {
         btn.style.backgroundColor = "red";
