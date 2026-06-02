@@ -5,27 +5,23 @@
 <title>Utbildningar</title>
 
 <style>
-
 body {
     font-family: Arial;
     margin: 0;
     background: #f5f5f5;
 }
 
-/* TOP */
 h1, h2 {
     margin: 20px;
 }
 
-/* GRID */
-#courses, #modules, #questions {
+#courseGrid, #modules, #questions {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 15px;
     padding: 20px;
 }
 
-/* CARDS */
 .card {
     background: white;
     border-radius: 12px;
@@ -33,7 +29,6 @@ h1, h2 {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* BUTTON */
 button {
     margin-top: 10px;
     padding: 10px;
@@ -49,13 +44,11 @@ button:hover {
     background: #005ea6;
 }
 
-/* VIDEO */
 video {
     width: 90%;
     margin: 20px;
     border-radius: 10px;
 }
-
 </style>
 
 </head>
@@ -64,7 +57,8 @@ video {
 
 <div id="courses"></div>
 
-<script src="kurser-app.js"></script>
+<!-- ✅ DETTA ÄR DET VIKTIGA -->
+<script src="assets/js/kurser-app.js"></script>
 
 </body>
 </html>
