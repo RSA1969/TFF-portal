@@ -63,3 +63,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
             card.innerHTML = `
                 <h2>${kurs.titel || "Ingen titel"}</h2>
+                <p>${kurs.beskrivning || ""}</p>
+                <button>Öppna kurs</button>
+            `;
+
+            // ✅ Klick fungerar alltid
+            card.querySelector("button").addEventListener("click", () => {
+
+                console.log("Öppnar kurs:", kurs);
+
+                localStorage.setItem("selectedKurs", JSON.stringify(kurs));
+
+                window.location.href = "kurs_dokumentation.html";
+            });
+
+            container.appendChild(card);
+        });
+    }
+
+});
