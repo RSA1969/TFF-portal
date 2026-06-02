@@ -2,7 +2,7 @@
   "courses": [
     {
       "courseId": 1,
-      "title": "Kurs 1 – Test",
+      "title": "Testkurs",
       "purpose": "Testar systemet",
       "color": "#82c7b8",
       "active": "Ja"
