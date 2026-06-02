@@ -1,3 +1,7 @@
+let courses = [];
+let currentCourse = null;
+let currentModuleIndex = 0;
+
 // ===============================
 function getCourseId() {
     const params = new URLSearchParams(window.location.search);
@@ -18,53 +22,114 @@ function resolveVideo(video) {
 }
 
 // ===============================
-function renderCourse(course) {
+function renderCourseSelect(data) {
+    const select = document.getElementById("courseSelect");
 
-    const container = document.querySelector(".container");
+    select.innerHTML = data.kurser.map(c =>
+        `<option value="${c.id}">${c.title}</option>`
+    ).join("");
+
+    select.onchange = () => {
+        loadCourse(select.value, data);
+    };
+}
+
+// ===============================
+function loadCourse(id, data) {
+
+    currentCourse = data.kurser.find(c => c.id === id);
+
+    currentModuleIndex = 0;
+
+    renderModules();
+    renderModule();
+
+    // sätt dropdown rätt
+    document.getElementById("courseSelect").value = id;
+}
+
+// ===============================
+function renderModules() {
+    const list = document.getElementById("moduleList");
+
+    list.innerHTML = currentCourse.modules.map((m, i) => `
+        <div class="module-item ${i === currentModuleIndex ? "active" : ""}" onclick="selectModule(${i})">
+            <strong>${i + 1}. ${m.title}</strong>
+        </div>
+    `).join("");
+}
+
+// ===============================
+function selectModule(index) {
+    currentModuleIndex = index;
+    renderModules();
+    renderModule();
+}
+
+// ===============================
+function renderModule() {
+
+    const module = currentCourse.modules[currentModuleIndex];
+    const container = document.getElementById("contentArea");
+
+    const video = resolveVideo(module.video);
 
     container.innerHTML = `
-        <div style="display:flex; gap:20px">
+        <h2>${module.title}</h2>
 
-            <div style="width:300px">
-                <h3>Moduler</h3>
+        <p><strong>Syfte:</strong> ${module.text}</p>
 
-                ${course.modules.map((m, i) => `
-                    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
-                        <strong>${i+1}. ${m.title}</strong>
-                    </div>
-                `).join("")}
-            </div>
+        <h3>Innehåll</h3>
+        <ul>
+            <li>${module.text}</li>
+        </ul>
 
-            <div style="flex:1">
-                <h2>Innehåll</h2>
+        ${video ? `
+            <video controls>
+                ${video}
+            </video>
+        ` : ""}
 
-                <h3>Video</h3>
+        <br><br>
 
-                <video controls width="100%">
-                    ${resolveVideo(course.modules[0].video)}
-                </video>
-            </div>
-
-        </div>
+        <button onclick="prevModule()">Föregående</button>
+        <button onclick="nextModule()">Nästa</button>
     `;
+}
+
+// ===============================
+function nextModule() {
+    if (currentModuleIndex < currentCourse.modules.length - 1) {
+        currentModuleIndex++;
+        renderModules();
+        renderModule();
+    }
+}
+
+// ===============================
+function prevModule() {
+    if (currentModuleIndex > 0) {
+        currentModuleIndex--;
+        renderModules();
+        renderModule();
+    }
 }
 
 // ===============================
 async function init() {
 
-    const id = getCourseId();
-
     const data = await loadData();
 
-    // ✅ VIKTIG FIX HÄR
-    const course = data.kurser.find(c => c.id === id);
+    // fyll dropdown
+    renderCourseSelect(data);
 
-    if (!course) {
-        document.querySelector(".container").innerHTML = "Kurs hittades inte";
-        return;
-    }
+    // ✅ HÄR ÄR FIXEN
+    const urlCourseId = getCourseId();
 
-    renderCourse(course);
+    const courseId = urlCourseId || data.kurser[0].id;
+
+    loadCourse(courseId, data);
 }
 
 init();
+``
