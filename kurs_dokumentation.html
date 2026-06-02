@@ -41,13 +41,13 @@
         }
 
         .sidebar {
-            width: 330px;
-            flex: 0 0 330px;
+            width: 340px;
+            flex: 0 0 340px;
         }
 
         .content {
             flex: 1;
-            min-height: 500px;
+            min-height: 560px;
         }
 
         h1, h2, h3, h4 {
@@ -60,9 +60,9 @@
             line-height: 1.5;
         }
 
-        select {
+        .course-select {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 14px;
             border: 1px solid #cbd5e1;
             border-radius: 10px;
             background: #ffffff;
@@ -107,19 +107,84 @@
             color: #4b5563;
         }
 
+        .empty-state {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .course-header {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .course-image {
+            width: 110px;
+            height: 110px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid #e5e7eb;
+            background: #f3f4f6;
+            flex: 0 0 110px;
+        }
+
+        .course-meta {
+            flex: 1;
+        }
+
+        .color-badge {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 8px;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+
         .content-title {
-            font-size: 22px;
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+        }
+
+        .muted {
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .module-box {
+            margin-top: 14px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 18px;
+        }
+
+        .module-title {
+            font-size: 20px;
             font-weight: 700;
             margin: 0 0 12px 0;
         }
 
-        .content-text {
+        .module-text {
             line-height: 1.6;
             color: #374151;
+            margin-bottom: 14px;
+        }
+
+        .content-list {
+            margin: 12px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .content-list li {
+            margin-bottom: 8px;
+            line-height: 1.5;
         }
 
         .video-wrap {
-            margin-top: 18px;
+            margin-top: 20px;
         }
 
         video {
@@ -129,10 +194,19 @@
             background: #000000;
         }
 
-        .nav-buttons {
+        .quiz-box {
+            margin-top: 20px;
+            padding: 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+
+        .button-row {
             display: flex;
             gap: 12px;
             margin-top: 24px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -152,7 +226,7 @@
             border-color: #1f69c5;
         }
 
-        .muted-box {
+        .note-box {
             margin-top: 18px;
             padding: 14px;
             border: 1px solid #d1d5db;
@@ -163,16 +237,6 @@
             line-height: 1.5;
         }
 
-        .empty-state {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        ul {
-            padding-left: 20px;
-        }
-
         @media (max-width: 1000px) {
             .layout {
                 flex-direction: column;
@@ -181,6 +245,10 @@
             .sidebar {
                 width: 100%;
                 flex: none;
+            }
+
+            .course-header {
+                flex-direction: column;
             }
         }
     </style>
@@ -194,19 +262,19 @@
             <h2>Kurs</h2>
             <p class="section-text">Välj kurs och navigera via modulerna.</p>
 
-            <select id="courseSelect"></select>
+            <select id="courseSelect" class="course-select"></select>
 
             <h3>Moduler</h3>
             <div id="moduleList" class="module-list"></div>
 
-            <div class="muted-box">
-                Modulerna laddas från <strong>assets/data/kurser-data.json</strong>.
-                Video kan hämtas från lokal mapp <strong>video/</strong> eller från extern länk.
+            <div class="note-box">
+                Kursdata läses från <strong>assets/data/kurser-data.json</strong>.
+                Den här sidan använder <strong>assets/js/kurs-dokumentation.js</strong>. 
             </div>
         </aside>
 
         <main class="content" id="contentArea">
-            <h2 class="empty-state">Välj en modul</h2>
+            <h2 class="empty-state">Laddar kurs…</h2>
         </main>
     </div>
 
