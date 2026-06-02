@@ -1,63 +1,83 @@
-document.addEventListener("DOMContentLoaded", () => {
+const grid = document.getElementById("courseGrid");
+const input = document.getElementById("q");
+const btnSearch = document.getElementById("btnSearch");
 
-    const container = document.getElementById("kurser-container");
+let courses = [];
 
-    console.log("✅ JS startar");
+// Pastellfärger (matchar din design)
+const colors = [
+    "#D6F5FF",
+    "#E8E1FF",
+    "#FFF1CC",
+    "#E1F7E7",
+    "#FFDDE6",
+    "#EEE1FF",
+    "#FFEBE1",
+    "#E9F5FF",
+    "#F5E6FF",
+    "#FFF5E1",
+    "#E1FFF5",
+    "#FDE2FF",
+    "#E8FFD6",
+    "#FFE6CC",
+    "#D6EFFF"
+];
 
-    fetch("./assets/data/kurser-data.json")   // ✅ VIKTIG FIX (./)
-        .then(res => {
-            console.log("✅ Response:", res);
+// Hämta data
+fetch("assets/data/kurser-data.json")
+    .then(r => r.json())
+    .then(data => {
+        courses = data.kurser;
+        render(courses);
+    });
 
-            if (!res.ok) {
-                throw new Error("Hittade inte filen: " + res.url);
-            }
-            return res.json();
-        })
-        .then(data => {
+// Rendera kort (DETTA ÄR FIXEN)
+function render(list) {
 
-            console.log("✅ JSON:", data);
+    grid.innerHTML = "";
 
-            if (!data.kurser) {
-                throw new Error("saknar 'kurser' i JSON");
-            }
+    list.forEach((kurs, index) => {
 
-            renderKurser(data.kurser);
-        })
-        .catch(err => {
-            console.error("❌ FEL:", err);
+        const color = colors[index % colors.length];
 
-            container.innerHTML = `
-                <p>Fel vid laddning av kurser</p>
-                <p>${err.message}</p>
-            `;
-        });
+        const card = document.createElement("a");
 
+        // ✅ MÅSTE vara card
+        card.className = "card";
 
-    function renderKurser(kurser) {
+        // ✅ rätt navigation (din portal använder utbildning.html)
+        card.href = `utbildning.html?course=${kurs.id}`;
 
-        container.innerHTML = "";
+        // ✅ sätter färg via CSS variabel
+        card.style.setProperty("--course-color", color);
 
-        const colors = ["#8cc9bd", "#a9d0ea", "#e8c09f"];
+        card.innerHTML = `
+            <h3>${kurs.titel}</h3>
+            <p>${kurs.beskrivning}</p>
+            <span class="badge">5 moduler</span>
+        `;
 
-        kurser.forEach((kurs, index) => {
+        grid.appendChild(card);
+    });
+}
 
-            const card = document.createElement("div");
-            card.className = "kurs-card";
-            card.style.background = colors[index % colors.length];
+// Sök
+function doSearch() {
 
-            card.innerHTML = `
-                <h2>${kurs.titel}</h2>
-                <p>${kurs.beskrivning}</p>
-                <button>Öppna kurs</button>
-            `;
+    const q = input.value.toLowerCase();
 
-            card.querySelector("button").addEventListener("click", () => {
-                localStorage.setItem("selectedKurs", JSON.stringify(kurs));
-                window.location.href = "kurs_dokumentation.html";
-            });
+    const filtered = courses.filter(k =>
+        k.titel.toLowerCase().includes(q) ||
+        k.beskrivning.toLowerCase().includes(q)
+    );
 
-            container.appendChild(card);
-        });
+    render(filtered);
+}
+
+btnSearch.onclick = doSearch;
+
+input.addEventListener("keyup", e => {
+    if (e.key === "Enter") {
+        doSearch();
     }
-
 });
