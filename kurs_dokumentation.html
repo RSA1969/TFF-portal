@@ -1,72 +1,156 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>Kurs</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TFF – Kurs</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
+  <header class="topbar">
+    <div class="container topbar__row">
+      <div class="brand">
+        <div class="brand__title">TFF – Kurs</div>
+        <div class="brand__sub">Moduler • Video • Innehåll</div>
+      </div>
 
-<h1 id="titel"></h1>
+      <div class="right topbar__actions">
+        <button class="btn btn--ghost" type="button" onclick="location.href='utbildningar.html'">Tillbaka</button>
+      </div>
+    </div>
+  </header>
 
-<h2>Moduler</h2>
-<div id="moduler"></div>
+  <main class="container">
+    <section class="panel">
+      <div class="panel__header">
+        <div>
+          <h2 id="kursTitel">Laddar...</h2>
+          <p class="muted" id="kursBeskrivning"></p>
+        </div>
+        <div class="rightnote" id="kursMeta"></div>
+      </div>
 
-<h2>Video</h2>
-<video id="video" controls width="700"></video>
+      <div class="courseDetailLayout">
+        <aside class="panel panel--inner">
+          <h3 class="sectionLabel">Moduler</h3>
+          <div id="modulLista" class="moduleCards"></div>
+        </aside>
 
-<h2>Quiz</h2>
-<div id="quiz"></div>
+        <section class="panel panel--inner">
+          <h3 class="sectionLabel" id="aktivModulTitel">Välj en modul</h3>
+          <p class="muted" id="aktivModulText">Klicka på en modul till vänster.</p>
 
-<script>
-const params = new URLSearchParams(window.location.search);
-const kursId = params.get("id");
+          <div class="videoWrap is-empty" id="videoWrap">
+            <video id="kursVideo" controls preload="metadata"></video>
+            <div id="videoFallback" class="muted">Ingen video kopplad till vald modul.</div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
 
-fetch("assets/data/kurser-data.json")
-.then(r => r.json())
-.then(data => {
+  <footer class="footer">
+    <div class="container"><small>TFF – Portal</small></div>
+  </footer>
 
-    const kurs = data.kurser.find(k => k.id === kursId);
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const kursId = params.get("id");
 
-    document.getElementById("titel").innerText = kurs.titel;
+      const kursTitel = document.getElementById("kursTitel");
+      const kursBeskrivning = document.getElementById("kursBeskrivning");
+      const kursMeta = document.getElementById("kursMeta");
+      const modulLista = document.getElementById("modulLista");
+      const aktivModulTitel = document.getElementById("aktivModulTitel");
+      const aktivModulText = document.getElementById("aktivModulText");
+      const kursVideo = document.getElementById("kursVideo");
+      const videoWrap = document.getElementById("videoWrap");
+      const videoFallback = document.getElementById("videoFallback");
 
-    const modDiv = document.getElementById("moduler");
+      function visaModul(kurs, modulIndex) {
+        const modul = kurs.moduler[modulIndex];
+        if (!modul) return;
 
-    kurs.moduler.forEach((m) => {
-        const btn = document.createElement("button");
-        btn.innerText = m.titel;
+        aktivModulTitel.textContent = modul.titel || `Modul ${modulIndex + 1}`;
+        aktivModulText.textContent = modul.text || modul.beskrivning || "Ingen modultext finns.";
 
-        btn.onclick = () => {
-            document.getElementById("video").src = kurs.videor[m.videoIndex].url;
-        };
+        let videoUrl = "";
 
-        modDiv.appendChild(btn);
-    });
+        if (typeof modul.videoUrl === "string" && modul.videoUrl.trim()) {
+          videoUrl = modul.videoUrl.trim();
+        } else if (
+          typeof modul.videoIndex === "number" &&
+          Array.isArray(kurs.videor) &&
+          kurs.videor[modul.videoIndex] &&
+          kurs.videor[modul.videoIndex].url
+        ) {
+          videoUrl = kurs.videor[modul.videoIndex].url;
+        }
 
-    const quizDiv = document.getElementById("quiz");
+        if (videoUrl) {
+          kursVideo.src = videoUrl;
+          kursVideo.style.display = "block";
+          videoFallback.style.display = "none";
+          videoWrap.classList.remove("is-empty");
+        } else {
+          kursVideo.removeAttribute("src");
+          kursVideo.load();
+          kursVideo.style.display = "none";
+          videoFallback.style.display = "block";
+          videoWrap.classList.add("is-empty");
+        }
 
-    kurs.quiz.forEach(q => {
-        const div = document.createElement("div");
-
-        const fråga = document.createElement("p");
-        fråga.innerText = q.fråga;
-        div.appendChild(fråga);
-
-        q.alternativ.forEach((alt, i) => {
-            const btn = document.createElement("button");
-            btn.innerText = alt;
-
-            btn.onclick = () => {
-                alert(i === q.rättSvar ? "Rätt svar" : "Fel svar");
-            };
-
-            div.appendChild(btn);
+        modulLista.querySelectorAll(".moduleCard").forEach((btn, idx) => {
+          btn.classList.toggle("is-active", idx === modulIndex);
         });
+      }
 
-        quizDiv.appendChild(div);
-    });
+      fetch("assets/data/kurser-data.json", { cache: "no-store" })
+        .then(res => {
+          if (!res.ok) throw new Error("Kunde inte läsa kurser-data.json");
+          return res.json();
+        })
+        .then(data => {
+          const kurser = Array.isArray(data.kurser) ? data.kurser : [];
+          const kurs = kurser.find(k => k.id === kursId);
 
-});
-</script>
+          if (!kurs) {
+            kursTitel.textContent = "Kurs hittades inte";
+            kursBeskrivning.textContent = "Kontrollera länken eller kurs-id.";
+            return;
+          }
 
+          kursTitel.textContent = kurs.titel || "";
+          kursBeskrivning.textContent = kurs.beskrivning || "";
+          kursMeta.textContent = `${Array.isArray(kurs.moduler) ? kurs.moduler.length : 0} moduler`;
+
+          modulLista.innerHTML = "";
+          (kurs.moduler || []).forEach((modul, index) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "moduleCard";
+            btn.innerHTML = `
+              <span class="moduleCard__index">${index + 1}</span>
+              <span class="moduleCard__text">${modul.titel || `Modul ${index + 1}`}</span>
+            `;
+            btn.addEventListener("click", () => visaModul(kurs, index));
+            modulLista.appendChild(btn);
+          });
+
+          if ((kurs.moduler || []).length > 0) {
+            visaModul(kurs, 0);
+          } else {
+            aktivModulTitel.textContent = "Inga moduler";
+            aktivModulText.textContent = "Den här kursen saknar moduler.";
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          kursTitel.textContent = "Fel vid laddning";
+          kursBeskrivning.textContent = "Kontrollera assets/data/kurser-data.json";
+        });
+    })();
+  </script>
 </body>
 </html>
