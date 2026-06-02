@@ -1,121 +1,113 @@
+let courses = [];
+let currentCourse = null;
+let currentModuleIndex = 0;
+
 // ===============================
-// HÄMTA URL PARAMETER (kurs id)
-// ===============================
-function getCourseId() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("id");
+async function loadData() {
+    const res = await fetch("assets/data/kurser-data.json?nocache=" + Date.now());
+    courses = await res.json();
 }
 
 // ===============================
-// HÄMTA DATA
-// ===============================
-async function loadCourses() {
-    const response = await fetch("assets/data/kurser-data.json?nocache=" + new Date().getTime());
-    return await response.json();
-}
-
-// ===============================
-// KONVERTERA VIDEO-VÄG
-// ===============================
-function resolveVideoPath(video) {
-    
+function resolveVideo(video) {
     if (!video) return "";
-
-    // FALL 1: Redan en full URL (Teams / SharePoint)
-    if (video.startsWith("http")) {
-        return video;
-    }
-
-    // FALL 2: Lokal video (lägg automatiskt till /video/)
+    if (video.startsWith("http")) return video;
     return "video/" + video;
 }
 
 // ===============================
-// RENDERA KURS
-// ===============================
-function renderCourse(course) {
+function renderCourseSelect() {
+    const select = document.getElementById("courseSelect");
 
-    const container = document.getElementById("course-container");
+    select.innerHTML = courses.map(c =>
+        `<option value="${c.id}">${c.title}</option>`
+    ).join("");
+
+    select.onchange = () => {
+        loadCourse(select.value);
+    };
+}
+
+// ===============================
+function loadCourse(id) {
+    currentCourse = courses.find(c => c.id === id);
+    currentModuleIndex = 0;
+
+    renderModules();
+    renderModule();
+}
+
+// ===============================
+function renderModules() {
+    const list = document.getElementById("moduleList");
+
+    list.innerHTML = currentCourse.modules.map((m, i) => `
+        <div class="module-item ${i === currentModuleIndex ? "active" : ""}" onclick="selectModule(${i})">
+            <strong>${i+1}. ${m.title}</strong>
+        </div>
+    `).join("");
+}
+
+// ===============================
+function selectModule(index) {
+    currentModuleIndex = index;
+    renderModules();
+    renderModule();
+}
+
+// ===============================
+function renderModule() {
+    const module = currentCourse.modules[currentModuleIndex];
+    const container = document.getElementById("contentArea");
+
+    const video = resolveVideo(module.video);
 
     container.innerHTML = `
-        <h1>${course.title}</h1>
-        <p>${course.description}</p>
-        ${course.modules.map((m, index) => renderModule(m, index)).join("")}
+        <h2>${module.title}</h2>
+
+        <p><strong>Syfte:</strong> ${module.text}</p>
+
+        <h3>Innehåll</h3>
+        <ul>
+            <li>${module.text}</li>
+        </ul>
+
+        ${video ? `
+            <video controls>
+                <source src="${video}" type="video/mp4">
+            </video>
+        ` : ""}
+
+        <br><br>
+
+        <button class="button" onclick="prevModule()">Föregående</button>
+        <button class="button" onclick="nextModule()">Nästa</button>
     `;
 }
 
 // ===============================
-// RENDERA MODUL
-// ===============================
-function renderModule(module, index) {
-
-    const videoUrl = resolveVideoPath(module.video);
-
-    return `
-        <div class="module">
-
-            <h2>Modul ${index + 1}: ${module.title}</h2>
-
-            <p>${module.text}</p>
-
-            ${videoUrl ? `
-                <video controls width="100%">
-                    <source src="${videoUrl}" type="video/mp4">
-                    Din webbläsare stödjer inte video.
-                </video>
-            ` : ""}
-
-            ${renderQuiz(module.quiz)}
-
-        </div>
-    `;
+function nextModule() {
+    if (currentModuleIndex < currentCourse.modules.length - 1) {
+        currentModuleIndex++;
+        renderModules();
+        renderModule();
+    }
 }
 
 // ===============================
-// RENDERA QUIZ
-// ===============================
-function renderQuiz(quiz) {
-
-    if (!quiz || !quiz.questions) return "";
-
-    return `
-        <div class="quiz">
-            <h3>Kunskapstest</h3>
-
-            ${quiz.questions.map((q, qi) => `
-                <div class="question">
-                    <p>${qi + 1}. ${q.question}</p>
-
-                    ${q.options.map((opt, oi) => `
-                        <label>
-                            <input type="radio" name="q${qi}" value="${oi}">
-                            ${opt}
-                        </label>
-                    `).join("<br>")}
-
-                </div>
-            `).join("")}
-        </div>
-    `;
+function prevModule() {
+    if (currentModuleIndex > 0) {
+        currentModuleIndex--;
+        renderModules();
+        renderModule();
+    }
 }
 
-// ===============================
-// INIT
 // ===============================
 async function init() {
-
-    const id = getCourseId();
-
-    const data = await loadCourses();
-
-    const course = data.find(c => c.id === id);
-
-    if (!course) {
-        document.getElementById("course-container").innerHTML = "<p>Kurs hittades inte</p>";
-        return;
-    }
-
-    renderCourse(course);
+    await loadData();
+    renderCourseSelect();
+    loadCourse(courses[0].id);
 }
 
 init();
