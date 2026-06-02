@@ -1,38 +1,262 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8" />
-    <title>Utbildningar</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utbildningar</title>
 
-    <style>
-        body {
-            font-family: Arial;
-            margin: 40px;
-        }
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
-        .kurs-card {
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            background: #e0f2f1;
-        }
+  <style>
+    body {
+      margin: 0;
+      background: #f2f4f7;
+      font-family: Arial, sans-serif;
+      color: #0f172a;
+    }
 
-        button {
-            margin-top: 10px;
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-    </style>
+    .wrap {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 28px;
+    }
+
+    .kurs-card {
+      border-radius: 18px;
+      padding: 28px 24px;
+      margin-bottom: 18px;
+      box-sizing: border-box;
+    }
+
+    .kurs-card h2 {
+      margin: 0 0 18px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .kurs-card p {
+      margin: 0 0 18px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .kurs-card button {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .status {
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #ffffff;
+      border: 1px solid #dbe2ea;
+      font-size: 14px;
+    }
+
+    .error {
+      background: #fff1f1;
+      border-color: #f0b0b0;
+      color: #7f1d1d;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <h1>Utbildningar</h1>
 
-<h1>Utbildningar</h1>
+    <div id="status" class="status">Laddar kursinformation från Excel...</div>
 
-<div id="kurser-container">
-    <!-- Fylls dynamiskt -->
-</div>
+    <div id="kurser-container"></div>
+  </div>
 
-<script src="assets/js/kurser-app.js"></script>
+  <script>
+    /**************************************************************
+     * SHAREPOINT EXCEL-LÄNK
+     * Byt endast om du vill använda en annan Excel-fil.
+     **************************************************************/
+    const SHAREPOINT_EXCEL_URL =
+      "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek-PUBLICERING/_layouts/15/download.aspx?UniqueId=a54e016fdc0743d7ab15bec5c095781d&e=KMoMTD";
 
+    /**************************************************************
+     * FÄRGER – behåller samma typ av pastellutseende
+     **************************************************************/
+    const COURSE_COLORS = [
+      "#8cc9bd",
+      "#a9d0ea",
+      "#e8c09f",
+      "#d6c9f4",
+      "#f2df9c",
+      "#f2cdd9",
+      "#cfe6ba",
+      "#d6ecf8",
+      "#f4d6b8",
+      "#e5dbff",
+      "#ffe2bf",
+      "#cceee8",
+      "#e6d4c5",
+      "#d6e4b9",
+      "#f3d7a6"
+    ];
+
+    const statusEl = document.getElementById("status");
+    const container = document.getElementById("kurser-container");
+
+    function safe(value) {
+      return (value ?? "").toString().trim();
+    }
+
+    function slugify(text) {
+      return safe(text)
+        .toLowerCase()
+        .replace(/[åä]/g, "a")
+        .replace(/ö/g, "o")
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+    }
+
+    async function loadWorkbook(url) {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error("Kunde inte läsa Excel-filen från SharePoint.");
+      }
+      const arrayBuffer = await res.arrayBuffer();
+      return XLSX.read(arrayBuffer, { type: "array" });
+    }
+
+    function getSheetRows(workbook) {
+      let sheetName =
+        workbook.SheetNames.find(n => n === "Moduler") ||
+        workbook.SheetNames.find(n => n === "Blad1") ||
+        workbook.SheetNames[0];
+
+      const sheet = workbook.Sheets[sheetName];
+      return XLSX.utils.sheet_to_json(sheet, { defval: "" });
+    }
+
+    function mapCourses(rows) {
+      const courseMap = new Map();
+
+      rows.forEach((row, index) => {
+        const kursTitel =
+          safe(row.Kurs) ||
+          safe(row.KursTitel) ||
+          safe(row.Kursnamn) ||
+          "Okänd kurs";
+
+        const kursId =
+          safe(row.KursId) ||
+          slugify(kursTitel) ||
+          `kurs_${index + 1}`;
+
+        const modulTitel =
+          safe(row.Titel) ||
+          safe(row.ModulTitel) ||
+          `Modul ${safe(row.ModulNummer) || ""}`.trim();
+
+        const modulNummer = Number(row.ModulNummer || 0);
+
+        const modulInnehall =
+          safe(row.Innehåll) ||
+          safe(row.Innehall) ||
+          safe(row.Beskrivning) ||
+          "";
+
+        const videoUrl =
+          safe(row.VideoUrl) ||
+          safe(row.MP4) ||
+          safe(row.Video) ||
+          safe(row.VideoLank);
+
+        if (!courseMap.has(kursId)) {
+          courseMap.set(kursId, {
+            id: kursId,
+            titel: kursTitel,
+            beskrivning:
+              safe(row.KursBeskrivning) ||
+              modulInnehall ||
+              "Kursinformation hämtad från SharePoint Excel.",
+            color: COURSE_COLORS[courseMap.size % COURSE_COLORS.length],
+            moduler: []
+          });
+        }
+
+        courseMap.get(kursId).moduler.push({
+          modulNummer: modulNummer || courseMap.get(kursId).moduler.length + 1,
+          titel: modulTitel,
+          innehall: modulInnehall,
+          videoUrl: videoUrl
+        });
+      });
+
+      return Array.from(courseMap.values());
+    }
+
+    function renderKurser(kurser) {
+      container.innerHTML = "";
+
+      if (!kurser.length) {
+        container.innerHTML = "<p>Inga kurser hittades i Excel-filen.</p>";
+        return;
+      }
+
+      kurser.forEach((kurs, index) => {
+        const card = document.createElement("div");
+        card.className = "kurs-card";
+        card.style.background = kurs.color;
+
+        card.innerHTML = `
+          <h2>${escapeHtml(kurs.titel)}</h2>
+          <p>${escapeHtml(kurs.beskrivning)}</p>
+          <button type="button">Öppna kurs</button>
+        `;
+
+        card.querySelector("button").addEventListener("click", () => {
+          localStorage.setItem("selectedKurs", JSON.stringify(kurs));
+          window.location.href = "kurs_dokumentation.html";
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    async function init() {
+      try {
+        const workbook = await loadWorkbook(SHAREPOINT_EXCEL_URL);
+        const rows = getSheetRows(workbook);
+        const kurser = mapCourses(rows);
+
+        statusEl.classList.add("hidden");
+        renderKurser(kurser);
+      } catch (error) {
+        console.error(error);
+        statusEl.classList.remove("hidden");
+        statusEl.classList.add("error");
+        statusEl.textContent = "Fel vid laddning av SharePoint Excel: " + error.message;
+      }
+    }
+
+    init();
+  </script>
 </body>
 </html>
