@@ -1,51 +1,45 @@
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-<meta charset="UTF-8" />
-<title>Kurs</title>
-
-<style>
-body { font-family: Arial; margin: 40px; }
-.modul { border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; }
-</style>
-
-</head>
-<body>
-
-<h1 id="titel"></h1>
-<p id="beskrivning"></p>
-
-<div id="moduler"></div>
-
 <script>
 
 const kurs = JSON.parse(localStorage.getItem("selectedKurs"));
 
-document.getElementById("titel").innerText = kurs.titel;
-document.getElementById("beskrivning").innerText = kurs.beskrivning;
+console.log("Kurs:", kurs);
 
+const titel = document.getElementById("titel");
+const beskrivning = document.getElementById("beskrivning");
 const container = document.getElementById("moduler");
 
-kurs.moduler.forEach(m => {
+// Säkerhet
+if (!kurs) {
+    document.body.innerHTML = "<p>Ingen kurs vald</p>";
+}
 
-    const div = document.createElement("div");
-    div.className = "modul";
+// Skriv ut kursinfo
+titel.innerText = kurs.titel;
+beskrivning.innerText = kurs.beskrivning;
 
-    div.innerHTML = `
-        <h3>Modul ${m.modulNummer} – ${m.titel}</h3>
-        <p>${m.innehall}</p>
-        ${
-            m.videoUrl
-            ? `<a href="${m.videoUrl}" target="_blank">Öppna MP4</a>`
-            : `<p>Ingen video</p>`
-        }
-    `;
+// ✅ KRITISK FIX
+const moduler = kurs.moduler || [];
 
-    container.appendChild(div);
-});
+if (moduler.length === 0) {
+    container.innerHTML = "<p>Inga moduler hittades</p>";
+} else {
+
+    moduler.forEach(m => {
+
+        const div = document.createElement("div");
+
+        div.innerHTML = `
+            <h3>Modul ${m.modulNummer} – ${m.titel}</h3>
+            <p>${m.innehall}</p>
+            ${
+                m.videoUrl
+                ? `<a href="${m.videoUrl}" target="_blank">Öppna MP4</a>`
+                : `<p>Ingen video</p>`
+            }
+        `;
+
+        container.appendChild(div);
+    });
+}
 
 </script>
-
-</body>
-</html>
-``
