@@ -4,19 +4,33 @@
       "id": "kurs1",
       "titel": "Kurs 1 – Microsoft Teams",
       "beskrivning": "Rätt användning av Teams i vardagsarbetet.",
-      "moduler": []
+      "moduler": [
+        {
+          "modulNummer": 1,
+          "titel": "Introduktion",
+          "innehall": "Vad är Teams och hur används det.",
+          "videoUrl": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek-PUBLICERING/_layouts/15/download.aspx?UniqueId=a54e016fdc0743d7ab15bec5c095781d&e=KMoMTD"
+        },
+        {
+          "modulNummer": 2,
+          "titel": "Kanaler",
+          "innehall": "Hur kanaler fungerar.",
+          "videoUrl": ""
+        }
+      ]
     },
     {
       "id": "kurs2",
       "titel": "Kurs 2 – Transkribering",
       "beskrivning": "Effektiv och spårbar omvandling av tal till text.",
-      "moduler": []
-    },
-    {
-      "id": "kurs3",
-      "titel": "Kurs 3 – Dokumentation",
-      "beskrivning": "Strukturerad dokumentation enligt regelverk.",
-      "moduler": []
+      "moduler": [
+        {
+          "modulNummer": 1,
+          "titel": "Grund",
+          "innehall": "Hur transkribering fungerar.",
+          "videoUrl": ""
+        }
+      ]
     }
   ]
 }
