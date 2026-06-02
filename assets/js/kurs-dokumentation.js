@@ -1,13 +1,9 @@
-console.log("JS laddad ✅");
-
 const params = new URLSearchParams(window.location.search);
 const kursId = params.get("id");
 
 fetch("assets/data/kurser-data.json")
   .then(res => res.json())
   .then(data => {
-
-    console.log("Data laddad ✅", data);
 
     const kurs = data.kurser.find(k => k.id === kursId);
 
@@ -16,23 +12,19 @@ fetch("assets/data/kurser-data.json")
       return;
     }
 
-    // Titel
+    // ===== KURS =====
     document.getElementById("kursTitel").textContent = kurs.titel;
-
-    // Text
     document.getElementById("kursText").textContent =
       kurs.syfte || kurs.beskrivning || "";
 
-    // Moduler
     const modDiv = document.getElementById("moduler");
-    modDiv.innerHTML = "";
 
-    kurs.moduler.forEach((m, i) => {
+    kurs.moduler.forEach((modul, index) => {
 
       const btn = document.createElement("button");
-      btn.textContent = (i + 1) + ". " + m.titel;
+      btn.textContent = (index + 1) + ". " + modul.titel;
 
-      btn.onclick = () => visaModul(m);
+      btn.onclick = () => visaModul(modul);
 
       modDiv.appendChild(btn);
     });
@@ -41,18 +33,26 @@ fetch("assets/data/kurser-data.json")
     if (kurs.moduler.length > 0) {
       visaModul(kurs.moduler[0]);
     }
-
-  })
-  .catch(err => {
-    console.error("Fel:", err);
-    document.body.innerHTML = "Fel vid laddning";
   });
 
 function visaModul(modul) {
 
+  document.getElementById("modulTitel").textContent = modul.titel;
+  document.getElementById("modulSyfte").textContent =
+    modul.syfte || modul.beskrivning || "";
+
+  const ul = document.getElementById("modulInnehall");
+  ul.innerHTML = "";
+
+  modul.innehall.forEach(rad => {
+    const li = document.createElement("li");
+    li.textContent = rad;
+    ul.appendChild(li);
+  });
+
   const video = document.getElementById("video");
 
-  if (video && modul.video) {
+  if (modul.video) {
     video.src = modul.video;
   }
 }
