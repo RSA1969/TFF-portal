@@ -5,7 +5,11 @@
       "titel": "Kurs 1 – MICROSOFT TEAMS",
       "beskrivning": "Rätt användning av Teams",
       "moduler": [
-        {"id": "k1m1", "titel": "Modul 1", "video": "video/kurs1_modul1.mp4", "quiz": []}
+        {"id":"k1m1","titel":"Modul 1","video":"video/kurs1_modul1.mp4","quiz":[]},
+        {"id":"k1m2","titel":"Modul 2","video":"video/kurs1_modul2.mp4","quiz":[]},
+        {"id":"k1m3","titel":"Modul 3","video":"video/kurs1_modul3.mp4","quiz":[]},
+        {"id":"k1m4","titel":"Modul 4","video":"video/kurs1_modul4.mp4","quiz":[]},
+        {"id":"k1m5","titel":"Modul 5","video":"video/kurs1_modul5.mp4","quiz":[]}
       ]
     },
     {
@@ -13,7 +17,11 @@
       "titel": "Kurs 2 – TRANSKRIBERING",
       "beskrivning": "Tal till text",
       "moduler": [
-        {"id": "k2m1", "titel": "Modul 1", "video": "video/kurs2_modul1.mp4", "quiz": []}
+        {"id":"k2m1","titel":"Modul 1","video":"video/kurs2_modul1.mp4","quiz":[]},
+        {"id":"k2m2","titel":"Modul 2","video":"video/kurs2_modul2.mp4","quiz":[]},
+        {"id":"k2m3","titel":"Modul 3","video":"video/kurs2_modul3.mp4","quiz":[]},
+        {"id":"k2m4","titel":"Modul 4","video":"video/kurs2_modul4.mp4","quiz":[]},
+        {"id":"k2m5","titel":"Modul 5","video":"video/kurs2_modul5.mp4","quiz":[]}
       ]
     },
     {
@@ -21,7 +29,115 @@
       "titel": "Kurs 3 – DOKUMENTATION",
       "beskrivning": "Dokumentation",
       "moduler": [
-        {"id": "k3m1", "titel": "Modul 1", "video": "video/kurs3_modul1.mp4", "quiz": []}
+        {"id":"k3m1","titel":"Modul 1","video":"video/kurs3_modul1.mp4","quiz":[]},
+        {"id":"k3m2","titel":"Modul 2","video":"video/kurs3_modul2.mp4","quiz":[]},
+        {"id":"k3m3","titel":"Modul 3","video":"video/kurs3_modul3.mp4","quiz":[]},
+        {"id":"k3m4","titel":"Modul 4","video":"video/kurs3_modul4.mp4","quiz":[]},
+        {"id":"k3m5","titel":"Modul 5","video":"video/kurs3_modul5.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs4",
+      "titel": "Kurs 4 – AI & COPILOT",
+      "beskrivning": "AI",
+      "moduler": [
+        {"id":"k4m1","titel":"Modul 1","video":"video/kurs4_modul1.mp4","quiz":[]},
+        {"id":"k4m2","titel":"Modul 2","video":"video/kurs4_modul2.mp4","quiz":[]},
+        {"id":"k4m3","titel":"Modul 3","video":"video/kurs4_modul3.mp4","quiz":[]},
+        {"id":"k4m4","titel":"Modul 4","video":"video/kurs4_modul4.mp4","quiz":[]},
+        {"id":"k4m5","titel":"Modul 5","video":"video/kurs4_modul5.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs5",
+      "titel": "Kurs 5 – PROMPTNING",
+      "beskrivning": "Prompt",
+      "moduler": [
+        {"id":"k5m1","titel":"Modul 1","video":"video/kurs5_modul1.mp4","quiz":[]},
+        {"id":"k5m2","titel":"Modul 2","video":"video/kurs5_modul2.mp4","quiz":[]},
+        {"id":"k5m3","titel":"Modul 3","video":"video/kurs5_modul3.mp4","quiz":[]},
+        {"id":"k5m4","titel":"Modul 4","video":"video/kurs5_modul4.mp4","quiz":[]},
+        {"id":"k5m5","titel":"Modul 5","video":"video/kurs5_modul5.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs6",
+      "titel": "Kurs 6",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k6m1","titel":"Modul 1","video":"video/kurs6_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs7",
+      "titel": "Kurs 7",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k7m1","titel":"Modul 1","video":"video/kurs7_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs8",
+      "titel": "Kurs 8",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k8m1","titel":"Modul 1","video":"video/kurs8_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs9",
+      "titel": "Kurs 9",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k9m1","titel":"Modul 1","video":"video/kurs9_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs10",
+      "titel": "Kurs 10",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k10m1","titel":"Modul 1","video":"video/kurs10_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs11",
+      "titel": "Kurs 11",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k11m1","titel":"Modul 1","video":"video/kurs11_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs12",
+      "titel": "Kurs 12",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k12m1","titel":"Modul 1","video":"video/kurs12_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs13",
+      "titel": "Kurs 13",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k13m1","titel":"Modul 1","video":"video/kurs13_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs14",
+      "titel": "Kurs 14",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k14m1","titel":"Modul 1","video":"video/kurs14_modul1.mp4","quiz":[]}
+      ]
+    },
+    {
+      "id": "kurs15",
+      "titel": "Kurs 15",
+      "beskrivning": "",
+      "moduler": [
+        {"id":"k15m1","titel":"Modul 1","video":"video/kurs15_modul1.mp4","quiz":[]}
       ]
     }
   ]
