@@ -9,6 +9,8 @@
     <h1 id="kursTitel"></h1>
     <p id="kursBeskrivning"></p>
 
+    <div id="videoContainer"></div>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
@@ -22,8 +24,26 @@
                     const kurs = data.kurser.find(k => k.id === kursId);
 
                     if (kurs) {
+
                         document.getElementById("kursTitel").innerText = kurs.titel;
                         document.getElementById("kursBeskrivning").innerText = kurs.beskrivning;
+
+                        const videoContainer = document.getElementById("videoContainer");
+                        videoContainer.innerHTML = "";
+
+                        kurs.videor.forEach(video => {
+                            const videoElement = document.createElement("video");
+                            videoElement.controls = true;
+                            videoElement.width = 600;
+
+                            const source = document.createElement("source");
+                            source.src = video.url;
+                            source.type = "video/mp4";
+
+                            videoElement.appendChild(source);
+                            videoContainer.appendChild(videoElement);
+                        });
+
                     } else {
                         document.getElementById("kursTitel").innerText = "Kurs hittades inte";
                     }
