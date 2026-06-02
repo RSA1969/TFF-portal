@@ -44,15 +44,5 @@
     }
   ],
 
-  "questions": [
-    {
-      "moduleId": 1,
-      "question": "Vad är Teams?",
-      "option1": "Mail",
-      "option2": "Plattform",
-      "option3": "Chatt",
-      "option4": "Dokument",
-      "correct": 2
-    }
-  ]
+  "questions": []
 }
