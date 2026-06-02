@@ -1,60 +1,53 @@
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-<meta charset="UTF-8">
-<title>Kurs</title>
-<link rel="stylesheet" href="assets/css/styles.css">
-</head>
+const urlParams = new URLSearchParams(window.location.search);
+const kursId = urlParams.get("id");
 
-<body>
-
-<h1 id="titel"></h1>
-<p id="beskrivning"></p>
-
-<h2>Moduler</h2>
-<div id="moduler"></div>
-
-<h2>Video</h2>
-<video id="video" controls width="600"></video>
-
-<script>
-
-const params = new URLSearchParams(window.location.search);
-const kursId = params.get("id");
-
-fetch("assets/data/kurser-data.json?nocache=1")
-.then(r => r.json())
-.then(data => {
+fetch("assets/data/kurser-data.json")
+  .then(res => res.json())
+  .then(data => {
 
     const kurs = data.kurser.find(k => k.id === kursId);
 
-    document.getElementById("titel").innerText = kurs.titel;
-    document.getElementById("beskrivning").innerText = kurs.beskrivning;
+    if (!kurs) {
+      document.body.innerHTML = "Kurs saknas";
+      return;
+    }
 
-    const modDiv = document.getElementById("moduler");
+    // ======= RUBRIK =======
+    document.querySelector("h1").textContent = kurs.titel;
 
-    // 🔴 KRITISK FIX
-    kurs.moduler.forEach((m, i) => {
+    // ======= SYFTE / BESKRIVNING =======
+    const textElement = document.querySelector("p");
 
-        const btn = document.createElement("button");
+    // ✅ FIX – fallback så inget blir undefined
+    textElement.textContent = kurs.syfte || kurs.beskrivning || "";
 
-        btn.innerText = m.titel;
+    // ======= MODULER =======
+    const modulerDiv = document.querySelector("#moduler");
+    modulerDiv.innerHTML = "";
 
-        btn.onclick = () => {
+    kurs.moduler.forEach((modul, index) => {
 
-            // 🔴 VIKTIGT: korrekt koppling VIDEO
-            const video = kurs.videor[m.videoIndex];
+      const btn = document.createElement("button");
+      btn.textContent = modul.titel;
 
-            if(video && video.url){
-                document.getElementById("video").src = video.url;
-            }
-        };
+      btn.onclick = () => visaModul(modul);
 
-        modDiv.appendChild(btn);
+      modulerDiv.appendChild(btn);
     });
 
-});
-</script>
+    // ======= VISA FÖRSTA MODUL =======
+    if (kurs.moduler.length > 0) {
+      visaModul(kurs.moduler[0]);
+    }
+  });
 
-</body>
-</html>
+function visaModul(modul) {
+
+  // ======= VIDEO =======
+  const video = document.querySelector("video");
+
+  if (video && modul.video) {
+    video.src = modul.video;
+  }
+
+}
