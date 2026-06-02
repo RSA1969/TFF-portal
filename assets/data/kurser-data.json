@@ -3,63 +3,19 @@
     {
       "id": "kurs1",
       "titel": "Kurs 1 – Microsoft Teams",
-      "beskrivning": "Rätt användning av Teams i vardagsarbetet.",
-      "moduler": [
+      "beskrivning": "Rätt användning av Teams i vardagsarbetet",
+      "videor": [
         {
-          "modulNummer": 1,
-          "titel": "Introduktion",
-          "innehall": "Vad är Microsoft Teams och hur används det i en kommunal organisation.",
-          "videoUrl": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek-PUBLICERING/_layouts/15/download.aspx?UniqueId=a54e016fdc0743d7ab15bec5c095781d&e=KMoMTD"
+          "url": "https://halmstad.sharepoint.com/sites/YOURPATH/video1.mp4"
         },
         {
-          "modulNummer": 2,
-          "titel": "Kanaler och struktur",
-          "innehall": "Hur du strukturerar Team, kanaler och filer korrekt.",
-          "videoUrl": ""
+          "url": "https://halmstad.sharepoint.com/sites/YOURPATH/video2.mp4"
         },
         {
-          "modulNummer": 3,
-          "titel": "Möten",
-          "innehall": "Genomför effektiva möten i Teams.",
-          "videoUrl": ""
-        }
-      ]
-    },
-    {
-      "id": "kurs2",
-      "titel": "Kurs 2 – Transkribering",
-      "beskrivning": "Effektiv och spårbar omvandling av tal till text.",
-      "moduler": [
-        {
-          "modulNummer": 1,
-          "titel": "Grundläggande transkribering",
-          "innehall": "Vad transkribering är och hur det används.",
-          "videoUrl": ""
+          "url": "https://halmstad.sharepoint.com/sites/YOURPATH/video3.mp4"
         },
         {
-          "modulNummer": 2,
-          "titel": "Praktisk användning",
-          "innehall": "Hur du använder transkribering i möten och dokumentation.",
-          "videoUrl": ""
-        }
-      ]
-    },
-    {
-      "id": "kurs3",
-      "titel": "Kurs 3 – Dokumentation",
-      "beskrivning": "Strukturerad dokumentation enligt regelverk.",
-      "moduler": [
-        {
-          "modulNummer": 1,
-          "titel": "Grundläggande dokumentation",
-          "innehall": "Vad dokumentation innebär i kommunal verksamhet.",
-          "videoUrl": ""
-        },
-        {
-          "modulNummer": 2,
-          "titel": "Standard och struktur",
-          "innehall": "Hur dokument ska struktureras enligt krav.",
-          "videoUrl": ""
+          "url": "https://halmstad.sharepoint.com/sites/YOURPATH/video4.mp4"
         }
       ]
     }
