@@ -1,93 +1,221 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>TFF – Utbildning</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TFF – Utbildning</title>
 
-<style>
-body { font-family: Arial; margin: 0; background: #f5f6f8; }
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-.topbar {
-    padding: 15px 30px;
-    background: white;
-    border-bottom: 1px solid #ddd;
-    font-weight: bold;
-}
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f6f8;
+            color: #111827;
+        }
 
-.layout {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-}
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid #d1d5db;
+            padding: 16px 24px;
+            font-size: 18px;
+            font-weight: 700;
+        }
 
-.sidebar {
-    width: 300px;
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-}
+        .layout {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            align-items: flex-start;
+        }
 
-.module-item {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
+        .sidebar,
+        .content {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
 
-.module-item.active {
-    border-color: #4caf50;
-    background: #eef6f0;
-}
+        .sidebar {
+            width: 330px;
+            flex: 0 0 330px;
+        }
 
-.content {
-    flex: 1;
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-}
+        .content {
+            flex: 1;
+            min-height: 500px;
+        }
 
-video {
-    width: 100%;
-    border-radius: 10px;
-    margin-top: 15px;
-}
+        h1, h2, h3, h4 {
+            margin-top: 0;
+        }
 
-button {
-    padding: 10px 15px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    margin-top: 15px;
-    background: #2b6cb0;
-    color: white;
-}
-</style>
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+        }
 
+        .section-text {
+            margin: 0 0 16px 0;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            background: #ffffff;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .module-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .module-item {
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            background: #ffffff;
+            transition: 0.15s ease;
+        }
+
+        .module-item:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+
+        .module-item.active {
+            border-color: #c7e3d6;
+            background: #eef7f1;
+        }
+
+        .module-item-title {
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 4px;
+        }
+
+        .module-item-status {
+            font-size: 12px;
+            color: #4b5563;
+        }
+
+        .content-header {
+            margin-bottom: 18px;
+        }
+
+        .content-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+        }
+
+        .content-text {
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .video-wrap {
+            margin-top: 18px;
+        }
+
+        video {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 12px;
+            background: #000000;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            border: 1px solid #d1d5db;
+            background: #ffffff;
+            color: #111827;
+            border-radius: 10px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .btn.primary {
+            background: #1f69c5;
+            color: #ffffff;
+            border-color: #1f69c5;
+        }
+
+        .muted-box {
+            margin-top: 18px;
+            padding: 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 12px;
+            background: #fafafa;
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        @media (max-width: 1000px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex: none;
+            }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="topbar">TFF – Utbildning</div>
+    <div class="topbar">TFF – Utbildning</div>
 
-<div class="layout">
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Kurs</h2>
+            <p class="section-text">Välj kurs och navigera via modulerna.</p>
 
-    <div class="sidebar">
-        <h3>Kurs</h3>
-        <select id="courseSelect"></select>
+            <select id="courseSelect"></select>
 
-        <h4>Moduler</h4>
-        <div id="moduleList"></div>
+            <h3>Moduler</h3>
+            <div id="moduleList" class="module-list"></div>
+
+            <div class="muted-box">
+                Modulerna laddas från <strong>assets/data/kurser-data.json</strong>.
+                Video kan hämtas från lokal mapp <strong>video/</strong> eller från extern länk.
+            </div>
+        </aside>
+
+        <main class="content" id="contentArea">
+            <h2 class="empty-state">Välj en modul</h2>
+        </main>
     </div>
 
-    <div class="content" id="contentArea">
-        <h2>Välj en modul</h2>
-    </div>
-
-</div>
-
-<script src="assets/js/kurs-dokumentation.js"></script>
-
+    <script src="assets/js/kurs-dokumentation.js"></script>
 </body>
 </html>
