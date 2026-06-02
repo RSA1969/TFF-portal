@@ -29,13 +29,6 @@ async function loadData() {
     return await response.json();
 }
 
-// ===============================
-// ROOT-NORMALISERING
-// Klarar:
-// { "kurser": [...] }
-// { "courses": [...] }
-// [ ... ]
-// ===============================
 function getCoursesArray(data) {
     if (Array.isArray(data)) return data;
     if (Array.isArray(data?.kurser)) return data.kurser;
@@ -44,33 +37,33 @@ function getCoursesArray(data) {
 }
 
 // ===============================
-// KURSFÄLT
+// HJÄLPFUNKTIONER - KURS
 // ===============================
-function getCourseId(course, fallbackIndex = 0) {
-    return (
+function getCourseId(course, fallbackIndex) {
+    return String(
         course?.id ??
         course?.kursId ??
         course?.kursID ??
         course?.kursid ??
         course?.slug ??
-        `kurs${fallbackIndex + 1}`
+        ("kurs" + (fallbackIndex + 1))
     );
 }
 
-function getCourseTitle(course, fallbackIndex = 0) {
-    return (
+function getCourseTitle(course, fallbackIndex) {
+    return String(
         course?.title ??
         course?.titel ??
         course?.kursTitel ??
         course?.kurstitel ??
         course?.name ??
         course?.namn ??
-        `Kurs ${fallbackIndex + 1}`
+        ("Kurs " + (fallbackIndex + 1))
     );
 }
 
 function getCourseDescription(course) {
-    return (
+    return String(
         course?.description ??
         course?.beskrivning ??
         course?.text ??
@@ -81,7 +74,7 @@ function getCourseDescription(course) {
 }
 
 // ===============================
-// MODULFÄLT
+// HJÄLPFUNKTIONER - MODUL
 // ===============================
 function getModulesArray(course) {
     if (Array.isArray(course?.modules)) return course.modules;
@@ -89,20 +82,20 @@ function getModulesArray(course) {
     return [];
 }
 
-function getModuleTitle(module, fallbackIndex = 0) {
-    return (
+function getModuleTitle(module, fallbackIndex) {
+    return String(
         module?.title ??
         module?.titel ??
         module?.modulTitel ??
         module?.modultitel ??
         module?.name ??
         module?.namn ??
-        `Modul ${fallbackIndex + 1}`
+        ("Modul " + (fallbackIndex + 1))
     );
 }
 
 function getModuleText(module) {
-    return (
+    return String(
         module?.text ??
         module?.innehall ??
         module?.innehåll ??
@@ -114,7 +107,7 @@ function getModuleText(module) {
 }
 
 function getModuleVideo(module) {
-    return (
+    return String(
         module?.video ??
         module?.videoUrl ??
         module?.videourl ??
@@ -138,11 +131,11 @@ function resolveVideoPath(videoValue) {
         return videoValue;
     }
 
-    return "video/" + String(videoValue).replace(/^\/+/, "");
+    return "video/" + videoValue.replace(/^\/+/, "");
 }
 
 // ===============================
-// HTML-SÄKERHET
+// HTML ESCAPE
 // ===============================
 function escapeHtml(value) {
     return String(value ?? "")
@@ -153,35 +146,41 @@ function escapeHtml(value) {
         .replaceAll("'", "&#039;");
 }
 
-function escapeAttribute(value) {
-    return String(value ?? "").replaceAll('"', "&quot;");
+// ===============================
+// UI - TOMT INNEHÅLL
+// ===============================
+function renderEmptyContent(message) {
+    const contentArea = document.getElementById("contentArea");
+    if (!contentArea) return;
+
+    contentArea.innerHTML = "<h2 class=\"empty-state\">" + escapeHtml(message) + "</h2>";
 }
 
 // ===============================
-// DROPDOWN
+// UI - DROPDOWN
 // ===============================
 function renderCourseSelect() {
     const select = document.getElementById("courseSelect");
+    if (!select) return;
+
     const courses = getCoursesArray(dataGlobal);
 
-    if (!select) {
-        console.error("Elementet #courseSelect hittades inte.");
-        return;
-    }
-
     if (!courses.length) {
-        select.innerHTML = `<option value="">Inga kurser hittades</option>`;
+        select.innerHTML = "<option value=\"\">Inga kurser hittades</option>";
         return;
     }
 
-    select.innerHTML = courses
-        .map((course, index) => {
-            const courseId = getCourseId(course, index);
-            const courseTitle = getCourseTitle(course, index);
+    let html = "";
 
-            return `<option value="${escapeAttribute(courseId)}">${escapeHtml(courseTitle)}</option>`;
-        })
-        .join("");
+    for (let i = 0; i < courses.length; i++) {
+        const course = courses[i];
+        const courseId = getCourseId(course, i);
+        const courseTitle = getCourseTitle(course, i);
+
+        html += "<option value=\"" + escapeHtml(courseId) + "\">" + escapeHtml(courseTitle) + "</option>";
+    }
+
+    select.innerHTML = html;
 
     select.onchange = function () {
         loadCourse(this.value);
@@ -189,7 +188,7 @@ function renderCourseSelect() {
 }
 
 // ===============================
-// LADDA KURS
+// UI - LADDA KURS
 // ===============================
 function loadCourse(requestedId) {
     const courses = getCoursesArray(dataGlobal);
@@ -201,42 +200,45 @@ function loadCourse(requestedId) {
         return;
     }
 
-    const normalizedCourses = courses.map((course, index) => ({
-        raw: course,
-        id: String(getCourseId(course, index)),
-        title: getCourseTitle(course, index)
-    }));
+    let selectedCourse = null;
+    let selectedCourseId = null;
 
-    let selected = normalizedCourses.find(c => c.id === String(requestedId));
+    for (let i = 0; i < courses.length; i++) {
+        const course = courses[i];
+        const courseId = getCourseId(course, i);
 
-    if (!selected) {
-        selected = normalizedCourses[0];
+        if (String(courseId) === String(requestedId)) {
+            selectedCourse = course;
+            selectedCourseId = courseId;
+            break;
+        }
     }
 
-    currentCourse = selected.raw;
+    if (!selectedCourse) {
+        selectedCourse = courses[0];
+        selectedCourseId = getCourseId(courses[0], 0);
+    }
+
+    currentCourse = selectedCourse;
     currentModuleIndex = 0;
 
     const select = document.getElementById("courseSelect");
     if (select) {
-        select.value = selected.id;
+        select.value = selectedCourseId;
     }
 
-    setCourseIdInUrl(selected.id);
+    setCourseIdInUrl(selectedCourseId);
 
     renderModules();
     renderModule();
 }
 
 // ===============================
-// MODULLISTA
+// UI - MODULLISTA
 // ===============================
 function renderModules() {
     const list = document.getElementById("moduleList");
-
-    if (!list) {
-        console.error("Elementet #moduleList hittades inte.");
-        return;
-    }
+    if (!list) return;
 
     if (!currentCourse) {
         list.innerHTML = "";
@@ -246,27 +248,29 @@ function renderModules() {
     const modules = getModulesArray(currentCourse);
 
     if (!modules.length) {
-        list.innerHTML = `<div class="muted-box">Inga moduler hittades för vald kurs.</div>`;
+        list.innerHTML = "<div class=\"muted-box\">Inga moduler hittades för vald kurs.</div>";
         return;
     }
 
-    list.innerHTML = modules
-        .map((module, index) => {
-            const title = getModuleTitle(module, index);
-            const statusText = "Modul ej klar • Quiz: Ej godkänd";
+    let html = "";
 
-            return `
-                <div class="module-item ${index === currentModuleIndex ? "active" : ""}" onclick="selectModule(${index})">
-                    <div class="module-item-title">${index + 1}. ${escapeHtml(title)}</div>
-                    <div class="module-item-status">${statusText}</div>
-                </div>
-            `;
-        })
-        .join("");
+    for (let i = 0; i < modules.length; i++) {
+        const module = modules[i];
+        const title = getModuleTitle(module, i);
+        const activeClass = i === currentModuleIndex ? " active" : "";
+
+        html += ""
+            + "<div class=\"module-item" + activeClass + "\" onclick=\"selectModule(" + i + ")\">"
+            + "  <div class=\"module-item-title\">" + (i + 1) + ". " + escapeHtml(title) + "</div>"
+            + "  <div class=\"module-item-status\">Modul ej klar • Quiz: Ej godkänd</div>"
+            + "</div>";
+    }
+
+    list.innerHTML = html;
 }
 
 // ===============================
-// VÄLJ MODUL
+// UI - VÄLJ MODUL
 // ===============================
 function selectModule(index) {
     currentModuleIndex = index;
@@ -275,36 +279,18 @@ function selectModule(index) {
 }
 
 // ===============================
-// TOMT INNEHÅLL
-// ===============================
-function renderEmptyContent(message) {
-    const contentArea = document.getElementById("contentArea");
-
-    if (!contentArea) {
-        console.error("Elementet #contentArea hittades inte.");
-        return;
-    }
-
-    contentArea.innerHTML = `<h2 class="empty-state">${escapeHtml(message)}</h2>`;
-}
-
-// ===============================
-// RENDERA MODUL
+// UI - MODULINNEHÅLL
 // ===============================
 function renderModule() {
     const contentArea = document.getElementById("contentArea");
-
-    if (!contentArea) {
-        console.error("Elementet #contentArea hittades inte.");
-        return;
-    }
+    if (!contentArea) return;
 
     if (!currentCourse) {
         renderEmptyContent("Ingen kurs vald.");
         return;
     }
 
-    const courseTitle = getCourseTitle(currentCourse);
+    const courseTitle = getCourseTitle(currentCourse, 0);
     const courseDescription = getCourseDescription(currentCourse);
     const modules = getModulesArray(currentCourse);
 
@@ -325,45 +311,47 @@ function renderModule() {
     const rawVideo = getModuleVideo(module);
     const videoPath = resolveVideoPath(rawVideo);
 
-    contentArea.innerHTML = `
-        <div class="content-header">
-            <h2 class="content-title">${escapeHtml(courseTitle)}</h2>
-            ${courseDescription ? `<p class="section-text">${escapeHtml(courseDescription)}</p>` : ""}
-        </div>
+    let html = "";
 
-        <h3>Modul ${currentModuleIndex + 1} – ${escapeHtml(moduleTitle)}</h3>
+    html += "<div class=\"content-header\">";
+    html += "  <h2 class=\"content-title\">" + escapeHtml(courseTitle) + "</h2>";
 
-        <div class="content-text">
-            ${moduleText ? `<p>${escapeHtml(moduleText)}</p>` : `<p>Ingen modultext angiven.</p>`}
-        </div>
+    if (courseDescription) {
+        html += "  <p class=\"section-text\">" + escapeHtml(courseDescription) + "</p>";
+    }
 
-        ${
-            videoPath
-                ? `
-                <div class="video-wrap">
-                    <h3>Video</h3>
-                    <video controls preload="metadata">
-                        <source src="${escapeAttribute(videoPath)}" type="video/mp4">
-                        Din webbläsare stödjer inte video.
-                    </video>
-                </div>
-                `
-                : `
-                <div class="muted-box">
-                    Ingen video angiven för denna modul.
-                </div>
-                `
-        }
+    html += "</div>";
 
-        <div class="nav-buttons">
-            <button class="btn" onclick="prevModule()">Föregående modul</button>
-            <button class="btn primary" onclick="nextModule()">Nästa modul</button>
-        </div>
-    `;
+    html += "<h3>Modul " + (currentModuleIndex + 1) + " – " + escapeHtml(moduleTitle) + "</h3>";
+
+    if (moduleText) {
+        html += "<div class=\"content-text\"><p>" + escapeHtml(moduleText) + "</p></div>";
+    } else {
+        html += "<div class=\"content-text\"><p>Ingen modultext angiven.</p></div>";
+    }
+
+    if (videoPath) {
+        html += "<div class=\"video-wrap\">";
+        html += "  <h3>Video</h3>";
+        html += "  <video controls preload=\"metadata\">";
+        html += "      <source src=\"" + escapeHtml(videoPath) + "\" type=\"video/mp4\">";
+        html += "      Din webbläsare stödjer inte video.";
+        html += "  </video>";
+        html += "</div>";
+    } else {
+        html += "<div class=\"muted-box\">Ingen video angiven för denna modul.</div>";
+    }
+
+    html += "<div class=\"nav-buttons\">";
+    html += "  <button class=\"btn\" onclick=\"prevModule()\">Föregående modul</button>";
+    html += "  <button class=\"btn primary\" onclick=\"nextModule()\">Nästa modul</button>";
+    html += "</div>";
+
+    contentArea.innerHTML = html;
 }
 
 // ===============================
-// NAVIGATION
+// UI - NAVIGATION
 // ===============================
 function prevModule() {
     const modules = currentCourse ? getModulesArray(currentCourse) : [];
@@ -416,3 +404,4 @@ async function init() {
 }
 
 init();
+``
