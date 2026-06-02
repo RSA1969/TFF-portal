@@ -2,20 +2,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const container = document.getElementById("kurser-container");
 
-    // ✅ HÄMTAR JSON (inte SharePoint!)
+    // ✅ TEST – visar om JS körs
+    console.log("JS laddad");
+
     fetch("assets/data/kurser-data.json")
         .then(response => {
+
+            console.log("Svar från server:", response);
+
             if (!response.ok) {
-                throw new Error("Kunde inte läsa JSON");
+                throw new Error("Hittar inte JSON-filen");
             }
+
             return response.json();
         })
         .then(data => {
+
+            console.log("JSON data:", data);
+
             renderKurser(data.kurser);
         })
         .catch(error => {
-            console.error(error);
-            container.innerHTML = "<p>Fel vid laddning av kurser</p>";
+
+            console.error("FEL:", error);
+
+            container.innerHTML = `
+                <p>Fel vid laddning av kurser</p>
+                <p>${error.message}</p>
+            `;
         });
 
     function renderKurser(kurser) {
@@ -46,4 +60,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 });
-``
