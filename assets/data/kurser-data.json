@@ -26,3 +26,47 @@
         { "id": "m1", "titel": "Vad är Teams", "videoIndex": 0 },
         { "id": "m2", "titel": "Chat och kanaler", "videoIndex": 1 },
         { "id": "m3", "titel": "Möten", "videoIndex": 2 },
+        { "id": "m4", "titel": "Filer", "videoIndex": 3 },
+        { "id": "m5", "titel": "Sammanfattning", "videoIndex": 0 }
+      ],
+      "quiz": [
+        {
+          "fråga": "Vad används Teams till?",
+          "alternativ": ["Ekonomi","Kommunikation","Backup","HR"],
+          "rättSvar": 1
+        },
+        {
+          "fråga": "Vad är en kanal?",
+          "alternativ": ["Diskussion","Server","Fil","Användare"],
+          "rättSvar": 0
+        }
+      ]
+    },
+
+    {
+      "id": "kurs2",
+      "titel": "Kurs 2",
+      "beskrivning": "Beskrivning kurs 2",
+      "videor": [
+        { "namn": "Modul 1", "url": "VIDEO_LÄNK_1" },
+        { "namn": "Modul 2", "url": "VIDEO_LÄNK_2" },
+        { "namn": "Modul 3", "url": "VIDEO_LÄNK_3" },
+        { "namn": "Modul 4", "url": "VIDEO_LÄNK_4" }
+      ],
+      "moduler": [
+        { "id": "m1", "titel": "Modul 1", "videoIndex": 0 },
+        { "id": "m2", "titel": "Modul 2", "videoIndex": 1 },
+        { "id": "m3", "titel": "Modul 3", "videoIndex": 2 },
+        { "id": "m4", "titel": "Modul 4", "videoIndex": 3 },
+        { "id": "m5", "titel": "Modul 5", "videoIndex": 0 }
+      ],
+      "quiz": [
+        { "fråga": "Fråga 1", "alternativ": ["A","B","C","D"], "rättSvar": 2 },
+        { "fråga": "Fråga 2", "alternativ": ["A","B","C","D"], "rättSvar": 1 }
+      ]
+    }
+
+    /* Duplicera samma struktur upp till kurs15 */
+  ]
+}
+``
