@@ -1,33 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>Kurser</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TFF – Kurskatalog</title>
+
+<link rel="stylesheet" href="assets/css/styles.css" />
 </head>
+
 <body>
 
-<h1>Kurser</h1>
-<div id="lista"></div>
+<header class="topbar">
+  <div class="container topbar__row">
 
-<script>
-fetch("assets/data/kurser-data.json")
-.then(r => r.json())
-.then(data => {
-    const lista = document.getElementById("lista");
+    <div class="brand">
+      <div class="brand__title">TFF – Kurskatalog</div>
+      <div class="brand__sub">Pastellfärg per kurs • Filter och sök</div>
+    </div>
 
-    data.kurser.forEach(kurs => {
-        const div = document.createElement("div");
+    <div class="right">
+      <input id="q" type="search" placeholder="Sök kurs…" />
+      <button class="btn btn--primary" id="btnSearch">Sök</button>
+      <button class="btn btn--ghost" onclick="location.href='index.html'">Start</button>
+    </div>
 
-        div.innerHTML = `
-            <h3>${kurs.titel}</h3>
-            <p>${kurs.beskrivning}</p>
-            <a href="kurs_dokumentation.html?id=${kurs.id}">Öppna kurs</a>
-        `;
+  </div>
+</header>
 
-        lista.appendChild(div);
-    });
-});
-</script>
+<main class="container">
+
+  <section class="panel">
+
+    <div class="panel__header">
+      <h2>Kurser</h2>
+      <div class="rightnote">Öppna en kurs</div>
+    </div>
+
+    <!-- ✅ DENNA ÄR KRITISK -->
+    <div class="grid grid--cards" id="courseGrid"></div>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <small>TFF – Portal</small>
+  </div>
+</footer>
+
+<script src="assets/js/kurser-app.js"></script>
 
 </body>
 </html>
