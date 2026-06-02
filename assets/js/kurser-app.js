@@ -2,29 +2,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const container = document.getElementById("kurser-container");
 
-    // ✅ TEST – visar om JS körs
-    console.log("JS laddad");
+    // Debug – visar att JS körs
+    console.log("✅ kurser-app.js laddad");
 
+    // ✅ Hämta JSON lokalt (GitHub kompatibelt)
     fetch("assets/data/kurser-data.json")
         .then(response => {
 
             console.log("Svar från server:", response);
 
             if (!response.ok) {
-                throw new Error("Hittar inte JSON-filen");
+                throw new Error("JSON-filen hittades inte");
             }
 
             return response.json();
         })
         .then(data => {
 
-            console.log("JSON data:", data);
+            console.log("✅ JSON laddad:", data);
 
-            renderKurser(data.kurser);
+            // Säker fallback
+            const kurser = data.kurser || [];
+
+            renderKurser(kurser);
         })
         .catch(error => {
 
-            console.error("FEL:", error);
+            console.error("❌ FEL:", error);
 
             container.innerHTML = `
                 <p>Fel vid laddning av kurser</p>
@@ -32,11 +36,24 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         });
 
+
+    // ✅ Rendera kurskort
     function renderKurser(kurser) {
 
         container.innerHTML = "";
 
-        const colors = ["#8cc9bd", "#a9d0ea", "#e8c09f"];
+        if (!kurser || kurser.length === 0) {
+            container.innerHTML = "<p>Inga kurser hittades</p>";
+            return;
+        }
+
+        const colors = [
+            "#8cc9bd",
+            "#a9d0ea",
+            "#e8c09f",
+            "#d6c9f4",
+            "#f2df9c"
+        ];
 
         kurser.forEach((kurs, index) => {
 
@@ -45,18 +62,4 @@ document.addEventListener("DOMContentLoaded", () => {
             card.style.background = colors[index % colors.length];
 
             card.innerHTML = `
-                <h2>${kurs.titel}</h2>
-                <p>${kurs.beskrivning}</p>
-                <button>Öppna kurs</button>
-            `;
-
-            card.querySelector("button").addEventListener("click", () => {
-                localStorage.setItem("selectedKurs", JSON.stringify(kurs));
-                window.location.href = "kurs_dokumentation.html";
-            });
-
-            container.appendChild(card);
-        });
-    }
-
-});
+                <h2>${kurs.titel || "Ingen titel"}</h2>
