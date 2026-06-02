@@ -2,12 +2,44 @@
   "courses": [
     {
       "courseId": 1,
-      "title": "Testkurs",
-      "purpose": "Testar systemet",
+      "title": "Kurs 1 – MICROSOFT TEAMS",
+      "purpose": "Rätt användning av Teams i vardagsarbetet.",
       "color": "#82c7b8",
+      "active": "Ja"
+    },
+    {
+      "courseId": 2,
+      "title": "Kurs 2 – TRANSKRIBERING",
+      "purpose": "Effektiv och spårbar omvandling av tal till text.",
+      "color": "#a7d8f5",
       "active": "Ja"
     }
   ],
-  "modules": [],
-  "questions": []
+
+  "modules": [
+    {
+      "moduleId": 1,
+      "courseId": 1,
+      "title": "Modul 1 – Vad är Teams",
+      "video": "assets/video/kurs1_modul1.mp4"
+    },
+    {
+      "moduleId": 2,
+      "courseId": 1,
+      "title": "Modul 2 – Chatt och möten",
+      "video": "assets/video/kurs1_modul2.mp4"
+    }
+  ],
+
+  "questions": [
+    {
+      "moduleId": 1,
+      "question": "Vad är Teams?",
+      "option1": "Mail",
+      "option2": "Plattform",
+      "option3": "Chatt",
+      "option4": "Dokument",
+      "correct": 2
+    }
+  ]
 }
