@@ -1,83 +1,42 @@
 const grid = document.getElementById("courseGrid");
-const input = document.getElementById("q");
-const btnSearch = document.getElementById("btnSearch");
 
-let courses = [];
-
-// Pastellfärger (matchar din design)
-const colors = [
-    "#D6F5FF",
-    "#E8E1FF",
-    "#FFF1CC",
-    "#E1F7E7",
-    "#FFDDE6",
-    "#EEE1FF",
-    "#FFEBE1",
-    "#E9F5FF",
-    "#F5E6FF",
-    "#FFF5E1",
-    "#E1FFF5",
-    "#FDE2FF",
-    "#E8FFD6",
-    "#FFE6CC",
-    "#D6EFFF"
-];
-
-// Hämta data
 fetch("assets/data/kurser-data.json")
-    .then(r => r.json())
-    .then(data => {
-        courses = data.kurser;
-        render(courses);
-    });
-
-// Rendera kort (DETTA ÄR FIXEN)
-function render(list) {
+  .then(res => res.json())
+  .then(data => {
 
     grid.innerHTML = "";
 
-    list.forEach((kurs, index) => {
+    const colors = [
+      "#D6F5FF", "#E8E1FF", "#FFF1CC", "#E1F7E7",
+      "#FFDDE6", "#EEE1FF", "#FFEBE1", "#E9F5FF",
+      "#F5E6FF", "#FFF5E1", "#E1FFF5", "#FDE2FF",
+      "#E8FFD6", "#FFE6CC", "#D6EFFF"
+    ];
 
-        const color = colors[index % colors.length];
+    data.kurser.forEach((kurs, index) => {
 
-        const card = document.createElement("a");
+      const a = document.createElement("a");
 
-        // ✅ MÅSTE vara card
-        card.className = "card";
+      // ✅ DETTA ÄR KRITISKT
+      a.className = "card";
 
-        // ✅ rätt navigation (din portal använder utbildning.html)
-        card.href = `utbildning.html?course=${kurs.id}`;
+      // ✅ rätt navigation för din portal
+      a.href = `utbildning.html?course=${kurs.id}`;
 
-        // ✅ sätter färg via CSS variabel
-        card.style.setProperty("--course-color", color);
+      // ✅ färg per kurs
+      a.style.setProperty("--course-color", colors[index % colors.length]);
 
-        card.innerHTML = `
-            <h3>${kurs.titel}</h3>
-            <p>${kurs.beskrivning}</p>
-            <span class="badge">5 moduler</span>
-        `;
+      // ✅ detta skapar kortet (inte lista)
+      a.innerHTML = `
+        <h3>${kurs.titel}</h3>
+        <p>${kurs.beskrivning}</p>
+        <span class="badge">5 moduler</span>
+      `;
 
-        grid.appendChild(card);
+      grid.appendChild(a);
     });
-}
 
-// Sök
-function doSearch() {
-
-    const q = input.value.toLowerCase();
-
-    const filtered = courses.filter(k =>
-        k.titel.toLowerCase().includes(q) ||
-        k.beskrivning.toLowerCase().includes(q)
-    );
-
-    render(filtered);
-}
-
-btnSearch.onclick = doSearch;
-
-input.addEventListener("keyup", e => {
-    if (e.key === "Enter") {
-        doSearch();
-    }
-});
+  })
+  .catch(err => {
+    console.error("Fel JSON:", err);
+  });
