@@ -13,6 +13,13 @@
       "purpose": "Effektiv och spårbar omvandling av tal till text.",
       "color": "#a7d8f5",
       "active": "Ja"
+    },
+    {
+      "courseId": 3,
+      "title": "Kurs 3 – DOKUMENTATION",
+      "purpose": "Strukturerad dokumentation enligt regelverk.",
+      "color": "#f3c9a9",
+      "active": "Ja"
     }
   ],
 
@@ -28,6 +35,12 @@
       "courseId": 1,
       "title": "Modul 2 – Chatt och möten",
       "video": "assets/video/kurs1_modul2.mp4"
+    },
+    {
+      "moduleId": 3,
+      "courseId": 2,
+      "title": "Modul 1 – Transkribering",
+      "video": "assets/video/kurs2_modul1.mp4"
     }
   ],
 
