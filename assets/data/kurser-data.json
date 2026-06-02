@@ -7,83 +7,83 @@
 
       "videor": [
         {
-          "namn": "Introduktion Teams",
-          "url": "KLISTER_IN_DIN_SHAREPOINT_LÄNK_1"
+          "namn": "Modul 1 – Vad är Teams",
+          "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%201%20Vad%20%C3%A4r%20Teams%20(och%20vad%20%C3%A4r%20det%20inte).mp4?download=1"
         },
         {
-          "namn": "Att skapa team och kanaler",
-          "url": "KLISTER_IN_DIN_SHAREPOINT_LÄNK_2"
+          "namn": "Modul 2 – Chat, kanal och möte",
+          "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%202%20Chat,%20kanal%20och%20m%C3%B6te%20%E2%80%93%20r%C3%A4tt%20val.mp4?download=1"
         },
         {
-          "namn": "Dokumenthantering i Teams",
-          "url": "KLISTER_IN_DIN_SHAREPOINT_LÄNK_3"
+          "namn": "Modul 3 – Möten i Teams",
+          "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%203%20M%C3%B6ten%20i%20Teams%20%E2%80%93%20roller%20%26%20praxis.mp4?download=1"
         },
         {
-          "namn": "Möten och chatt",
-          "url": "KLISTER_IN_DIN_SHAREPOINT_LÄNK_4"
+          "namn": "Modul 4 – Filer i Teams",
+          "url": "https://halmstad.sharepoint.com/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%204%20Filer%20i%20Teams%20(SharePoint%20i%20bakgrunden).mp4?download=1"
         }
       ],
 
       "moduler": [
         {
           "id": "m1",
-          "titel": "Introduktion",
-          "text": "Grundläggande förståelse för Teams.",
+          "titel": "Vad är Teams",
+          "text": "Introduktion till Microsoft Teams",
           "videoIndex": 0
         },
         {
           "id": "m2",
-          "titel": "Struktur",
-          "text": "Hur team och kanaler används.",
+          "titel": "Chat, kanal och möte",
+          "text": "Hur du väljer rätt arbetssätt",
           "videoIndex": 1
         },
         {
           "id": "m3",
-          "titel": "Dokument",
-          "text": "Samverkan i filer och dokument.",
+          "titel": "Möten i Teams",
+          "text": "Roller och arbetssätt",
           "videoIndex": 2
         },
         {
           "id": "m4",
-          "titel": "Kommunikation",
-          "text": "Möten och chatt i Teams.",
+          "titel": "Filer i Teams",
+          "text": "Dokumenthantering via SharePoint",
           "videoIndex": 3
         },
         {
           "id": "m5",
           "titel": "Sammanfattning",
-          "text": "Sammanfattning och repetition.",
+          "text": "Repetition av kursens innehåll",
           "videoIndex": 0
         }
       ],
 
       "quiz": [
         {
-          "fråga": "Vad används Teams främst till?",
+          "fråga": "Vad är Teams främst till för?",
           "alternativ": [
-            "Dokumentlagring",
-            "Samverkan och kommunikation",
             "Ekonomi",
-            "HR-system"
+            "Kommunikation och samarbete",
+            "Backup",
+            "HR"
           ],
           "rättSvar": 1
         },
         {
           "fråga": "Vad är en kanal?",
           "alternativ": [
-            "En användare",
-            "En plats för diskussion i ett team",
+            "En plats för diskussion",
             "En fil",
-            "En server"
+            "En server",
+            "En användare"
           ],
-          "rättSvar": 1
+          "rättSvar": 0
         },
         {
-          "fråga": "Var sparas filer i Teams?",
+          "fråga": "Var lagras filer i Teams?",
           "alternativ": [
-            "Lokalt",
-            "SharePoint",
             "USB",
+            "SharePoint",
+            "Lokalt",
             "E-post"
           ],
           "rättSvar": 1
@@ -91,22 +91,22 @@
         {
           "fråga": "Vad används möten till?",
           "alternativ": [
-            "Chat",
-            "Video och samarbete",
             "Backup",
-            "Loggning"
+            "Video och samarbete",
+            "Loggning",
+            "Export"
           ],
           "rättSvar": 1
         },
         {
-          "fråga": "Kan man dela filer i Teams?",
+          "fråga": "Kan du dela filer i Teams?",
           "alternativ": [
-            "Ja",
             "Nej",
+            "Ja",
             "Endast admin",
-            "Endast chefer"
+            "Endast chef"
           ],
-          "rättSvar": 0
+          "rättSvar": 1
         }
       ]
     }
