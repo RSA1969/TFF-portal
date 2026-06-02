@@ -2,21 +2,32 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<title>Utbildningar</title>
-
-<style>
-body { font-family: Arial; margin: 40px; }
-.kurs-card { padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-</style>
-
+<title>Kurser</title>
 </head>
 <body>
 
-<h1>Utbildningar</h1>
+<h1>Kurser</h1>
+<div id="lista"></div>
 
-<div id="kurser-container"></div>
+<script>
+fetch("assets/data/kurser-data.json")
+.then(r => r.json())
+.then(data => {
+    const lista = document.getElementById("lista");
 
-<script src="assets/js/kurser-app.js"></script>
+    data.kurser.forEach(kurs => {
+        const div = document.createElement("div");
+
+        div.innerHTML = `
+            <h3>${kurs.titel}</h3>
+            <p>${kurs.beskrivning}</p>
+            <a href="kurs_dokumentation.html?id=${kurs.id}">Öppna kurs</a>
+        `;
+
+        lista.appendChild(div);
+    });
+});
+</script>
 
 </body>
 </html>
