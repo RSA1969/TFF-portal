@@ -4,104 +4,12 @@
       "id": "kurs1",
       "titel": "Kurs 1 – MICROSOFT TEAMS",
       "beskrivning": "Rätt användning av Teams i vardagsarbetet",
-      "color": "#82c7b8",
-      "image": "assets/img/tile-mandatory.jpg",
       "moduler": [
-        {
-          "id": "k1m1",
-          "titel": "Modul 1 – Vad är Teams (och vad är det inte)",
-          "video": "video/kurs1_modul1.mp4",
-          "quiz": [
-            {
-              "fråga": "Vad är huvudsyftet med modulen?",
-              "alternativ": [
-                "Att lagra allt lokalt",
-                "Rätt användning av Teams",
-                "Att ersätta dokumentation",
-                "Att undvika arbetssätt"
-              ],
-              "rätt": 1
-            },
-            {
-              "fråga": "Vilket arbetssätt är bäst?",
-              "alternativ": [
-                "Individuellt arbete",
-                "Ingen dokumentation",
-                "Gemensam struktur",
-                "Privata filer"
-              ],
-              "rätt": 2
-            }
-          ]
-        },
-        {
-          "id": "k1m2",
-          "titel": "Modul 2 – Chatt, kanal och möte",
-          "video": "video/kurs1_modul2.mp4",
-          "quiz": [
-            {
-              "fråga": "Vad är viktigt?",
-              "alternativ": [
-                "Otydlighet",
-                "Tydlighet",
-                "Slump",
-                "Ingen ansvar"
-              ],
-              "rätt": 1
-            }
-          ]
-        },
-        {
-          "id": "k1m3",
-          "titel": "Modul 3 – Möten i Teams",
-          "video": "video/kurs1_modul3.mp4",
-          "quiz": [
-            {
-              "fråga": "Vad är viktigt i möten?",
-              "alternativ": [
-                "Tydlighet",
-                "Oordning",
-                "Slump",
-                "Ingen struktur"
-              ],
-              "rätt": 0
-            }
-          ]
-        },
-        {
-          "id": "k1m4",
-          "titel": "Modul 4 – Filer i Teams",
-          "video": "video/kurs1_modul4.mp4",
-          "quiz": [
-            {
-              "fråga": "Vad ska undvikas?",
-              "alternativ": [
-                "Otydlig info",
-                "Struktur",
-                "Ordning",
-                "Spårbarhet"
-              ],
-              "rätt": 0
-            }
-          ]
-        },
-        {
-          "id": "k1m5",
-          "titel": "Modul 5 – Vanliga misstag",
-          "video": "video/kurs1_modul5.mp4",
-          "quiz": [
-            {
-              "fråga": "Vad ger kvalitet?",
-              "alternativ": [
-                "Oordning",
-                "Slump",
-                "Struktur",
-                "Ingen kontroll"
-              ],
-              "rätt": 2
-            }
-          ]
-        }
+        {"id":"k1m1","titel":"Modul 1","video":"video/kurs1_modul1.mp4","quiz":[]},
+        {"id":"k1m2","titel":"Modul 2","video":"video/kurs1_modul2.mp4","quiz":[]},
+        {"id":"k1m3","titel":"Modul 3","video":"video/kurs1_modul3.mp4","quiz":[]},
+        {"id":"k1m4","titel":"Modul 4","video":"video/kurs1_modul4.mp4","quiz":[]},
+        {"id":"k1m5","titel":"Modul 5","video":"video/kurs1_modul5.mp4","quiz":[]}
       ]
     },
 
@@ -109,26 +17,12 @@
       "id": "kurs2",
       "titel": "Kurs 2 – TRANSKRIBERING",
       "beskrivning": "Effektiv och spårbar omvandling av tal till text",
-      "color": "#a7d8f5",
-      "image": "assets/img/tile-status.jpg",
       "moduler": [
-        {
-          "id": "k2m1",
-          "titel": "Modul 1 – Grundläggande transkribering",
-          "video": "video/kurs2_modul1.mp4",
-          "quiz": [
-            {
-              "fråga": "Syftet?",
-              "alternativ": [
-                "Text från tal",
-                "Undvika struktur",
-                "Lagra lokalt",
-                "Mail ersättning"
-              ],
-              "rätt": 0
-            }
-          ]
-        }
+        {"id":"k2m1","titel":"Modul 1","video":"video/kurs2_modul1.mp4","quiz":[]},
+        {"id":"k2m2","titel":"Modul 2","video":"video/kurs2_modul2.mp4","quiz":[]},
+        {"id":"k2m3","titel":"Modul 3","video":"video/kurs2_modul3.mp4","quiz":[]},
+        {"id":"k2m4","titel":"Modul 4","video":"video/kurs2_modul4.mp4","quiz":[]},
+        {"id":"k2m5","titel":"Modul 5","video":"video/kurs2_modul5.mp4","quiz":[]}
       ]
     },
 
@@ -136,105 +30,41 @@
       "id": "kurs3",
       "titel": "Kurs 3 – DOKUMENTATION",
       "beskrivning": "Strukturerad dokumentation enligt regelverk",
-      "color": "#f3c9a9",
-      "image": "assets/img/tile-guides.jpg",
-      "moduler": []
+      "moduler": [
+        {"id":"k3m1","titel":"Modul 1","video":"video/kurs3_modul1.mp4","quiz":[]},
+        {"id":"k3m2","titel":"Modul 2","video":"video/kurs3_modul2.mp4","quiz":[]},
+        {"id":"k3m3","titel":"Modul 3","video":"video/kurs3_modul3.mp4","quiz":[]},
+        {"id":"k3m4","titel":"Modul 4","video":"video/kurs3_modul4.mp4","quiz":[]},
+        {"id":"k3m5","titel":"Modul 5","video":"video/kurs3_modul5.mp4","quiz":[]}
+      ]
     },
+
     {
       "id": "kurs4",
       "titel": "Kurs 4 – AI & COPILOT",
       "beskrivning": "Grunderna i AI och Copilot i arbetet",
-      "color": "#9fd8cf",
-      "image": "assets/img/tile-chief.jpg",
-      "moduler": []
+      "moduler": [
+        {"id":"k4m1","titel":"Modul 1","video":"video/kurs4_modul1.mp4","quiz":[]},
+        {"id":"k4m2","titel":"Modul 2","video":"video/kurs4_modul2.mp4","quiz":[]},
+        {"id":"k4m3","titel":"Modul 3","video":"video/kurs4_modul3.mp4","quiz":[]},
+        {"id":"k4m4","titel":"Modul 4","video":"video/kurs4_modul4.mp4","quiz":[]},
+        {"id":"k4m5","titel":"Modul 5","video":"video/kurs4_modul5.mp4","quiz":[]}
+      ]
     },
+
     {
       "id": "kurs5",
       "titel": "Kurs 5 – PROMPTNING",
       "beskrivning": "Skriva effektiva prompts i Microsoft 365",
-      "color": "#eab3b3",
-      "image": "assets/img/tile-edu.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs6",
-      "titel": "Kurs 6 – SKAPA OCH SPARA DOKUMENT",
-      "beskrivning": "Korrekt dokumenthantering",
-      "color": "#c9b8e4",
-      "image": "assets/img/tile-hrkollegan.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs7",
-      "titel": "Kurs 7 – TEAMS & SHAREPOINT",
-      "beskrivning": "Struktur och behörigheter",
-      "color": "#f3b6c6",
-      "image": "assets/img/tile-atlas.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs8",
-      "titel": "Kurs 8 – GDPR",
-      "beskrivning": "Personuppgiftshantering",
-      "color": "#f4c2c2",
-      "image": "assets/img/tile-chief.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs9",
-      "titel": "Kurs 9 – RÄTT VERKTYG",
-      "beskrivning": "Välja rätt verktyg",
-      "color": "#d9c1e8",
-      "image": "assets/img/tile-guides.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs10",
-      "titel": "Kurs 10 – MÖTESKULTUR",
-      "beskrivning": "Effektiva möten",
-      "color": "#f6c09a",
-      "image": "assets/img/tile-status.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs11",
-      "titel": "Kurs 11 – FRÅN CHATT TILL STRUKTUR",
-      "beskrivning": "Skapa struktur",
-      "color": "#a6dcd4",
-      "image": "assets/img/tile-mandatory.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs12",
-      "titel": "Kurs 12 – DIARIEFÖRING",
-      "beskrivning": "Allmänna handlingar",
-      "color": "#c9d9a6",
-      "image": "assets/img/tile-edu.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs13",
-      "titel": "Kurs 13 – GOVERNANCE",
-      "beskrivning": "Styrning i M365",
-      "color": "#d4c6f4",
-      "image": "assets/img/tile-atlas.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs14",
-      "titel": "Kurs 14 – LIVSCYKEL",
-      "beskrivning": "Informationslivscykel",
-      "color": "#b7e1cd",
-      "image": "assets/img/tile-hrkollegan.jpg",
-      "moduler": []
-    },
-    {
-      "id": "kurs15",
-      "titel": "Kurs 15 – PROCESSARBETE",
-      "beskrivning": "Processbaserat arbetssätt",
-      "color": "#a8ddd3",
-      "image": "assets/img/tile-chief.jpg",
-      "moduler": []
+      "moduler": [
+        {"id":"k5m1","titel":"Modul 1","video":"video/kurs5_modul1.mp4","quiz":[]},
+        {"id":"k5m2","titel":"Modul 2","video":"video/kurs5_modul2.mp4","quiz":[]},
+        {"id":"k5m3","titel":"Modul 3","video":"video/kurs5_modul3.mp4","quiz":[]},
+        {"id":"k5m4","titel":"Modul 4","video":"video/kurs5_modul4.mp4","quiz":[]},
+        {"id":"k5m5","titel":"Modul 5","video":"video/kurs5_modul5.mp4","quiz":[]}
+      ]
     }
+
+    // ✅ fortsätt samma mönster kurs6–kurs15
   ]
 }
