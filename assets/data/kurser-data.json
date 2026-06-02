@@ -5,38 +5,92 @@
       "titel": "Kurs 1 – Microsoft Teams",
       "beskrivning": "Rätt användning av Teams i vardagsarbetet",
       "moduler": [
-        {
-          "id": "m1",
-          "titel": "Introduktion",
-          "video": "https://your-teams-link.mp4",
-          "quiz": [
-            {
-              "fråga": "Vad är Teams?",
-              "alternativ": ["Chattverktyg", "Spel", "Webbläsare", "E-post"],
-              "rätt": 0
-            }
-          ]
-        }
+        {"id":"k1m1","titel":"Modul 1","video":"https://example.mp4","quiz":[{"fråga":"Fråga 1","alternativ":["A","B","C","D"],"rätt":0},{"fråga":"Fråga 2","alternativ":["A","B","C","D"],"rätt":1}]},
+        {"id":"k1m2","titel":"Modul 2","video":"https://example.mp4","quiz":[{"fråga":"Fråga 1","alternativ":["A","B","C","D"],"rätt":2},{"fråga":"Fråga 2","alternativ":["A","B","C","D"],"rätt":3}]},
+        {"id":"k1m3","titel":"Modul 3","video":"https://example.mp4","quiz":[{"fråga":"Fråga 1","alternativ":["A","B","C","D"],"rätt":1},{"fråga":"Fråga 2","alternativ":["A","B","C","D"],"rätt":0}]},
+        {"id":"k1m4","titel":"Modul 4","video":"https://example.mp4","quiz":[{"fråga":"Fråga 1","alternativ":["A","B","C","D"],"rätt":3},{"fråga":"Fråga 2","alternativ":["A","B","C","D"],"rätt":2}]},
+        {"id":"k1m5","titel":"Modul 5","video":"https://example.mp4","quiz":[{"fråga":"Fråga 1","alternativ":["A","B","C","D"],"rätt":0},{"fråga":"Fråga 2","alternativ":["A","B","C","D"],"rätt":2}]}
       ]
     },
+
     {
       "id": "kurs2",
       "titel": "Kurs 2 – Informationssäkerhet",
       "beskrivning": "Grundläggande informationssäkerhet",
-      "moduler": [
-        {
-          "id": "m1",
-          "titel": "Grunder",
-          "video": "https://your-teams-link-2.mp4",
-          "quiz": [
-            {
-              "fråga": "Vad är GDPR?",
-              "alternativ": ["Lag", "Program", "App", "System"],
-              "rätt": 0
-            }
-          ]
-        }
-      ]
-    }
-  ]
-}
+      "moduler": []
+    },
+    {
+      "id": "kurs3",
+      "titel": "Kurs 3 – GDPR",
+      "beskrivning": "Hantering av personuppgifter",
+      "moduler": []
+    },
+    {
+      "id": "kurs4",
+      "titel": "Kurs 4 – NIS2",
+      "beskrivning": "Cyber- och informationssäkerhet",
+      "moduler": []
+    },
+    {
+      "id": "kurs5",
+      "titel": "Kurs 5 – SBA",
+      "beskrivning": "Systematiskt brandskyddsarbete",
+      "moduler": []
+    },
+    {
+      "id": "kurs6",
+      "titel": "Kurs 6 – SAM",
+      "beskrivning": "Systematiskt arbetsmiljöarbete",
+      "moduler": []
+    },
+    {
+      "id": "kurs7",
+      "titel": "Kurs 7 – LSO",
+      "beskrivning": "Skydd mot olyckor",
+      "moduler": []
+    },
+    {
+      "id": "kurs8",
+      "titel": "Kurs 8 – Dokumenthantering",
+      "beskrivning": "Arkivering och dokumentstyrning",
+      "moduler": []
+    },
+    {
+      "id": "kurs9",
+      "titel": "Kurs 9 – Processkartläggning",
+      "beskrivning": "Processarbete i kommunen",
+      "moduler": []
+    },
+    {
+      "id": "kurs10",
+      "titel": "Kurs 10 – Kvalitet",
+      "beskrivning": "Kvalitetssäkring och uppföljning",
+      "moduler": []
+    },
+    {
+      "id": "kurs11",
+      "titel": "Kurs 11 – Riskhantering",
+      "beskrivning": "Identifiera och hantera risker",
+      "moduler": []
+    },
+    {
+      "id": "kurs12",
+      "titel": "Kurs 12 – Första hjälpen",
+      "beskrivning": "Akut omhändertagande",
+      "moduler": []
+    },
+    {
+      "id": "kurs13",
+      "titel": "Kurs 13 – Hjärtstartare",
+      "beskrivning": "Användning av AED",
+      "moduler": []
+    },
+    {
+      "id": "kurs14",
+      "titel": "Kurs 14 – IT-säkerhet",
+      "beskrivning": "IT-säkerhet i praktiken",
+      "moduler": []
+    },
+    {
+      "id": "kurs15",
+     
