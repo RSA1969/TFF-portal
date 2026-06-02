@@ -1,43 +1,70 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <title>Moduler</title>
+<meta charset="UTF-8">
+<title>Utbildningar</title>
+
+<style>
+
+body {
+    font-family: Arial;
+    margin: 0;
+    background: #f5f5f5;
+}
+
+/* TOP */
+h1, h2 {
+    margin: 20px;
+}
+
+/* GRID */
+#courses, #modules, #questions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+
+/* CARDS */
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* BUTTON */
+button {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 6px;
+    background: #0078d4;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #005ea6;
+}
+
+/* VIDEO */
+video {
+    width: 90%;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+</style>
+
 </head>
+
 <body>
 
-<h1>Moduler</h1>
+<div id="courses"></div>
 
-<div id="modules"></div>
-
-<script src="assets/js/kurser-data.js"></script>
-
-<script>
-const courseId = localStorage.getItem("selectedCourse") || "kurs1";
-
-const course = kurserData.find(c => c.id === courseId);
-const container = document.getElementById("modules");
-
-if (!course) {
-  container.innerHTML = "<p>Ingen kurs hittades</p>";
-} else {
-  course.modules.forEach(m => {
-    const div = document.createElement("div");
-
-    div.innerHTML = `
-      <h3>${m.title}</h3>
-      <button onclick="startModule('${m.id}')">Starta</button>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-function startModule(id) {
-  localStorage.setItem("selectedModule", id);
-  window.location.href = "quiz.html";
-}
-</script>
+<script src="kurser-app.js"></script>
 
 </body>
 </html>
