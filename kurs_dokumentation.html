@@ -1,45 +1,46 @@
 <script>
 
-const kurs = JSON.parse(localStorage.getItem("selectedKurs"));
+document.addEventListener("DOMContentLoaded", () => {
 
-console.log("Kurs:", kurs);
+    const kurs = JSON.parse(localStorage.getItem("selectedKurs"));
 
-const titel = document.getElementById("titel");
-const beskrivning = document.getElementById("beskrivning");
-const container = document.getElementById("moduler");
+    console.log("Kurs:", kurs);
 
-// Säkerhet
-if (!kurs) {
-    document.body.innerHTML = "<p>Ingen kurs vald</p>";
-}
+    const titel = document.getElementById("titel");
+    const beskrivning = document.getElementById("beskrivning");
+    const container = document.getElementById("moduler");
 
-// Skriv ut kursinfo
-titel.innerText = kurs.titel;
-beskrivning.innerText = kurs.beskrivning;
+    if (!kurs) {
+        document.body.innerHTML = "<p>Ingen kurs vald</p>";
+        return;
+    }
 
-// ✅ KRITISK FIX
-const moduler = kurs.moduler || [];
+    titel.innerText = kurs.titel;
+    beskrivning.innerText = kurs.beskrivning;
 
-if (moduler.length === 0) {
-    container.innerHTML = "<p>Inga moduler hittades</p>";
-} else {
+    const moduler = kurs.moduler || [];
 
-    moduler.forEach(m => {
+    if (moduler.length === 0) {
+        container.innerHTML = "<p>Inga moduler hittades</p>";
+    } else {
+        moduler.forEach(m => {
 
-        const div = document.createElement("div");
+            const div = document.createElement("div");
 
-        div.innerHTML = `
-            <h3>Modul ${m.modulNummer} – ${m.titel}</h3>
-            <p>${m.innehall}</p>
-            ${
-                m.videoUrl
-                ? `<a href="${m.videoUrl}" target="_blank">Öppna MP4</a>`
-                : `<p>Ingen video</p>`
-            }
-        `;
+            div.innerHTML = `
+                <h3>Modul ${m.modulNummer} – ${m.titel}</h3>
+                <p>${m.innehall}</p>
+                ${
+                    m.videoUrl
+                    ? `<a href="${m.videoUrl}" target="_blank">Öppna MP4</a>`
+                    : `<p>Ingen video</p>`
+                }
+            `;
 
-        container.appendChild(div);
-    });
-}
+            container.appendChild(div);
+        });
+    }
+
+});
 
 </script>
