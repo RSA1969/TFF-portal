@@ -10,17 +10,50 @@
 
 <body>
 
-<h1>TFF – Kurskatalog</h1>
+<header class="topbar">
+  <div class="container topbar__row">
 
-<div>
-    <input id="q" placeholder="Sök kurs..." />
-    <button id="btnSearch">Sök</button>
-</div>
+    <div class="brand">
+      <div class="brand__title">TFF – Kurskatalog</div>
+      <div class="brand__sub">Pastellfärg per kurs • Filter och sök</div>
+    </div>
 
-<!-- 🔥 DENNA RAD ÄR KRITISK -->
-<div id="courseGrid" class="grid grid--cards"></div>
+    <div class="right">
+      <input id="q" type="search" placeholder="Sök kurs…" />
+      <button class="btn btn--primary" id="btnSearch" type="button">Sök</button>
+      <button class="btn btn--ghost" type="button" onclick="location.href='index.html'">
+        Start
+      </button>
+    </div>
 
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="panel">
+
+    <div class="panel__header">
+      <h2>Kurser</h2>
+      <div class="rightnote">Öppna en kurs</div>
+    </div>
+
+    <!-- 🔴 KRITISK RAD – DETTA ÄR DET SOM SAKNAS HOS DIG -->
+    <div id="courseGrid" class="grid grid--cards"></div>
+
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    <small>TFF – Portal</small>
+  </div>
+</footer>
+
+<!-- 🔴 KRITISK – rätt script -->
 <script src="assets/js/kurser-app.js"></script>
 
 </body>
 </html>
+``
