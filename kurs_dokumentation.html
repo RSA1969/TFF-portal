@@ -15,31 +15,27 @@
             const params = new URLSearchParams(window.location.search);
             const kursId = params.get("id");
 
-            console.log("KursId:", kursId);
+            fetch("assets/data/kurser-data.json")
+                .then(response => response.json())
+                .then(data => {
 
-            const kurser = [
-                {
-                    id: "kurs1",
-                    titel: "Kurs 1 – Microsoft Teams",
-                    beskrivning: "Rätt användning av Teams i vardagsarbetet",
-                    moduler: ["Modul 1", "Modul 2", "Modul 3"]
-                }
-            ];
+                    const kurs = data.kurser.find(k => k.id === kursId);
 
-            const kurs = kurser.find(k => k.id === kursId);
+                    if (kurs) {
+                        document.getElementById("kursTitel").innerText = kurs.titel;
+                        document.getElementById("kursBeskrivning").innerText = kurs.beskrivning;
+                    } else {
+                        document.getElementById("kursTitel").innerText = "Kurs hittades inte";
+                    }
 
-            console.log("Kurs:", kurs);
-
-            if (kurs) {
-                document.getElementById("kursTitel").innerText = kurs.titel;
-                document.getElementById("kursBeskrivning").innerText = kurs.beskrivning;
-            } else {
-                document.getElementById("kursTitel").innerText = "Kurs hittades inte";
-            }
+                })
+                .catch(error => {
+                    console.error("Fel:", error);
+                    document.getElementById("kursTitel").innerText = "Fel vid laddning";
+                });
 
         });
     </script>
 
 </body>
 </html>
-``
