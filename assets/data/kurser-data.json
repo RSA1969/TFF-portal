@@ -4,20 +4,38 @@
       "id": "kurs1",
       "titel": "Kurs 1 – Microsoft Teams",
       "beskrivning": "Rätt användning av Teams i vardagsarbetet",
-
-      "videor": [
-        { "url": "LINK1" },
-        { "url": "LINK2" },
-        { "url": "LINK3" },
-        { "url": "LINK4" }
-      ],
-
       "moduler": [
-        { "titel": "Modul 1", "videoIndex": 0 },
-        { "titel": "Modul 2", "videoIndex": 1 },
-        { "titel": "Modul 3", "videoIndex": 2 },
-        { "titel": "Modul 4", "videoIndex": 3 },
-        { "titel": "Modul 5", "videoIndex": 0 }
+        {
+          "id": "m1",
+          "titel": "Introduktion",
+          "video": "https://your-teams-link.mp4",
+          "quiz": [
+            {
+              "fråga": "Vad är Teams?",
+              "alternativ": ["Chattverktyg", "Spel", "Webbläsare", "E-post"],
+              "rätt": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kurs2",
+      "titel": "Kurs 2 – Informationssäkerhet",
+      "beskrivning": "Grundläggande informationssäkerhet",
+      "moduler": [
+        {
+          "id": "m1",
+          "titel": "Grunder",
+          "video": "https://your-teams-link-2.mp4",
+          "quiz": [
+            {
+              "fråga": "Vad är GDPR?",
+              "alternativ": ["Lag", "Program", "App", "System"],
+              "rätt": 0
+            }
+          ]
+        }
       ]
     }
   ]
