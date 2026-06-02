@@ -1,12 +1,10 @@
 let DATA = null;
 const container = document.getElementById("courses");
 
-// ✅ ABSOLUT PATH – detta var ditt fel
-fetch("/TFF-portal/assets/data/kurser-data.json")
+// ✅ KORREKT RAW-LÄNK
+fetch("https://raw.githubusercontent.com/RSA1969/TFF-portal/main/assets/data/kurser-data.json")
 .then(res => {
-    if (!res.ok) {
-        throw new Error("Kan inte läsa JSON");
-    }
+    if (!res.ok) throw new Error("Kan inte läsa JSON");
     return res.json();
 })
 .then(data => {
@@ -15,16 +13,12 @@ fetch("/TFF-portal/assets/data/kurser-data.json")
 })
 .catch(error => {
     container.innerHTML = `
-        <h2>Fel vid laddning</h2>
-        <p>Kontrollera att filen finns här:</p>
-        <b>/assets/data/kurser-data.json</b>
+        <h2 style="color:red">Fel vid laddning</h2>
+        <p>JSON kunde inte läsas</p>
     `;
     console.error(error);
 });
 
-// =========================
-// VISA KURSER
-// =========================
 function renderCourses() {
 
     container.innerHTML = `
@@ -34,13 +28,13 @@ function renderCourses() {
 
     const grid = document.getElementById("courseGrid");
 
-    DATA.courses.forEach(course => {
-        if (course.active === "Ja") {
+    DATA.courses.forEach(c => {
+        if (c.active === "Ja") {
             grid.innerHTML += `
-                <div class="card" style="background:${course.color}">
-                    <h3>${course.title}</h3>
-                    <p>${course.purpose}</p>
-                    <button onclick="openCourse(${course.courseId})">
+                <div class="card" style="background:${c.color}">
+                    <h3>${c.title}</h3>
+                    <p>${c.purpose}</p>
+                    <button onclick="openCourse(${c.courseId})">
                         Öppna kurs
                     </button>
                 </div>
@@ -49,9 +43,6 @@ function renderCourses() {
     });
 }
 
-// =========================
-// MODULER
-// =========================
 function openCourse(courseId) {
 
     const course = DATA.courses.find(c => c.courseId == courseId);
@@ -65,23 +56,20 @@ function openCourse(courseId) {
     const modulesDiv = document.getElementById("modules");
 
     DATA.modules
-    .filter(m => m.courseId == courseId)
-    .forEach(m => {
+        .filter(m => m.courseId == courseId)
+        .forEach(m => {
 
-        modulesDiv.innerHTML += `
-            <div class="card">
-                <h3>${m.title}</h3>
-                <button onclick="openModule(${courseId}, ${m.moduleId})">
-                    Starta modul
-                </button>
-            </div>
-        `;
-    });
+            modulesDiv.innerHTML += `
+                <div class="card">
+                    <h3>${m.title}</h3>
+                    <button onclick="openModule(${courseId}, ${m.moduleId})">
+                        Starta modul
+                    </button>
+                </div>
+            `;
+        });
 }
 
-// =========================
-// MODUL + VIDEO + FRÅGOR
-// =========================
 function openModule(courseId, moduleId) {
 
     const module = DATA.modules.find(m => m.moduleId == moduleId);
@@ -91,25 +79,22 @@ function openModule(courseId, moduleId) {
         <button onclick="openCourse(${courseId})">← Tillbaka</button>
 
         <video width="100%" controls>
-            <source src="${module.video}" type="video/mp4">
+            ${module.video}
         </video>
 
         <div id="questions"></div>
     `;
 
-    const questions = DATA.questions.filter(q => q.moduleId == moduleId);
-
-    renderQuestions(questions);
+    renderQuestions(
+        DATA.questions.filter(q => q.moduleId == moduleId)
+    );
 }
 
-// =========================
-// FRÅGOR
-// =========================
 function renderQuestions(questions) {
 
     const qDiv = document.getElementById("questions");
 
-    questions.forEach((q, index) => {
+    questions.forEach((q, i) => {
 
         let options = [
             {text: q.option1, key: 1},
@@ -122,7 +107,7 @@ function renderQuestions(questions) {
 
         let html = `
             <div class="card">
-                <p>${index + 1}. ${q.question}</p>
+                <p>${i+1}. ${q.question}</p>
         `;
 
         options.forEach(o => {
@@ -139,16 +124,10 @@ function renderQuestions(questions) {
     });
 }
 
-// =========================
-// SVAR
-// =========================
 function checkAnswer(selected, correct, btn) {
 
-    if (selected === correct) {
-        btn.style.backgroundColor = "green";
-    } else {
-        btn.style.backgroundColor = "red";
-    }
+    btn.style.backgroundColor =
+        selected === correct ? "green" : "red";
 
     btn.disabled = true;
 }
