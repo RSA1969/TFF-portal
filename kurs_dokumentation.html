@@ -1,61 +1,72 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <title>Kurs</title>
+<meta charset="UTF-8">
+<title>Kurs</title>
 </head>
 <body>
 
-    <h1 id="kursTitel"></h1>
-    <p id="kursBeskrivning"></p>
+<h1 id="titel"></h1>
 
-    <div id="videoContainer"></div>
+<h2>Moduler</h2>
+<div id="moduler"></div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+<h2>Video</h2>
+<video id="video" controls width="700"></video>
 
-            const params = new URLSearchParams(window.location.search);
-            const kursId = params.get("id");
+<h2>Quiz</h2>
+<div id="quiz"></div>
 
-            fetch("assets/data/kurser-data.json")
-                .then(response => response.json())
-                .then(data => {
+<script>
+const params = new URLSearchParams(window.location.search);
+const kursId = params.get("id");
 
-                    const kurs = data.kurser.find(k => k.id === kursId);
+fetch("assets/data/kurser-data.json")
+.then(r => r.json())
+.then(data => {
 
-                    if (kurs) {
+    const kurs = data.kurser.find(k => k.id === kursId);
 
-                        document.getElementById("kursTitel").innerText = kurs.titel;
-                        document.getElementById("kursBeskrivning").innerText = kurs.beskrivning;
+    document.getElementById("titel").innerText = kurs.titel;
 
-                        const videoContainer = document.getElementById("videoContainer");
-                        videoContainer.innerHTML = "";
+    const modDiv = document.getElementById("moduler");
 
-                        kurs.videor.forEach(video => {
-                            const videoElement = document.createElement("video");
-                            videoElement.controls = true;
-                            videoElement.width = 600;
+    kurs.moduler.forEach((m) => {
+        const btn = document.createElement("button");
+        btn.innerText = m.titel;
 
-                            const source = document.createElement("source");
-                            source.src = video.url;
-                            source.type = "video/mp4";
+        btn.onclick = () => {
+            document.getElementById("video").src = kurs.videor[m.videoIndex].url;
+        };
 
-                            videoElement.appendChild(source);
-                            videoContainer.appendChild(videoElement);
-                        });
+        modDiv.appendChild(btn);
+    });
 
-                    } else {
-                        document.getElementById("kursTitel").innerText = "Kurs hittades inte";
-                    }
+    const quizDiv = document.getElementById("quiz");
 
-                })
-                .catch(error => {
-                    console.error("Fel:", error);
-                    document.getElementById("kursTitel").innerText = "Fel vid laddning";
-                });
+    kurs.quiz.forEach(q => {
+        const div = document.createElement("div");
 
+        const fråga = document.createElement("p");
+        fråga.innerText = q.fråga;
+        div.appendChild(fråga);
+
+        q.alternativ.forEach((alt, i) => {
+            const btn = document.createElement("button");
+            btn.innerText = alt;
+
+            btn.onclick = () => {
+                alert(i === q.rättSvar ? "Rätt svar" : "Fel svar");
+            };
+
+            div.appendChild(btn);
         });
-    </script>
+
+        quizDiv.appendChild(div);
+    });
+
+});
+</script>
 
 </body>
 </html>
