@@ -1,58 +1,270 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<title>Utbildningar</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utbildningar</title>
+  <style>
+    :root {
+      --bg: #f3f5f7;
+      --panel: #ffffff;
+      --text: #1f2328;
+      --muted: #5f6b76;
+      --primary: #0078d4;
+      --primary-hover: #005ea6;
+      --border: #d9dde3;
+      --shadow: 0 6px 18px rgba(0,0,0,0.08);
+      --radius: 16px;
+    }
 
-<style>
-body {
-    font-family: Arial;
-    margin: 0;
-    background: #f5f5f5;
-}
+    * { box-sizing: border-box; }
 
-h1, h2 {
-    margin: 20px;
-}
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
 
-#courseGrid, #modules, #questions {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 15px;
-    padding: 20px;
-}
+    #courses {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
 
-.card {
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+    .page-header {
+      margin-bottom: 20px;
+    }
 
-button {
-    margin-top: 10px;
-    padding: 10px;
-    width: 100%;
-    border: none;
-    border-radius: 6px;
-    background: #0078d4;
-    color: white;
-    cursor: pointer;
-}
+    .page-header h1 {
+      margin: 0 0 10px;
+      font-size: 2.2rem;
+      line-height: 1.1;
+    }
 
-button:hover {
-    background: #005ea6;
-}
-</style>
+    .page-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+    }
 
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .course-card, .module-card {
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-body h2, .card-body h3, .question-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+      line-height: 1.25;
+    }
+
+    .card-body p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .card-actions {
+      margin-top: 16px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      min-height: 44px;
+      cursor: pointer;
+      font-size: 0.98rem;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus-visible,
+    .btn-outline:hover,
+    .btn-outline:focus-visible {
+      background: var(--primary-hover);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #eef2f6;
+      color: var(--text);
+      width: auto;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      width: auto;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+    }
+
+    .module-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .panel h2, .quiz-header h2 {
+      margin: 0 0 12px;
+      font-size: 1.25rem;
+    }
+
+    .content-list {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.6;
+    }
+
+    .module-video {
+      width: 100%;
+      border-radius: 12px;
+      background: #000;
+    }
+
+    .video-link-wrap {
+      margin: 12px 0 0;
+    }
+
+    .video-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .quiz-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .question-card .answer-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .question-number {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .answer-btn {
+      text-align: left;
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .answer-btn:hover,
+    .answer-btn:focus-visible {
+      background: #eef6ff;
+      border-color: var(--primary);
+      color: var(--text);
+    }
+
+    .answer-btn.is-correct {
+      background: #dff6e4;
+      border-color: #1a7f37;
+      color: #145c2a;
+    }
+
+    .answer-btn.is-wrong {
+      background: #fde7e9;
+      border-color: #c62828;
+      color: #8a1c1c;
+    }
+
+    .answer-feedback {
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    .feedback-correct { color: #145c2a; }
+    .feedback-wrong { color: #8a1c1c; }
+
+    .state-error {
+      background: #fff;
+      padding: 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    code {
+      background: #eef2f6;
+      padding: 2px 5px;
+      border-radius: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .module-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #courses {
+        padding: 16px 12px 40px;
+      }
+
+      .page-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
-
 <body>
-
-<div id="courses"></div>
-
-<!-- ✅ KORREKT SÖKVÄG -->
-<script src="/TFF-portal/assets/js/kurser-app.js"></script>
-
+  <main id="courses"></main>
+  <script src="./assets/js/kurser-app.js"></script>
 </body>
 </html>
