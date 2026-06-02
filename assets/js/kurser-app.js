@@ -1,42 +1,35 @@
 const grid = document.getElementById("courseGrid");
 
+const colors = [
+  "#D6F5FF","#E8E1FF","#FFF1CC","#E1F7E7",
+  "#FFDDE6","#EEE1FF","#FFEBE1","#E9F5FF",
+  "#F5E6FF","#FFF5E1","#E1FFF5","#FDE2FF",
+  "#E8FFD6","#FFE6CC","#D6EFFF"
+];
+
 fetch("assets/data/kurser-data.json")
-  .then(res => res.json())
-  .then(data => {
+.then(r => r.json())
+.then(data => {
 
-    grid.innerHTML = "";
+  const kurser = data.kurser;
 
-    const colors = [
-      "#D6F5FF", "#E8E1FF", "#FFF1CC", "#E1F7E7",
-      "#FFDDE6", "#EEE1FF", "#FFEBE1", "#E9F5FF",
-      "#F5E6FF", "#FFF5E1", "#E1FFF5", "#FDE2FF",
-      "#E8FFD6", "#FFE6CC", "#D6EFFF"
-    ];
+  grid.innerHTML = "";
 
-    data.kurser.forEach((kurs, index) => {
+  kurser.forEach((kurs, i) => {
 
-      const a = document.createElement("a");
+    const card = document.createElement("a");
 
-      // ✅ DETTA ÄR KRITISKT
-      a.className = "card";
+    card.className = "card";
+    card.href = "kurs_dokumentation.html?id=" + kurs.id;
+    card.style.setProperty("--course-color", colors[i % colors.length]);
 
-      // ✅ rätt navigation för din portal
-      a.href = `utbildning.html?course=${kurs.id}`;
+    card.innerHTML = `
+      <h3>${kurs.titel}</h3>
+      <p>${kurs.beskrivning}</p>
+      <span class="badge">5 moduler</span>
+    `;
 
-      // ✅ färg per kurs
-      a.style.setProperty("--course-color", colors[index % colors.length]);
-
-      // ✅ detta skapar kortet (inte lista)
-      a.innerHTML = `
-        <h3>${kurs.titel}</h3>
-        <p>${kurs.beskrivning}</p>
-        <span class="badge">5 moduler</span>
-      `;
-
-      grid.appendChild(a);
-    });
-
-  })
-  .catch(err => {
-    console.error("Fel JSON:", err);
+    grid.appendChild(card);
   });
+
+});
