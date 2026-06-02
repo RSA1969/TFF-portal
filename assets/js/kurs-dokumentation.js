@@ -3,7 +3,7 @@ let currentCourse = null;
 let currentModuleIndex = 0;
 
 // ===============================
-// URL-ID
+// URL
 // ===============================
 function getCourseIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
@@ -17,7 +17,7 @@ function setCourseIdInUrl(courseId) {
 }
 
 // ===============================
-// DATAHÄMTNING
+// DATA
 // ===============================
 async function loadData() {
     const response = await fetch("assets/data/kurser-data.json?nocache=" + Date.now());
@@ -30,10 +30,10 @@ async function loadData() {
 }
 
 // ===============================
-// NORMALISERING AV ROOT
+// ROOT-NORMALISERING
 // Klarar:
-// { kurser: [...] }
-// { courses: [...] }
+// { "kurser": [...] }
+// { "courses": [...] }
 // [ ... ]
 // ===============================
 function getCoursesArray(data) {
@@ -44,8 +44,7 @@ function getCoursesArray(data) {
 }
 
 // ===============================
-// HJÄLPFUNKTIONER FÖR DIN BENÄMNING
-// Klarar olika fältnamn utan att krascha
+// KURSFÄLT
 // ===============================
 function getCourseId(course, fallbackIndex = 0) {
     return (
@@ -81,6 +80,9 @@ function getCourseDescription(course) {
     );
 }
 
+// ===============================
+// MODULFÄLT
+// ===============================
 function getModulesArray(course) {
     if (Array.isArray(course?.modules)) return course.modules;
     if (Array.isArray(course?.moduler)) return course.moduler;
@@ -136,7 +138,23 @@ function resolveVideoPath(videoValue) {
         return videoValue;
     }
 
-    return "video/" + videoValue.replace(/^\/+/, "");
+    return "video/" + String(videoValue).replace(/^\/+/, "");
+}
+
+// ===============================
+// HTML-SÄKERHET
+// ===============================
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+function escapeAttribute(value) {
+    return String(value ?? "").replaceAll('"', "&quot;");
 }
 
 // ===============================
@@ -145,6 +163,11 @@ function resolveVideoPath(videoValue) {
 function renderCourseSelect() {
     const select = document.getElementById("courseSelect");
     const courses = getCoursesArray(dataGlobal);
+
+    if (!select) {
+        console.error("Elementet #courseSelect hittades inte.");
+        return;
+    }
 
     if (!courses.length) {
         select.innerHTML = `<option value="">Inga kurser hittades</option>`;
@@ -156,7 +179,7 @@ function renderCourseSelect() {
             const courseId = getCourseId(course, index);
             const courseTitle = getCourseTitle(course, index);
 
-            return `<option value="${escapeHtml(courseId)}">${escapeHtml(courseTitle)}</option>`;
+            return `<option value="${escapeAttribute(courseId)}">${escapeHtml(courseTitle)}</option>`;
         })
         .join("");
 
@@ -186,7 +209,6 @@ function loadCourse(requestedId) {
 
     let selected = normalizedCourses.find(c => c.id === String(requestedId));
 
-    // Om URL-id inte matchar exakt, använd första kursen
     if (!selected) {
         selected = normalizedCourses[0];
     }
@@ -194,7 +216,11 @@ function loadCourse(requestedId) {
     currentCourse = selected.raw;
     currentModuleIndex = 0;
 
-    document.getElementById("courseSelect").value = selected.id;
+    const select = document.getElementById("courseSelect");
+    if (select) {
+        select.value = selected.id;
+    }
+
     setCourseIdInUrl(selected.id);
 
     renderModules();
@@ -206,6 +232,11 @@ function loadCourse(requestedId) {
 // ===============================
 function renderModules() {
     const list = document.getElementById("moduleList");
+
+    if (!list) {
+        console.error("Elementet #moduleList hittades inte.");
+        return;
+    }
 
     if (!currentCourse) {
         list.innerHTML = "";
@@ -244,10 +275,29 @@ function selectModule(index) {
 }
 
 // ===============================
-// MODULINNEHÅLL
+// TOMT INNEHÅLL
+// ===============================
+function renderEmptyContent(message) {
+    const contentArea = document.getElementById("contentArea");
+
+    if (!contentArea) {
+        console.error("Elementet #contentArea hittades inte.");
+        return;
+    }
+
+    contentArea.innerHTML = `<h2 class="empty-state">${escapeHtml(message)}</h2>`;
+}
+
+// ===============================
+// RENDERA MODUL
 // ===============================
 function renderModule() {
     const contentArea = document.getElementById("contentArea");
+
+    if (!contentArea) {
+        console.error("Elementet #contentArea hittades inte.");
+        return;
+    }
 
     if (!currentCourse) {
         renderEmptyContent("Ingen kurs vald.");
@@ -313,18 +363,10 @@ function renderModule() {
 }
 
 // ===============================
-// TOMT INNEHÅLL
-// ===============================
-function renderEmptyContent(message) {
-    const contentArea = document.getElementById("contentArea");
-    contentArea.innerHTML = `<h2 class="empty-state">${escapeHtml(message)}</h2>`;
-}
-
-// ===============================
 // NAVIGATION
 // ===============================
 function prevModule() {
-    const modules = getModulesArray(currentCourse);
+    const modules = currentCourse ? getModulesArray(currentCourse) : [];
 
     if (!modules.length) return;
 
@@ -336,7 +378,7 @@ function prevModule() {
 }
 
 function nextModule() {
-    const modules = getModulesArray(currentCourse);
+    const modules = currentCourse ? getModulesArray(currentCourse) : [];
 
     if (!modules.length) return;
 
@@ -345,22 +387,6 @@ function nextModule() {
         renderModules();
         renderModule();
     }
-}
-
-// ===============================
-// ESCAPE
-// ===============================
-function escapeHtml(value) {
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-function escapeAttribute(value) {
-    return String(value ?? "").replaceAll('"', "&quot;");
 }
 
 // ===============================
@@ -380,8 +406,9 @@ async function init() {
         }
 
         const urlId = getCourseIdFromUrl();
-        loadCourse(urlId || getCourseId(courses[0], 0));
+        const firstCourseId = getCourseId(courses[0], 0);
 
+        loadCourse(urlId || firstCourseId);
     } catch (error) {
         console.error(error);
         renderEmptyContent("Kunde inte läsa kursdata. Kontrollera JSON-strukturen i assets/data/kurser-data.json.");
