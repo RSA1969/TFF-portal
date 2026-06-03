@@ -1,283 +1,34 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TFF – Utbildning</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f5f6f8;
-            color: #111827;
-        }
-
-        .topbar {
-            background: #ffffff;
-            border-bottom: 1px solid #d1d5db;
-            padding: 16px 24px;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .layout {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-            align-items: flex-start;
-        }
-
-        .sidebar,
-        .content {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-        }
-
-        .sidebar {
-            width: 340px;
-            flex: 0 0 340px;
-        }
-
-        .content {
-            flex: 1;
-            min-height: 560px;
-        }
-
-        h1, h2, h3, h4 {
-            margin-top: 0;
-        }
-
-        .section-text {
-            margin: 0 0 16px 0;
-            color: #4b5563;
-            line-height: 1.5;
-        }
-
-        .course-select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #cbd5e1;
-            border-radius: 10px;
-            background: #ffffff;
-            font-size: 14px;
-            margin-bottom: 18px;
-        }
-
-        .module-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .module-item {
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            padding: 12px;
-            cursor: pointer;
-            background: #ffffff;
-            transition: 0.15s ease;
-        }
-
-        .module-item:hover {
-            border-color: #94a3b8;
-            background: #f8fafc;
-        }
-
-        .module-item.active {
-            border-color: #c7e3d6;
-            background: #eef7f1;
-        }
-
-        .module-item-title {
-            font-size: 14px;
-            font-weight: 700;
-            line-height: 1.35;
-            margin-bottom: 4px;
-        }
-
-        .module-item-status {
-            font-size: 12px;
-            color: #4b5563;
-        }
-
-        .empty-state {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .course-header {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-            margin-bottom: 16px;
-        }
-
-        .course-image {
-            width: 110px;
-            height: 110px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 1px solid #e5e7eb;
-            background: #f3f4f6;
-            flex: 0 0 110px;
-        }
-
-        .course-meta {
-            flex: 1;
-        }
-
-        .color-badge {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            vertical-align: middle;
-            margin-right: 8px;
-            border: 1px solid rgba(0,0,0,0.08);
-        }
-
-        .content-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 10px 0;
-        }
-
-        .muted {
-            color: #6b7280;
-            line-height: 1.5;
-        }
-
-        .module-box {
-            margin-top: 14px;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 18px;
-        }
-
-        .module-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin: 0 0 12px 0;
-        }
-
-        .module-text {
-            line-height: 1.6;
-            color: #374151;
-            margin-bottom: 14px;
-        }
-
-        .content-list {
-            margin: 12px 0 0 0;
-            padding-left: 20px;
-        }
-
-        .content-list li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-
-        .video-wrap {
-            margin-top: 20px;
-        }
-
-        video {
-            width: 100%;
-            max-width: 900px;
-            border-radius: 12px;
-            background: #000000;
-        }
-
-        .quiz-box {
-            margin-top: 20px;
-            padding: 14px;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            background: #fafafa;
-        }
-
-        .button-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 24px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            border: 1px solid #d1d5db;
-            background: #ffffff;
-            color: #111827;
-            border-radius: 10px;
-            padding: 10px 16px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .btn.primary {
-            background: #1f69c5;
-            color: #ffffff;
-            border-color: #1f69c5;
-        }
-
-        .note-box {
-            margin-top: 18px;
-            padding: 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            background: #fafafa;
-            color: #6b7280;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 1000px) {
-            .layout {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                flex: none;
-            }
-
-            .course-header {
-                flex-direction: column;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modul</title>
 </head>
+
 <body>
 
-    <div class="topbar">TFF – Utbildning</div>
+<main>
 
-    <div class="layout">
-        <aside class="sidebar">
-            <h2>Kurs</h2>
-            <p class="section-text">Välj kurs och navigera via modulerna.</p>
+  utbildningar.html← Kurskatalog</a>
+  <button id="resetProgressBtn">Rensa progression</button>
 
-            <select id="courseSelect" class="course-select"></select>
+  <h1 id="moduleTitle">Modul</h1>
+  <p id="moduleSubtitle"></p>
 
-            <h3>Moduler</h3>
-            <div id="moduleList" class="module-list"></div>
+  <h2>Innehåll</h2>
+  <ul id="moduleBullets"></ul>
 
-            <div class="note-box">
-                Kursdata läses från <strong>assets/data/kurser-data.json</strong>.
-                Den här sidan använder <strong>assets/js/kurs-dokumentation.js</strong>. 
-            </div>
-        </aside>
+  <h2>Video</h2>
+  <div id="videoContainer"></div>
 
-        <main class="content" id="contentArea">
-            <h2 class="empty-state">Laddar kurs…</h2>
-        </main>
-    </div>
+  <h2>Quiz</h2>
+  <div id="quizContainer"></div>
 
-    <script src="assets/js/kurs-dokumentation.js"></script>
+  <div id="moduleNav"></div>
+
+</main>
+
+assets/js/kurser-app.jsscript>
 </body>
 </html>
