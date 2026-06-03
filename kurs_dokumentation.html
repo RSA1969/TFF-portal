@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modul</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul</title>
 </head>
-
 <body>
+  <main>
+    <a href="utbildningar.html">← Kurskatalog</a>
+    <button id="resetProgressBtn">Rensa progression</button>
 
-<main>
+    <h1 id="moduleTitle"></h1>
+    <p id="moduleSubtitle"></p>
 
-  <a href="utbildningar.html">← Kurskatalog</a>
-  <button id="resetProgressBtn">Rensa progression</button>
+    <h2>Innehåll</h2>
+    <ul id="moduleBullets"></ul>
 
-  <h1 id="moduleTitle"></h1>
-  <p id="moduleSubtitle"></p>
+    <h2>Video</h2>
+    <div id="videoContainer"></div>
 
-  <h2>Innehåll</h2>
-  <ul id="moduleBullets"></ul>
+    <h2>Quiz</h2>
+    <div id="quizContainer"></div>
 
-  <h2>Video</h2>
-  <div id="videoContainer"></div>
+    <div id="moduleNav"></div>
+  </main>
 
-  <h2>Quiz</h2>
-  <div id="quizContainer"></div>
-
-  <div id="moduleNav"></div>
-
-</main>
-
-<script src="assets/js/kurser-app.js"></script>
-
+  <script src="assets/js/kurser-app.js"></script>
 </body>
 </html>
