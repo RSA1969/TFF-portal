@@ -1,27 +1,22 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kurs</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kurs</title>
 </head>
-
 <body>
+  <main>
+    <a href="utbildningar.html">← Till kurskatalogen</a>
+    <button id="resetProgressBtn">Rensa progression</button>
 
-<main>
+    <h1 id="courseTitle"></h1>
+    <p id="coursePurpose"></p>
+    <p id="courseProgress"></p>
 
-  <a href="utbildningar.html">← Till kurskatalog</a>
-  <button id="resetProgressBtn">Rensa progression</button>
+    <ul id="moduleList"></ul>
+  </main>
 
-  <h1 id="courseTitle"></h1>
-  <p id="coursePurpose"></p>
-  <p id="courseProgress"></p>
-
-  <ul id="moduleList"></ul>
-
-</main>
-
-<script src="assets/js/kurser-app.js"></script>
-
+  <script src="assets/js/kurser-app.js"></script>
 </body>
 </html>
