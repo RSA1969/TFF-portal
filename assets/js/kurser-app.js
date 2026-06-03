@@ -14,9 +14,9 @@
   };
 
   /* =====================================================
-     DATA – 15 KURSER × 5 MODULER
+     KURSER OCH MODULER
      ===================================================== */
-  const COURSES = [
+  const COURSE_DEFS = [
     {
       id: "kurs01",
       code: "K1",
@@ -25,11 +25,11 @@
       color: "#82c7b8",
       image: "assets/img/tile-mandatory.jpg",
       modules: [
-        { id: "kurs01_modul01", number: 1, title: "Vad är Teams (och vad är det inte)", video: "video/kurs1_modul1.mp4" },
-        { id: "kurs01_modul02", number: 2, title: "Chat, kanal och möte – rätt val", video: "video/kurs1_modul2.mp4" },
-        { id: "kurs01_modul03", number: 3, title: "Möten i Teams – roller & praxis", video: "video/kurs1_modul3.mp4" },
-        { id: "kurs01_modul04", number: 4, title: "Filer i Teams (SharePoint i bakgrunden)", video: "video/kurs1_modul4.mp4" },
-        { id: "kurs01_modul05", number: 5, title: "Vanliga misstag i kommunal Teams‑användning", video: "video/kurs1_modul5.mp4" }
+        "Vad är Teams (och vad är det inte)",
+        "Chat, kanal och möte – rätt val",
+        "Möten i Teams – roller & praxis",
+        "Filer i Teams (SharePoint i bakgrunden)",
+        "Vanliga misstag i kommunal Teams‑användning"
       ]
     },
     {
@@ -40,11 +40,11 @@
       color: "#a7d8f5",
       image: "assets/img/tile-status.jpg",
       modules: [
-        { id: "kurs02_modul01", number: 1, title: "Grundläggande transkribering", video: "video/kurs2_modul1.mp4" },
-        { id: "kurs02_modul02", number: 2, title: "Praktisk användning i möten", video: "video/kurs2_modul2.mp4" },
-        { id: "kurs02_modul03", number: 3, title: "Kvalitetssäkring", video: "video/kurs2_modul3.mp4" },
-        { id: "kurs02_modul04", number: 4, title: "Informationshantering & GDPR", video: "video/kurs2_modul4.mp4" },
-        { id: "kurs02_modul05", number: 5, title: "Tillämpning i TFF", video: "video/kurs2_modul5.mp4" }
+        "Grundläggande transkribering",
+        "Praktisk användning i möten",
+        "Kvalitetssäkring",
+        "Informationshantering & GDPR",
+        "Tillämpning i TFF"
       ]
     },
     {
@@ -55,11 +55,11 @@
       color: "#f3c9a9",
       image: "assets/img/tile-guides.jpg",
       modules: [
-        { id: "kurs03_modul01", number: 1, title: "Grundläggande dokumentation", video: "video/kurs3_modul1.mp4" },
-        { id: "kurs03_modul02", number: 2, title: "Struktur och standard", video: "video/kurs3_modul2.mp4" },
-        { id: "kurs03_modul03", number: 3, title: "Dokument i M365", video: "video/kurs3_modul3.mp4" },
-        { id: "kurs03_modul04", number: 4, title: "Efterlevnad (lagar och regler)", video: "video/kurs3_modul4.mp4" },
-        { id: "kurs03_modul05", number: 5, title: "Praktisk tillämpning i TFF", video: "video/kurs3_modul5.mp4" }
+        "Grundläggande dokumentation",
+        "Struktur och standard",
+        "Dokument i M365",
+        "Efterlevnad (lagar och regler)",
+        "Praktisk tillämpning i TFF"
       ]
     },
     {
@@ -70,11 +70,11 @@
       color: "#9fd8cf",
       image: "assets/img/tile-chief.jpg",
       modules: [
-        { id: "kurs04_modul01", number: 1, title: "Vad Copilot är (och inte är)", video: "video/kurs4_modul1.mp4" },
-        { id: "kurs04_modul02", number: 2, title: "Data, behörighet och ansvar", video: "video/kurs4_modul2.mp4" },
-        { id: "kurs04_modul03", number: 3, title: "När Copilot hjälper – och när den inte gör det", video: "video/kurs4_modul3.mp4" },
-        { id: "kurs04_modul04", number: 4, title: "Kvalitetskontroll av AI‑svar", video: "video/kurs4_modul4.mp4" },
-        { id: "kurs04_modul05", number: 5, title: "Kommunala exempel & fallgropar", video: "video/kurs4_modul5.mp4" }
+        "Vad Copilot är (och inte är)",
+        "Data, behörighet och ansvar",
+        "När Copilot hjälper – och när den inte gör det",
+        "Kvalitetskontroll av AI‑svar",
+        "Kommunala exempel & fallgropar"
       ]
     },
     {
@@ -85,11 +85,11 @@
       color: "#eab3b3",
       image: "assets/img/tile-edu.jpg",
       modules: [
-        { id: "kurs05_modul01", number: 1, title: "Promptens byggstenar", video: "video/kurs5_modul1.mp4" },
-        { id: "kurs05_modul02", number: 2, title: "Roller, kontext och mål", video: "video/kurs5_modul2.mp4" },
-        { id: "kurs05_modul03", number: 3, title: "Vanliga jobbcase (möten, text, analys)", video: "video/kurs5_modul3.mp4" },
-        { id: "kurs05_modul04", number: 4, title: "Förbättra prompt steg‑för‑steg", video: "video/kurs5_modul4.mp4" },
-        { id: "kurs05_modul05", number: 5, title: "Promptbibliotek & återanvändning", video: "video/kurs5_modul5.mp4" }
+        "Promptens byggstenar",
+        "Roller, kontext och mål",
+        "Vanliga jobbcase (möten, text, analys)",
+        "Förbättra prompt steg‑för‑steg",
+        "Promptbibliotek & återanvändning"
       ]
     },
     {
@@ -100,11 +100,11 @@
       color: "#c9b8e4",
       image: "assets/img/tile-hrkollegan.jpg",
       modules: [
-        { id: "kurs06_modul01", number: 1, title: "Utkast vs styrdokument", video: "video/kurs6_modul1.mp4" },
-        { id: "kurs06_modul02", number: 2, title: "Var dokument ska skapas", video: "video/kurs6_modul2.mp4" },
-        { id: "kurs06_modul03", number: 3, title: "Namngivning & struktur", video: "video/kurs6_modul3.mp4" },
-        { id: "kurs06_modul04", number: 4, title: "Versionering och livscykel", video: "video/kurs6_modul4.mp4" },
-        { id: "kurs06_modul05", number: 5, title: "Återanvändning och spårbarhet", video: "video/kurs6_modul5.mp4" }
+        "Utkast vs styrdokument",
+        "Var dokument ska skapas",
+        "Namngivning & struktur",
+        "Versionering och livscykel",
+        "Återanvändning och spårbarhet"
       ]
     },
     {
@@ -115,11 +115,11 @@
       color: "#f3b6c6",
       image: "assets/img/tile-atlas.jpg",
       modules: [
-        { id: "kurs07_modul01", number: 1, title: "Ägare, medlemmar, gäster", video: "video/kurs7_modul1.mp4" },
-        { id: "kurs07_modul02", number: 2, title: "Team‑, kanal‑ och filbehörighet", video: "video/kurs7_modul2.mp4" },
-        { id: "kurs07_modul03", number: 3, title: "Flytta innehåll rätt", video: "video/kurs7_modul3.mp4" },
-        { id: "kurs07_modul04", number: 4, title: "Dela länkar säkert", video: "video/kurs7_modul4.mp4" },
-        { id: "kurs07_modul05", number: 5, title: "Vanliga behörighetsfel", video: "video/kurs7_modul5.mp4" }
+        "Ägare, medlemmar, gäster",
+        "Team‑, kanal‑ och filbehörighet",
+        "Flytta innehåll rätt",
+        "Dela länkar säkert",
+        "Vanliga behörighetsfel"
       ]
     },
     {
@@ -130,11 +130,11 @@
       color: "#f4c2c2",
       image: "assets/img/tile-chief.jpg",
       modules: [
-        { id: "kurs08_modul01", number: 1, title: "Vad är informationsklassning?", video: "video/kurs8_modul1.mp4" },
-        { id: "kurs08_modul02", number: 2, title: "Känslig data i Teams & SharePoint", video: "video/kurs8_modul2.mp4" },
-        { id: "kurs08_modul03", number: 3, title: "Copilot och personuppgifter", video: "video/kurs8_modul3.mp4" },
-        { id: "kurs08_modul04", number: 4, title: "Delning och lagring – juridiskt ansvar", video: "video/kurs8_modul4.mp4" },
-        { id: "kurs08_modul05", number: 5, title: "Praktiska kommunala exempel", video: "video/kurs8_modul5.mp4" }
+        "Vad är informationsklassning?",
+        "Känslig data i Teams & SharePoint",
+        "Copilot och personuppgifter",
+        "Delning och lagring – juridiskt ansvar",
+        "Praktiska kommunala exempel"
       ]
     },
     {
@@ -145,11 +145,11 @@
       color: "#d9c1e8",
       image: "assets/img/tile-guides.jpg",
       modules: [
-        { id: "kurs09_modul01", number: 1, title: "När ska du använda e‑post?", video: "video/kurs9_modul1.mp4" },
-        { id: "kurs09_modul02", number: 2, title: "När är Teams rätt?", video: "video/kurs9_modul2.mp4" },
-        { id: "kurs09_modul03", number: 3, title: "När ska något vara ett dokument?", video: "video/kurs9_modul3.mp4" },
-        { id: "kurs09_modul04", number: 4, title: "Beslutsmatris för vardagen", video: "video/kurs9_modul4.mp4" },
-        { id: "kurs09_modul05", number: 5, title: "Exempel från kommunal verklighet", video: "video/kurs9_modul5.mp4" }
+        "När ska du använda e‑post?",
+        "När är Teams rätt?",
+        "När ska något vara ett dokument?",
+        "Beslutsmatris för vardagen",
+        "Exempel från kommunal verklighet"
       ]
     },
     {
@@ -160,11 +160,11 @@
       color: "#f6c09a",
       image: "assets/img/tile-status.jpg",
       modules: [
-        { id: "kurs10_modul01", number: 1, title: "När behövs möte?", video: "video/kurs10_modul1.mp4" },
-        { id: "kurs10_modul02", number: 2, title: "Agenda & förväntningar", video: "video/kurs10_modul2.mp4" },
-        { id: "kurs10_modul03", number: 3, title: "Beslut, åtgärder och uppföljning", video: "video/kurs10_modul3.mp4" },
-        { id: "kurs10_modul04", number: 4, title: "Asynkront arbete i Teams", video: "video/kurs10_modul4.mp4" },
-        { id: "kurs10_modul05", number: 5, title: "Mötesetikett i digital miljö", video: "video/kurs10_modul5.mp4" }
+        "När behövs möte?",
+        "Agenda & förväntningar",
+        "Beslut, åtgärder och uppföljning",
+        "Asynkront arbete i Teams",
+        "Mötesetikett i digital miljö"
       ]
     },
     {
@@ -175,11 +175,11 @@
       color: "#a6dcd4",
       image: "assets/img/tile-mandatory.jpg",
       modules: [
-        { id: "kurs11_modul01", number: 1, title: "Varför chatt inte är arkiv", video: "video/kurs11_modul1.mp4" },
-        { id: "kurs11_modul02", number: 2, title: "Fånga beslut ur dialog", video: "video/kurs11_modul2.mp4" },
-        { id: "kurs11_modul03", number: 3, title: "Skapa struktur av arbetsmaterial", video: "video/kurs11_modul3.mp4" },
-        { id: "kurs11_modul04", number: 4, title: "Dela rätt – inte allt", video: "video/kurs11_modul4.mp4" },
-        { id: "kurs11_modul05", number: 5, title: "Från brus till verksamhetsnytta", video: "video/kurs11_modul5.mp4" }
+        "Varför chatt inte är arkiv",
+        "Fånga beslut ur dialog",
+        "Skapa struktur av arbetsmaterial",
+        "Dela rätt – inte allt",
+        "Från brus till verksamhetsnytta"
       ]
     },
     {
@@ -190,11 +190,11 @@
       color: "#c9d9a6",
       image: "assets/img/tile-edu.jpg",
       modules: [
-        { id: "kurs12_modul01", number: 1, title: "Grundläggande begrepp och regelverk", video: "video/kurs12_modul1.mp4" },
-        { id: "kurs12_modul02", number: 2, title: "Diarieföring i praktiken", video: "video/kurs12_modul2.mp4" },
-        { id: "kurs12_modul03", number: 3, title: "Arkivering och bevarande", video: "video/kurs12_modul3.mp4" },
-        { id: "kurs12_modul04", number: 4, title: "GDPR och informationssäkerhet", video: "video/kurs12_modul4.mp4" },
-        { id: "kurs12_modul05", number: 5, title: "Praktisk tillämpning i TFF", video: "video/kurs12_modul5.mp4" }
+        "Grundläggande begrepp och regelverk",
+        "Diarieföring i praktiken",
+        "Arkivering och bevarande",
+        "GDPR och informationssäkerhet",
+        "Praktisk tillämpning i TFF"
       ]
     },
     {
@@ -205,11 +205,11 @@
       color: "#d4c6f4",
       image: "assets/img/tile-atlas.jpg",
       modules: [
-        { id: "kurs13_modul01", number: 1, title: "Vad är governance i M365", video: "video/kurs13_modul1.mp4" },
-        { id: "kurs13_modul02", number: 2, title: "Roller och ansvar", video: "video/kurs13_modul2.mp4" },
-        { id: "kurs13_modul03", number: 3, title: "Livscykelhantering", video: "video/kurs13_modul3.mp4" },
-        { id: "kurs13_modul04", number: 4, title: "Struktur och standarder", video: "video/kurs13_modul4.mp4" },
-        { id: "kurs13_modul05", number: 5, title: "Uppföljning och kontroll", video: "video/kurs13_modul5.mp4" }
+        "Vad är governance i M365",
+        "Roller och ansvar",
+        "Livscykelhantering",
+        "Struktur och standarder",
+        "Uppföljning och kontroll"
       ]
     },
     {
@@ -220,11 +220,11 @@
       color: "#b7e1cd",
       image: "assets/img/tile-hrkollegan.jpg",
       modules: [
-        { id: "kurs14_modul01", number: 1, title: "Informationsflöde", video: "video/kurs14_modul1.mp4" },
-        { id: "kurs14_modul02", number: 2, title: "Allmän handling", video: "video/kurs14_modul2.mp4" },
-        { id: "kurs14_modul03", number: 3, title: "Bevarande och gallring", video: "video/kurs14_modul3.mp4" },
-        { id: "kurs14_modul04", number: 4, title: "Koppling till arkiv", video: "video/kurs14_modul4.mp4" },
-        { id: "kurs14_modul05", number: 5, title: "Praktisk tillämpning (TFF)", video: "video/kurs14_modul5.mp4" }
+        "Informationsflöde",
+        "Allmän handling",
+        "Bevarande och gallring",
+        "Koppling till arkiv",
+        "Praktisk tillämpning (TFF)"
       ]
     },
     {
@@ -235,14 +235,24 @@
       color: "#a8ddd3",
       image: "assets/img/tile-chief.jpg",
       modules: [
-        { id: "kurs15_modul01", number: 1, title: "Processer i verksamheten", video: "video/kurs15_modul1.mp4" },
-        { id: "kurs15_modul02", number: 2, title: "Från process till digitalt stöd", video: "video/kurs15_modul2.mp4" },
-        { id: "kurs15_modul03", number: 3, title: "Struktur per process", video: "video/kurs15_modul3.mp4" },
-        { id: "kurs15_modul04", number: 4, title: "Standardisering", video: "video/kurs15_modul4.mp4" },
-        { id: "kurs15_modul05", number: 5, title: "Koppling till ledningssystem", video: "video/kurs15_modul5.mp4" }
+        "Processer i verksamheten",
+        "Från process till digitalt stöd",
+        "Struktur per process",
+        "Standardisering",
+        "Koppling till ledningssystem"
       ]
     }
   ];
+
+  const COURSES = COURSE_DEFS.map((course, courseIndex) => ({
+    ...course,
+    modules: course.modules.map((moduleTitle, moduleIndex) => ({
+      id: `${course.id}_modul${String(moduleIndex + 1).padStart(2, "0")}`,
+      number: moduleIndex + 1,
+      title: moduleTitle,
+      video: `video/kurs${courseIndex + 1}_modul${moduleIndex + 1}.mp4`
+    }))
+  }));
 
   /* =====================================================
      HJÄLPFUNKTIONER
@@ -719,7 +729,7 @@
     main.innerHTML = `
       <section class="tff-wrap">
         <nav class="tff-topnav">
-          utbildningar.html">← Till kurskatalogen</a>
+          <a href="utbildningar.html" class="tff-btn tff-btn-ghost">← Till kurskatalogen</a>
           <button id="resetProgressBtn" class="tff-btn tff-btn-ghost">Rensa progression</button>
         </nav>
 
@@ -758,7 +768,7 @@
     main.innerHTML = `
       <section class="tff-wrap">
         <nav class="tff-topnav">
-          utbildningar.html">← Kurskatalog</a>
+          <a href="utbildningar.html" class="tff-btn tff-btn-ghost">← Kurskatalog</a>
           <button id="resetProgressBtn" class="tff-btn tff-btn-ghost">Rensa progression</button>
         </nav>
 
@@ -799,7 +809,7 @@
   }
 
   /* =====================================================
-     FRÅGOR – 10 PER MODUL
+     FRÅGOR – 10 FRÅGOR PER MODUL
      ===================================================== */
   function shuffleWithSeed(options, seed) {
     const arr = options.map((text) => ({ text }));
@@ -943,10 +953,7 @@
             <p>${escapeHtml(course.purpose)}</p>
             <div class="tff-progress"><span style="width:${progress.percent}%"></span></div>
             <p class="tff-progress-text">Genomfört: ${progress.passed}/${progress.total} moduler (${progress.percent}%)</p>
-            href="kurser.html?course=${encodeURIComponent(course.id)}"
-               class="tff-btn tff-btn-primary">
-              Öppna kurs
-            </a>
+            <a href="kurser.html?course=${encodeURIComponent(course.id)}" class="tff-btn tff-btn-primary">Öppna kurs</a>
           </div>
         </article>
       `;
@@ -996,8 +1003,7 @@
           <div>
             ${
               unlocked
-                ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(module.id)}"
-                      class="tff-btn tff-btn-primary">Öppna modul</a>`
+                ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(module.id)}" class="tff-btn tff-btn-primary">Öppna modul</a>`
                 : `<button class="tff-btn tff-btn-ghost" disabled>Låst</button>`
             }
           </div>
@@ -1033,8 +1039,7 @@
             <h1>Modulen är låst</h1>
             <p>Du måste klara föregående modul innan du kan öppna denna.</p>
             <p style="margin-top:12px">
-              href="kurser.html?course=${encodeURIComponent(course.id)}"
-                 class="tff-btn tff-btn-primary">Tillbaka till kursen</a>
+              <a href="kurser.html?course=${encodeURIComponent(course.id)}" class="tff-btn tff-btn-primary">Tillbaka till kursen</a>
             </p>
           </section>
         </section>
@@ -1059,12 +1064,13 @@
 
       if (url.includes("embed=1")) {
         layout.video.innerHTML = `
-          <iframe src="${escapeHtml(url)}"
-                  width="100%"
-                  height="420"
-                  frameborder="0"
-                  allowfullscreen
-                  loading="lazy"></iframe>
+          <iframe
+            src="${escapeHtml(url)}"
+            width="100%"
+            height="420"
+            frameborder="0"
+            allowfullscreen
+            loading="lazy"></iframe>
         `;
       } else {
         layout.video.innerHTML = `
@@ -1088,18 +1094,15 @@
         <div class="tff-module-nav">
           ${
             prev
-              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(prev.id)}"
-                     class="tff-btn tff-btn-ghost">← Föregående modul</a>`
+              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(prev.id)}" class="tff-btn tff-btn-ghost">← Föregående modul</a>`
               : `<span></span>`
           }
 
-          <a href="kurser.html?course=${encodeURIComponent(course.id)}"
-             class="tff-btn tff-btn-primary">Till kursen</a>
+          <a href="kurser.html?course=${encodeURIComponent(course.id)}" class="tff-btn tff-btn-primary">Till kursen</a>
 
           ${
             next && isUnlocked(course.id, next.id)
-              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}"
-                     class="tff-btn tff-btn-ghost">Nästa modul →</a>`
+              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}" class="tff-btn tff-btn-ghost">Nästa modul →</a>`
               : `<span></span>`
           }
         </div>
@@ -1189,12 +1192,10 @@
         }
 
         <div class="tff-result-actions">
-          <a href="kurser.html?course=${encodeURIComponent(course.id)}"
-             class="tff-btn tff-btn-primary">Till kursen</a>
+          <a href="kurser.html?course=${encodeURIComponent(course.id)}" class="tff-btn tff-btn-primary">Till kursen</a>
           ${
             passed && next
-              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}"
-                     class="tff-btn tff-btn-ghost">Gå till nästa modul</a>`
+              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}" class="tff-btn tff-btn-ghost">Gå till nästa modul</a>`
               : ``
           }
         </div>
@@ -1225,6 +1226,7 @@
       return;
     }
 
+    // fallback på element
     if (byId("coursesGrid")) {
       renderCatalogPage();
       return;
@@ -1240,4 +1242,3 @@
 
   document.addEventListener("DOMContentLoaded", init);
 })();
-``
