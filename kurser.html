@@ -1,45 +1,26 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <title>Kurser</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurs</title>
 </head>
+
 <body>
 
-<h1>Kurser</h1>
+<main>
 
-<div id="courses"></div>
+  utbildningar.html← Till kurskatalogen</a>
+  <button id="resetProgressBtn">Rensa progression</button>
 
-<script src="assets/js/kurser-data.js"></script>
+  <h1 id="courseTitle">Kurs</h1>
+  <p id="coursePurpose"></p>
+  <p id="courseProgress"></p>
 
-<script>
-function loadCourses() {
-  const container = document.getElementById("courses");
+  <ul id="moduleList"></ul>
 
-  if (!window.kurserData) {
-    container.innerHTML = "<p>Ingen data laddad</p>";
-    return;
-  }
+</main>
 
-  kurserData.forEach(course => {
-    const div = document.createElement("div");
-
-    div.innerHTML = `
-      <h2>${course.title}</h2>
-      <button onclick="openCourse('${course.id}')">Öppna</button>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-function openCourse(id) {
-  localStorage.setItem("selectedCourse", id);
-  window.location.href = "utbildningar.html";
-}
-
-loadCourses();
-</script>
-
+assets/js/kurser-app.jsscript>
 </body>
 </html>
