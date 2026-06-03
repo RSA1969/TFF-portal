@@ -3,9 +3,9 @@
 
   const PASS_PERCENT = 80;
 
-  /* =====================================================
+  /* =========================================================
      VIDEO-OVERRIDES
-     ===================================================== */
+     ========================================================= */
   const VIDEO_OVERRIDES = {
     "kurs01_modul01": "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQABWSDYJjqPQoIfGi0z0Ou9AcMxF5Oy4PrqVL_O-_kNaGM?download=1",
     "kurs01_modul02": "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQD71mP6Qek0TLIsqv9_dLTZAbF0Ejm0iqytgK-HSoVan30?download=1",
@@ -13,23 +13,24 @@
     "kurs01_modul04": "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQAQSNKAUbYpQLkt7bg4jpcrAWi_WYKLOb9TLMNIG6zl5BI?download=1"
   };
 
-  /* =====================================================
-     KURSER OCH MODULER
-     ===================================================== */
+  /* =========================================================
+     ALLA 15 KURSER
+     ========================================================= */
   const COURSE_DEFS = [
     {
       id: "kurs01",
       code: "K1",
       title: "Kurs 1 – MICROSOFT TEAMS: GRUND & ARBETSSÄTT",
       purpose: "Rätt användning av Teams i vardagsarbetet.",
-      color: "#82c7b8",
-      image: "assets/img/tile-mandatory.jpg",
+      color: "#9fdcd0",
+      tag1: "Grundutbildning",
+      tag2: "System",
       modules: [
-        "Vad är Teams (och vad är det inte)",
-        "Chat, kanal och möte – rätt val",
-        "Möten i Teams – roller & praxis",
-        "Filer i Teams (SharePoint i bakgrunden)",
-        "Vanliga misstag i kommunal Teams‑användning"
+        "Modul 1 – Vad är Teams (och vad är det inte)",
+        "Modul 2 – Chat, kanal och möte – rätt val",
+        "Modul 3 – Möten i Teams – roller & praxis",
+        "Modul 4 – Filer i Teams (SharePoint i bakgrunden)",
+        "Modul 5 – Vanliga misstag i kommunal Teams‑användning"
       ]
     },
     {
@@ -38,13 +39,14 @@
       title: "Kurs 2 – TRANSKRIBERING",
       purpose: "Effektiv och spårbar omvandling av tal till text.",
       color: "#a7d8f5",
-      image: "assets/img/tile-status.jpg",
+      tag1: "Grundutbildning",
+      tag2: "Arbetssätt",
       modules: [
-        "Grundläggande transkribering",
-        "Praktisk användning i möten",
-        "Kvalitetssäkring",
-        "Informationshantering & GDPR",
-        "Tillämpning i TFF"
+        "Modul 1 – Grundläggande transkribering",
+        "Modul 2 – Praktisk användning i möten",
+        "Modul 3 – Kvalitetssäkring",
+        "Modul 4 – Informationshantering & GDPR",
+        "Modul 5 – Tillämpning i TFF"
       ]
     },
     {
@@ -52,14 +54,15 @@
       code: "K3",
       title: "Kurs 3 – Dokumentation (TFF)",
       purpose: "Strukturerad dokumentation enligt regelverk.",
-      color: "#f3c9a9",
-      image: "assets/img/tile-guides.jpg",
+      color: "#f0c8a8",
+      tag1: "Grundutbildning",
+      tag2: "Dokument",
       modules: [
-        "Grundläggande dokumentation",
-        "Struktur och standard",
-        "Dokument i M365",
-        "Efterlevnad (lagar och regler)",
-        "Praktisk tillämpning i TFF"
+        "Modul 1 – Grundläggande dokumentation",
+        "Modul 2 – Struktur och standard",
+        "Modul 3 – Dokument i M365",
+        "Modul 4 – Efterlevnad (lagar och regler)",
+        "Modul 5 – Praktisk tillämpning i TFF"
       ]
     },
     {
@@ -67,14 +70,15 @@
       code: "K4",
       title: "Kurs 4 – AI & COPILOT: GRUNDERNA",
       purpose: "Grunderna i AI och Copilot i arbetet.",
-      color: "#9fd8cf",
-      image: "assets/img/tile-chief.jpg",
+      color: "#9fdcd0",
+      tag1: "AI",
+      tag2: "M365",
       modules: [
-        "Vad Copilot är (och inte är)",
-        "Data, behörighet och ansvar",
-        "När Copilot hjälper – och när den inte gör det",
-        "Kvalitetskontroll av AI‑svar",
-        "Kommunala exempel & fallgropar"
+        "Modul 1 – Vad Copilot är (och inte är)",
+        "Modul 2 – Data, behörighet och ansvar",
+        "Modul 3 – När Copilot hjälper – och när den inte gör det",
+        "Modul 4 – Kvalitetskontroll av AI‑svar",
+        "Modul 5 – Kommunala exempel & fallgropar"
       ]
     },
     {
@@ -83,13 +87,14 @@
       title: "Kurs 5 – PROMPTNING I COPILOT (M365)",
       purpose: "Skriva effektiva prompts i Microsoft 365.",
       color: "#eab3b3",
-      image: "assets/img/tile-edu.jpg",
+      tag1: "AI",
+      tag2: "Prompt",
       modules: [
-        "Promptens byggstenar",
-        "Roller, kontext och mål",
-        "Vanliga jobbcase (möten, text, analys)",
-        "Förbättra prompt steg‑för‑steg",
-        "Promptbibliotek & återanvändning"
+        "Modul 1 – Promptens byggstenar",
+        "Modul 2 – Roller, kontext och mål",
+        "Modul 3 – Vanliga jobbcase (möten, text, analys)",
+        "Modul 4 – Förbättra prompt steg‑för‑steg",
+        "Modul 5 – Promptbibliotek & återanvändning"
       ]
     },
     {
@@ -97,14 +102,15 @@
       code: "K6",
       title: "Kurs 6 – SKAPA & SPARA DOKUMENT KORREKT",
       purpose: "Korrekt dokumenthantering i vardagen.",
-      color: "#c9b8e4",
-      image: "assets/img/tile-hrkollegan.jpg",
+      color: "#d5c4ef",
+      tag1: "Dokument",
+      tag2: "M365",
       modules: [
-        "Utkast vs styrdokument",
-        "Var dokument ska skapas",
-        "Namngivning & struktur",
-        "Versionering och livscykel",
-        "Återanvändning och spårbarhet"
+        "Modul 1 – Utkast vs styrdokument",
+        "Modul 2 – Var dokument ska skapas",
+        "Modul 3 – Namngivning & struktur",
+        "Modul 4 – Versionering och livscykel",
+        "Modul 5 – Återanvändning och spårbarhet"
       ]
     },
     {
@@ -113,13 +119,14 @@
       title: "Kurs 7 – TEAMS, SHAREPOINT & BEHÖRIGHETER",
       purpose: "Rätt struktur, lagring och behörigheter.",
       color: "#f3b6c6",
-      image: "assets/img/tile-atlas.jpg",
+      tag1: "System",
+      tag2: "Behörighet",
       modules: [
-        "Ägare, medlemmar, gäster",
-        "Team‑, kanal‑ och filbehörighet",
-        "Flytta innehåll rätt",
-        "Dela länkar säkert",
-        "Vanliga behörighetsfel"
+        "Modul 1 – Ägare, medlemmar, gäster",
+        "Modul 2 – Team‑, kanal‑ och filbehörighet",
+        "Modul 3 – Flytta innehåll rätt",
+        "Modul 4 – Dela länkar säkert",
+        "Modul 5 – Vanliga behörighetsfel"
       ]
     },
     {
@@ -128,13 +135,14 @@
       title: "Kurs 8 – INFORMATIONSKLASSNING & GDPR I M365",
       purpose: "Rätt hantering av information och personuppgifter.",
       color: "#f4c2c2",
-      image: "assets/img/tile-chief.jpg",
+      tag1: "GDPR",
+      tag2: "Säkerhet",
       modules: [
-        "Vad är informationsklassning?",
-        "Känslig data i Teams & SharePoint",
-        "Copilot och personuppgifter",
-        "Delning och lagring – juridiskt ansvar",
-        "Praktiska kommunala exempel"
+        "Modul 1 – Vad är informationsklassning?",
+        "Modul 2 – Känslig data i Teams & SharePoint",
+        "Modul 3 – Copilot och personuppgifter",
+        "Modul 4 – Delning och lagring – juridiskt ansvar",
+        "Modul 5 – Praktiska kommunala exempel"
       ]
     },
     {
@@ -143,13 +151,14 @@
       title: "Kurs 9 – RÄTT VERKTYG FÖR RÄTT Ärende",
       purpose: "Välja rätt verktyg för rätt arbete.",
       color: "#d9c1e8",
-      image: "assets/img/tile-guides.jpg",
+      tag1: "Arbetssätt",
+      tag2: "M365",
       modules: [
-        "När ska du använda e‑post?",
-        "När är Teams rätt?",
-        "När ska något vara ett dokument?",
-        "Beslutsmatris för vardagen",
-        "Exempel från kommunal verklighet"
+        "Modul 1 – När ska du använda e‑post?",
+        "Modul 2 – När är Teams rätt?",
+        "Modul 3 – När ska något vara ett dokument?",
+        "Modul 4 – Beslutsmatris för vardagen",
+        "Modul 5 – Exempel från kommunal verklighet"
       ]
     },
     {
@@ -158,13 +167,14 @@
       title: "Kurs 10 – DIGITAL MÖTESKULTUR",
       purpose: "Effektiva digitala möten med tydliga resultat.",
       color: "#f6c09a",
-      image: "assets/img/tile-status.jpg",
+      tag1: "Möten",
+      tag2: "Arbetssätt",
       modules: [
-        "När behövs möte?",
-        "Agenda & förväntningar",
-        "Beslut, åtgärder och uppföljning",
-        "Asynkront arbete i Teams",
-        "Mötesetikett i digital miljö"
+        "Modul 1 – När behövs möte?",
+        "Modul 2 – Agenda & förväntningar",
+        "Modul 3 – Beslut, åtgärder och uppföljning",
+        "Modul 4 – Asynkront arbete i Teams",
+        "Modul 5 – Mötesetikett i digital miljö"
       ]
     },
     {
@@ -173,13 +183,14 @@
       title: "Kurs 11 – FRÅN CHATT TILL STRUKTUR",
       purpose: "Göra kunskap beständig och återanvändbar.",
       color: "#a6dcd4",
-      image: "assets/img/tile-mandatory.jpg",
+      tag1: "Dokument",
+      tag2: "Arbetssätt",
       modules: [
-        "Varför chatt inte är arkiv",
-        "Fånga beslut ur dialog",
-        "Skapa struktur av arbetsmaterial",
-        "Dela rätt – inte allt",
-        "Från brus till verksamhetsnytta"
+        "Modul 1 – Varför chatt inte är arkiv",
+        "Modul 2 – Fånga beslut ur dialog",
+        "Modul 3 – Skapa struktur av arbetsmaterial",
+        "Modul 4 – Dela rätt – inte allt",
+        "Modul 5 – Från brus till verksamhetsnytta"
       ]
     },
     {
@@ -188,13 +199,14 @@
       title: "Kurs 12 – Diarieföring och arkivering (TFF)",
       purpose: "Korrekt hantering av allmänna handlingar och dokument.",
       color: "#c9d9a6",
-      image: "assets/img/tile-edu.jpg",
+      tag1: "Arkiv",
+      tag2: "Efterlevnad",
       modules: [
-        "Grundläggande begrepp och regelverk",
-        "Diarieföring i praktiken",
-        "Arkivering och bevarande",
-        "GDPR och informationssäkerhet",
-        "Praktisk tillämpning i TFF"
+        "Modul 1 – Grundläggande begrepp och regelverk",
+        "Modul 2 – Diarieföring i praktiken",
+        "Modul 3 – Arkivering och bevarande",
+        "Modul 4 – GDPR och informationssäkerhet",
+        "Modul 5 – Praktisk tillämpning i TFF"
       ]
     },
     {
@@ -203,13 +215,14 @@
       title: "Kurs 13 – STYRNING & GOVERNANCE I M365 (TFF)",
       purpose: "Styrning, struktur och uppföljning i M365.",
       color: "#d4c6f4",
-      image: "assets/img/tile-atlas.jpg",
+      tag1: "Governance",
+      tag2: "M365",
       modules: [
-        "Vad är governance i M365",
-        "Roller och ansvar",
-        "Livscykelhantering",
-        "Struktur och standarder",
-        "Uppföljning och kontroll"
+        "Modul 1 – Vad är governance i M365",
+        "Modul 2 – Roller och ansvar",
+        "Modul 3 – Livscykelhantering",
+        "Modul 4 – Struktur och standarder",
+        "Modul 5 – Uppföljning och kontroll"
       ]
     },
     {
@@ -218,13 +231,14 @@
       title: "Kurs 14 – INFORMATIONENS LIVSCYKEL",
       purpose: "Informationshantering genom hela livscykeln.",
       color: "#b7e1cd",
-      image: "assets/img/tile-hrkollegan.jpg",
+      tag1: "Informationshantering",
+      tag2: "Efterlevnad",
       modules: [
-        "Informationsflöde",
-        "Allmän handling",
-        "Bevarande och gallring",
-        "Koppling till arkiv",
-        "Praktisk tillämpning (TFF)"
+        "Modul 1 – Informationsflöde",
+        "Modul 2 – Allmän handling",
+        "Modul 3 – Bevarande och gallring",
+        "Modul 4 – Koppling till arkiv",
+        "Modul 5 – Praktisk tillämpning (TFF)"
       ]
     },
     {
@@ -233,13 +247,14 @@
       title: "Kurs 15 – ARBETA PROCESSBASERAT I M365",
       purpose: "Processbaserat arbetssätt i digital miljö.",
       color: "#a8ddd3",
-      image: "assets/img/tile-chief.jpg",
+      tag1: "Process",
+      tag2: "Ledningssystem",
       modules: [
-        "Processer i verksamheten",
-        "Från process till digitalt stöd",
-        "Struktur per process",
-        "Standardisering",
-        "Koppling till ledningssystem"
+        "Modul 1 – Processer i verksamheten",
+        "Modul 2 – Från process till digitalt stöd",
+        "Modul 3 – Struktur per process",
+        "Modul 4 – Standardisering",
+        "Modul 5 – Koppling till ledningssystem"
       ]
     }
   ];
@@ -250,19 +265,75 @@
       id: `${course.id}_modul${String(moduleIndex + 1).padStart(2, "0")}`,
       number: moduleIndex + 1,
       title: moduleTitle,
-      video: `video/kurs${courseIndex + 1}_modul${moduleIndex + 1}.mp4`
+      video: `video/kurs${courseIndex + 1}_modul${moduleIndex + 1}.mp4`,
+      audio: `assets/audio/kurs${courseIndex + 1}_modul${moduleIndex + 1}.mp3`
     }))
   }));
 
-  /* =====================================================
-     HJÄLPFUNKTIONER
-     ===================================================== */
+  /* =========================================================
+     STORAGE
+     ========================================================= */
+  function moduleStateKey(courseId, moduleId) {
+    return `tff_module_state_${courseId}_${moduleId}`;
+  }
+
+  function courseLastKey(courseId) {
+    return `tff_course_last_${courseId}`;
+  }
+
+  function getModuleState(courseId, moduleId) {
+    const raw = localStorage.getItem(moduleStateKey(courseId, moduleId));
+    if (!raw) {
+      return {
+        moduleDone: false,
+        quizPassed: false,
+        quizScore: 0,
+        quizPercent: 0
+      };
+    }
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return {
+        moduleDone: false,
+        quizPassed: false,
+        quizScore: 0,
+        quizPercent: 0
+      };
+    }
+  }
+
+  function setModuleState(courseId, moduleId, patch) {
+    const current = getModuleState(courseId, moduleId);
+    const updated = { ...current, ...patch };
+    localStorage.setItem(moduleStateKey(courseId, moduleId), JSON.stringify(updated));
+    localStorage.setItem(courseLastKey(courseId), moduleId);
+    return updated;
+  }
+
+  function clearAllProgress() {
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith("tff_module_state_") || key.startsWith("tff_course_last_")) {
+        localStorage.removeItem(key);
+      }
+    });
+    window.location.reload();
+  }
+
+  /* =========================================================
+     HELPERS
+     ========================================================= */
   function byId(id) {
     return document.getElementById(id);
   }
 
   function getParam(name) {
     return new URLSearchParams(window.location.search).get(name);
+  }
+
+  function pageName() {
+    const path = window.location.pathname || "";
+    return path.split("/").pop().toLowerCase();
   }
 
   function escapeHtml(str) {
@@ -272,11 +343,6 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
-  }
-
-  function pageName() {
-    const path = window.location.pathname || "";
-    return path.split("/").pop().toLowerCase();
   }
 
   function getCourse(courseId) {
@@ -316,505 +382,464 @@
     return normalizeVideoUrl(VIDEO_OVERRIDES[module.id] || module.video || "");
   }
 
-  function progressKey(courseId, moduleId) {
-    return `tff_progress_${courseId}_${moduleId}`;
-  }
-
-  function saveProgress(courseId, moduleId, data) {
-    localStorage.setItem(progressKey(courseId, moduleId), JSON.stringify(data));
-  }
-
-  function loadProgress(courseId, moduleId) {
-    const raw = localStorage.getItem(progressKey(courseId, moduleId));
-    return raw ? JSON.parse(raw) : null;
-  }
-
-  function isPassed(courseId, moduleId) {
-    const p = loadProgress(courseId, moduleId);
-    return !!(p && p.passed === true);
-  }
-
-  function isUnlocked(courseId, moduleId) {
-    const course = getCourse(courseId);
-    if (!course) return false;
-    const index = course.modules.findIndex(m => m.id === moduleId);
-    if (index === -1) return false;
-    if (index === 0) return true;
-    return isPassed(courseId, course.modules[index - 1].id);
+  function getAudioUrl(module) {
+    return module.audio || "";
   }
 
   function getCourseProgress(courseId) {
     const course = getCourse(courseId);
-    if (!course) return { passed: 0, total: 0, percent: 0 };
+    if (!course) return { done: 0, total: 0, percent: 0, allApproved: false };
+
     const total = course.modules.length;
-    const passed = course.modules.filter(m => isPassed(courseId, m.id)).length;
+    let done = 0;
+    let approved = true;
+
+    course.modules.forEach(module => {
+      const state = getModuleState(course.id, module.id);
+      if (state.moduleDone) done += 1;
+      if (!state.quizPassed) approved = false;
+    });
+
     return {
-      passed,
+      done,
       total,
-      percent: total ? Math.round((passed / total) * 100) : 0
+      percent: total ? Math.round((done / total) * 100) : 0,
+      allApproved: approved && total > 0
     };
   }
 
-  function resetAllProgress() {
-    COURSES.forEach(course => {
-      course.modules.forEach(module => {
-        localStorage.removeItem(progressKey(course.id, module.id));
-      });
-    });
-    window.location.reload();
+  function getLastVisitedModule(courseId) {
+    const stored = localStorage.getItem(courseLastKey(courseId));
+    if (!stored) return null;
+    return getModule(courseId, stored);
   }
 
-  window.resetAllTffCourseProgress = resetAllProgress;
-
-  /* =====================================================
-     STIL
-     ===================================================== */
+  /* =========================================================
+     STYLING
+     ========================================================= */
   function injectStyles() {
-    if (document.getElementById("tff-kurser-app-styles")) return;
+    if (document.getElementById("tff-ui-styles")) return;
 
     const style = document.createElement("style");
-    style.id = "tff-kurser-app-styles";
+    style.id = "tff-ui-styles";
     style.textContent = `
-      :root{
-        --tff-bg:#f3f4f8;
-        --tff-card:#ffffff;
-        --tff-text:#1f2937;
-        --tff-muted:#6b7280;
-        --tff-line:#e5e7eb;
-        --tff-primary:#2563eb;
-        --tff-success:#16a34a;
-        --tff-danger:#dc2626;
-        --tff-shadow:0 10px 24px rgba(15,23,42,.08);
-        --tff-radius:18px;
+      :root {
+        --bg: #f3f4f6;
+        --card: #ffffff;
+        --line: #d9dfe5;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --blue: #1f65b8;
+        --blue-dark: #0f4f96;
+        --green-soft: #eef7f4;
+        --btn-ghost: #f7fafb;
+        --shadow: 0 6px 18px rgba(0,0,0,.07);
+        --radius: 16px;
       }
 
-      body{
-        margin:0;
-        background:var(--tff-bg);
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Segoe UI, Arial, sans-serif;
       }
 
-      .tff-wrap{
-        max-width:1160px;
-        margin:0 auto;
-        padding:24px;
-        font-family:Segoe UI, Arial, sans-serif;
-        color:var(--tff-text);
+      .wrap {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 16px 20px;
       }
 
-      .tff-hero,
-      .tff-card{
-        background:var(--tff-card);
-        border-radius:var(--tff-radius);
-        box-shadow:var(--tff-shadow);
-        padding:24px;
-        margin-bottom:22px;
+      .topbar {
+        background: #fff;
+        border-bottom: 1px solid var(--line);
+        padding: 14px 0;
+        margin-bottom: 18px;
       }
 
-      .tff-hero h1,
-      .tff-card h1,
-      .tff-card h2{
-        margin:0 0 10px;
+      .topbar-inner {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 16px;
+        flex-wrap: wrap;
       }
 
-      .tff-hero p,
-      .tff-card p{
-        margin:0;
-        line-height:1.6;
-        color:var(--tff-muted);
+      .title-block h1 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 800;
       }
 
-      .tff-toolbar,
-      .tff-topnav{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        gap:12px;
-        flex-wrap:wrap;
-        margin-bottom:16px;
+      .title-block p {
+        margin: 2px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 600;
       }
 
-      .tff-btn{
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        padding:12px 16px;
-        border-radius:12px;
-        text-decoration:none;
-        font-weight:600;
-        border:none;
-        cursor:pointer;
-        font-size:14px;
+      .top-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
       }
 
-      .tff-btn-primary{
-        background:var(--tff-primary);
-        color:#fff;
+      .pill {
+        background: var(--green-soft);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 10px 14px;
+        font-weight: 700;
+        font-size: 14px;
+        white-space: nowrap;
       }
 
-      .tff-btn-ghost{
-        background:#fff;
-        border:1px solid var(--tff-line);
-        color:var(--tff-text);
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        padding: 12px 16px;
+        font-weight: 800;
+        font-size: 14px;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: var(--text);
+        cursor: pointer;
       }
 
-      .tff-courses-grid{
-        display:grid;
-        grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-        gap:18px;
+      .btn-primary {
+        background: var(--blue);
+        color: #fff;
+        border-color: var(--blue);
       }
 
-      .tff-course-card{
-        background:#fff;
-        border-radius:18px;
-        box-shadow:var(--tff-shadow);
-        overflow:hidden;
-        border-top:6px solid #ccc;
+      .btn-primary:hover {
+        background: var(--blue-dark);
       }
 
-      .tff-course-card-body{
-        padding:20px;
+      .btn-ghost {
+        background: var(--btn-ghost);
       }
 
-      .tff-chip{
-        display:inline-block;
-        background:#eef2ff;
-        color:#4338ca;
-        font-size:.84rem;
-        font-weight:700;
-        padding:6px 10px;
-        border-radius:999px;
-        margin-bottom:10px;
+      .catalog-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+        gap: 18px;
       }
 
-      .tff-course-card h3{
-        margin:0 0 10px;
-        line-height:1.35;
-        font-size:1.14rem;
+      .catalog-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 18px;
+        border-top: 6px solid #cfd8dc;
       }
 
-      .tff-course-card p{
-        margin:0 0 10px;
-        line-height:1.55;
-        color:var(--tff-muted);
+      .catalog-card h3 {
+        margin: 6px 0 8px;
+        font-size: 18px;
+        line-height: 1.35;
       }
 
-      .tff-progress{
-        width:100%;
-        height:10px;
-        background:#edf2f7;
-        border-radius:999px;
-        overflow:hidden;
-        margin:12px 0 8px;
+      .catalog-card p {
+        margin: 0 0 12px;
+        color: var(--muted);
+        line-height: 1.55;
       }
 
-      .tff-progress > span{
-        display:block;
-        height:100%;
-        background:#10b981;
+      .chip {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #eef2ff;
+        color: #4338ca;
+        font-weight: 800;
+        font-size: 12px;
       }
 
-      .tff-progress-text{
-        font-weight:600;
-        color:#111827 !important;
+      .progress-bar {
+        width: 100%;
+        height: 10px;
+        border-radius: 999px;
+        background: #e7edf2;
+        overflow: hidden;
+        margin: 12px 0 8px;
       }
 
-      .tff-module-list{
-        list-style:none;
-        padding:0;
-        margin:0;
-        display:flex;
-        flex-direction:column;
-        gap:14px;
+      .progress-bar span {
+        display: block;
+        height: 100%;
+        background: #6bc4b2;
       }
 
-      .tff-module-item{
-        background:#fff;
-        border-radius:18px;
-        box-shadow:var(--tff-shadow);
-        padding:18px;
-        display:flex;
-        justify-content:space-between;
-        gap:16px;
-        align-items:center;
+      .page-grid {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 18px;
       }
 
-      .tff-module-item.locked{
-        opacity:.62;
+      .panel {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 18px;
       }
 
-      .tff-module-left{
-        display:flex;
-        gap:14px;
-        align-items:flex-start;
-        flex:1;
+      .panel h2,
+      .panel h3 {
+        margin: 0 0 12px;
       }
 
-      .tff-module-badge{
-        min-width:54px;
-        height:54px;
-        border-radius:14px;
-        background:#eef2ff;
-        color:#4338ca;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-weight:700;
+      .panel p {
+        margin: 0 0 12px;
+        color: var(--muted);
+        line-height: 1.55;
       }
 
-      .tff-module-info h4{
-        margin:0 0 8px;
+      .course-select {
+        width: 100%;
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        font-weight: 700;
+        font-size: 14px;
+        background: #fff;
       }
 
-      .tff-module-info p{
-        margin:0 0 8px;
-        color:var(--tff-muted);
+      .module-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 14px;
       }
 
-      .tff-status{
-        display:inline-flex;
-        padding:6px 10px;
-        border-radius:999px;
-        font-size:.84rem;
-        font-weight:700;
+      .module-card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+        background: #fff;
       }
 
-      .tff-status-open{
-        background:#dbeafe;
-        color:#1d4ed8;
+      .module-card.active {
+        border-color: #b8d8d2;
+        background: #f2faf7;
       }
 
-      .tff-status-passed{
-        background:#dcfce7;
-        color:#166534;
+      .module-card strong {
+        display: block;
+        font-size: 16px;
+        line-height: 1.35;
+        margin-bottom: 6px;
       }
 
-      .tff-status-locked{
-        background:#fee2e2;
-        color:#991b1b;
+      .module-card small {
+        display: block;
+        color: var(--muted);
+        font-weight: 700;
+        line-height: 1.4;
       }
 
-      .tff-bullets{
-        padding-left:20px;
-        margin:0;
+      .right-main {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
       }
 
-      .tff-bullets li{
-        margin-bottom:8px;
-        line-height:1.6;
+      .title-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
       }
 
-      .tff-video video,
-      .tff-video iframe{
-        width:100%;
-        min-height:320px;
-        border-radius:14px;
-        background:#000;
+      .title-row h2 {
+        margin: 0 0 6px;
+        font-size: 18px;
       }
 
-      .tff-quiz-form{
-        display:flex;
-        flex-direction:column;
-        gap:16px;
+      .title-row p {
+        margin: 0;
+        color: var(--muted);
       }
 
-      .tff-quiz-question{
-        border:1px solid var(--tff-line);
-        border-radius:14px;
-        padding:16px;
+      .tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
       }
 
-      .tff-quiz-question legend{
-        padding:0 6px;
-        font-weight:700;
-        line-height:1.5;
+      .tag {
+        background: var(--green-soft);
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-weight: 800;
+        white-space: nowrap;
       }
 
-      .tff-quiz-option{
-        display:flex;
-        align-items:flex-start;
-        gap:8px;
-        padding:8px 0;
-        cursor:pointer;
-        line-height:1.5;
+      .audio-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding-top: 6px;
+        border-top: 1px solid var(--line);
       }
 
-      .tff-quiz-actions{
-        display:flex;
-        justify-content:flex-start;
+      .audio-status {
+        color: var(--muted);
+        font-weight: 700;
+        font-size: 14px;
       }
 
-      .tff-result{
-        border-radius:14px;
-        padding:16px;
-        margin-top:8px;
+      .content-grid {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 16px;
       }
 
-      .tff-result-success{
-        background:#dcfce7;
-        color:#166534;
+      .info-card,
+      .status-card {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 16px;
+        background: #fff;
       }
 
-      .tff-result-fail{
-        background:#fee2e2;
-        color:#991b1b;
+      .info-card h3,
+      .status-card h3 {
+        margin: 0 0 10px;
+        font-size: 16px;
       }
 
-      .tff-result p{
-        margin:0 0 8px;
-        color:inherit;
+      .label {
+        font-weight: 800;
+        margin-bottom: 6px;
       }
 
-      .tff-result-actions{
-        display:flex;
-        gap:12px;
-        flex-wrap:wrap;
-        margin-top:12px;
+      .bullet-list {
+        padding-left: 18px;
+        margin: 0;
       }
 
-      .tff-module-nav{
-        display:flex;
-        justify-content:space-between;
-        gap:12px;
-        flex-wrap:wrap;
+      .bullet-list li {
+        margin-bottom: 8px;
+        line-height: 1.55;
       }
 
-      @media (max-width:720px){
-        .tff-module-item{
-          flex-direction:column;
-          align-items:stretch;
+      .button-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+
+      .note-box {
+        margin-top: 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+        background: #fafafa;
+        color: var(--muted);
+        line-height: 1.55;
+        font-size: 14px;
+      }
+
+      .video-card video,
+      .video-card iframe {
+        width: 100%;
+        border-radius: 14px;
+        background: #000;
+        min-height: 320px;
+      }
+
+      .quiz-card {
+        border-top: 1px solid var(--line);
+        padding-top: 14px;
+      }
+
+      .quiz-form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .quiz-question {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+        background: #fff;
+      }
+
+      .quiz-question legend {
+        font-weight: 800;
+        padding: 0 4px;
+      }
+
+      .quiz-option {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        padding: 6px 0;
+        line-height: 1.45;
+      }
+
+      .quiz-result {
+        border-radius: 14px;
+        padding: 14px;
+        margin-top: 10px;
+      }
+
+      .quiz-success {
+        background: #edf9f1;
+        color: #166534;
+      }
+
+      .quiz-fail {
+        background: #fef2f2;
+        color: #991b1b;
+      }
+
+      .nav-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      @media (max-width: 980px) {
+        .page-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .content-grid {
+          grid-template-columns: 1fr;
         }
       }
     `;
     document.head.appendChild(style);
   }
 
-  /* =====================================================
-     LAYOUTER
-     ===================================================== */
-  function ensureCatalogLayout() {
-    let grid = byId("coursesGrid");
-    if (grid) return grid;
-
-    const main = document.querySelector("main") || document.body;
-    main.innerHTML = `
-      <section class="tff-wrap">
-        <section class="tff-hero">
-          <h1>TFF – Kurskatalog</h1>
-          <p>Digitala kurser med moduler, video, quiz och progression.</p>
-        </section>
-
-        <div class="tff-toolbar">
-          <div></div>
-          <button id="resetProgressBtn" class="tff-btn tff-btn-ghost">Rensa progression</button>
-        </div>
-
-        <section id="coursesGrid" class="tff-courses-grid"></section>
-      </section>
-    `;
-    return byId("coursesGrid");
-  }
-
-  function ensureCourseLayout() {
-    let list = byId("moduleList");
-    if (list) {
-      return {
-        title: byId("courseTitle"),
-        purpose: byId("coursePurpose"),
-        progress: byId("courseProgress"),
-        list
-      };
-    }
-
-    const main = document.querySelector("main") || document.body;
-    main.innerHTML = `
-      <section class="tff-wrap">
-        <nav class="tff-topnav">
-          <a href="utbildningar.html" class="tff-btn tff-btn-ghost">← Till kurskatalogen</a>
-          <button id="resetProgressBtn" class="tff-btn tff-btn-ghost">Rensa progression</button>
-        </nav>
-
-        <section class="tff-hero">
-          <h1 id="courseTitle"></h1>
-          <p id="coursePurpose"></p>
-          <p id="courseProgress" class="tff-progress-text"></p>
-        </section>
-
-        <ul id="moduleList" class="tff-module-list"></ul>
-      </section>
-    `;
-
-    return {
-      title: byId("courseTitle"),
-      purpose: byId("coursePurpose"),
-      progress: byId("courseProgress"),
-      list: byId("moduleList")
-    };
-  }
-
-  function ensureModuleLayout() {
-    let quiz = byId("quizContainer");
-    if (quiz) {
-      return {
-        title: byId("moduleTitle"),
-        subtitle: byId("moduleSubtitle"),
-        bullets: byId("moduleBullets"),
-        video: byId("videoContainer"),
-        quiz,
-        nav: byId("moduleNav")
-      };
-    }
-
-    const main = document.querySelector("main") || document.body;
-    main.innerHTML = `
-      <section class="tff-wrap">
-        <nav class="tff-topnav">
-          <a href="utbildningar.html" class="tff-btn tff-btn-ghost">← Kurskatalog</a>
-          <button id="resetProgressBtn" class="tff-btn tff-btn-ghost">Rensa progression</button>
-        </nav>
-
-        <section class="tff-card">
-          <h1 id="moduleTitle"></h1>
-          <p id="moduleSubtitle"></p>
-        </section>
-
-        <section class="tff-card">
-          <h2>Innehåll</h2>
-          <ul id="moduleBullets" class="tff-bullets"></ul>
-        </section>
-
-        <section class="tff-card">
-          <h2>Video</h2>
-          <div id="videoContainer" class="tff-video"></div>
-        </section>
-
-        <section class="tff-card">
-          <h2>Quiz</h2>
-          <div id="quizContainer"></div>
-        </section>
-
-        <section class="tff-card">
-          <div id="moduleNav"></div>
-        </section>
-      </section>
-    `;
-
-    return {
-      title: byId("moduleTitle"),
-      subtitle: byId("moduleSubtitle"),
-      bullets: byId("moduleBullets"),
-      video: byId("videoContainer"),
-      quiz: byId("quizContainer"),
-      nav: byId("moduleNav")
-    };
-  }
-
-  /* =====================================================
-     FRÅGOR – 10 FRÅGOR PER MODUL
-     ===================================================== */
-  function shuffleWithSeed(options, seed) {
-    const arr = options.map((text) => ({ text }));
+  /* =========================================================
+     QUESTIONS (10 PER MODUL)
+     ========================================================= */
+  function seededShuffle(options, seed) {
+    const arr = options.map(text => ({ text }));
     for (let i = arr.length - 1; i > 0; i--) {
-      const j = (seed + i * 17) % (i + 1);
+      const j = (seed + i * 13) % (i + 1);
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
@@ -823,7 +848,7 @@
   function buildQuestions(course, module) {
     const templates = [
       {
-        question: `Vad är huvudsyftet med modulen "${module.title}"?`,
+        question: `Vad är huvudsyftet med "${module.title}"?`,
         options: [
           course.purpose,
           "Att lagra allt lokalt",
@@ -833,7 +858,7 @@
         correct: 0
       },
       {
-        question: `Vilket arbetssätt stödjer bäst kursen "${course.title}"?`,
+        question: `Vilket arbetssätt stödjer bäst "${course.title}"?`,
         options: [
           "Gemensam struktur och tydliga ansvar",
           "Att varje person gör helt olika",
@@ -883,7 +908,7 @@
         correct: 0
       },
       {
-        question: `Vad bör prioriteras i kursen "${course.title}"?`,
+        question: `Vad bör prioriteras i "${course.title}"?`,
         options: [
           "Rätt information på rätt plats",
           "Privat lagring som förstahandsval",
@@ -913,7 +938,7 @@
         correct: 0
       },
       {
-        question: `Vad är det övergripande målet i kursen "${course.title}"?`,
+        question: `Vad är det övergripande målet i "${course.title}"?`,
         options: [
           "Att skapa ordning, kvalitet och hållbara arbetssätt",
           "Att undvika struktur",
@@ -924,12 +949,12 @@
       }
     ];
 
-    return templates.map((item, idx) => {
-      const shuffled = shuffleWithSeed(item.options, course.code.length + module.number + idx);
+    return templates.map((item, index) => {
+      const shuffled = seededShuffle(item.options, course.code.length + module.number + index);
       const correctText = item.options[item.correct];
       return {
-        id: `${module.id}_q${String(idx + 1).padStart(2, "0")}`,
-        number: idx + 1,
+        id: `${module.id}_q${String(index + 1).padStart(2, "0")}`,
+        number: index + 1,
         question: item.question,
         options: shuffled.map(x => x.text),
         correct: shuffled.findIndex(x => x.text === correctText)
@@ -937,306 +962,387 @@
     });
   }
 
-  /* =====================================================
-     RENDER – KURSKATALOG
-     ===================================================== */
+  /* =========================================================
+     CATALOG PAGE
+     ========================================================= */
   function renderCatalogPage() {
-    const grid = ensureCatalogLayout();
+    const root = byId("app");
+    if (!root) return;
 
+    root.innerHTML = `
+      <div class="topbar">
+        <div class="topbar-inner">
+          <div class="title-block">
+            <h1>TFF – Kurskatalog</h1>
+            <p>Kurser • Moduler • Video • Quiz • Progress</p>
+          </div>
+          <div class="top-actions">
+            <button id="resetProgressBtn" class="btn btn-ghost">Återställ progress</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="catalog-grid" id="catalogGrid"></div>
+      </div>
+    `;
+
+    const grid = byId("catalogGrid");
     grid.innerHTML = COURSES.map(course => {
       const progress = getCourseProgress(course.id);
+      const approved = progress.allApproved ? "Godkänd" : "Ej godkänd";
+
+      const firstModule = course.modules[0];
+
       return `
-        <article class="tff-course-card" style="border-top-color:${escapeHtml(course.color)}">
-          <div class="tff-course-card-body">
-            <span class="tff-chip">${escapeHtml(course.code)}</span>
-            <h3>${escapeHtml(course.title)}</h3>
-            <p>${escapeHtml(course.purpose)}</p>
-            <div class="tff-progress"><span style="width:${progress.percent}%"></span></div>
-            <p class="tff-progress-text">Genomfört: ${progress.passed}/${progress.total} moduler (${progress.percent}%)</p>
-            <a href="kurser.html?course=${encodeURIComponent(course.id)}" class="tff-btn tff-btn-primary">Öppna kurs</a>
-          </div>
+        <article class="catalog-card" style="border-top-color:${escapeHtml(course.color)}">
+          <span class="chip">${escapeHtml(course.code)}</span>
+          <h3>${escapeHtml(course.title)}</h3>
+          <p>${escapeHtml(course.purpose)}</p>
+
+          <div class="progress-bar"><span style="width:${progress.percent}%"></span></div>
+          <p><strong>Genomfört:</strong> ${progress.done}/${progress.total} moduler (${progress.percent}%)</p>
+          <p><strong>Status:</strong> ${approved}</p>
+
+          <a href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(firstModule.id)}" class="btn btn-primary">
+            Öppna kurs
+          </a>
         </article>
       `;
     }).join("");
 
     const resetBtn = byId("resetProgressBtn");
-    if (resetBtn) resetBtn.onclick = resetAllProgress;
+    if (resetBtn) resetBtn.onclick = clearAllProgress;
   }
 
-  /* =====================================================
-     RENDER – KURS
-     ===================================================== */
-  function renderCoursePage() {
-    const courseId = getParam("course");
-    const course = getCourse(courseId);
-    const layout = ensureCourseLayout();
+  /* =========================================================
+     TRAINING PAGE
+     ========================================================= */
+  function renderTrainingPage() {
+    const root = byId("app");
+    if (!root) return;
 
-    if (!course) {
-      layout.list.innerHTML = `<li class="tff-card">Kurs hittades inte.</li>`;
-      return;
-    }
+    let courseId = getParam("course") || COURSES[0].id;
+    let course = getCourse(courseId) || COURSES[0];
 
-    if (layout.title) layout.title.textContent = course.title;
-    if (layout.purpose) layout.purpose.textContent = course.purpose;
+    let moduleId = getParam("module");
+    let module = getModule(course.id, moduleId) || getLastVisitedModule(course.id) || course.modules[0];
 
-    const progress = getCourseProgress(course.id);
-    if (layout.progress) {
-      layout.progress.textContent = `Genomfört: ${progress.passed}/${progress.total} moduler (${progress.percent}%)`;
-    }
+    const courseProgress = getCourseProgress(course.id);
+    const moduleState = getModuleState(course.id, module.id);
 
-    layout.list.innerHTML = course.modules.map(module => {
-      const unlocked = isUnlocked(course.id, module.id);
-      const passed = isPassed(course.id, module.id);
+    root.innerHTML = `
+      <div class="topbar">
+        <div class="topbar-inner">
+          <div class="title-block">
+            <h1>TFF – Utbildning</h1>
+            <p>Moduler • Podd • Progress • Godkänd</p>
+          </div>
+          <div class="top-actions">
+            <div class="pill">Progress: ${courseProgress.percent}%</div>
+            <div class="pill">Kurs: ${courseProgress.allApproved ? "Godkänd" : "Ej godkänd"}</div>
+            <button id="resetProgressBtn" class="btn btn-ghost">Återställ progress</button>
+            utbildningar.html" class="btn btn-primary">Till kurskatalog</a>
+          </div>
+        </div>
+      </div>
 
-      return `
-        <li class="tff-module-item ${unlocked ? "" : "locked"}">
-          <div class="tff-module-left">
-            <div class="tff-module-badge">M${module.number}</div>
-            <div class="tff-module-info">
-              <h4>${escapeHtml(module.title)}</h4>
-              <p>${escapeHtml(course.purpose)}</p>
-              <span class="tff-status ${passed ? "tff-status-passed" : unlocked ? "tff-status-open" : "tff-status-locked"}">
-                ${passed ? "Godkänd" : unlocked ? "Öppen" : "Låst"}
-              </span>
+      <div class="wrap">
+        <div class="page-grid">
+          <aside class="panel">
+            <h2>Kurs</h2>
+            <p>Välj kurs och navigera via modulerna.</p>
+
+            <select id="courseSelect" class="course-select"></select>
+
+            <h3 style="margin-top:18px;">Moduler</h3>
+            <div id="moduleSidebar" class="module-list"></div>
+
+            <div class="note-box">
+              Modulerna använder samma kursfärg. Ljud försöker starta automatiskt men kan kräva interaktion p.g.a. webbläsarpolicy.
             </div>
-          </div>
-          <div>
-            ${
-              unlocked
-                ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(module.id)}" class="tff-btn tff-btn-primary">Öppna modul</a>`
-                : `<button class="tff-btn tff-btn-ghost" disabled>Låst</button>`
-            }
-          </div>
-        </li>
+          </aside>
+
+          <main class="panel right-main">
+            <div class="title-row">
+              <div>
+                <h2 id="courseTitle"></h2>
+                <p id="coursePurpose"></p>
+              </div>
+              <div class="tags">
+                <span class="tag" id="tag1"></span>
+                <span class="tag" id="tag2"></span>
+              </div>
+            </div>
+
+            <div class="audio-row">
+              <button id="playAudioBtn" class="btn btn-ghost">Spela ljud</button>
+              <label style="display:flex;gap:8px;align-items:center;font-weight:700;">
+                <input type="checkbox" id="resumeToggle">
+                Fortsätt där jag slutade
+              </label>
+              <span class="audio-status" id="audioStatus"></span>
+            </div>
+
+            <div class="content-grid">
+              <section class="info-card">
+                <h3>Modul</h3>
+                <p id="moduleTitleLine"></p>
+
+                <div class="label">Syfte</div>
+                <p id="modulePurposeLine"></p>
+
+                <div class="label">Innehåll</div>
+                <ul class="bullet-list" id="moduleBullets"></ul>
+              </section>
+
+              <section class="status-card">
+                <h3>Progress i modul</h3>
+                <p id="moduleProgressLine"></p>
+
+                <div class="button-row">
+                  <button id="markDoneBtn" class="btn btn-ghost">Markera modul som klar</button>
+                  <button id="showQuizBtn" class="btn btn-primary">Godkänn quiz</button>
+                </div>
+
+                <div class="note-box">
+                  Quizdelar kan fyllas på här nedanför. Ljudet är kopplat per modul (MP3-fil), men om fil saknas visas bara informationsrad.
+                </div>
+              </section>
+            </div>
+
+            <section class="panel video-card">
+              <h3>Video</h3>
+              <div id="videoBox"></div>
+            </section>
+
+            <section class="quiz-card">
+              <h3>Quiz</h3>
+              <div id="quizBox"></div>
+            </section>
+
+            <div class="nav-row">
+              <button id="prevBtn" class="btn btn-ghost">Föregående modul</button>
+              <button id="nextBtn" class="btn btn-primary">Nästa modul</button>
+            </div>
+          </main>
+        </div>
+      </div>
+    `;
+
+    const courseSelect = byId("courseSelect");
+    courseSelect.innerHTML = COURSES.map(c => `
+      <option value="${c.id}" ${c.id === course.id ? "selected" : ""}>${escapeHtml(c.title)}</option>
+    `).join("");
+
+    courseSelect.onchange = (e) => {
+      const selectedCourse = getCourse(e.target.value);
+      if (!selectedCourse) return;
+      const firstModule = selectedCourse.modules[0];
+      window.location.href = `kurser.html?course=${encodeURIComponent(selectedCourse.id)}&module=${encodeURIComponent(firstModule.id)}`;
+    };
+
+    byId("courseTitle").textContent = course.title;
+    byId("coursePurpose").textContent = `Syfte: ${course.purpose}`;
+    byId("tag1").textContent = course.tag1 || "Kurs";
+    byId("tag2").textContent = course.tag2 || "System";
+
+    const sidebar = byId("moduleSidebar");
+    sidebar.innerHTML = course.modules.map((m, index) => {
+      const state = getModuleState(course.id, m.id);
+      const active = m.id === module.id ? "active" : "";
+      return `
+        href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(m.id)}" class="module-card ${active}">
+          <strong>${index + 1}. ${escapeHtml(m.title)}</strong>
+          <small>Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}</small>
+        </a>
       `;
     }).join("");
 
-    const resetBtn = byId("resetProgressBtn");
-    if (resetBtn) resetBtn.onclick = resetAllProgress;
-  }
+    byId("moduleTitleLine").textContent = module.title;
+    byId("modulePurposeLine").textContent = course.purpose;
 
-  /* =====================================================
-     RENDER – MODUL
-     ===================================================== */
-  function renderModulePage() {
-    const courseId = getParam("course");
-    const moduleId = getParam("module");
-    const course = getCourse(courseId);
-    const module = getModule(courseId, moduleId);
-    const layout = ensureModuleLayout();
+    const bulletList = byId("moduleBullets");
+    bulletList.innerHTML = `
+      <li>${escapeHtml(module.title.replace(/^Modul \\d+ – /, ""))}</li>
+      <li>Arbetssätt och struktur i praktiken</li>
+      <li>Vanliga fel, risker och rekommenderade arbetssätt</li>
+      <li>Koppling till kommunal verksamhet och Microsoft 365</li>
+    `;
 
-    if (!course || !module) {
-      if (layout.quiz) {
-        layout.quiz.innerHTML = `<div class="tff-card">Kurs eller modul hittades inte.</div>`;
-      }
-      return;
-    }
+    byId("moduleProgressLine").textContent =
+      `Modul: ${moduleState.moduleDone ? "klar" : "ej klar"} • Quiz: ${moduleState.quizPassed ? "Godkänd" : "Ej godkänd"}`;
 
-    if (!isUnlocked(course.id, module.id)) {
-      document.body.innerHTML = `
-        <section class="tff-wrap">
-          <section class="tff-card">
-            <h1>Modulen är låst</h1>
-            <p>Du måste klara föregående modul innan du kan öppna denna.</p>
-            <p style="margin-top:12px">
-              <a href="kurser.html?course=${encodeURIComponent(course.id)}" class="tff-btn tff-btn-primary">Tillbaka till kursen</a>
-            </p>
-          </section>
-        </section>
+    const videoUrl = getVideoUrl(module);
+    const videoBox = byId("videoBox");
+    if (videoUrl.includes("embed=1")) {
+      videoBox.innerHTML = `
+        &quot; width=&quot;100%&quot; height=&quot;420&quot; frameborder=&quot;0&quot; allowfullscreen loading=&quot;lazy&quot;></iframe>
       `;
-      return;
-    }
-
-    if (layout.title) layout.title.textContent = module.title;
-    if (layout.subtitle) layout.subtitle.textContent = `${course.title} – ${course.purpose}`;
-
-    if (layout.bullets) {
-      layout.bullets.innerHTML = [
-        `Syfte: ${course.purpose}`,
-        `Fokusområde: ${module.title}`,
-        "Arbetssätt och struktur i praktiken",
-        "Vanliga fel, risker och rekommenderade arbetssätt"
-      ].map(item => `<li>${escapeHtml(item)}</li>`).join("");
-    }
-
-    if (layout.video) {
-      const url = getVideoUrl(module);
-
-      if (url.includes("embed=1")) {
-        layout.video.innerHTML = `
-          <iframe
-            src="${escapeHtml(url)}"
-            width="100%"
-            height="420"
-            frameborder="0"
-            allowfullscreen
-            loading="lazy"></iframe>
-        `;
-      } else {
-        layout.video.innerHTML = `
-          <video controls preload="metadata">
-            <source src="${escapeHtml(url)}" type="video/mp4">
-            Din webbläsare stödjer inte video.
-          </video>
-        `;
-      }
-    }
-
-    if (layout.quiz) {
-      renderQuiz(course, module, layout.quiz);
-    }
-
-    if (layout.nav) {
-      const prev = getPrevModule(course.id, module.id);
-      const next = getNextModule(course.id, module.id);
-
-      layout.nav.innerHTML = `
-        <div class="tff-module-nav">
-          ${
-            prev
-              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(prev.id)}" class="tff-btn tff-btn-ghost">← Föregående modul</a>`
-              : `<span></span>`
-          }
-
-          <a href="kurser.html?course=${encodeURIComponent(course.id)}" class="tff-btn tff-btn-primary">Till kursen</a>
-
-          ${
-            next && isUnlocked(course.id, next.id)
-              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}" class="tff-btn tff-btn-ghost">Nästa modul →</a>`
-              : `<span></span>`
-          }
-        </div>
+    } else {
+      videoBox.innerHTML = `
+        <video controls preload="metadata">
+          ${videoUrl}
+          Din webbläsare stödjer inte video.
+        </video>
       `;
     }
 
+    const audioStatus = byId("audioStatus");
+    const playAudioBtn = byId("playAudioBtn");
+    const audioUrl = getAudioUrl(module);
+    const audio = new Audio(audioUrl);
+
+    audio.addEventListener("error", () => {
+      audioStatus.textContent = `Ingen ljudfil hittades för modulen (lägg MP3 i assets/audio/ enligt README).`;
+    });
+
+    audio.addEventListener("canplaythrough", () => {
+      audioStatus.textContent = `Ljudfil hittad för modulen.`;
+    });
+
+    playAudioBtn.onclick = async () => {
+      try {
+        await audio.play();
+        audioStatus.textContent = "Ljud spelas upp.";
+      } catch {
+        audioStatus.textContent = "Ljud kunde inte starta automatiskt. Kontrollera att MP3-filen finns.";
+      }
+    };
+
+    byId("resumeToggle").checked = true;
+
+    byId("markDoneBtn").onclick = () => {
+      const current = getModuleState(course.id, module.id);
+      setModuleState(course.id, module.id, {
+        moduleDone: !current.moduleDone
+      });
+      window.location.reload();
+    };
+
+    byId("showQuizBtn").onclick = () => {
+      document.getElementById("quizBox").scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    renderQuiz(course, module);
+
+    const prev = getPrevModule(course.id, module.id);
+    const next = getNextModule(course.id, module.id);
+
+    byId("prevBtn").disabled = !prev;
+    byId("nextBtn").disabled = !next;
+
+    byId("prevBtn").onclick = () => {
+      if (!prev) return;
+      window.location.href = `kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(prev.id)}`;
+    };
+
+    byId("nextBtn").onclick = () => {
+      if (!next) return;
+      window.location.href = `kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}`;
+    };
+
     const resetBtn = byId("resetProgressBtn");
-    if (resetBtn) resetBtn.onclick = resetAllProgress;
+    if (resetBtn) resetBtn.onclick = clearAllProgress;
   }
 
-  /* =====================================================
+  /* =========================================================
      QUIZ
-     ===================================================== */
-  function renderQuiz(course, module, container) {
+     ========================================================= */
+  function renderQuiz(course, module) {
+    const quizBox = byId("quizBox");
+    if (!quizBox) return;
+
     const questions = buildQuestions(course, module);
 
-    container.innerHTML = `
-      <form id="tffQuizForm" class="tff-quiz-form">
+    quizBox.innerHTML = `
+      <form id="quizForm" class="quiz-form">
         ${questions.map(q => `
-          <fieldset class="tff-quiz-question">
-            <legend><strong>Fråga ${q.number}:</strong> ${escapeHtml(q.question)}</legend>
+          <fieldset class="quiz-question">
+            <legend>Fråga ${q.number}: ${escapeHtml(q.question)}</legend>
             ${q.options.map((option, index) => `
-              <label class="tff-quiz-option">
-                <input type="radio" name="${escapeHtml(q.id)}" value="${index}">
+              <label class="quiz-option">
+                <input type="radio" name="${q.id}" value="${index}">
                 <span>${escapeHtml(option)}</span>
               </label>
             `).join("")}
           </fieldset>
         `).join("")}
 
-        <div class="tff-quiz-actions">
-          <button type="button" id="tffCheckQuizBtn" class="tff-btn tff-btn-primary">Kontrollera svar</button>
+        <div class="button-row">
+          <button type="button" class="btn btn-primary" id="checkQuizBtn">Rätta quiz</button>
         </div>
 
-        <div id="tffQuizResult"></div>
+        <div id="quizResult"></div>
       </form>
     `;
 
-    const button = byId("tffCheckQuizBtn");
-    if (button) {
-      button.onclick = function () {
-        checkQuiz(course, module, questions);
+    const checkBtn = byId("checkQuizBtn");
+    if (checkBtn) {
+      checkBtn.onclick = () => {
+        let score = 0;
+        let answered = 0;
+
+        questions.forEach(q => {
+          const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+          if (selected) {
+            answered++;
+            if (Number(selected.value) === q.correct) {
+              score++;
+            }
+          }
+        });
+
+        const percent = Math.round((score / questions.length) * 100);
+        const passed = percent >= PASS_PERCENT;
+
+        setModuleState(course.id, module.id, {
+          quizPassed: passed,
+          quizScore: score,
+          quizPercent: percent
+        });
+
+        const result = byId("quizResult");
+        result.innerHTML = `
+          <div class="quiz-result ${passed ? "quiz-success" : "quiz-fail"}">
+            <p><strong>Resultat:</strong> ${score} av ${questions.length} rätt (${percent}%)</p>
+            <p><strong>Status:</strong> ${passed ? "Godkänd" : "Inte godkänd"}</p>
+            <p><strong>Besvarade frågor:</strong> ${answered} av ${questions.length}</p>
+            <p>${passed ? "Quizet är godkänt." : "Du behöver minst 80% rätt för godkänt."}</p>
+          </div>
+        `;
+
+        const line = byId("moduleProgressLine");
+        if (line) {
+          const state = getModuleState(course.id, module.id);
+          line.textContent =
+            `Modul: ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}`;
+        }
+
+        const sidebarCard = document.querySelector("a.module-card.active small");
+        if (sidebarCard) {
+          const state = getModuleState(course.id, module.id);
+          sidebarCard.textContent = `Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}`;
+        }
       };
     }
   }
 
-  function checkQuiz(course, module, questions) {
-    let score = 0;
-    let answered = 0;
-
-    questions.forEach(q => {
-      const selected = document.querySelector(`input[name="${q.id}"]:checked`);
-      if (selected) {
-        answered++;
-        if (Number(selected.value) === q.correct) {
-          score++;
-        }
-      }
-    });
-
-    const percent = Math.round((score / questions.length) * 100);
-    const passed = percent >= PASS_PERCENT;
-
-    saveProgress(course.id, module.id, {
-      score,
-      total: questions.length,
-      percent,
-      passed,
-      timestamp: new Date().toISOString()
-    });
-
-    const next = getNextModule(course.id, module.id);
-    const result = byId("tffQuizResult");
-
-    if (!result) return;
-
-    result.innerHTML = `
-      <div class="tff-result ${passed ? "tff-result-success" : "tff-result-fail"}">
-        <p><strong>Resultat:</strong> ${score} av ${questions.length} rätt (${percent}%)</p>
-        <p><strong>Krav:</strong> ${PASS_PERCENT}% för godkänt</p>
-        <p><strong>Status:</strong> ${passed ? "Godkänd" : "Inte godkänd"}</p>
-        <p><strong>Besvarade frågor:</strong> ${answered} av ${questions.length}</p>
-        ${
-          passed
-            ? `<p>Modulen är godkänd. Nästa modul låses upp automatiskt.</p>`
-            : `<p>Du behöver nå minst ${PASS_PERCENT}% för att låsa upp nästa modul.</p>`
-        }
-
-        <div class="tff-result-actions">
-          <a href="kurser.html?course=${encodeURIComponent(course.id)}" class="tff-btn tff-btn-primary">Till kursen</a>
-          ${
-            passed && next
-              ? `<a href="kurs_dokumentation.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}" class="tff-btn tff-btn-ghost">Gå till nästa modul</a>`
-              : ``
-          }
-        </div>
-      </div>
-    `;
-  }
-
-  /* =====================================================
+  /* =========================================================
      INIT
-     ===================================================== */
+     ========================================================= */
   function init() {
     injectStyles();
+    const page = pageName();
 
-    const current = pageName();
-
-    if (current === "utbildningar.html") {
+    if (page === "utbildningar.html") {
       renderCatalogPage();
       return;
     }
 
-    if (current === "kurser.html") {
-      renderCoursePage();
+    if (page === "kurser.html" || page === "kurs_dokumentation.html") {
+      renderTrainingPage();
       return;
-    }
-
-    if (current === "kurs_dokumentation.html") {
-      renderModulePage();
-      return;
-    }
-
-    // fallback på element
-    if (byId("coursesGrid")) {
-      renderCatalogPage();
-      return;
-    }
-    if (byId("moduleList")) {
-      renderCoursePage();
-      return;
-    }
-    if (byId("quizContainer") || byId("videoContainer")) {
-      renderModulePage();
     }
   }
 
