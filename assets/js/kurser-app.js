@@ -5,8 +5,7 @@
 
   /* =========================================================
      VIDEO-OVERRIDES
-     - SharePoint-länkar visas i iframe
-     - Övriga videor visas i <video>
+     SharePoint-länkar ska använda embed=1
      ========================================================= */
   const VIDEO_OVERRIDES = {
     kurs01_modul01:
@@ -33,7 +32,7 @@
       tag2: "System",
       modules: [
         "Modul 1 – Vad är Teams (och vad är det inte)",
-        "Modul 2 – Chat, kanal och möte – rätt val",
+        "Modul 2 – Chatt, kanal och möte – rätt val",
         "Modul 3 – Möten i Teams – roller & praxis",
         "Modul 4 – Filer i Teams (SharePoint i bakgrunden)",
         "Modul 5 – Vanliga misstag i kommunal Teams‑användning"
@@ -154,7 +153,7 @@
     {
       id: "kurs09",
       code: "K9",
-      title: "Kurs 9 – RÄTT VERKTYG FÖR RÄTT Ärende",
+      title: "Kurs 9 – RÄTT VERKTYG FÖR RÄTT ÄRENDE",
       purpose: "Välja rätt verktyg för rätt arbete.",
       color: "#d9c1e8",
       tag1: "Arbetssätt",
@@ -383,7 +382,7 @@
   function normalizeVideoUrl(url) {
     if (!url) return "";
     if (url.includes("sharepoint.com")) {
-      if (url.includes("embed=1") || url.includes("download=1")) return url;
+      if (url.includes("embed=1")) return url;
       return url.includes("?") ? `${url}&embed=1` : `${url}?embed=1`;
     }
     return url;
@@ -776,7 +775,8 @@
       }
 
       .video-card video,
-      .video-card iframe {
+      .video-card iframe,
+      .video-frame {
         width: 100%;
         border-radius: 14px;
         background: #000;
@@ -1024,10 +1024,7 @@
           <p><strong>Genomfört:</strong> ${progress.done}/${progress.total} moduler (${progress.percent}%)</p>
           <p><strong>Status:</strong> ${approved}</p>
 
-          <a
-            href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(firstModule.id)}"
-            class="btn btn-primary"
-          >
+          <a href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(firstModule.id)}" class="btn btn-primary">
             Öppna kurs
           </a>
         </article>
@@ -1036,6 +1033,43 @@
 
     const resetBtn = byId("resetProgressBtn");
     if (resetBtn) resetBtn.onclick = clearAllProgress;
+  }
+
+  /* =========================================================
+     VIDEO-RENDERING
+     ========================================================= */
+  function renderVideo(videoBox, module) {
+    const videoUrl = getVideoUrl(module);
+
+    if (!videoUrl) {
+      videoBox.innerHTML = `<div class="note-box">Ingen video är kopplad till denna modul ännu.</div>`;
+      return;
+    }
+
+    if (isSharePointUrl(videoUrl)) {
+      videoBox.innerHTML = `
+        <iframe
+          class="video-frame"
+          src="${videoUrl}"
+          title="${escapeHtml(module.title)}"
+          width="100%"
+          height="420"
+          frameborder="0"
+          allow="autoplay; fullscreen"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      `;
+      return;
+    }
+
+    videoBox.innerHTML = `
+      <video controls preload="metadata">
+        <source src="${videoUrl}" type="video/mp4">
+        Din webbläsare stödjer inte video.
+      </video>
+    `;
   }
 
   /* =========================================================
@@ -1157,7 +1191,7 @@
       </div>
     `;
 
-    /* ---------- Kurser ---------- */
+    /* ---------- Kursval ---------- */
     const courseSelect = byId("courseSelect");
     courseSelect.innerHTML = COURSES.map((c) => `
       <option value="${c.id}" ${c.id === course.id ? "selected" : ""}>
@@ -1185,10 +1219,7 @@
       const active = m.id === module.id ? "active" : "";
 
       return `
-        <a
-          href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(m.id)}"
-          class="module-card ${active}"
-        >
+        <a href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(m.id)}" class="module-card ${active}">
           <strong>${index + 1}. ${escapeHtml(m.title)}</strong>
           <small>Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}</small>
         </a>
@@ -1201,7 +1232,7 @@
 
     const bulletList = byId("moduleBullets");
     bulletList.innerHTML = `
-      <li>${escapeHtml(module.title.replace(/^Modul \d+ – /, ""))}</li>
+      <li>${escapeHtml(module.title.replace(/^Modul \\d+ – /, ""))}</li>
       <li>Arbetssätt och struktur i praktiken</li>
       <li>Vanliga fel, risker och rekommenderade arbetssätt</li>
       <li>Koppling till kommunal verksamhet och Microsoft 365</li>
@@ -1211,50 +1242,29 @@
       `Modul: ${moduleState.moduleDone ? "klar" : "ej klar"} • Quiz: ${moduleState.quizPassed ? "Godkänd" : "Ej godkänd"}`;
 
     /* ---------- Video ---------- */
-    const videoUrl = getVideoUrl(module);
     const videoBox = byId("videoBox");
-
-    if (!videoUrl) {
-      videoBox.innerHTML = `
-        <div class="note-box">Ingen video är kopplad till denna modul ännu.</div>
-      `;
-    } else if (isSharePointUrl(videoUrl)) {
-      videoBox.innerHTML = `
-        <iframe
-          src="${videoUrl}"
-          width="100%"
-          height="420"
-          frameborder="0"
-          allowfullscreen
-          loading="lazy"
-          referrerpolicy="no-referrer"
-        ></iframe>
-      `;
-    } else {
-      videoBox.innerHTML = `
-        <video controls preload="metadata">
-          <source src="${videoUrl}" type="video/mp4">
-          Din webbläsare stödjer inte video.
-        </video>
-      `;
-    }
+    renderVideo(videoBox, module);
 
     /* ---------- Audio ---------- */
     const audioStatus = byId("audioStatus");
     const playAudioBtn = byId("playAudioBtn");
     const audioUrl = getAudioUrl(module);
-    const audio = new Audio(audioUrl);
+    const audio = audioUrl ? new Audio(audioUrl) : null;
 
-    audio.addEventListener("error", () => {
-      audioStatus.textContent = "Ingen ljudfil hittades för modulen.";
-    });
+    if (audio) {
+      audio.addEventListener("error", () => {
+        audioStatus.textContent = "Ingen ljudfil hittades för modulen.";
+      });
 
-    audio.addEventListener("canplaythrough", () => {
-      audioStatus.textContent = "Ljudfil hittad för modulen.";
-    });
+      audio.addEventListener("canplaythrough", () => {
+        audioStatus.textContent = "Ljudfil hittad för modulen.";
+      });
+    } else {
+      audioStatus.textContent = "Ingen ljudfil är kopplad till modulen.";
+    }
 
     playAudioBtn.onclick = async () => {
-      if (!audioUrl) {
+      if (!audio) {
         audioStatus.textContent = "Ingen ljudfil är kopplad till modulen.";
         return;
       }
