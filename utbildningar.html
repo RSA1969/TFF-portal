@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TFF-portal – Utbildningar</title>
+    <title>TFF – Kurskatalog</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/styles.css">
@@ -11,35 +11,10 @@
 
 <body>
 
-    <!-- HEADER -->
-    <header class="hero hero--compact">
-        <div class="hero__inner">
-            <a class="back" href="index.html">← Tillbaka till portalen</a>
-            <h1 class="hero__title hero__title--small">Utbildningar</h1>
+    <!-- ✅ VIKTIGT: JS skriver ALLT innehåll här -->
+    <div id="app"></div>
 
-            <!-- SÖK (valfri, påverkar inte funktion) -->
-            <form class="searchbar" role="search">
-                <input type="search" placeholder="Sök utbildning…">
-                <button type="submit">🔍</button>
-            </form>
-        </div>
-    </header>
-
-    <!-- MAIN -->
-    <main id="main" class="container">
-
-        <!-- DYNAMISK LISTA -->
-        <section class="education">
-            <h2>Alla kurser</h2>
-
-            <!-- ✅ VIKTIGT: denna används av JS -->
-            <div id="kurser-container"></div>
-
-        </section>
-
-    </main>
-
-    <!-- ✅ RÄTT SCRIPT (fixar ditt fel) -->
+    <!-- JS -->
     <script src="assets/js/kurser-app.js"></script>
 
 </body>
