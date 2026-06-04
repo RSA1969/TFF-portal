@@ -5,12 +5,18 @@
 
   /* =========================================================
      VIDEO-OVERRIDES
+     - SharePoint-länkar visas i iframe
+     - Övriga videor visas i <video>
      ========================================================= */
   const VIDEO_OVERRIDES = {
-    "kurs01_modul01": "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQABWSDYJjqPQoIfGi0z0Ou9AcMxF5Oy4PrqVL_O-_kNaGM?download=1",
-    "kurs01_modul02": "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQD71mP6Qek0TLIsqv9_dLTZAbF0Ejm0iqytgK-HSoVan30?download=1",
-    "kurs01_modul03": "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQCRb0ptY9iCQJThz0KP2dPMAfjC3fxkyC1F9g3bhnclEwM?download=1",
-    "kurs01_modul04": "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQAQSNKAUbYpQLkt7bg4jpcrAWi_WYKLOb9TLMNIG6zl5BI?download=1"
+    kurs01_modul01:
+      "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQABWSDYJjqPQoIfGi0z0Ou9AcMxF5Oy4PrqVL_O-_kNaGM?embed=1",
+    kurs01_modul02:
+      "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQD71mP6Qek0TLIsqv9_dLTZAbF0Ejm0iqytgK-HSoVan30?embed=1",
+    kurs01_modul03:
+      "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQCRb0ptY9iCQJThz0KP2dPMAfjC3fxkyC1F9g3bhnclEwM?embed=1",
+    kurs01_modul04:
+      "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQAQSNKAUbYpQLkt7bg4jpcrAWi_WYKLOb9TLMNIG6zl5BI?embed=1"
   };
 
   /* =========================================================
@@ -265,8 +271,12 @@
       id: `${course.id}_modul${String(moduleIndex + 1).padStart(2, "0")}`,
       number: moduleIndex + 1,
       title: moduleTitle,
-      video: `video/kurs${courseIndex + 1}_modul${moduleIndex + 1}.mp4`,
-      audio: `assets/audio/kurs${courseIndex + 1}_modul${moduleIndex + 1}.mp3`
+      video: `video/kurs${String(courseIndex + 1).padStart(2, "0")}_modul${String(
+        moduleIndex + 1
+      ).padStart(2, "0")}.mp4`,
+      audio: `assets/audio/kurs${String(courseIndex + 1).padStart(2, "0")}_modul${String(
+        moduleIndex + 1
+      ).padStart(2, "0")}.mp3`
     }))
   }));
 
@@ -291,6 +301,7 @@
         quizPercent: 0
       };
     }
+
     try {
       return JSON.parse(raw);
     } catch {
@@ -312,7 +323,7 @@
   }
 
   function clearAllProgress() {
-    Object.keys(localStorage).forEach(key => {
+    Object.keys(localStorage).forEach((key) => {
       if (key.startsWith("tff_module_state_") || key.startsWith("tff_course_last_")) {
         localStorage.removeItem(key);
       }
@@ -336,44 +347,44 @@
     return path.split("/").pop().toLowerCase();
   }
 
-  function escapeHtml(str) {
-    return String(str ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
   function getCourse(courseId) {
-    return COURSES.find(c => c.id === courseId) || null;
+    return COURSES.find((c) => c.id === courseId) || null;
   }
 
   function getModule(courseId, moduleId) {
     const course = getCourse(courseId);
     if (!course) return null;
-    return course.modules.find(m => m.id === moduleId) || null;
+    return course.modules.find((m) => m.id === moduleId) || null;
   }
 
   function getPrevModule(courseId, moduleId) {
     const course = getCourse(courseId);
     if (!course) return null;
-    const index = course.modules.findIndex(m => m.id === moduleId);
+    const index = course.modules.findIndex((m) => m.id === moduleId);
     return index > 0 ? course.modules[index - 1] : null;
   }
 
   function getNextModule(courseId, moduleId) {
     const course = getCourse(courseId);
     if (!course) return null;
-    const index = course.modules.findIndex(m => m.id === moduleId);
+    const index = course.modules.findIndex((m) => m.id === moduleId);
     return index >= 0 && index < course.modules.length - 1 ? course.modules[index + 1] : null;
   }
 
   function normalizeVideoUrl(url) {
     if (!url) return "";
     if (url.includes("sharepoint.com")) {
-      if (url.includes("download=1") || url.includes("embed=1")) return url;
-      return url.includes("?") ? `${url}&download=1` : `${url}?download=1`;
+      if (url.includes("embed=1") || url.includes("download=1")) return url;
+      return url.includes("?") ? `${url}&embed=1` : `${url}?embed=1`;
     }
     return url;
   }
@@ -386,15 +397,21 @@
     return module.audio || "";
   }
 
+  function isSharePointUrl(url) {
+    return typeof url === "string" && url.includes("sharepoint.com");
+  }
+
   function getCourseProgress(courseId) {
     const course = getCourse(courseId);
-    if (!course) return { done: 0, total: 0, percent: 0, allApproved: false };
+    if (!course) {
+      return { done: 0, total: 0, percent: 0, allApproved: false };
+    }
 
     const total = course.modules.length;
     let done = 0;
     let approved = true;
 
-    course.modules.forEach(module => {
+    course.modules.forEach((module) => {
       const state = getModuleState(course.id, module.id);
       if (state.moduleDone) done += 1;
       if (!state.quizPassed) approved = false;
@@ -434,7 +451,6 @@
         --green-soft: #eef7f4;
         --btn-ghost: #f7fafb;
         --shadow: 0 6px 18px rgba(0,0,0,.07);
-        --radius: 16px;
       }
 
       * { box-sizing: border-box; }
@@ -834,10 +850,10 @@
   }
 
   /* =========================================================
-     QUESTIONS (10 PER MODUL)
+     QUIZFRÅGOR
      ========================================================= */
   function seededShuffle(options, seed) {
-    const arr = options.map(text => ({ text }));
+    const arr = options.map((text) => ({ text }));
     for (let i = arr.length - 1; i > 0; i--) {
       const j = (seed + i * 13) % (i + 1);
       [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -952,18 +968,19 @@
     return templates.map((item, index) => {
       const shuffled = seededShuffle(item.options, course.code.length + module.number + index);
       const correctText = item.options[item.correct];
+
       return {
         id: `${module.id}_q${String(index + 1).padStart(2, "0")}`,
         number: index + 1,
         question: item.question,
-        options: shuffled.map(x => x.text),
-        correct: shuffled.findIndex(x => x.text === correctText)
+        options: shuffled.map((x) => x.text),
+        correct: shuffled.findIndex((x) => x.text === correctText)
       };
     });
   }
 
   /* =========================================================
-     CATALOG PAGE
+     KATALOGSIDA
      ========================================================= */
   function renderCatalogPage() {
     const root = byId("app");
@@ -988,10 +1005,10 @@
     `;
 
     const grid = byId("catalogGrid");
-    grid.innerHTML = COURSES.map(course => {
+
+    grid.innerHTML = COURSES.map((course) => {
       const progress = getCourseProgress(course.id);
       const approved = progress.allApproved ? "Godkänd" : "Ej godkänd";
-
       const firstModule = course.modules[0];
 
       return `
@@ -1000,11 +1017,17 @@
           <h3>${escapeHtml(course.title)}</h3>
           <p>${escapeHtml(course.purpose)}</p>
 
-          <div class="progress-bar"><span style="width:${progress.percent}%"></span></div>
+          <div class="progress-bar">
+            <span style="width:${progress.percent}%"></span>
+          </div>
+
           <p><strong>Genomfört:</strong> ${progress.done}/${progress.total} moduler (${progress.percent}%)</p>
           <p><strong>Status:</strong> ${approved}</p>
 
-          <a href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(firstModule.id)}" class="btn btn-primary">
+          <a
+            href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(firstModule.id)}"
+            class="btn btn-primary"
+          >
             Öppna kurs
           </a>
         </article>
@@ -1016,17 +1039,20 @@
   }
 
   /* =========================================================
-     TRAINING PAGE
+     UTBILDNINGSSIDA
      ========================================================= */
   function renderTrainingPage() {
     const root = byId("app");
     if (!root) return;
 
-    let courseId = getParam("course") || COURSES[0].id;
-    let course = getCourse(courseId) || COURSES[0];
+    const courseId = getParam("course") || COURSES[0].id;
+    const course = getCourse(courseId) || COURSES[0];
 
-    let moduleId = getParam("module");
-    let module = getModule(course.id, moduleId) || getLastVisitedModule(course.id) || course.modules[0];
+    const moduleId = getParam("module");
+    const module =
+      getModule(course.id, moduleId) ||
+      getLastVisitedModule(course.id) ||
+      course.modules[0];
 
     const courseProgress = getCourseProgress(course.id);
     const moduleState = getModuleState(course.id, module.id);
@@ -1038,11 +1064,12 @@
             <h1>TFF – Utbildning</h1>
             <p>Moduler • Podd • Progress • Godkänd</p>
           </div>
+
           <div class="top-actions">
             <div class="pill">Progress: ${courseProgress.percent}%</div>
             <div class="pill">Kurs: ${courseProgress.allApproved ? "Godkänd" : "Ej godkänd"}</div>
             <button id="resetProgressBtn" class="btn btn-ghost">Återställ progress</button>
-            utbildningar.html" class="btn btn-primary">Till kurskatalog</a>
+            <a href="utbildningar.html" class="btn btn-primary">Till kurskatalog</a>
           </div>
         </div>
       </div>
@@ -1059,7 +1086,7 @@
             <div id="moduleSidebar" class="module-list"></div>
 
             <div class="note-box">
-              Modulerna använder samma kursfärg. Ljud försöker starta automatiskt men kan kräva interaktion p.g.a. webbläsarpolicy.
+              Modulerna använder samma kursfärg. Ljud kan kräva klick p.g.a. webbläsarpolicy.
             </div>
           </aside>
 
@@ -1106,7 +1133,7 @@
                 </div>
 
                 <div class="note-box">
-                  Quizdelar kan fyllas på här nedanför. Ljudet är kopplat per modul (MP3-fil), men om fil saknas visas bara informationsrad.
+                  Quiz visas längre ned på sidan. Om MP3 saknas visas bara informationsrad.
                 </div>
               </section>
             </div>
@@ -1130,9 +1157,12 @@
       </div>
     `;
 
+    /* ---------- Kurser ---------- */
     const courseSelect = byId("courseSelect");
-    courseSelect.innerHTML = COURSES.map(c => `
-      <option value="${c.id}" ${c.id === course.id ? "selected" : ""}>${escapeHtml(c.title)}</option>
+    courseSelect.innerHTML = COURSES.map((c) => `
+      <option value="${c.id}" ${c.id === course.id ? "selected" : ""}>
+        ${escapeHtml(c.title)}
+      </option>
     `).join("");
 
     courseSelect.onchange = (e) => {
@@ -1142,29 +1172,36 @@
       window.location.href = `kurser.html?course=${encodeURIComponent(selectedCourse.id)}&module=${encodeURIComponent(firstModule.id)}`;
     };
 
+    /* ---------- Rubriker ---------- */
     byId("courseTitle").textContent = course.title;
     byId("coursePurpose").textContent = `Syfte: ${course.purpose}`;
     byId("tag1").textContent = course.tag1 || "Kurs";
     byId("tag2").textContent = course.tag2 || "System";
 
+    /* ---------- Sidebar moduler ---------- */
     const sidebar = byId("moduleSidebar");
     sidebar.innerHTML = course.modules.map((m, index) => {
       const state = getModuleState(course.id, m.id);
       const active = m.id === module.id ? "active" : "";
+
       return `
-        href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(m.id)}" class="module-card ${active}">
+        <a
+          href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(m.id)}"
+          class="module-card ${active}"
+        >
           <strong>${index + 1}. ${escapeHtml(m.title)}</strong>
           <small>Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}</small>
         </a>
       `;
     }).join("");
 
+    /* ---------- Modulinfo ---------- */
     byId("moduleTitleLine").textContent = module.title;
     byId("modulePurposeLine").textContent = course.purpose;
 
     const bulletList = byId("moduleBullets");
     bulletList.innerHTML = `
-      <li>${escapeHtml(module.title.replace(/^Modul \\d+ – /, ""))}</li>
+      <li>${escapeHtml(module.title.replace(/^Modul \d+ – /, ""))}</li>
       <li>Arbetssätt och struktur i praktiken</li>
       <li>Vanliga fel, risker och rekommenderade arbetssätt</li>
       <li>Koppling till kommunal verksamhet och Microsoft 365</li>
@@ -1173,45 +1210,66 @@
     byId("moduleProgressLine").textContent =
       `Modul: ${moduleState.moduleDone ? "klar" : "ej klar"} • Quiz: ${moduleState.quizPassed ? "Godkänd" : "Ej godkänd"}`;
 
+    /* ---------- Video ---------- */
     const videoUrl = getVideoUrl(module);
     const videoBox = byId("videoBox");
-    if (videoUrl.includes("embed=1")) {
+
+    if (!videoUrl) {
       videoBox.innerHTML = `
-        &quot; width=&quot;100%&quot; height=&quot;420&quot; frameborder=&quot;0&quot; allowfullscreen loading=&quot;lazy&quot;></iframe>
+        <div class="note-box">Ingen video är kopplad till denna modul ännu.</div>
+      `;
+    } else if (isSharePointUrl(videoUrl)) {
+      videoBox.innerHTML = `
+        <iframe
+          src="${videoUrl}"
+          width="100%"
+          height="420"
+          frameborder="0"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer"
+        ></iframe>
       `;
     } else {
       videoBox.innerHTML = `
         <video controls preload="metadata">
-          ${videoUrl}
+          <source src="${videoUrl}" type="video/mp4">
           Din webbläsare stödjer inte video.
         </video>
       `;
     }
 
+    /* ---------- Audio ---------- */
     const audioStatus = byId("audioStatus");
     const playAudioBtn = byId("playAudioBtn");
     const audioUrl = getAudioUrl(module);
     const audio = new Audio(audioUrl);
 
     audio.addEventListener("error", () => {
-      audioStatus.textContent = `Ingen ljudfil hittades för modulen (lägg MP3 i assets/audio/ enligt README).`;
+      audioStatus.textContent = "Ingen ljudfil hittades för modulen.";
     });
 
     audio.addEventListener("canplaythrough", () => {
-      audioStatus.textContent = `Ljudfil hittad för modulen.`;
+      audioStatus.textContent = "Ljudfil hittad för modulen.";
     });
 
     playAudioBtn.onclick = async () => {
+      if (!audioUrl) {
+        audioStatus.textContent = "Ingen ljudfil är kopplad till modulen.";
+        return;
+      }
+
       try {
         await audio.play();
         audioStatus.textContent = "Ljud spelas upp.";
       } catch {
-        audioStatus.textContent = "Ljud kunde inte starta automatiskt. Kontrollera att MP3-filen finns.";
+        audioStatus.textContent = "Ljud kunde inte starta. Kontrollera att MP3-filen finns.";
       }
     };
 
     byId("resumeToggle").checked = true;
 
+    /* ---------- Progressknappar ---------- */
     byId("markDoneBtn").onclick = () => {
       const current = getModuleState(course.id, module.id);
       setModuleState(course.id, module.id, {
@@ -1221,23 +1279,27 @@
     };
 
     byId("showQuizBtn").onclick = () => {
-      document.getElementById("quizBox").scrollIntoView({ behavior: "smooth", block: "start" });
+      byId("quizBox").scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
     renderQuiz(course, module);
 
+    /* ---------- Navigering ---------- */
     const prev = getPrevModule(course.id, module.id);
     const next = getNextModule(course.id, module.id);
 
-    byId("prevBtn").disabled = !prev;
-    byId("nextBtn").disabled = !next;
+    const prevBtn = byId("prevBtn");
+    const nextBtn = byId("nextBtn");
 
-    byId("prevBtn").onclick = () => {
+    prevBtn.disabled = !prev;
+    nextBtn.disabled = !next;
+
+    prevBtn.onclick = () => {
       if (!prev) return;
       window.location.href = `kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(prev.id)}`;
     };
 
-    byId("nextBtn").onclick = () => {
+    nextBtn.onclick = () => {
       if (!next) return;
       window.location.href = `kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}`;
     };
@@ -1257,7 +1319,7 @@
 
     quizBox.innerHTML = `
       <form id="quizForm" class="quiz-form">
-        ${questions.map(q => `
+        ${questions.map((q) => `
           <fieldset class="quiz-question">
             <legend>Fråga ${q.number}: ${escapeHtml(q.question)}</legend>
             ${q.options.map((option, index) => `
@@ -1278,54 +1340,55 @@
     `;
 
     const checkBtn = byId("checkQuizBtn");
-    if (checkBtn) {
-      checkBtn.onclick = () => {
-        let score = 0;
-        let answered = 0;
+    if (!checkBtn) return;
 
-        questions.forEach(q => {
-          const selected = document.querySelector(`input[name="${q.id}"]:checked`);
-          if (selected) {
-            answered++;
-            if (Number(selected.value) === q.correct) {
-              score++;
-            }
+    checkBtn.onclick = () => {
+      let score = 0;
+      let answered = 0;
+
+      questions.forEach((q) => {
+        const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+        if (selected) {
+          answered += 1;
+          if (Number(selected.value) === q.correct) {
+            score += 1;
           }
-        });
-
-        const percent = Math.round((score / questions.length) * 100);
-        const passed = percent >= PASS_PERCENT;
-
-        setModuleState(course.id, module.id, {
-          quizPassed: passed,
-          quizScore: score,
-          quizPercent: percent
-        });
-
-        const result = byId("quizResult");
-        result.innerHTML = `
-          <div class="quiz-result ${passed ? "quiz-success" : "quiz-fail"}">
-            <p><strong>Resultat:</strong> ${score} av ${questions.length} rätt (${percent}%)</p>
-            <p><strong>Status:</strong> ${passed ? "Godkänd" : "Inte godkänd"}</p>
-            <p><strong>Besvarade frågor:</strong> ${answered} av ${questions.length}</p>
-            <p>${passed ? "Quizet är godkänt." : "Du behöver minst 80% rätt för godkänt."}</p>
-          </div>
-        `;
-
-        const line = byId("moduleProgressLine");
-        if (line) {
-          const state = getModuleState(course.id, module.id);
-          line.textContent =
-            `Modul: ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}`;
         }
+      });
 
-        const sidebarCard = document.querySelector("a.module-card.active small");
-        if (sidebarCard) {
-          const state = getModuleState(course.id, module.id);
-          sidebarCard.textContent = `Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}`;
-        }
-      };
-    }
+      const percent = Math.round((score / questions.length) * 100);
+      const passed = percent >= PASS_PERCENT;
+
+      setModuleState(course.id, module.id, {
+        quizPassed: passed,
+        quizScore: score,
+        quizPercent: percent
+      });
+
+      const result = byId("quizResult");
+      result.innerHTML = `
+        <div class="quiz-result ${passed ? "quiz-success" : "quiz-fail"}">
+          <p><strong>Resultat:</strong> ${score} av ${questions.length} rätt (${percent}%)</p>
+          <p><strong>Status:</strong> ${passed ? "Godkänd" : "Inte godkänd"}</p>
+          <p><strong>Besvarade frågor:</strong> ${answered} av ${questions.length}</p>
+          <p>${passed ? "Quizet är godkänt." : "Du behöver minst 80% rätt för godkänt."}</p>
+        </div>
+      `;
+
+      const line = byId("moduleProgressLine");
+      if (line) {
+        const state = getModuleState(course.id, module.id);
+        line.textContent =
+          `Modul: ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}`;
+      }
+
+      const sidebarCard = document.querySelector("a.module-card.active small");
+      if (sidebarCard) {
+        const state = getModuleState(course.id, module.id);
+        sidebarCard.textContent =
+          `Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}`;
+      }
+    };
   }
 
   /* =========================================================
@@ -1335,14 +1398,13 @@
     injectStyles();
     const page = pageName();
 
-    if (page === "utbildningar.html") {
+    if (page === "utbildningar.html" || page === "" || page === "index.html") {
       renderCatalogPage();
       return;
     }
 
     if (page === "kurser.html" || page === "kurs_dokumentation.html") {
       renderTrainingPage();
-      return;
     }
   }
 
