@@ -17,19 +17,19 @@ body {
   width: 300px;
 }
 
-/* ✅ LAYOUT (NU PROPORTIONELL) */
+/* ✅ LAYOUT */
 .layout {
   display: grid;
-  grid-template-columns: 1.4fr 1fr; /* ✅ mindre vänster */
+  grid-template-columns: 1.3fr 1fr; /* ✅ mindre vänster */
   gap: 20px;
   padding: 20px;
   align-items: start;
 }
 
-/* ✅ LEFT (fixad storlek) */
+/* ✅ LEFT (FIXAD HÖJD – INTE HELA SKÄRMEN) */
 .left img {
   width: 100%;
-  height: 480px;        /* ✅ gör bilden mindre */
+  height: 420px;   /* 🔴 viktig ändring */
   object-fit: cover;
   border-radius: 12px;
 }
@@ -41,38 +41,42 @@ body {
   gap: 20px;
 }
 
-/* TOP */
+/* ✅ TOP CARDS */
 .right-top {
   display: flex;
   gap: 20px;
+  align-items: stretch;
 }
 
-/* BOTTOM */
+/* ✅ BOTTOM */
 .right-bottom {
   display: flex;
 }
 
-/* CARDS */
+/* ✅ CARDS – TAR BORT EXTRA LUFT */
 .card {
   flex: 1;
   display: flex;
   flex-direction: column;
-  text-decoration: none;
+  justify-content: flex-start;  /* 🔴 tar bort luft */
   background: white;
   border-radius: 12px;
   overflow: hidden;
+  text-decoration: none;
   color: black;
 }
 
-/* ✅ BILD PROPORTION */
+/* ✅ FIXAR VIT YTA */
 .card img {
   width: 100%;
-  height: 140px;
+  height: 130px;   /* 🔴 mindre bild = mindre tomrum */
   object-fit: cover;
+  display: block;
 }
 
 /* TEXT */
 .card h3 {
-  padding: 12px;
+  padding: 10px;
+  margin: 0;
   font-size: 16px;
 }
