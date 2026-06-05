@@ -1,57 +1,52 @@
-<!doctype html>
-<html lang="sv">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kunskapsportal för TFF</title>
+.layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  padding: 20px;
+}
 
-  <!-- ✅ RÄTT -->
-  <link rel="stylesheet" href="assets/css/styles.css">
-</head>
+/* LEFT */
+.left img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
 
-<body>
+/* RIGHT SIDE */
+.right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-  <div class="top">
-    <h1>Kunskapsportal för TFF</h1>
-    <input type="text" placeholder="Vad kan vi hjälpa dig med?" />
-  </div>
+.right-top {
+  display: flex;
+  gap: 20px;
+}
 
-  <div class="layout">
+.right-bottom {
+  display: flex;
+}
 
-    <!-- ✅ VÄNSTER STOR -->
-    <div class="left">
-      <img src="assets/img/hero-left.jpg" />
-    </div>
+/* CARDS */
+.card {
+  flex: 1;
+  display: block;
+  text-decoration: none;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  color: black;
+}
 
-    <!-- ✅ HÖGER -->
-    <div class="right">
+.card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
 
-      <div class="right-top">
-
-        <a class="card" href="https://m365.cloud.microsoft/chat">
-          <img src="assets/img/tile-atlas.jpg">
-          <h3>Fråga TFF</h3>
-        </a>
-
-        <a class="card" href="utbildningar.html">
-          <img src="assets/img/tile-edut.jpg">
-          <h3>TFF Digitala Utbildningar</h3>
-        </a>
-
-      </div>
-
-      <div class="right-bottom">
-
-        <a class="card" href="utbildningar.html">
-          <img src="assets/img/tile-guides.jpg">
-          <h3>Utbildningar</h3>
-        </a>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</body>
-</html>
+.card h3 {
+  padding: 10px;
+  font-size: 16px;
+}
