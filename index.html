@@ -1,142 +1,143 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TFF – Portal</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kunskapsportal för TFF</title>
 
-<style>
-body{margin:0;font-family:Arial;background:#f3f4f6}
+  assets/css/styles.css
 
-/* HEADER */
-.topbar{
-background:#165c8d;
-color:white;
-padding:30px;
-text-align:center;
-}
+  <style>
+    body {
+      margin:0;
+      background:#f3f4f6;
+      font-family: Segoe UI, Arial;
+    }
 
-.search input{
-width:500px;
-padding:12px;
-border-radius:10px;
-border:none;
-}
+    .top {
+      background:#1f5f86;
+      color:#fff;
+      padding:20px;
+      text-align:center;
+    }
 
-/* GRID */
-.container{max-width:1200px;margin:auto;padding:20px}
+    .search {
+      margin-top:10px;
+    }
 
-.grid{
-display:grid;
-grid-template-columns:2fr 1fr 1fr;
-gap:15px;
-}
+    .search input {
+      width:300px;
+      padding:10px;
+      border-radius:8px;
+      border:none;
+    }
 
-.card{
-background:white;
-border-radius:10px;
-overflow:hidden;
-cursor:pointer;
-}
+    .grid {
+      display:grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap:20px;
+      max-width:1100px;
+      margin:30px auto;
+    }
 
-.card img{
-width:100%;
-height:150px;
-object-fit:cover;
-}
+    .card {
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
 
-.big img{height:420px}
+    .card img {
+      width:100%;
+      display:block;
+      height:260px;
+      object-fit:cover;
+    }
 
-.card-body{padding:10px;text-align:center}
+    .card-title {
+      padding:12px;
+      text-align:center;
+      font-weight:700;
+    }
 
-/* BUTTONS */
-.buttons{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-margin-top:10px;
-}
+    .info-card {
+      background:#fff;
+      border-radius:12px;
+      padding:20px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      text-align:center;
+    }
 
-.btn{
-background:#165c8d;
-color:white;
-padding:20px;
-text-align:center;
-border-radius:10px;
-cursor:pointer;
-}
-</style>
+    .info-card h3 {
+      margin:0 0 10px;
+    }
+
+    .info-card p {
+      color:#6b7280;
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .btn {
+      margin-top:12px;
+      padding:10px;
+      background:#1f5f86;
+      color:#fff;
+      border-radius:8px;
+      text-decoration:none;
+      display:inline-block;
+      font-weight:600;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="topbar">
-<h1>Kunskapsportal för TFF</h1>
-<div class="search">
-<input placeholder="Vad kan vi hjälpa dig med?"
-onkeydown="if(event.key==='Enter') window.location.href='utbildningar.html'">
-</div>
-</div>
+  <!-- HEADER -->
+  <div class="top">
+    <h2>Kunskapsportal för TFF</h2>
+    <div class="search">
+      <input placeholder="Vad kan vi hjälpa dig med?">
+    </div>
+  </div>
 
-<div class="container">
+  <!-- GRID -->
+  <div class="grid">
 
-<div class="grid">
+    <!-- LEFT BIG IMAGE -->
+    <div class="card">
+      assets/img/startbild.jpg
+      <div class="card-title">
+        Upptäck hur enkelt det kan vara
+      </div>
+    </div>
 
-<div class="card big" onclick="goCatalog()">
-<img src="assets/img/hero-left.jpg">
-<div class="card-body">
-<h3>Upptäck hur enkelt det kan vara</h3>
-</div>
-</div>
+    <!-- ✅ NYTT BLOCK (INFO) -->
+    <div class="info-card">
+      <h3>Välkommen till dina Digitala utbildningar</h3>
+      <p>
+        Här hittar du kommunens utbildningar, moduler och quiz.
+        Följ kursstrukturen steg för steg och säkerställ att du arbetar enligt
+        rätt arbetssätt i Microsoft 365.
+      </p>
+    </div>
 
-<div class="card" onclick="goCatalog()">
-<img src="assets/img/tile-guides.jpg">
-<div class="card-body"><h3>Alla guider</h3></div>
-</div>
+    <!-- ✅ FRÅGA VERA (COPILOT) -->
+    https://m365.cloud.microsoft/chat
+      assets/img/fraga-vera.jpg
+      <div class="card-title">Fråga Vera</div>
+    </a>
 
-<div class="card" onclick="goCourse('kurs04_ai')">
-<img src="assets/img/tile-hrkollegan.jpg">
-<div class="card-body"><h3>Fråga Vera</h3></div>
-</div>
+    <!-- ✅ DIGITALA UTBILDNINGAR -->
+    <a class="card" href="utbildningar.html">
+      assets/img/digitala-utbildningar.jpg
+      <div class="card-title">Digitala utbildningar</div>
+    </a>
 
-<div class="card" onclick="goCatalog()">
-<img src="assets/img/tile-edu.jpg">
-<div class="card-body"><h3>Digitala utbildningar</h3></div>
-</div>
-
-<div class="card" onclick="goCatalog('obligatorisk')">
-<img src="assets/img/tile-mandatory.jpg">
-<div class="card-body"><h3>Obligatoriska</h3></div>
-</div>
-
-<div class="card" onclick="goCatalog()">
-<img src="assets/img/tile-chef.jpg">
-<div class="card-body"><h3>Chef</h3></div>
-</div>
-
-<div class="card" onclick="goCourse('kurs10')">
-<img src="assets/img/tile-status.jpg">
-<div class="card-body"><h3>HR‑kollegan</h3></div>
-</div>
-
-</div>
-
-<div class="buttons">
-<div class="btn" onclick="goCourse('kurs06')">Heroma</div>
-<div class="btn" onclick="goCatalog()">Kontakta HR</div>
-</div>
-
-</div>
-
-<script>
-function goCatalog(){
-window.location.href="utbildningar.html";
-}
-
-function goCourse(id){
-window.location.href="utbildning.html?course="+id;
-}
-</script>
+  </div>
 
 </body>
 </html>
