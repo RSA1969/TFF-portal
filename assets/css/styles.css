@@ -6,9 +6,15 @@ body {
 
 /* HEADER */
 .top {
-  background: #0b5c8a;
+  background: #165c84;
   color: white;
   padding: 20px;
+}
+
+.top input {
+  margin-top: 10px;
+  padding: 10px;
+  width: 300px;
 }
 
 /* ✅ LAYOUT */
@@ -21,58 +27,54 @@ body {
 }
 
 /* ✅ LEFT */
-.left {
-  height: 100%;
-}
-
 .left img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
 }
 
 /* ✅ RIGHT */
 .right {
   display: flex;
   flex-direction: column;
-  height: 100%;
   gap: 20px;
+  height: 100%;
 }
 
-/* TOP ROW */
+/* TOP */
 .right-top {
   display: flex;
   gap: 20px;
-  height: 50%;
+  height: 40%;
 }
 
-/* BOTTOM ROW */
+/* BOTTOM */
 .right-bottom {
-  height: 50%;
+  height: 60%;
 }
 
-/* CARDS */
+/* ✅ CARDS */
 .card {
-  flex: 1;
+  display: flex;
+  flex-direction: column;
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   text-decoration: none;
   color: black;
-  display: flex;
-  flex-direction: column;
+  flex: 1;
 }
 
-/* ✅ BILD HÖJD (KRITISK) */
+/* ✅ VIKTIG – RÄTT STORLEK */
 .card img {
   width: 100%;
-  height: 120px;
+  height: 140px;   /* ← justerar storleken korrekt */
   object-fit: cover;
 }
 
 /* TEXT */
 .card h3 {
-  padding: 10px;
+  padding: 12px;
   font-size: 16px;
 }
