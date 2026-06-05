@@ -5,137 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kunskapsportal för TFF</title>
 
-  assets/css/styles.css
-
-  <style>
-    body {
-      margin:0;
-      background:#f3f4f6;
-      font-family: Segoe UI, Arial;
-    }
-
-    .top {
-      background:#1f5f86;
-      color:#fff;
-      padding:20px;
-      text-align:center;
-    }
-
-    .search {
-      margin-top:10px;
-    }
-
-    .search input {
-      width:300px;
-      padding:10px;
-      border-radius:8px;
-      border:none;
-    }
-
-    .grid {
-      display:grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap:20px;
-      max-width:1100px;
-      margin:30px auto;
-    }
-
-    .card {
-      background:#fff;
-      border-radius:12px;
-      overflow:hidden;
-      box-shadow:0 4px 10px rgba(0,0,0,0.1);
-    }
-
-    .card img {
-      width:100%;
-      display:block;
-      height:260px;
-      object-fit:cover;
-    }
-
-    .card-title {
-      padding:12px;
-      text-align:center;
-      font-weight:700;
-    }
-
-    .info-card {
-      background:#fff;
-      border-radius:12px;
-      padding:20px;
-      box-shadow:0 4px 10px rgba(0,0,0,0.1);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      text-align:center;
-    }
-
-    .info-card h3 {
-      margin:0 0 10px;
-    }
-
-    .info-card p {
-      color:#6b7280;
-      font-size:14px;
-      line-height:1.5;
-    }
-
-    .btn {
-      margin-top:12px;
-      padding:10px;
-      background:#1f5f86;
-      color:#fff;
-      border-radius:8px;
-      text-decoration:none;
-      display:inline-block;
-      font-weight:600;
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
 
   <!-- HEADER -->
   <div class="top">
-    <h2>Kunskapsportal för TFF</h2>
-    <div class="search">
-      <input placeholder="Vad kan vi hjälpa dig med?">
-    </div>
+    <h1>Kunskapsportal för TFF</h1>
+
+    <input type="text" placeholder="Vad kan vi hjälpa dig med?" />
   </div>
 
   <!-- GRID -->
   <div class="grid">
 
-    <!-- LEFT BIG IMAGE -->
+    <!-- Välkommen -->
     <div class="card">
-      assets/img/startbild.jpg
-      <div class="card-title">
-        Upptäck hur enkelt det kan vara
-      </div>
-    </div>
-
-    <!-- ✅ NYTT BLOCK (INFO) -->
-    <div class="info-card">
-      <h3>Välkommen till dina Digitala utbildningar</h3>
+      <h2>Välkommen till dina Digitala utbildningar</h2>
       <p>
         Här hittar du kommunens utbildningar, moduler och quiz.
-        Följ kursstrukturen steg för steg och säkerställ att du arbetar enligt
-        rätt arbetssätt i Microsoft 365.
+        Följ kursstrukturen steg för steg och säkerställ att du
+        arbetar enligt rätt arbetssätt i Microsoft 365.
       </p>
     </div>
 
-    <!-- ✅ FRÅGA VERA (COPILOT) -->
-    https://m365.cloud.microsoft/chat
-      assets/img/fraga-vera.jpg
-      <div class="card-title">Fråga Vera</div>
-    </a>
-
-    <!-- ✅ DIGITALA UTBILDNINGAR -->
-    <a class="card" href="utbildningar.html">
-      assets/img/digitala-utbildningar.jpg
-      <div class="card-title">Digitala utbildningar</div>
-    </a>
+    <!-- Fråga Vera -->
+    <div class="card">
+      <a href="https://m365.cloud.microsoft/chat" target="_blank">
+        Fråga Vera
+      </a>
+    </div>
 
   </div>
 
