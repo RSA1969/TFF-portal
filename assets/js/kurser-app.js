@@ -1049,3 +1049,327 @@
 
     videoBox.innerHTML = `
       <video controls preload="metadata" style="width:100%; border-radius:14px; background:#000;">
+        <source src="${videoUrl}" type="video/mp4">
+        Din webbläsare stödjer inte video.
+      </video>
+    `;
+  }
+
+  /* =========================================================
+     UTBILDNINGSSIDA
+     ========================================================= */
+  function renderTrainingPage() {
+    const root = byId("app");
+    if (!root) return;
+
+    const courseId = getParam("course") || COURSES[0].id;
+    const course = getCourse(courseId) || COURSES[0];
+
+    const moduleId = getParam("module");
+    const module =
+      getModule(course.id, moduleId) ||
+      getLastVisitedModule(course.id) ||
+      course.modules[0];
+
+    const courseProgress = getCourseProgress(course.id);
+    const moduleState = getModuleState(course.id, module.id);
+
+    root.innerHTML = `
+      <div class="topbar">
+        <div class="topbar-inner">
+          <div class="title-block">
+            <h1>TFF – Utbildning</h1>
+            <p>Moduler • Video • Progress • Godkänd</p>
+          </div>
+
+          <div class="top-actions">
+            <div class="pill">Progress: ${courseProgress.percent}%</div>
+            <div class="pill">Kurs: ${courseProgress.allApproved ? "Godkänd" : "Ej godkänd"}</div>
+            <button id="resetProgressBtn" class="btn btn-ghost">Återställ progress</button>
+            <a href="utbildningar.html" class="btn btn-primary">Till kurskatalog</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="page-grid">
+          <aside class="panel">
+            <h2>Kurs</h2>
+            <p>Välj kurs och navigera via modulerna.</p>
+
+            <select id="courseSelect" class="course-select"></select>
+
+            <h3 style="margin-top:18px;">Moduler</h3>
+            <div id="moduleSidebar" class="module-list"></div>
+
+            <div class="note-box">
+              Modulerna använder samma kursfärg.
+            </div>
+          </aside>
+
+          <main class="panel right-main">
+            <div class="title-row">
+              <div>
+                <h2 id="courseTitle"></h2>
+                <p id="coursePurpose"></p>
+              </div>
+              <div class="tags">
+                <span class="tag" id="tag1"></span>
+                <span class="tag" id="tag2"></span>
+              </div>
+            </div>
+
+            <div class="meta-row">
+              <label style="display:flex;gap:8px;align-items:center;font-weight:700;">
+                <input type="checkbox" id="resumeToggle">
+                Fortsätt där jag slutade
+              </label>
+              <span class="meta-status" id="videoStatus"></span>
+            </div>
+
+            <section class="panel video-card">
+              <h3>Video</h3>
+              <div id="videoBox"></div>
+            </section>
+
+            <div class="content-grid">
+              <section class="info-card">
+                <h3>Modul</h3>
+                <p id="moduleTitleLine"></p>
+
+                <div class="label">Syfte</div>
+                <p id="modulePurposeLine"></p>
+
+                <div class="label">Innehåll</div>
+                <ul class="bullet-list" id="moduleBullets"></ul>
+              </section>
+
+              <section class="status-card">
+                <h3>Progress i modul</h3>
+                <p id="moduleProgressLine"></p>
+
+                <div class="button-row">
+                  <button id="markDoneBtn" class="btn btn-ghost">Markera modul som klar</button>
+                  <button id="showQuizBtn" class="btn btn-primary">Godkänn quiz</button>
+                </div>
+
+                <div class="note-box">
+                  Quiz visas längre ned på sidan.
+                </div>
+              </section>
+            </div>
+
+            <section class="quiz-card">
+              <h3>Quiz</h3>
+              <div id="quizBox"></div>
+            </section>
+
+            <div class="nav-row">
+              <button id="prevBtn" class="btn btn-ghost">Föregående modul</button>
+              <button id="nextBtn" class="btn btn-primary">Nästa modul</button>
+            </div>
+          </main>
+        </div>
+      </div>
+    `;
+
+    const courseSelect = byId("courseSelect");
+    courseSelect.innerHTML = COURSES.map((c) => `
+      <option value="${c.id}" ${c.id === course.id ? "selected" : ""}>
+        ${escapeHtml(c.title)}
+      </option>
+    `).join("");
+
+    courseSelect.onchange = (e) => {
+      const selectedCourse = getCourse(e.target.value);
+      if (!selectedCourse) return;
+      const firstModule = selectedCourse.modules[0];
+      window.location.href = `kurser.html?course=${encodeURIComponent(selectedCourse.id)}&module=${encodeURIComponent(firstModule.id)}`;
+    };
+
+    byId("courseTitle").textContent = course.title;
+    byId("coursePurpose").textContent = `Syfte: ${course.purpose}`;
+    byId("tag1").textContent = course.tag1 || "Kurs";
+    byId("tag2").textContent = course.tag2 || "System";
+
+    const sidebar = byId("moduleSidebar");
+    sidebar.innerHTML = course.modules.map((m, index) => {
+      const state = getModuleState(course.id, m.id);
+      const active = m.id === module.id ? "active" : "";
+
+      return `
+        <a href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(m.id)}" class="module-card ${active}">
+          <strong>${index + 1}. ${escapeHtml(m.title)}</strong>
+          <small>Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}</small>
+        </a>
+      `;
+    }).join("");
+
+    byId("moduleTitleLine").textContent = module.title;
+    byId("modulePurposeLine").textContent = course.purpose;
+
+    const bulletList = byId("moduleBullets");
+    bulletList.innerHTML = `
+      <li>${escapeHtml(module.title.replace(/^Modul \\d+ – /, ""))}</li>
+      <li>Arbetssätt och struktur i praktiken</li>
+      <li>Vanliga fel, risker och rekommenderade arbetssätt</li>
+      <li>Koppling till kommunal verksamhet och Microsoft 365</li>
+    `;
+
+    byId("moduleProgressLine").textContent =
+      `Modul: ${moduleState.moduleDone ? "klar" : "ej klar"} • Quiz: ${moduleState.quizPassed ? "Godkänd" : "Ej godkänd"}`;
+
+    const videoBox = byId("videoBox");
+    renderVideo(videoBox, module);
+
+    const videoStatus = byId("videoStatus");
+    const videoUrl = getVideoUrl(module);
+    if (!videoUrl) {
+      videoStatus.textContent = "Ingen video är kopplad till modulen.";
+    } else if (isSharePointUrl(videoUrl)) {
+      videoStatus.textContent = "Video öppnas via SharePoint.";
+    } else {
+      videoStatus.textContent = "Lokal MP4-video är kopplad till modulen.";
+    }
+
+    byId("resumeToggle").checked = true;
+
+    byId("markDoneBtn").onclick = () => {
+      const current = getModuleState(course.id, module.id);
+      setModuleState(course.id, module.id, {
+        moduleDone: !current.moduleDone
+      });
+      window.location.reload();
+    };
+
+    byId("showQuizBtn").onclick = () => {
+      byId("quizBox").scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    renderQuiz(course, module);
+
+    const prev = getPrevModule(course.id, module.id);
+    const next = getNextModule(course.id, module.id);
+
+    const prevBtn = byId("prevBtn");
+    const nextBtn = byId("nextBtn");
+
+    prevBtn.disabled = !prev;
+    nextBtn.disabled = !next;
+
+    prevBtn.onclick = () => {
+      if (!prev) return;
+      window.location.href = `kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(prev.id)}`;
+    };
+
+    nextBtn.onclick = () => {
+      if (!next) return;
+      window.location.href = `kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}`;
+    };
+
+    const resetBtn = byId("resetProgressBtn");
+    if (resetBtn) resetBtn.onclick = clearAllProgress;
+  }
+
+  /* =========================================================
+     QUIZ
+     ========================================================= */
+  function renderQuiz(course, module) {
+    const quizBox = byId("quizBox");
+    if (!quizBox) return;
+
+    const questions = buildQuestions(course, module);
+
+    quizBox.innerHTML = `
+      <form id="quizForm" class="quiz-form">
+        ${questions.map((q) => `
+          <fieldset class="quiz-question">
+            <legend>Fråga ${q.number}: ${escapeHtml(q.question)}</legend>
+            ${q.options.map((option, index) => `
+              <label class="quiz-option">
+                <input type="radio" name="${q.id}" value="${index}">
+                <span>${escapeHtml(option)}</span>
+              </label>
+            `).join("")}
+          </fieldset>
+        `).join("")}
+
+        <div class="button-row">
+          <button type="button" class="btn btn-primary" id="checkQuizBtn">Rätta quiz</button>
+        </div>
+
+        <div id="quizResult"></div>
+      </form>
+    `;
+
+    const checkBtn = byId("checkQuizBtn");
+    if (!checkBtn) return;
+
+    checkBtn.onclick = () => {
+      let score = 0;
+      let answered = 0;
+
+      questions.forEach((q) => {
+        const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+        if (selected) {
+          answered += 1;
+          if (Number(selected.value) === q.correct) {
+            score += 1;
+          }
+        }
+      });
+
+      const percent = Math.round((score / questions.length) * 100);
+      const passed = percent >= PASS_PERCENT;
+
+      setModuleState(course.id, module.id, {
+        quizPassed: passed,
+        quizScore: score,
+        quizPercent: percent
+      });
+
+      const result = byId("quizResult");
+      result.innerHTML = `
+        <div class="quiz-result ${passed ? "quiz-success" : "quiz-fail"}">
+          <p><strong>Resultat:</strong> ${score} av ${questions.length} rätt (${percent}%)</p>
+          <p><strong>Status:</strong> ${passed ? "Godkänd" : "Inte godkänd"}</p>
+          <p><strong>Besvarade frågor:</strong> ${answered} av ${questions.length}</p>
+          <p>${passed ? "Quizet är godkänt." : "Du behöver minst 80% rätt för godkänt."}</p>
+        </div>
+      `;
+
+      const line = byId("moduleProgressLine");
+      if (line) {
+        const state = getModuleState(course.id, module.id);
+        line.textContent =
+          `Modul: ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}`;
+      }
+
+      const sidebarCard = document.querySelector("a.module-card.active small");
+      if (sidebarCard) {
+        const state = getModuleState(course.id, module.id);
+        sidebarCard.textContent =
+          `Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}`;
+      }
+    };
+  }
+
+  /* =========================================================
+     INIT
+     ========================================================= */
+  function init() {
+    injectStyles();
+    const page = pageName();
+
+    if (page === "utbildningar.html" || page === "" || page === "index.html") {
+      renderCatalogPage();
+      return;
+    }
+
+    if (page === "kurser.html" || page === "kurs_dokumentation.html") {
+      renderTrainingPage();
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
