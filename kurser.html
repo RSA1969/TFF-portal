@@ -5,35 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TFF Portal – Kurs</title>
 
-assets/css/styles.css
+<link rel="stylesheet" href="assets/css/styles.css">
 
 <style>
 body { margin:0; font-family: Segoe UI, Arial; }
 .container { max-width:1200px; margin:auto; padding:20px; }
 
-.module {
-    border:1px solid #ddd;
-    padding:15px;
-    margin-bottom:15px;
-    border-radius:10px;
-}
-
-.video-box {
-    background:#f3f3f3;
-    padding:10px;
-    border-radius:10px;
-    margin-top:15px;
-}
-
-video { width:100%; border-radius:10px; }
-
-.quiz { margin-top:20px; }
+.module { border:1px solid #ddd; padding:20px; border-radius:10px; }
+video { width:100%; border-radius:10px; margin-top:10px; }
 
 .quiz-question {
-    margin-bottom:15px;
-    padding:10px;
     border:1px solid #eee;
+    padding:10px;
     border-radius:8px;
+    margin-top:15px;
 }
 </style>
 
@@ -43,6 +28,7 @@ video { width:100%; border-radius:10px; }
 <div id="app" class="container"></div>
 
 <script>
+
 // ==========================
 // PARAMS
 // ==========================
@@ -51,41 +37,82 @@ const courseId = params.get("course");
 const moduleId = params.get("module");
 
 // ==========================
-// DATA (DU BYTER SENARE TILL JSON)
+// DIN RIKTIGA DATA (1 modul demo – kopiera struktur)
 // ==========================
 const data = {
     kurs01: {
         title: "Microsoft Teams – Grund",
         modules: {
+
             kurs01_modul01: {
                 title: "Vad är Teams",
 
-                // ✅ BYT denna till riktig MP4
-                video: "https://rsa1969.github.io/TFF-portal/assets/video/demo.mp4",
+                // ✅ DIN SharePoint MP4
+                video: "https://halmstad.sharepoint.com/sites/XXXXXXXX/video.mp4",
 
                 quiz: [
-                    {
-                        q: "Vad är huvudsyftet?",
-                        a: [
-                            "Lagra lokalt",
-                            "Rätt användning i vardagen",
-                            "Undvika samarbete",
-                            "Ersätta dokument"
-                        ],
-                        correct: 1
+                    { question:"Vad är huvudsyftet?",
+                      answers:[
+                        "Lagra lokalt",
+                        "Rätt användning i vardagen",
+                        "Undvika samarbete",
+                        "Ersätta dokument"
+                      ],
+                      correct:1
                     },
-                    {
-                        q: "Vad stödjer bästa arbetssätt?",
-                        a: [
-                            "E-post",
-                            "Teams kanaler",
-                            "USB-minne",
-                            "Utskrifter"
-                        ],
-                        correct: 1
+
+                    { question:"Vad stödjer bästa arbetssätt?",
+                      answers:[
+                        "E-post",
+                        "Teams kanaler",
+                        "USB-minne",
+                        "Utskrifter"
+                      ],
+                      correct:1
+                    },
+
+                    { question:"Var används Teams?",
+                      answers:["Privat","Enbart IT","Verksamhetssamarbete","Ej alls"],
+                      correct:2
+                    },
+
+                    { question:"Vilket är rätt struktur?",
+                      answers:["Kaos","Filer lokalt","Team + kanal","USB"],
+                      correct:2
+                    },
+
+                    { question:"Vad ska undvikas?",
+                      answers:["Dubbelarbete","Samverkan","Dialog","Planering"],
+                      correct:0
+                    },
+
+                    { question:"Var lagras filer?",
+                      answers:["USB","SharePoint","Mail","Ingenstans"],
+                      correct:1
+                    },
+
+                    { question:"Vad ökar effektivitet?",
+                      answers:["Teams","Papper","USB","Mail"],
+                      correct:0
+                    },
+
+                    { question:"Vad ger struktur?",
+                      answers:["Teams-kanaler","Inbox","USB","Chat"],
+                      correct:0
+                    },
+
+                    { question:"Vad är en fördel?",
+                      answers:["Samarbete","Isolering","Manuellt","Ingen"],
+                      correct:0
+                    },
+
+                    { question:"Vad är korrekt?",
+                      answers:["Teams används i vardagen","Ej relevant","Endast IT","Privat"],
+                      correct:0
                     }
                 ]
             }
+
         }
     }
 };
@@ -93,36 +120,30 @@ const data = {
 // ==========================
 // VIDEO FIX (SharePoint)
 // ==========================
-function getVideoUrl(url) {
-    if (!url) return "";
-
-    if (url.includes("sharepoint.com")) {
-        if (url.includes("?")) return url + "&download=1";
+function fixVideo(url){
+    if(!url) return "";
+    if(url.includes("sharepoint.com")){
+        if(url.includes("?")) return url + "&download=1";
         return url + "?download=1";
     }
-
     return url;
 }
 
 // ==========================
 // RENDER
 // ==========================
-function render() {
+function render(){
+
     const root = document.getElementById("app");
-
     const kurs = data[courseId];
-    if (!kurs) {
-        root.innerHTML = "<h2>Kurs saknas</h2>";
+    const modul = kurs?.modules[moduleId];
+
+    if(!kurs || !modul){
+        root.innerHTML = "<h2>Data saknas</h2>";
         return;
     }
 
-    const modul = kurs.modules[moduleId];
-    if (!modul) {
-        root.innerHTML = "<h2>Modul saknas</h2>";
-        return;
-    }
-
-    const videoUrl = getVideoUrl(modul.video);
+    const videoUrl = fixVideo(modul.video);
 
     root.innerHTML = `
         <h1>${kurs.title}</h1>
@@ -130,33 +151,29 @@ function render() {
         <div class="module">
             <h2>${modul.title}</h2>
 
-            <div class="video-box">
-                ${videoUrl ? `
-                <video controls preload="metadata">
-                    <source src="${videoUrl}" type="video/mp4">
-                </video>
-                ` : `<p>Ingen video</p>`}
-            </div>
+            <video controls>
+                <source src="${videoUrl}" type="video/mp4">
+            </video>
 
-            <div class="quiz">
-                <h3>Quiz</h3>
-                ${modul.quiz.map((q, i) => `
-                    <div class="quiz-question">
-                        <strong>Fråga ${i+1}: ${q.q}</strong>
-                        ${q.a.map((alt, j) => `
-                            <div>
-                                <input type="radio" name="q${i}" value="${j}">
-                                ${alt}
-                            </div>
-                        `).join("")}
-                    </div>
-                `).join("")}
-            </div>
+            <h3>Quiz</h3>
+
+            ${modul.quiz.map((q,i)=>`
+                <div class="quiz-question">
+                    <strong>Fråga ${i+1}: ${q.question}</strong>
+                    ${q.answers.map((a,j)=>`
+                        <div>
+                            <input type="radio" name="q${i}"> ${a}
+                        </div>
+                    `).join("")}
+                </div>
+            `).join("")}
+
         </div>
     `;
 }
 
 render();
+
 </script>
 
 </body>
