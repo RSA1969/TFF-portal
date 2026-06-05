@@ -8,12 +8,12 @@
      - SharePoint-länkar öppnas i ny flik
      - Lokal mp4 används som fallback för inline-video
      ========================================================= */
-const VIDEO_OVERRIDES = {
-  kurs01_modul01: "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQABWSDYJjqPQoIfGi0z0Ou9AcMxF5Oy4PrqVL_O-_kNaGM",
-  kurs01_modul02: "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQD71mP6Qek0TLIsqv9_dLTZAbF0Ejm0iqytgK-HSoVan30",
-  kurs01_modul03: "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQCRb0ptY9iCQJThz0KP2dPMAfjC3fxkyC1F9g3bhnclEwM",
-  kurs01_modul04: "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQAQSNKAUbYpQLkt7bg4jpcrAWi_WYKLOb9TLMNIG6zl5BI"
-};
+  const VIDEO_OVERRIDES = {
+    kurs01_modul01: "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQABWSDYJjqPQoIfGi0z0Ou9AcMxF5Oy4PrqVL_O-_kNaGM",
+    kurs01_modul02: "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQD71mP6Qek0TLIsqv9_dLTZAbF0Ejm0iqytgK-HSoVan30",
+    kurs01_modul03: "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQCRb0ptY9iCQJThz0KP2dPMAfjC3fxkyC1F9g3bhnclEwM",
+    kurs01_modul04: "https://halmstad.sharepoint.com/:v:/s/TestavTeammedbibliotek/IQAQSNKAUbYpQLkt7bg4jpcrAWi_WYKLOb9TLMNIG6zl5BI"
+  };
 
   /* =========================================================
      ALLA 15 KURSER
