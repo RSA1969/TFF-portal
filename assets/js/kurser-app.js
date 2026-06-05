@@ -269,10 +269,7 @@
       title: moduleTitle,
       video: `video/kurs${String(courseIndex + 1).padStart(2, "0")}_modul${String(
         moduleIndex + 1
-      ).padStart(2, "0")}.mp4`,
-      audio: `assets/audio/kurs${String(courseIndex + 1).padStart(2, "0")}_modul${String(
-        moduleIndex + 1
-      ).padStart(2, "0")}.mp3`
+      ).padStart(2, "0")}.mp4`
     }))
   }));
 
@@ -378,10 +375,6 @@
 
   function getVideoUrl(module) {
     return VIDEO_OVERRIDES[module.id] || module.video || "";
-  }
-
-  function getAudioUrl(module) {
-    return module.audio || "";
   }
 
   function isSharePointUrl(url) {
@@ -694,7 +687,7 @@
         white-space: nowrap;
       }
 
-      .audio-row {
+      .meta-row {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -703,7 +696,7 @@
         border-top: 1px solid var(--line);
       }
 
-      .audio-status {
+      .meta-status {
         color: var(--muted);
         font-weight: 700;
         font-size: 14px;
@@ -760,6 +753,10 @@
         color: var(--muted);
         line-height: 1.55;
         font-size: 14px;
+      }
+
+      .video-card {
+        order: -1;
       }
 
       .video-card video {
@@ -1084,7 +1081,7 @@
         <div class="topbar-inner">
           <div class="title-block">
             <h1>TFF – Utbildning</h1>
-            <p>Moduler • Podd • Progress • Godkänd</p>
+            <p>Moduler • Video • Progress • Godkänd</p>
           </div>
 
           <div class="top-actions">
@@ -1108,7 +1105,7 @@
             <div id="moduleSidebar" class="module-list"></div>
 
             <div class="note-box">
-              Modulerna använder samma kursfärg. Ljud kan kräva klick p.g.a. webbläsarpolicy.
+              Modulerna använder samma kursfärg.
             </div>
           </aside>
 
@@ -1124,14 +1121,19 @@
               </div>
             </div>
 
-            <div class="audio-row">
-              <button id="playAudioBtn" class="btn btn-ghost">Spela ljud</button>
+            <div class="meta-row">
               <label style="display:flex;gap:8px;align-items:center;font-weight:700;">
                 <input type="checkbox" id="resumeToggle">
                 Fortsätt där jag slutade
               </label>
-              <span class="audio-status" id="audioStatus"></span>
+              <span class="meta-status" id="videoStatus"></span>
             </div>
+
+            <!-- VIDEO FÖRST -->
+            <section class="panel video-card">
+              <h3>Video</h3>
+              <div id="videoBox"></div>
+            </section>
 
             <div class="content-grid">
               <section class="info-card">
@@ -1155,15 +1157,10 @@
                 </div>
 
                 <div class="note-box">
-                  Quiz visas längre ned på sidan. Om MP3 saknas visas bara informationsrad.
+                  Quiz visas längre ned på sidan.
                 </div>
               </section>
             </div>
-
-            <section class="panel video-card">
-              <h3>Video</h3>
-              <div id="videoBox"></div>
-            </section>
 
             <section class="quiz-card">
               <h3>Quiz</h3>
@@ -1228,36 +1225,15 @@
     const videoBox = byId("videoBox");
     renderVideo(videoBox, module);
 
-    const audioStatus = byId("audioStatus");
-    const playAudioBtn = byId("playAudioBtn");
-    const audioUrl = getAudioUrl(module);
-    const audio = audioUrl ? new Audio(audioUrl) : null;
-
-    if (audio) {
-      audio.addEventListener("error", () => {
-        audioStatus.textContent = "Ingen ljudfil hittades för modulen.";
-      });
-
-      audio.addEventListener("canplaythrough", () => {
-        audioStatus.textContent = "Ljudfil hittad för modulen.";
-      });
+    const videoStatus = byId("videoStatus");
+    const videoUrl = getVideoUrl(module);
+    if (!videoUrl) {
+      videoStatus.textContent = "Ingen video är kopplad till modulen.";
+    } else if (isSharePointUrl(videoUrl)) {
+      videoStatus.textContent = "Video öppnas via SharePoint.";
     } else {
-      audioStatus.textContent = "Ingen ljudfil är kopplad till modulen.";
+      videoStatus.textContent = "Lokal MP4-video är kopplad till modulen.";
     }
-
-    playAudioBtn.onclick = async () => {
-      if (!audio) {
-        audioStatus.textContent = "Ingen ljudfil är kopplad till modulen.";
-        return;
-      }
-
-      try {
-        await audio.play();
-        audioStatus.textContent = "Ljud spelas upp.";
-      } catch {
-        audioStatus.textContent = "Ljud kunde inte starta. Kontrollera att MP3-filen finns.";
-      }
-    };
 
     byId("resumeToggle").checked = true;
 
