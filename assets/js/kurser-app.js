@@ -311,7 +311,7 @@
     const current = getModuleState(courseId, moduleId);
     const updated = { ...current, ...patch };
     localStorage.setItem(moduleStateKey(courseId, moduleId), JSON.stringify(updated));
-    localStorage.setItem(courseLastKey(courseId), moduleId);
+    localStorage.setItem(courseLastKey(courseId), module.id);
     return updated;
   }
 
@@ -347,6 +347,10 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+  }
+
+  function courseUrl(courseId, moduleId) {
+    return `kurser.html?course=${encodeURIComponent(courseId)}&module=${encodeURIComponent(moduleId)}`;
   }
 
   function getCourse(courseId) {
@@ -755,10 +759,6 @@
         font-size: 14px;
       }
 
-      .video-card {
-        order: -1;
-      }
-
       .video-card video {
         width: 100%;
         border-radius: 14px;
@@ -833,136 +833,6 @@
   }
 
   /* =========================================================
-     QUIZFRÅGOR
-     ========================================================= */
-  function seededShuffle(options, seed) {
-    const arr = options.map((text) => ({ text }));
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = (seed + i * 13) % (i + 1);
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
-
-  function buildQuestions(course, module) {
-    const templates = [
-      {
-        question: `Vad är huvudsyftet med "${module.title}"?`,
-        options: [
-          course.purpose,
-          "Att lagra allt lokalt",
-          "Att ersätta all dokumentation med chatt",
-          "Att undvika gemensamma arbetssätt"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vilket arbetssätt stödjer bäst "${course.title}"?`,
-        options: [
-          "Gemensam struktur och tydliga ansvar",
-          "Att varje person gör helt olika",
-          "Spridd information på flera privata platser",
-          "Att inget dokumenteras"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vad är viktigt i modulen "${module.title}"?`,
-        options: [
-          "Tydlighet och spårbarhet",
-          "Otydlighet",
-          "Slumpmässig lagring",
-          "Att ansvar saknas"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vad ska normalt undvikas i "${module.title}"?`,
-        options: [
-          "Otydlig eller spridd information",
-          "Tydlig ansvarsfördelning",
-          "Konsekvent struktur",
-          "Gemensamma arbetssätt"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vilken effekt ger ett bra arbetssätt i "${module.title}"?`,
-        options: [
-          "Mer ordning och bättre kvalitet",
-          "Mindre sökbarhet",
-          "Fler dubbletter",
-          "Sämre uppföljning"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vad är en vanlig risk utan struktur i "${module.title}"?`,
-        options: [
-          "Tappad information",
-          "Enklare uppföljning",
-          "Bättre spårbarhet",
-          "Ökad kvalitet"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vad bör prioriteras i "${course.title}"?`,
-        options: [
-          "Rätt information på rätt plats",
-          "Privat lagring som förstahandsval",
-          "Ad hoc-arbete",
-          "Brist på rutiner"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vad kännetecknar best practice i "${module.title}"?`,
-        options: [
-          "Standardiserat arbetssätt",
-          "Dolda beslut",
-          "Slumpmässig hantering",
-          "Ingen uppföljning"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vad stödjer bäst verksamhetsnytta i "${module.title}"?`,
-        options: [
-          "Struktur, uppföljning och tydliga ansvar",
-          "Spridda chattar",
-          "Otydliga versioner",
-          "Endast muntlig information"
-        ],
-        correct: 0
-      },
-      {
-        question: `Vad är det övergripande målet i "${course.title}"?`,
-        options: [
-          "Att skapa ordning, kvalitet och hållbara arbetssätt",
-          "Att undvika struktur",
-          "Att minska spårbarhet",
-          "Att ersätta alla andra system"
-        ],
-        correct: 0
-      }
-    ];
-
-    return templates.map((item, index) => {
-      const shuffled = seededShuffle(item.options, course.code.length + module.number + index);
-      const correctText = item.options[item.correct];
-
-      return {
-        id: `${module.id}_q${String(index + 1).padStart(2, "0")}`,
-        number: index + 1,
-        question: item.question,
-        options: shuffled.map((x) => x.text),
-        correct: shuffled.findIndex((x) => x.text === correctText)
-      };
-    });
-  }
-
-  /* =========================================================
      KATALOGSIDA
      ========================================================= */
   function renderCatalogPage() {
@@ -1007,7 +877,7 @@
           <p><strong>Genomfört:</strong> ${progress.done}/${progress.total} moduler (${progress.percent}%)</p>
           <p><strong>Status:</strong> ${approved}</p>
 
-          <a href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(firstModule.id)}" class="btn btn-primary">
+          <a href="${courseUrl(course.id, firstModule.id)}" class="btn btn-primary">
             Öppna kurs
           </a>
         </article>
@@ -1184,7 +1054,7 @@
       const selectedCourse = getCourse(e.target.value);
       if (!selectedCourse) return;
       const firstModule = selectedCourse.modules[0];
-      window.location.href = `kurser.html?course=${encodeURIComponent(selectedCourse.id)}&module=${encodeURIComponent(firstModule.id)}`;
+      window.location.href = courseUrl(selectedCourse.id, firstModule.id);
     };
 
     byId("courseTitle").textContent = course.title;
@@ -1198,7 +1068,7 @@
       const active = m.id === module.id ? "active" : "";
 
       return `
-        <a href="kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(m.id)}" class="module-card ${active}">
+        <a href="${courseUrl(course.id, m.id)}" class="module-card ${active}">
           <strong>${index + 1}. ${escapeHtml(m.title)}</strong>
           <small>Modul ${state.moduleDone ? "klar" : "ej klar"} • Quiz: ${state.quizPassed ? "Godkänd" : "Ej godkänd"}</small>
         </a>
@@ -1259,12 +1129,12 @@
 
     prevBtn.onclick = () => {
       if (!prev) return;
-      window.location.href = `kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(prev.id)}`;
+      window.location.href = courseUrl(course.id, prev.id);
     };
 
     nextBtn.onclick = () => {
       if (!next) return;
-      window.location.href = `kurser.html?course=${encodeURIComponent(course.id)}&module=${encodeURIComponent(next.id)}`;
+      window.location.href = courseUrl(course.id, next.id);
     };
 
     const resetBtn = byId("resetProgressBtn");
