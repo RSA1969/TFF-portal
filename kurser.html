@@ -1,18 +1,107 @@
 <!doctype html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TFF – Kurs</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TFF Portal – Kurs</title>
 
-  <link rel="stylesheet" href="assets/css/styles.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+
+<style>
+body {
+    margin: 0;
+    font-family: Segoe UI, Arial, sans-serif;
+}
+
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.video-box {
+    background: #f3f3f3;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+video {
+    width: 100%;
+    border-radius: 10px;
+}
+</style>
+
 </head>
-
 <body>
 
-  <div id="app"></div>
+<div id="app" class="container"></div>
 
-  <script src="assets/js/kurser-app.js"></script>
+<script>
+const params = new URLSearchParams(window.location.search);
+const course = params.get("course");
+const module = params.get("module");
+
+// TESTDATA (ersätt med din JSON senare)
+const data = {
+    kurs01: {
+        title: "Microsoft Teams – Grund",
+        modules: {
+            kurs01_modul01: {
+                title: "Vad är Teams",
+                video: "https://YOURDOMAIN/video1.mp4"
+            }
+        }
+    }
+};
+
+function getVideoUrl(url) {
+    if (!url) return "";
+
+    // FIX SharePoint
+    if (url.includes("sharepoint.com")) {
+        if (url.includes("?")) {
+            return url + "&download=1";
+        }
+        return url + "?download=1";
+    }
+    return url;
+}
+
+function render() {
+    const root = document.getElementById("app");
+
+    const kurs = data[course];
+    if (!kurs) {
+        root.innerHTML = "<h2>Kurs saknas</h2>";
+        return;
+    }
+
+    const modul = kurs.modules[module];
+    if (!modul) {
+        root.innerHTML = "<h2>Modul saknas</h2>";
+        return;
+    }
+
+    const videoUrl = getVideoUrl(modul.video);
+
+    root.innerHTML = `
+        <h1>${kurs.title}</h1>
+        <h2>${modul.title}</h2>
+
+        <div class="video-box">
+            ${videoUrl ? `
+                <video controls preload="metadata">
+                    <source src="${videoUrl}" type="video/mp4">
+                    Din webbläsare stöder inte video.
+                </video>
+            ` : `<p>Ingen video</p>`}
+        </div>
+    `;
+}
+
+render();
+</script>
 
 </body>
 </html>
