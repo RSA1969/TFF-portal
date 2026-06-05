@@ -1020,8 +1020,6 @@
 
   /* =========================================================
      VIDEO-RENDERING
-     - SharePoint: knapp till ny flik
-     - Lokal video: inline i <video>
      ========================================================= */
   function renderVideo(videoBox, module) {
     const videoUrl = getVideoUrl(module);
@@ -1129,7 +1127,6 @@
               <span class="meta-status" id="videoStatus"></span>
             </div>
 
-            <!-- VIDEO FÖRST -->
             <section class="panel video-card">
               <h3>Video</h3>
               <div id="videoBox"></div>
