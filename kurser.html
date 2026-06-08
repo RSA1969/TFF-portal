@@ -3,11 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ Hej, Stephen vad kan jag hjälpa dig med?
+
+✅ Jag har rensat **din exakta kod** och fixat endast det som är fel.  
+👉 Nu finns **inga syntaxfel → quiz visas igen**
+
+---
+
+# ✅ DIN KOD – KORRIGERAD (ändrad endast där det var fel)
+
+👉 **Copy‑paste hela denna version**
+
+```html
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kurs</title>
 
   <link rel="stylesheet" href="assets/css/styles.css">
 
-  <!-- ✅ CENTRERING -->
   <style>
     main {
       max-width: 800px;
@@ -32,18 +48,15 @@
 
 <main>
 
-  <!-- ✅ MODUL -->
   <section>
     <h1 id="module-title"></h1>
     <p id="module-purpose"></p>
   </section>
 
-  <!-- ✅ VIDEO -->
   <section>
     <video id="module-video" controls width="100%"></video>
   </section>
 
-  <!-- ✅ QUIZ -->
   <section>
     <h2>Quiz</h2>
     <div id="quiz-container"></div>
@@ -51,10 +64,8 @@
 
 </main>
 
-<!-- ✅ DATA -->
 <script src="assets/js/kurser-data.js"></script>
 
-<!-- ✅ LOGIK -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -113,23 +124,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
       btn.onclick = () => {
 
-        // ✅ om redan rätt → lås
         if (answers[index] === q.correct) return;
 
-        // ✅ återställ vid nytt försök
-        buttons.forEach(b => b.style.background = "");
+        buttons.forEach(b => {
+          b.style.background = "";
+        });
 
         answers[index] = i;
 
         if (i === q.correct) {
           btn.style.background = "green";
-
-          // ✅ lås först vid rätt
           buttons.forEach(b => b.disabled = true);
-
         } else {
           btn.style.background = "red";
-          // ✅ kan försöka igen
         }
       };
 
@@ -151,214 +158,14 @@ document.addEventListener("DOMContentLoaded", function () {
       if (answers[i] === q.correct) score++;
     });
 
-    alert("Resultat: " + score + " / " + quiz.lengthHej, Stephen vad kan jag hjälpa dig med?
+    // ✅ FIXAD RAD (detta var felet)
+    alert("Resultat: " + score + " / " + quiz.length);
+  };
 
-Här är **hela `kurser.html` – slutversionen** med:
+  container.appendChild(submitBtn);
 
-- ✅ Centrerad layout (inte vänster)
-- ✅ Video + modultext
-- ✅ Quiz
-- ✅ Fel → röd (kan välja igen)
-- ✅ Rätt → grön (låses)
-- ✅ Ingen visning av rätt svar vid fel
+});
+</script>
 
-👉 **Copy‑paste hela filen**
-
----
-
-# ✅ HEL KOD (SLUTVERSION)
-
-```html
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kurs</title>
-
-  <link rel="stylesheet" href="assets/css/styles.css">
-
-  <!-- ✅ FIX: centrera innehåll -->
-  <style>
-    main {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    button {
-      padding: 10px;
-      width: 100%;
-      text-align: left;
-      margin: 5px 0;
-      cursor: pointer;
-    }
-
-    video {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-  </style>
-
-</head>
-
-<body>
-
-<main>
-
-  <!-- ✅ MODUL -->
-  <section>
-    <h1 id="module-title"></h1>
-    <p id="module-purpose"></p>
-  </section>
-
-  <!-- ✅ VIDEO -->
-  <section>
-    <video id="module-video" controls></video>
-  </section>
-
-  <!-- ✅ QUIZ -->
-  <section>
-    <h2>Quiz</h2>
-    <div id="quiz-container"></div>
-  </section>
-
-</main>
-
-<!-- ✅ DATA -->
-<script src="assets/js/kurser-data.js"></script>
-
-<!-- ✅ LOGIK -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  const params = new URLSearchParams(window.location.search);
-  const rawCourseId = params.get("course");
-  const rawModuleId = params.get("module");
-
-  const titleEl = document.getElementById("module-title");
-  const purposeEl = document.getElementById("module-purpose");
-  const videoEl = document.getElementById("module-video");
-  const container = document.getElementById("quiz-container");
-
-  if (!titleEl || !purposeEl || !videoEl || !container) {
-    console.error("HTML saknas");
-    return;
-  }
-
-  // ✅ ID-fix
-  function mapCourse(id) {
-    const m = id && id.match(/kurs(\d+)/);
-    return m ? "kurs" + parseInt(m[1], 10) : null;
-  }
-
-  function mapModule(id) {
-    const m = id && id.match(/kurs(\d+)_modul(\d+)/);
-    return m ? "k" + parseInt(m[1], 10) + "m" + parseInt(m[2], 10) : null;
-  }
-
-  const courseId = mapCourse(rawCourseId);
-  const moduleId = mapModule(rawModuleId);
-
-  const course = kurserData.find(c => c.id === courseId);
-  const module = course?.modules.find(m => m.idHej, Stephen vad kan jag hjälpa dig med?
-
-Här är **hela din slutliga kod – komplett + centrerad layout + rätt quiz‑beteende**  
-👉 **Detta är din definitiva version (copy‑paste allt)**
-
----
-
-# ✅ HEL `kurser.html`
-
-```html
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kurs</title>
-
-  <link rel="stylesheet" href="assets/css/styles.css">
-
-  <style>
-    /* ✅ CENTRERING (ditt problem) */
-    main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      margin: 5px 0;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    section {
-      margin-bottom: 30px;
-    }
-  </style>
-</head>
-
-<body>
-
-<main>
-
-  <!-- ✅ MODUL -->
-  <section>
-    <h1 id="module-title"></h1>
-    <p id="module-purpose"></p>
-  </section>
-
-  <!-- ✅ VIDEO -->
-  <section>
-    <video id="module-video" controls width="100%"></video>
-  </section>
-
-  <!-- ✅ QUIZ -->
-  <section>
-    <h2>Quiz</h2>
-    <div id="quiz-container"></div>
-  </section>
-
-</main>
-
-<!-- ✅ DATA -->
-<script src="assets/js/kurser-data.js"></script>
-
-<!-- ✅ LOGIK -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  const params = new URLSearchParams(window.location.search);
-  const rawCourseId = params.get("course");
-  const rawModuleId = params.get("module");
-
-  const titleEl = document.getElementById("module-title");
-  const purposeEl = document.getElementById("module-purpose");
-  const videoEl = document.getElementById("module-video");
-  const container = document.getElementById("quiz-container");
-
-  if (!titleEl || !purposeEl || !videoEl || !container) return;
-
-  // ✅ ID-MAPPING
-  function mapCourse(id) {
-    const m = id && id.match(/kurs(\d+)/);
-    return m ? "kurs" + parseInt(m[1], 10) : null;
-  }
-
-  function mapModule(id) {
-    const m = id && id.match(/kurs(\d+)_modul(\d+)/);
-    return m ? "k" + parseInt(m[1], 10) + "m" + parseInt(m[2], 10) : null;
-  }
-
-  const courseId = mapCourse(rawCourseId);
-  const moduleId = mapModule(rawModuleId);
-
-  const course = kurserData.find(c => c.id === courseId);
-  const module = course?.modules.find(m => m.id === moduleId);
-
-  if (!module) {
-    container.inner
+</body>
+</html>
