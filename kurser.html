@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  // ✅ ID FIX
+  // ✅ ID-MAPPING
   function mapCourse(id) {
     const m = id && id.match(/kurs(\d+)/);
     return m ? "kurs" + parseInt(m[1], 10) : null;
@@ -83,18 +83,15 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  // ✅ MODULDATA
+  // ✅ VISNING
   titleEl.textContent = module.title;
   purposeEl.textContent = module.purpose;
+  if (module.video) videoEl.src = module.video;
 
-  if (module.video) {
-    videoEl.src = module.video;
-  }
-
-  // ✅ QUIZ
   const quiz = module.questions;
   let answers = new Array(quiz.length).fill(null);
 
+  // ✅ QUIZ
   quiz.forEach((q, index) => {
 
     const div = document.createElement("div");
@@ -113,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       btn.onclick = () => {
 
-        // ✅ redan svarat → stoppa
+        // ✅ stoppa om redan svarat
         if (answers[index] !== null) return;
 
         answers[index] = i;
@@ -122,15 +119,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         buttons.forEach((b, idx) => {
 
-          if (idx === q.correct) {
-            b.style.background = "green"; // ✅ rätt
-          } 
-          else if (idx === i) {
-            b.style.background = "red";   // ❌ fel
+          if (idx === i) {
+            // ✅ endast vald knapp färgsätts
+            if (i === q.correct) {
+              b.style.background = "green"; // ✅ rätt
+            } else {
+              b.style.background = "red";   // ❌ fel
+            }
           }
 
-          b.disabled = true; // ✅ lås
+          b.disabled = true; // ✅ lås alla
         });
+
       };
 
       div.appendChild(btn);
