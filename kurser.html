@@ -1,154 +1,1282 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kurser – TFF portal</title>
-<link rel="stylesheet" href="assets/css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TFF Portal – Kurser</title>
 
-<style>
-.container { max-width: 1100px; margin: auto; }
+  <link rel="stylesheet" href="assets/css/styles.css" />
 
-.module {
-    border: 1px solid #ccc;
-    padding: 16px;
-    margin-bottom: 20px;
-    background: #fff;
-}
+  <!-- SheetJS för att läsa Excel direkt -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-.hidden { display: none; }
+  <style>
+    :root{
+      --bg:#f5f7fa;
+      --panel:#ffffff;
+      --line:#d9dee5;
+      --text:#1d2939;
+      --muted:#667085;
+      --primary:#005a9c;
+      --primary-2:#0b74c8;
+      --success:#188038;
+      --danger:#c62828;
+      --warning:#b26a00;
+      --locked:#98a2b3;
+      --shadow:0 1px 3px rgba(16,24,40,.08), 0 1px 2px rgba(16,24,40,.04);
+      --radius:14px;
+      --sidebar:340px;
+    }
 
-.quiz-option {
-    display: block;
-    margin: 6px 0;
-    padding: 8px;
-    background: #f3f3f3;
-    cursor: pointer;
-}
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family: "Segoe UI", Arial, sans-serif; }
+    body { min-height:100vh; }
 
-.correct { background-color: #4CAF50; color: white; }
-.wrong { background-color: #f44336; color: white; }
+    .page {
+      display:grid;
+      grid-template-columns: var(--sidebar) 1fr;
+      min-height:100vh;
+    }
 
-button {
-    margin-top: 10px;
-    padding: 10px 15px;
-}
-</style>
+    .sidebar {
+      background:#0f172a;
+      color:#fff;
+      padding:24px 18px;
+      border-right:1px solid rgba(255,255,255,.08);
+      position:sticky;
+      top:0;
+      height:100vh;
+      overflow:auto;
+    }
 
+    .brand {
+      margin-bottom:18px;
+    }
+
+    .brand h1 {
+      margin:0 0 6px 0;
+      font-size:1.35rem;
+      line-height:1.2;
+    }
+
+    .brand p {
+      margin:0;
+      color:#cbd5e1;
+      font-size:.92rem;
+      line-height:1.5;
+    }
+
+    .sidebar-tools {
+      margin:18px 0 18px 0;
+      display:grid;
+      gap:10px;
+    }
+
+    .field {
+      width:100%;
+      padding:12px 14px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      outline:none;
+    }
+
+    .field::placeholder { color:#cbd5e1; }
+
+    .course-list {
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+
+    .course-btn {
+      width:100%;
+      text-align:left;
+      border:none;
+      border-radius:12px;
+      padding:14px 14px;
+      cursor:pointer;
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      transition:.15s ease;
+    }
+
+    .course-btn:hover { background:rgba(255,255,255,.12); }
+    .course-btn.active {
+      background:#ffffff;
+      color:#0f172a;
+    }
+
+    .course-btn-title {
+      font-weight:600;
+      font-size:.96rem;
+      line-height:1.35;
+      margin-bottom:6px;
+    }
+
+    .course-btn-meta {
+      font-size:.82rem;
+      opacity:.9;
+    }
+
+    .main {
+      padding:28px;
+      max-width:1400px;
+      width:100%;
+      margin:0 auto;
+    }
+
+    .topbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+
+    .title-wrap h2 {
+      margin:0 0 8px 0;
+      font-size:1.8rem;
+      line-height:1.2;
+    }
+
+    .title-wrap p {
+      margin:0;
+      color:var(--muted);
+      max-width:78ch;
+      line-height:1.6;
+    }
+
+    .status-panel {
+      min-width:280px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:var(--shadow);
+    }
+
+    .status-panel h3 {
+      margin:0 0 10px 0;
+      font-size:1rem;
+    }
+
+    .progress-line {
+      height:10px;
+      background:#e5e7eb;
+      border-radius:999px;
+      overflow:hidden;
+      margin:10px 0 8px 0;
+    }
+
+    .progress-fill {
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg, var(--primary), var(--primary-2));
+      transition:width .25s ease;
+    }
+
+    .status-row {
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--muted);
+      font-size:.9rem;
+      margin-top:8px;
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns: 1.12fr .88fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .panel {
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .panel h3 {
+      margin:0 0 14px 0;
+      font-size:1.05rem;
+    }
+
+    .modules-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+      gap:16px;
+    }
+
+    .module-card {
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:16px;
+      background:#fff;
+      cursor:pointer;
+      transition:.15s ease;
+      position:relative;
+    }
+
+    .module-card:hover { transform:translateY(-1px); box-shadow:var(--shadow); }
+
+    .module-card.locked {
+      opacity:.7;
+      cursor:not-allowed;
+      background:#f8fafc;
+    }
+
+    .module-number {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:34px;
+      height:34px;
+      padding:0 10px;
+      border-radius:999px;
+      font-weight:700;
+      color:#fff;
+      background:var(--primary);
+      font-size:.9rem;
+      margin-bottom:12px;
+    }
+
+    .module-card.locked .module-number {
+      background:var(--locked);
+    }
+
+    .module-title {
+      font-weight:700;
+      line-height:1.4;
+      margin-bottom:8px;
+    }
+
+    .module-desc {
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.5;
+      min-height:44px;
+    }
+
+    .badge-row {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:12px;
+    }
+
+    .badge {
+      border-radius:999px;
+      padding:5px 10px;
+      font-size:.78rem;
+      background:#eef4ff;
+      color:#124078;
+      border:1px solid #d7e7ff;
+    }
+
+    .badge.success {
+      background:#ecfdf3;
+      border-color:#ccebd7;
+      color:#166534;
+    }
+
+    .badge.warning {
+      background:#fff7ed;
+      border-color:#fed7aa;
+      color:#9a3412;
+    }
+
+    .module-view.hidden,
+    .empty-state.hidden,
+    .course-view.hidden {
+      display:none;
+    }
+
+    .module-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:16px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .module-header h3 {
+      margin:0 0 6px 0;
+      font-size:1.25rem;
+      line-height:1.3;
+    }
+
+    .module-header p {
+      margin:0;
+      color:var(--muted);
+    }
+
+    .btn-row {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    button.btn,
+    a.btn {
+      border:none;
+      border-radius:10px;
+      padding:11px 16px;
+      font-weight:600;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition:.15s ease;
+    }
+
+    .btn.primary { background:var(--primary); color:#fff; }
+    .btn.primary:hover { background:var(--primary-2); }
+    .btn.secondary { background:#eef2f6; color:#223041; }
+    .btn.secondary:hover { background:#e4e9f0; }
+    .btn.success { background:var(--success); color:#fff; }
+    .btn.danger { background:var(--danger); color:#fff; }
+    .btn[disabled] { opacity:.55; cursor:not-allowed; }
+
+    .video-shell {
+      width:100%;
+      border-radius:12px;
+      overflow:hidden;
+      background:#0b1220;
+      border:1px solid #111827;
+      margin-bottom:16px;
+    }
+
+    .video-shell video {
+      display:block;
+      width:100%;
+      max-height:520px;
+      background:#000;
+    }
+
+    .video-placeholder {
+      padding:22px;
+      color:#e5e7eb;
+      font-size:.95rem;
+      line-height:1.6;
+    }
+
+    .quiz-meta {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+      color:var(--muted);
+      font-size:.92rem;
+    }
+
+    .question-box {
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:16px;
+      background:#fff;
+      margin-bottom:14px;
+    }
+
+    .question-title {
+      font-weight:700;
+      line-height:1.5;
+      margin-bottom:14px;
+    }
+
+    .options {
+      display:grid;
+      gap:10px;
+    }
+
+    .option-btn {
+      width:100%;
+      text-align:left;
+      border:1px solid #d0d8e1;
+      border-radius:12px;
+      padding:13px 14px;
+      background:#f9fafb;
+      cursor:pointer;
+      transition:.12s ease;
+      line-height:1.45;
+      color:var(--text);
+    }
+
+    .option-btn:hover { background:#f1f5f9; }
+    .option-btn.selected {
+      border-color:#7aa7d8;
+      background:#eaf4ff;
+    }
+    .option-btn.correct {
+      border-color:#188038;
+      background:#dff4e5;
+      color:#0f5132;
+    }
+    .option-btn.wrong {
+      border-color:#c62828;
+      background:#fde7e9;
+      color:#7f1d1d;
+    }
+
+    .feedback {
+      min-height:24px;
+      font-size:.95rem;
+      font-weight:600;
+      margin:10px 0 4px 0;
+    }
+
+    .feedback.ok { color:var(--success); }
+    .feedback.fail { color:var(--danger); }
+
+    .quiz-actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+
+    .result-box {
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:16px;
+      background:#f8fafc;
+      margin-top:16px;
+    }
+
+    .result-box h4 {
+      margin:0 0 10px 0;
+      font-size:1rem;
+    }
+
+    .muted {
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .pill {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:.85rem;
+      font-weight:600;
+      background:#eef2f6;
+      color:#334155;
+    }
+
+    .pill.success { color:#166534; background:#ecfdf3; }
+    .pill.warning { color:#9a3412; background:#fff7ed; }
+
+    .empty-state {
+      background:var(--panel);
+      border:1px dashed var(--line);
+      border-radius:var(--radius);
+      padding:28px;
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+
+    .empty-state h3 {
+      margin:0 0 8px 0;
+      font-size:1.15rem;
+    }
+
+    .loading {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40vh;
+      color:var(--muted);
+      font-size:1rem;
+    }
+
+    @media (max-width: 1200px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        grid-template-columns:1fr;
+      }
+      .sidebar {
+        position:relative;
+        height:auto;
+      }
+      .main {
+        padding:18px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="page">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>TFF utbildningsportal</h1>
+        <p>Kurser, moduler, video och kunskapskontroller med progression.</p>
+      </div>
 
-<header>
-    <h1>Kurser</h1>
-</header>
+      <div class="sidebar-tools">
+        <input id="courseSearch" class="field" type="search" placeholder="Sök kurs eller modul..." />
+        <button id="resetProgressBtn" class="btn secondary" type="button">Nollställ progression</button>
+      </div>
 
-<main class="container">
+      <div id="courseList" class="course-list"></div>
+    </aside>
 
-    <!-- MODUL 1 -->
-    <div class="module" id="module1">
+    <main class="main">
+      <div id="loading" class="loading">Läser in kurser från Excel…</div>
 
-        <h2>Modul 1 – Introduktion</h2>
+      <div id="app" style="display:none;">
+        <section class="topbar">
+          <div class="title-wrap">
+            <h2 id="courseTitle">Kurser</h2>
+            <p id="courseIntro">Välj en kurs i vänstermenyn.</p>
+          </div>
 
-        <video width="100%" controls>
-            <source src="video/modul1.mp4" type="video/mp4">
-        </video>
+          <div class="status-panel">
+            <h3>Kursstatus</h3>
+            <div class="progress-line">
+              <div id="courseProgressFill" class="progress-fill"></div>
+            </div>
+            <div class="status-row">
+              <span>Slutförda moduler</span>
+              <strong id="courseProgressText">0 / 0</strong>
+            </div>
+            <div class="status-row">
+              <span>Godkända quiz</span>
+              <strong id="coursePassedText">0</strong>
+            </div>
+          </div>
+        </section>
 
-        <p>Grundläggande introduktion.</p>
+        <section id="courseView" class="course-view">
+          <div class="grid">
+            <div class="panel">
+              <h3>Moduler</h3>
+              <div id="modulesGrid" class="modules-grid"></div>
+            </div>
 
-        <div class="quiz" data-module="1">
-            <p>Fråga: Vad är rätt?</p>
+            <div class="panel">
+              <h3>Vald kurs</h3>
+              <div id="courseSummary" class="muted"></div>
+            </div>
+          </div>
+        </section>
 
-            <div class="quiz-option" data-correct="false">Svar A</div>
-            <div class="quiz-option" data-correct="true">Svar B</div>
-            <div class="quiz-option" data-correct="false">Svar C</div>
+        <section id="moduleView" class="module-view hidden">
+          <div class="panel">
+            <div class="module-header">
+              <div>
+                <h3 id="moduleTitle">Modul</h3>
+                <p id="moduleSubtitle">Kurs / Modul</p>
+              </div>
 
-            <button onclick="checkQuiz(1)">Kontrollera</button>
-        </div>
+              <div class="btn-row">
+                <button id="backToCourseBtn" class="btn secondary" type="button">Tillbaka till kurs</button>
+                <button id="unlockNextBtn" class="btn success" type="button" disabled>Nästa modul</button>
+              </div>
+            </div>
 
-    </div>
+            <div class="video-shell" id="videoShell">
+              <video id="moduleVideo" controls playsinline preload="metadata"></video>
+              <div id="videoPlaceholder" class="video-placeholder" style="display:none;">
+                Ingen video hittades för denna modul med standardmönstret.<br>
+                Lägg videofilen i <strong>video/</strong> med namn enligt något av dessa mönster:
+                <br><br>
+                <strong>kurs-{kursnummer}-modul-{modulnummer}.mp4</strong><br>
+                <strong>kurs_{kursnummer}_modul_{modulnummer}.mp4</strong><br>
+                <strong>modul_{kursnummer}_{modulnummer}.mp4</strong>
+              </div>
+            </div>
 
-    <!-- MODUL 2 -->
-    <div class="module hidden" id="module2">
+            <div class="panel" style="padding:16px; background:#fcfcfd;">
+              <h3 style="margin-top:0;">Innehåll</h3>
+              <div id="moduleContent" class="muted"></div>
+            </div>
 
-        <h2>Modul 2</h2>
+            <div class="panel" style="margin-top:16px;">
+              <h3 style="margin-top:0;">Quiz</h3>
 
-        <video width="100%" controls>
-            <source src="video/modul2.mp4" type="video/mp4">
-        </video>
+              <div id="quizContainer">
+                <div class="quiz-meta">
+                  <span id="quizProgress">Fråga 0 / 0</span>
+                  <span id="quizScoreLive">Rätt hittills: 0</span>
+                </div>
 
-        <p>Fortsättning.</p>
+                <div class="question-box">
+                  <div id="questionTitle" class="question-title">Laddar fråga…</div>
+                  <div id="optionsBox" class="options"></div>
+                  <div id="feedback" class="feedback"></div>
 
-    </div>
+                  <div class="quiz-actions">
+                    <button id="checkAnswerBtn" class="btn primary" type="button" disabled>Kontrollera</button>
+                    <button id="nextQuestionBtn" class="btn secondary" type="button" disabled>Nästa fråga</button>
+                    <button id="retryQuestionBtn" class="btn secondary" type="button">Välj om svar</button>
+                  </div>
+                </div>
 
-</main>
+                <div id="resultBox" class="result-box" style="display:none;">
+                  <h4>Resultat</h4>
+                  <div id="resultText" class="muted"></div>
+                </div>
+              </div>
 
-<script>
+              <div id="noQuizBox" class="muted" style="display:none;">
+                Inga frågor hittades för denna modul.
+              </div>
+            </div>
+          </div>
+        </section>
 
-let scores = {};
+        <section id="emptyState" class="empty-state hidden">
+          <h3>Ingen kurs vald</h3>
+          <p class="muted">Välj en kurs i vänstermenyn för att visa moduler och quiz.</p>
+        </section>
+      </div>
+    </main>
+  </div>
 
-function checkQuiz(module) {
+  <script>
+    const EXCEL_PATH = "data/TFF_Moduler_och_Fragor_for_SharePoint.xlsx";
+    const STORAGE_KEY = "tff_portal_progress_v3";
 
-    const quiz = document.querySelector(`.quiz[data-module='${module}']`);
-    const options = quiz.querySelectorAll(".quiz-option");
+    const state = {
+      data: [],
+      filteredData: [],
+      selectedCourseId: null,
+      selectedModuleId: null,
+      quiz: {
+        questions: [],
+        currentIndex: 0,
+        selectedOptionIndex: null,
+        checked: false,
+        correctCount: 0
+      },
+      progress: loadProgress()
+    };
 
-    let correctCount = 0;
-    let total = options.length;
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
 
-    options.forEach(opt => {
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress));
+    }
 
-        opt.classList.remove("correct","wrong");
+    function slugify(text) {
+      return String(text || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[–—]/g, "-")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
 
-        if (opt.classList.contains("selected")) {
+    function normalizeKey(text) {
+      return String(text || "")
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .replace(/[–—]/g, "-");
+    }
 
-            if (opt.dataset.correct === "true") {
-                opt.classList.add("correct");
-                correctCount++;
-            } else {
-                opt.classList.add("wrong");
-            }
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
+    function getCourseProgress(courseId) {
+      if (!state.progress[courseId]) {
+        state.progress[courseId] = { modules: {} };
+      }
+      return state.progress[courseId];
+    }
+
+    function getModuleProgress(courseId, moduleId) {
+      const courseProgress = getCourseProgress(courseId);
+      if (!courseProgress.modules[moduleId]) {
+        courseProgress.modules[moduleId] = {
+          passed: false,
+          scorePercent: 0,
+          correctCount: 0,
+          totalQuestions: 0,
+          completed: false
+        };
+      }
+      return courseProgress.modules[moduleId];
+    }
+
+    async function loadExcelData() {
+      const response = await fetch(EXCEL_PATH, { cache: "no-store" });
+      if (!response.ok) {
+        throw new Error("Kunde inte läsa Excel-filen: " + EXCEL_PATH);
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+
+      const sheet1 = workbook.Sheets[workbook.SheetNames[0]];
+      const sheet2 = workbook.Sheets[workbook.SheetNames[1]];
+
+      const modulesRows = XLSX.utils.sheet_to_json(sheet1, { defval: "" });
+      const questionsRows = XLSX.utils.sheet_to_json(sheet2, { defval: "" });
+
+      const coursesMap = new Map();
+
+      modulesRows.forEach((row, idx) => {
+        const courseLabel = row["Titel"] || row["titel"] || "";
+        const courseName = row["Kurs"] || row["kurs"] || "";
+        const moduleNumber = Number(row["ModulNummer"] || row["modulnummer"] || 0);
+        const content = row["Innehåll"] || row["innehåll"] || "";
+
+        if (!courseLabel || !courseName || !moduleNumber) return;
+
+        const courseId = slugify(courseLabel + "-" + courseName);
+        if (!coursesMap.has(courseId)) {
+          coursesMap.set(courseId, {
+            id: courseId,
+            courseLabel: String(courseLabel).trim(),
+            title: String(courseName).trim(),
+            courseNumber: extractCourseNumber(courseLabel),
+            intro: buildIntroFromCourseName(courseName),
+            modules: []
+          });
         }
 
-    });
+        const course = coursesMap.get(courseId);
+        const moduleTitle = content && String(content).trim()
+          ? String(content).trim()
+          : `Modul ${moduleNumber}`;
 
-    let percent = (correctCount / 1) * 100;
+        course.modules.push({
+          id: slugify(courseId + "-modul-" + moduleNumber + "-" + moduleTitle),
+          moduleNumber,
+          title: moduleTitle,
+          content: generateModuleContent(courseName, moduleTitle),
+          videoCandidates: buildVideoCandidates(extractCourseNumber(courseLabel), moduleNumber)
+        });
+      });
 
-    scores[module] = percent;
+      const questionGroups = new Map();
 
-    if (percent >= 80) {
-        unlockNext(module);
-    }
+      questionsRows.forEach((row) => {
+        const moduleTitle = String(row["Modul"] || row["modul"] || "").trim();
+        const questionNumber = Number(row["FrågeNummer"] || row["frågenummer"] || 0);
+        const questionText = String(row["Frågor"] || row["frågor"] || "").trim();
+        const answerA = String(row["SvarA"] || row["svara"] || "").trim();
+        const answerB = String(row["SvarB"] || row["svarb"] || "").trim();
+        const answerC = String(row["SvarC"] || row["svarc"] || "").trim();
+        const answerD = String(row["SvarD"] || row["svard"] || "").trim();
+        const right = String(row["RättSvar"] || row["rättsvar"] || "").trim().toUpperCase();
 
-}
+        if (!moduleTitle || !questionText) return;
 
-document.querySelectorAll(".quiz-option").forEach(opt => {
+        const key = normalizeKey(moduleTitle);
+        if (!questionGroups.has(key)) questionGroups.set(key, []);
 
-    opt.addEventListener("click", function () {
+        const options = [answerA, answerB, answerC, answerD].filter(Boolean);
+        const correctIndex = { A: 0, B: 1, C: 2, D: 3 }[right] ?? -1;
 
-        const parent = this.parentElement;
+        questionGroups.get(key).push({
+          questionNumber,
+          question: questionText,
+          options,
+          correctIndex
+        });
+      });
 
-        parent.querySelectorAll(".quiz-option").forEach(o => {
-            o.classList.remove("selected","correct","wrong");
+      const courses = Array.from(coursesMap.values())
+        .sort((a, b) => (a.courseNumber || 999) - (b.courseNumber || 999))
+        .map(course => {
+          course.modules = course.modules
+            .sort((a, b) => a.moduleNumber - b.moduleNumber)
+            .map(module => {
+              const key = normalizeKey(module.title);
+              module.questions = (questionGroups.get(key) || []).sort((a, b) => a.questionNumber - b.questionNumber);
+              return module;
+            });
+
+          return course;
         });
 
-        this.classList.add("selected");
-
-    });
-
-});
-
-function unlockNext(module) {
-
-    const next = document.getElementById("module" + (module + 1));
-
-    if (next) {
-        next.classList.remove("hidden");
+      return courses;
     }
 
-}
+    function extractCourseNumber(label) {
+      const match = String(label || "").match(/kurs\s*(\d+)/i);
+      return match ? Number(match[1]) : 0;
+    }
 
-</script>
+    function buildIntroFromCourseName(courseName) {
+      const map = {
+        "Microsoft Teams - Grund & Arbetssätt": "Rätt användning av Teams i vardagsarbetet.",
+        "Transkribering": "Säkerställa korrekt, effektiv och spårbar omvandling av tal till text.",
+        "Dokumentation (TFF)": "Säkerställa att information dokumenteras korrekt, strukturerat och enligt regelverk.",
+        "AI & CoPilot - Grunderna": "Skapa rätt förväntningar på AI och Copilot i arbetet.",
+        "Promptning i CoPilot (M365)": "Bygga bättre prompts för möten, texter och analys i Microsoft 365.",
+        "Skapa & Spara Dokument Korrekt": "Skapa, namnge, lagra och återanvänd dokument på rätt sätt.",
+        "Teams, SharePoint & Behörigheter": "Hantera åtkomst, delning och placering av information korrekt.",
+        "Informationsklassning & GDPR i M365": "Klassning, personuppgifter och korrekt hantering i M365.",
+        "Rätt verktyg för rätt ärende": "Välj rätt kanal, dokumentform och arbetssätt i vardagen.",
+        "Digital möteskultur": "Minska mötesbrus och skapa tydligare beslut, ansvar och uppföljning.",
+        "Från chatt till struktur": "Förvandla dialog till sökbar, spårbar och användbar struktur.",
+        "Diarieföring och arkivering (TFF)": "Koppla vardagsarbete till krav på registrering, arkiv och bevarande.",
+        "Styrning & Governance i M365 (TFF)": "Skapa ordning, ansvar och uppföljning för digitala arbetsytor.",
+        "Informationens livscykel": "Förstå hela flödet från skapande till bevarande eller gallring.",
+        "Arbeta processbaserat i M365": "Knyta verktyg, struktur och dokumentation till verksamhetens processer."
+      };
+      return map[courseName] || "Digital mikroutbildning i fem moduler.";
+    }
 
+    function generateModuleContent(courseName, moduleTitle) {
+      return `
+        <p><strong>${escapeHtml(moduleTitle)}</strong></p>
+        <p>Denna modul tillhör kursen <strong>${escapeHtml(courseName)}</strong>.</p>
+        <p>Arbeta igenom videon först och besvara därefter quizet. För att låsa upp nästa modul krävs minst <strong>80&nbsp;% rätt</strong>.</p>
+        <p>Resultat sparas lokalt i webbläsaren så att progressionen finns kvar mellan besök.</p>
+      `;
+    }
+
+    function buildVideoCandidates(courseNumber, moduleNumber) {
+      return [
+        `video/kurs-${courseNumber}-modul-${moduleNumber}.mp4`,
+        `video/kurs_${courseNumber}_modul_${moduleNumber}.mp4`,
+        `video/modul_${courseNumber}_${moduleNumber}.mp4`,
+        `video/modul-${courseNumber}-${moduleNumber}.mp4`,
+        `video/kurs${courseNumber}-modul${moduleNumber}.mp4`
+      ];
+    }
+
+    function filterCourses(searchTerm) {
+      const q = normalizeKey(searchTerm);
+      if (!q) {
+        state.filteredData = state.data;
+        renderCourseList();
+        return;
+      }
+
+      state.filteredData = state.data.filter(course => {
+        const inCourse = normalizeKey(course.title).includes(q) || normalizeKey(course.courseLabel).includes(q);
+        const inModules = course.modules.some(m => normalizeKey(m.title).includes(q));
+        return inCourse || inModules;
+      });
+
+      renderCourseList();
+    }
+
+    function renderCourseList() {
+      const wrap = document.getElementById("courseList");
+      wrap.innerHTML = "";
+
+      state.filteredData.forEach(course => {
+        const progress = getCourseProgress(course.id);
+        const moduleProgresses = course.modules.map(m => getModuleProgress(course.id, m.id));
+        const passedCount = moduleProgresses.filter(m => m.passed).length;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "course-btn" + (state.selectedCourseId === course.id ? " active" : "");
+        btn.innerHTML = `
+          <div class="course-btn-title">${escapeHtml(course.courseLabel)} – ${escapeHtml(course.title)}</div>
+          <div class="course-btn-meta">${passedCount} / ${course.modules.length} moduler godkända</div>
+        `;
+        btn.addEventListener("click", () => {
+          state.selectedCourseId = course.id;
+          state.selectedModuleId = null;
+          renderAll();
+        });
+
+        wrap.appendChild(btn);
+      });
+    }
+
+    function renderAll() {
+      renderCourseList();
+
+      const course = state.data.find(c => c.id === state.selectedCourseId);
+
+      if (!course) {
+        document.getElementById("emptyState").classList.remove("hidden");
+        document.getElementById("courseView").classList.add("hidden");
+        document.getElementById("moduleView").classList.add("hidden");
+        return;
+      }
+
+      document.getElementById("emptyState").classList.add("hidden");
+
+      if (state.selectedModuleId) {
+        document.getElementById("courseView").classList.add("hidden");
+        document.getElementById("moduleView").classList.remove("hidden");
+        renderModuleView(course);
+      } else {
+        document.getElementById("courseView").classList.remove("hidden");
+        document.getElementById("moduleView").classList.add("hidden");
+        renderCourseView(course);
+      }
+    }
+
+    function renderCourseView(course) {
+      document.getElementById("courseTitle").textContent = `${course.courseLabel} – ${course.title}`;
+      document.getElementById("courseIntro").textContent = course.intro;
+
+      const modulesGrid = document.getElementById("modulesGrid");
+      const courseSummary = document.getElementById("courseSummary");
+      modulesGrid.innerHTML = "";
+
+      const moduleProgresses = course.modules.map(m => getModuleProgress(course.id, m.id));
+      const passedCount = moduleProgresses.filter(m => m.passed).length;
+
+      const percent = Math.round((passedCount / Math.max(course.modules.length, 1)) * 100);
+      document.getElementById("courseProgressFill").style.width = `${percent}%`;
+      document.getElementById("courseProgressText").textContent = `${passedCount} / ${course.modules.length}`;
+      document.getElementById("coursePassedText").textContent = String(passedCount);
+
+      courseSummary.innerHTML = `
+        <p><strong>${escapeHtml(course.title)}</strong></p>
+        <p>${escapeHtml(course.intro)}</p>
+        <p>Kursen innehåller <strong>${course.modules.length}</strong> moduler. Nästa modul låses upp först när föregående modul är godkänd med minst <strong>80&nbsp;% rätt</strong>.</p>
+      `;
+
+      course.modules.forEach((module, index) => {
+        const prevModule = course.modules[index - 1];
+        const prevPassed = index === 0 ? true : getModuleProgress(course.id, prevModule.id).passed;
+        const moduleProgress = getModuleProgress(course.id, module.id);
+
+        const card = document.createElement("div");
+        card.className = "module-card" + (!prevPassed ? " locked" : "");
+        card.innerHTML = `
+          <div class="module-number">M${module.moduleNumber}</div>
+          <div class="module-title">${escapeHtml(module.title)}</div>
+          <div class="module-desc">${escapeHtml(shorten(introTextFromModule(module.title), 120))}</div>
+          <div class="badge-row">
+            <span class="badge">${module.questions.length} frågor</span>
+            ${moduleProgress.passed
+              ? `<span class="badge success">Godkänd ${moduleProgress.scorePercent}%</span>`
+              : !prevPassed
+                ? `<span class="badge warning">Låst</span>`
+                : `<span class="badge">Ej godkänd</span>`
+            }
+          </div>
+        `;
+
+        if (prevPassed) {
+          card.addEventListener("click", () => {
+            state.selectedModuleId = module.id;
+            state.quiz.currentIndex = 0;
+            state.quiz.selectedOptionIndex = null;
+            state.quiz.checked = false;
+            state.quiz.correctCount = 0;
+            renderAll();
+          });
+        }
+
+        modulesGrid.appendChild(card);
+      });
+    }
+
+    function introTextFromModule(title) {
+      return `Modulen behandlar ${title.toLowerCase()} och avslutas med quiz.`;
+    }
+
+    function shorten(text, maxLen) {
+      const s = String(text || "");
+      return s.length > maxLen ? s.slice(0, maxLen - 1) + "…" : s;
+    }
+
+    function renderModuleView(course) {
+      const module = course.modules.find(m => m.id === state.selectedModuleId);
+      if (!module) return;
+
+      document.getElementById("courseTitle").textContent = `${course.courseLabel} – ${course.title}`;
+      document.getElementById("courseIntro").textContent = course.intro;
+
+      const moduleProgress = getModuleProgress(course.id, module.id);
+
+      document.getElementById("moduleTitle").textContent = module.title;
+      document.getElementById("moduleSubtitle").textContent = `${course.courseLabel} – Modul ${module.moduleNumber}`;
+      document.getElementById("moduleContent").innerHTML = module.content;
+
+      setupVideo(module.videoCandidates);
+      setupQuiz(course, module);
+
+      const currentIndex = course.modules.findIndex(m => m.id === module.id);
+      const nextModule = course.modules[currentIndex + 1];
+      const unlockBtn = document.getElementById("unlockNextBtn");
+
+      if (nextModule && moduleProgress.passed) {
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = `Öppna nästa modul`;
+        unlockBtn.onclick = () => {
+          state.selectedModuleId = nextModule.id;
+          state.quiz.currentIndex = 0;
+          state.quiz.selectedOptionIndex = null;
+          state.quiz.checked = false;
+          state.quiz.correctCount = 0;
+          renderAll();
+        };
+      } else if (!nextModule) {
+        unlockBtn.disabled = true;
+        unlockBtn.textContent = "Sista modulen";
+      } else {
+        unlockBtn.disabled = true;
+        unlockBtn.textContent = "Nästa modul";
+      }
+    }
+
+    function setupVideo(videoCandidates) {
+      const video = document.getElementById("moduleVideo");
+      const placeholder = document.getElementById("videoPlaceholder");
+      const shell = document.getElementById("videoShell");
+
+      let idx = 0;
+
+      function tryNext() {
+        if (idx >= videoCandidates.length) {
+          video.style.display = "none";
+          placeholder.style.display = "block";
+          return;
+        }
+        const candidate = videoCandidates[idx++];
+        video.style.display = "block";
+        placeholder.style.display = "none";
+        video.src = candidate;
+        video.load();
+      }
+
+      video.onerror = tryNext;
+      tryNext();
+    }
+
+    function setupQuiz(course, module) {
+      const questions = module.questions || [];
+      state.quiz.questions = questions;
+      state.quiz.currentIndex = 0;
+      state.quiz.selectedOptionIndex = null;
+      state.quiz.checked = false;
+      state.quiz.correctCount = 0;
+
+      const noQuizBox = document.getElementById("noQuizBox");
+      const quizContainer = document.getElementById("quizContainer");
+      const resultBox = document.getElementById("resultBox");
+
+      resultBox.style.display = "none";
+
+      if (!questions.length) {
+        noQuizBox.style.display = "block";
+        quizContainer.style.display = "none";
+        return;
+      }
+
+      noQuizBox.style.display = "none";
+      quizContainer.style.display = "block";
+
+      renderQuestion(course, module);
+
+      document.getElementById("checkAnswerBtn").onclick = () => checkAnswer(course, module);
+      document.getElementById("nextQuestionBtn").onclick = () => nextQuestion(course, module);
+      document.getElementById("retryQuestionBtn").onclick = () => retryQuestion();
+      document.getElementById("backToCourseBtn").onclick = () => {
+        state.selectedModuleId = null;
+        renderAll();
+      };
+    }
+
+    function renderQuestion(course, module) {
+      const questions = state.quiz.questions;
+      const index = state.quiz.currentIndex;
+      const q = questions[index];
+
+      document.getElementById("quizProgress").textContent = `Fråga ${index + 1} / ${questions.length}`;
+      document.getElementById("quizScoreLive").textContent = `Rätt hittills: ${state.quiz.correctCount}`;
+      document.getElementById("questionTitle").textContent = q.question;
+
+      const optionsBox = document.getElementById("optionsBox");
+      const feedback = document.getElementById("feedback");
+      const checkBtn = document.getElementById("checkAnswerBtn");
+      const nextBtn = document.getElementById("nextQuestionBtn");
+
+      feedback.textContent = "";
+      feedback.className = "feedback";
+      nextBtn.disabled = true;
+      checkBtn.disabled = state.quiz.selectedOptionIndex === null;
+
+      optionsBox.innerHTML = "";
+
+      q.options.forEach((option, optionIndex) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option-btn" + (state.quiz.selectedOptionIndex === optionIndex ? " selected" : "");
+        btn.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
+
+        btn.addEventListener("click", () => {
+          if (state.quiz.checked) return;
+          state.quiz.selectedOptionIndex = optionIndex;
+          renderQuestion(course, module);
+        });
+
+        optionsBox.appendChild(btn);
+      });
+    }
+
+    function retryQuestion() {
+      if (state.quiz.checked) {
+        state.quiz.checked = false;
+      }
+      state.quiz.selectedOptionIndex = null;
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("feedback").className = "feedback";
+      document.getElementById("nextQuestionBtn").disabled = true;
+      document.getElementById("checkAnswerBtn").disabled = true;
+
+      const buttons = [...document.querySelectorAll(".option-btn")];
+      buttons.forEach(btn => {
+        btn.classList.remove("selected", "correct", "wrong");
+      });
+    }
+
+    function checkAnswer(course, module) {
+      if (state.quiz.selectedOptionIndex === null || state.quiz.checked) return;
+
+      state.quiz.checked = true;
+
+      const q = state.quiz.questions[state.quiz.currentIndex];
+      const selected = state.quiz.selectedOptionIndex;
+      const isCorrect = selected === q.correctIndex;
+
+      const buttons = [...document.querySelectorAll(".option-btn")];
+      buttons.forEach((btn, idx) => {
+        btn.classList.remove("selected");
+        if (idx === selected) {
+          btn.classList.add(isCorrect ? "correct" : "wrong");
+        }
+      });
+
+      const feedback = document.getElementById("feedback");
+      if (isCorrect) {
+        state.quiz.correctCount += 1;
+        feedback.textContent = "Rätt svar.";
+        feedback.className = "feedback ok";
+      } else {
+        feedback.textContent = "Fel svar. Du kan välja om svar innan du går vidare.";
+        feedback.className = "feedback fail";
+      }
+
+      document.getElementById("nextQuestionBtn").disabled = false;
+    }
+
+    function nextQuestion(course, module) {
+      if (!state.quiz.checked) return;
+
+      if (state.quiz.currentIndex < state.quiz.questions.length - 1) {
+        state.quiz.currentIndex += 1;
+        state.quiz.selectedOptionIndex = null;
+        state.quiz.checked = false;
+        renderQuestion(course, module);
+        return;
+      }
+
+      finalizeQuiz(course, module);
+    }
+
+    function finalizeQuiz(course, module) {
+      const total = state.quiz.questions.length;
+      const correct = state.quiz.correctCount;
+      const percent = Math.round((correct / Math.max(total, 1)) * 100);
+      const passed = percent >= 80;
+
+      const moduleProgress = getModuleProgress(course.id, module.id);
+      moduleProgress.correctCount = correct;
+      moduleProgress.totalQuestions = total;
+      moduleProgress.scorePercent = percent;
+      moduleProgress.passed = passed;
+      moduleProgress.completed = true;
+      saveProgress();
+
+      const resultBox = document.getElementById("resultBox");
+      const resultText = document.getElementById("resultText");
+      resultBox.style.display = "block";
+
+      if (passed) {
+        resultText.innerHTML = `
+          <p><strong>Godkänt.</strong></p>
+          <p>Du fick ${correct} av ${total} rätt (${percent} %).</p>
+          <p>Nästa modul är nu upplåst.</p>
+        `;
+      } else {
+        resultText.innerHTML = `
+          <p><strong>Inte godkänt ännu.</strong></p>
+          <p>Du fick ${correct} av ${total} rätt (${percent} %).</p>
+          <p>Du behöver minst 80 % för att låsa upp nästa modul. Öppna modulen igen för att göra om quizet.</p>
+        `;
+      }
+
+      renderAll();
+      document.getElementById("resultBox").style.display = "block";
+    }
+
+    function bindEvents() {
+      document.getElementById("courseSearch").addEventListener("input", (e) => {
+        filterCourses(e.target.value);
+      });
+
+      document.getElementById("resetProgressBtn").addEventListener("click", () => {
+        localStorage.removeItem(STORAGE_KEY);
+        state.progress = {};
+        state.selectedModuleId = null;
+        renderAll();
+      });
+    }
+
+    async function init() {
+      try {
+        bindEvents();
+
+        state.data = await loadExcelData();
+        state.filteredData = state.data;
+
+        if (state.data.length) {
+          state.selectedCourseId = state.data[0].id;
+        }
+
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("app").style.display = "block";
+
+        renderAll();
+      } catch (error) {
+        document.getElementById("loading").innerHTML = `
+          <div style="max-width:760px; padding:24px; background:#fff; border:1px solid #e5e7eb; border-radius:14px;">
+            <h3 style="margin-top:0;">Kunde inte läsa kursdata</h3>
+            <p style="color:#667085; line-height:1.7;">
+              Kontrollera att Excel-filen finns på sökvägen <strong>${EXCEL_PATH}</strong>.
+            </p>
+            <pre style="white-space:pre-wrap; background:#f8fafc; padding:12px; border-radius:10px; border:1px solid #e5e7eb;">${escapeHtml(error.message)}</pre>
+          </div>
+        `;
+      }
+    }
+
+    init();
+  </script>
 </body>
 </html>
