@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TFF Portal – Kurser</title>
+  <title>TFF Utbildningsportal – Kurser</title>
 
   <link rel="stylesheet" href="assets/css/styles.css" />
-
-  <!-- SheetJS för att läsa Excel direkt -->
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
     :root{
@@ -18,7 +15,7 @@
       --text:#1d2939;
       --muted:#667085;
       --primary:#005a9c;
-      --primary-2:#0b74c8;
+      --primary2:#0b74c8;
       --success:#188038;
       --danger:#c62828;
       --warning:#b26a00;
@@ -29,476 +26,447 @@
     }
 
     * { box-sizing: border-box; }
-    html, body { margin:0; padding:0; background:var(--bg); color:var(--text); font-family: "Segoe UI", Arial, sans-serif; }
-    body { min-height:100vh; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
 
     .page {
-      display:grid;
+      display: grid;
       grid-template-columns: var(--sidebar) 1fr;
-      min-height:100vh;
+      min-height: 100vh;
     }
 
     .sidebar {
-      background:#0f172a;
-      color:#fff;
-      padding:24px 18px;
-      border-right:1px solid rgba(255,255,255,.08);
-      position:sticky;
-      top:0;
-      height:100vh;
-      overflow:auto;
-    }
-
-    .brand {
-      margin-bottom:18px;
+      background: #0f172a;
+      color: #fff;
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
     }
 
     .brand h1 {
-      margin:0 0 6px 0;
-      font-size:1.35rem;
-      line-height:1.2;
+      margin: 0 0 6px 0;
+      font-size: 1.35rem;
     }
 
     .brand p {
-      margin:0;
-      color:#cbd5e1;
-      font-size:.92rem;
-      line-height:1.5;
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-size: .92rem;
     }
 
     .sidebar-tools {
-      margin:18px 0 18px 0;
-      display:grid;
-      gap:10px;
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
     }
 
     .field {
-      width:100%;
-      padding:12px 14px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      outline:none;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      outline: none;
     }
 
-    .field::placeholder { color:#cbd5e1; }
+    .field::placeholder { color: #cbd5e1; }
 
     .course-list {
-      display:grid;
-      gap:10px;
-      margin-top:10px;
+      display: grid;
+      gap: 10px;
     }
 
     .course-btn {
-      width:100%;
-      text-align:left;
-      border:none;
-      border-radius:12px;
-      padding:14px 14px;
-      cursor:pointer;
-      background:rgba(255,255,255,.06);
-      color:#fff;
-      transition:.15s ease;
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      transition: .15s ease;
     }
 
-    .course-btn:hover { background:rgba(255,255,255,.12); }
+    .course-btn:hover { background: rgba(255,255,255,.12); }
+
     .course-btn.active {
-      background:#ffffff;
-      color:#0f172a;
+      background: #fff;
+      color: #0f172a;
     }
 
     .course-btn-title {
-      font-weight:600;
-      font-size:.96rem;
-      line-height:1.35;
-      margin-bottom:6px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 6px;
     }
 
     .course-btn-meta {
-      font-size:.82rem;
-      opacity:.9;
+      font-size: .82rem;
+      opacity: .9;
     }
 
     .main {
-      padding:28px;
-      max-width:1400px;
-      width:100%;
-      margin:0 auto;
+      padding: 28px;
+      max-width: 1450px;
+      width: 100%;
+      margin: 0 auto;
     }
 
     .topbar {
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:16px;
-      margin-bottom:20px;
-      flex-wrap:wrap;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
     }
 
     .title-wrap h2 {
-      margin:0 0 8px 0;
-      font-size:1.8rem;
-      line-height:1.2;
+      margin: 0 0 8px 0;
+      font-size: 1.8rem;
+      line-height: 1.2;
     }
 
     .title-wrap p {
-      margin:0;
-      color:var(--muted);
-      max-width:78ch;
-      line-height:1.6;
+      margin: 0;
+      color: var(--muted);
+      max-width: 80ch;
+      line-height: 1.6;
     }
 
     .status-panel {
-      min-width:280px;
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:16px;
-      box-shadow:var(--shadow);
+      min-width: 280px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
     }
 
     .status-panel h3 {
-      margin:0 0 10px 0;
-      font-size:1rem;
+      margin: 0 0 10px 0;
+      font-size: 1rem;
     }
 
     .progress-line {
-      height:10px;
-      background:#e5e7eb;
-      border-radius:999px;
-      overflow:hidden;
-      margin:10px 0 8px 0;
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 8px 0;
     }
 
     .progress-fill {
-      height:100%;
-      width:0;
-      background:linear-gradient(90deg, var(--primary), var(--primary-2));
-      transition:width .25s ease;
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary), var(--primary2));
+      transition: width .25s ease;
     }
 
     .status-row {
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      color:var(--muted);
-      font-size:.9rem;
-      margin-top:8px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: .9rem;
+      margin-top: 8px;
     }
 
     .grid {
-      display:grid;
-      grid-template-columns: 1.12fr .88fr;
-      gap:22px;
-      align-items:start;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 22px;
+      align-items: start;
     }
 
     .panel {
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
     }
 
     .panel h3 {
-      margin:0 0 14px 0;
-      font-size:1.05rem;
+      margin: 0 0 14px 0;
+      font-size: 1.05rem;
     }
 
     .modules-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
-      gap:16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
     }
 
     .module-card {
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:16px;
-      background:#fff;
-      cursor:pointer;
-      transition:.15s ease;
-      position:relative;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      background: #fff;
+      cursor: pointer;
+      transition: .15s ease;
     }
 
-    .module-card:hover { transform:translateY(-1px); box-shadow:var(--shadow); }
+    .module-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
 
     .module-card.locked {
-      opacity:.7;
-      cursor:not-allowed;
-      background:#f8fafc;
+      opacity: .7;
+      cursor: not-allowed;
+      background: #f8fafc;
     }
 
     .module-number {
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:34px;
-      height:34px;
-      padding:0 10px;
-      border-radius:999px;
-      font-weight:700;
-      color:#fff;
-      background:var(--primary);
-      font-size:.9rem;
-      margin-bottom:12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--primary);
+      font-size: .9rem;
+      margin-bottom: 12px;
     }
 
     .module-card.locked .module-number {
-      background:var(--locked);
+      background: var(--locked);
     }
 
     .module-title {
-      font-weight:700;
-      line-height:1.4;
-      margin-bottom:8px;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
     }
 
     .module-desc {
-      color:var(--muted);
-      font-size:.92rem;
-      line-height:1.5;
-      min-height:44px;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.5;
+      min-height: 44px;
     }
 
     .badge-row {
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      margin-top:12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
     .badge {
-      border-radius:999px;
-      padding:5px 10px;
-      font-size:.78rem;
-      background:#eef4ff;
-      color:#124078;
-      border:1px solid #d7e7ff;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: .78rem;
+      background: #eef4ff;
+      color: #124078;
+      border: 1px solid #d7e7ff;
     }
 
     .badge.success {
-      background:#ecfdf3;
-      border-color:#ccebd7;
-      color:#166534;
+      background: #ecfdf3;
+      border-color: #ccebd7;
+      color: #166534;
     }
 
     .badge.warning {
-      background:#fff7ed;
-      border-color:#fed7aa;
-      color:#9a3412;
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: #9a3412;
     }
 
-    .module-view.hidden,
-    .empty-state.hidden,
-    .course-view.hidden {
-      display:none;
-    }
+    .hidden { display: none !important; }
 
     .module-header {
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:16px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
     }
 
     .module-header h3 {
-      margin:0 0 6px 0;
-      font-size:1.25rem;
-      line-height:1.3;
+      margin: 0 0 6px 0;
+      font-size: 1.25rem;
+      line-height: 1.3;
     }
 
     .module-header p {
-      margin:0;
-      color:var(--muted);
+      margin: 0;
+      color: var(--muted);
     }
 
     .btn-row {
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    button.btn,
-    a.btn {
-      border:none;
-      border-radius:10px;
-      padding:11px 16px;
-      font-weight:600;
-      cursor:pointer;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      transition:.15s ease;
+    button.btn, a.btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: .15s ease;
     }
 
-    .btn.primary { background:var(--primary); color:#fff; }
-    .btn.primary:hover { background:var(--primary-2); }
-    .btn.secondary { background:#eef2f6; color:#223041; }
-    .btn.secondary:hover { background:#e4e9f0; }
-    .btn.success { background:var(--success); color:#fff; }
-    .btn.danger { background:var(--danger); color:#fff; }
-    .btn[disabled] { opacity:.55; cursor:not-allowed; }
+    .btn.primary { background: var(--primary); color: #fff; }
+    .btn.primary:hover { background: var(--primary2); }
+    .btn.secondary { background: #eef2f6; color: #223041; }
+    .btn.secondary:hover { background: #e4e9f0; }
+    .btn.success { background: var(--success); color: #fff; }
+    .btn[disabled] { opacity: .55; cursor: not-allowed; }
 
     .video-shell {
-      width:100%;
-      border-radius:12px;
-      overflow:hidden;
-      background:#0b1220;
-      border:1px solid #111827;
-      margin-bottom:16px;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0b1220;
+      border: 1px solid #111827;
+      margin-bottom: 16px;
     }
 
     .video-shell video {
-      display:block;
-      width:100%;
-      max-height:520px;
-      background:#000;
+      display: block;
+      width: 100%;
+      max-height: 520px;
+      background: #000;
     }
 
     .video-placeholder {
-      padding:22px;
-      color:#e5e7eb;
-      font-size:.95rem;
-      line-height:1.6;
+      padding: 22px;
+      color: #e5e7eb;
+      font-size: .95rem;
+      line-height: 1.6;
     }
 
     .quiz-meta {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:14px;
-      color:var(--muted);
-      font-size:.92rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: .92rem;
     }
 
     .question-box {
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:16px;
-      background:#fff;
-      margin-bottom:14px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      background: #fff;
+      margin-bottom: 14px;
     }
 
     .question-title {
-      font-weight:700;
-      line-height:1.5;
-      margin-bottom:14px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 14px;
     }
 
     .options {
-      display:grid;
-      gap:10px;
+      display: grid;
+      gap: 10px;
     }
 
     .option-btn {
-      width:100%;
-      text-align:left;
-      border:1px solid #d0d8e1;
-      border-radius:12px;
-      padding:13px 14px;
-      background:#f9fafb;
-      cursor:pointer;
-      transition:.12s ease;
-      line-height:1.45;
-      color:var(--text);
+      width: 100%;
+      text-align: left;
+      border: 1px solid #d0d8e1;
+      border-radius: 12px;
+      padding: 13px 14px;
+      background: #f9fafb;
+      cursor: pointer;
+      transition: .12s ease;
+      line-height: 1.45;
+      color: var(--text);
     }
 
-    .option-btn:hover { background:#f1f5f9; }
+    .option-btn:hover { background: #f1f5f9; }
     .option-btn.selected {
-      border-color:#7aa7d8;
-      background:#eaf4ff;
+      border-color: #7aa7d8;
+      background: #eaf4ff;
     }
     .option-btn.correct {
-      border-color:#188038;
-      background:#dff4e5;
-      color:#0f5132;
+      border-color: #188038;
+      background: #dff4e5;
+      color: #0f5132;
     }
     .option-btn.wrong {
-      border-color:#c62828;
-      background:#fde7e9;
-      color:#7f1d1d;
+      border-color: #c62828;
+      background: #fde7e9;
+      color: #7f1d1d;
     }
 
     .feedback {
-      min-height:24px;
-      font-size:.95rem;
-      font-weight:600;
-      margin:10px 0 4px 0;
+      min-height: 24px;
+      font-size: .95rem;
+      font-weight: 600;
+      margin: 10px 0 4px 0;
     }
 
-    .feedback.ok { color:var(--success); }
-    .feedback.fail { color:var(--danger); }
+    .feedback.ok { color: var(--success); }
+    .feedback.fail { color: var(--danger); }
 
     .quiz-actions {
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
     }
 
     .result-box {
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:16px;
-      background:#f8fafc;
-      margin-top:16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      background: #f8fafc;
+      margin-top: 16px;
     }
 
     .result-box h4 {
-      margin:0 0 10px 0;
-      font-size:1rem;
+      margin: 0 0 10px 0;
+      font-size: 1rem;
     }
 
-    .muted {
-      color:var(--muted);
-      line-height:1.6;
-    }
-
-    .pill {
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:7px 12px;
-      border-radius:999px;
-      font-size:.85rem;
-      font-weight:600;
-      background:#eef2f6;
-      color:#334155;
-    }
-
-    .pill.success { color:#166534; background:#ecfdf3; }
-    .pill.warning { color:#9a3412; background:#fff7ed; }
+    .muted { color: var(--muted); line-height: 1.6; }
 
     .empty-state {
-      background:var(--panel);
-      border:1px dashed var(--line);
-      border-radius:var(--radius);
-      padding:28px;
-      text-align:center;
-      box-shadow:var(--shadow);
-    }
-
-    .empty-state h3 {
-      margin:0 0 8px 0;
-      font-size:1.15rem;
+      background: var(--panel);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      box-shadow: var(--shadow);
     }
 
     .loading {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      min-height:40vh;
-      color:var(--muted);
-      font-size:1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40vh;
+      color: var(--muted);
+      font-size: 1rem;
     }
 
     @media (max-width: 1200px) {
@@ -506,18 +474,17 @@
     }
 
     @media (max-width: 980px) {
-      .page {
-        grid-template-columns:1fr;
-      }
+      .page { grid-template-columns: 1fr; }
       .sidebar {
-        position:relative;
-        height:auto;
+        position: relative;
+        height: auto;
       }
-      .main {
-        padding:18px;
-      }
+      .main { padding: 18px; }
     }
   </style>
+
+  <!-- Fallback om du redan använder global JS-data -->
+  <script src="assets/js/kurser-data.js"></script>
 </head>
 <body>
   <div class="page">
@@ -530,13 +497,14 @@
       <div class="sidebar-tools">
         <input id="courseSearch" class="field" type="search" placeholder="Sök kurs eller modul..." />
         <button id="resetProgressBtn" class="btn secondary" type="button">Nollställ progression</button>
+        <a href="utbildningar.html" class="btn secondary">Till startsidan</a>
       </div>
 
       <div id="courseList" class="course-list"></div>
     </aside>
 
     <main class="main">
-      <div id="loading" class="loading">Läser in kurser från Excel…</div>
+      <div id="loading" class="loading">Läser in kurser…</div>
 
       <div id="app" style="display:none;">
         <section class="topbar">
@@ -561,7 +529,7 @@
           </div>
         </section>
 
-        <section id="courseView" class="course-view">
+        <section id="courseView">
           <div class="grid">
             <div class="panel">
               <h3>Moduler</h3>
@@ -575,7 +543,7 @@
           </div>
         </section>
 
-        <section id="moduleView" class="module-view hidden">
+        <section id="moduleView" class="hidden">
           <div class="panel">
             <div class="module-header">
               <div>
@@ -591,13 +559,8 @@
 
             <div class="video-shell" id="videoShell">
               <video id="moduleVideo" controls playsinline preload="metadata"></video>
-              <div id="videoPlaceholder" class="video-placeholder" style="display:none;">
-                Ingen video hittades för denna modul med standardmönstret.<br>
-                Lägg videofilen i <strong>video/</strong> med namn enligt något av dessa mönster:
-                <br><br>
-                <strong>kurs-{kursnummer}-modul-{modulnummer}.mp4</strong><br>
-                <strong>kurs_{kursnummer}_modul_{modulnummer}.mp4</strong><br>
-                <strong>modul_{kursnummer}_{modulnummer}.mp4</strong>
+              <div id="videoPlaceholder" class="video-placeholder hidden">
+                Ingen video hittades för denna modul.
               </div>
             </div>
 
@@ -627,13 +590,13 @@
                   </div>
                 </div>
 
-                <div id="resultBox" class="result-box" style="display:none;">
+                <div id="resultBox" class="result-box hidden">
                   <h4>Resultat</h4>
                   <div id="resultText" class="muted"></div>
                 </div>
               </div>
 
-              <div id="noQuizBox" class="muted" style="display:none;">
+              <div id="noQuizBox" class="muted hidden">
                 Inga frågor hittades för denna modul.
               </div>
             </div>
@@ -649,8 +612,7 @@
   </div>
 
   <script>
-    const EXCEL_PATH = "data/TFF_Moduler_och_Fragor_for_SharePoint.xlsx";
-    const STORAGE_KEY = "tff_portal_progress_v3";
+    const STORAGE_KEY = "tff_portal_progress_json_v1";
 
     const state = {
       data: [],
@@ -689,14 +651,6 @@
         .replace(/^-+|-+$/g, "");
     }
 
-    function normalizeKey(text) {
-      return String(text || "")
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ")
-        .replace(/[–—]/g, "-");
-    }
-
     function escapeHtml(str) {
       return String(str || "")
         .replace(/&/g, "&amp;")
@@ -704,6 +658,175 @@
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+    }
+
+    function normalizeText(text) {
+      return String(text || "").trim().toLowerCase();
+    }
+
+    async function loadRawData() {
+      try {
+        const res = await fetch("assets/data/kurser-data.json", { cache: "no-store" });
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch {}
+
+      if (Array.isArray(window.kursData)) return window.kursData;
+      if (Array.isArray(window.KURS_DATA)) return window.KURS_DATA;
+      if (Array.isArray(window.kurserData)) return window.kurserData;
+      if (Array.isArray(window.kurser)) return window.kurser;
+
+      if (window.kursData && Array.isArray(window.kursData.kurser)) return window.kursData.kurser;
+      if (window.KURS_DATA && Array.isArray(window.KURS_DATA.kurser)) return window.KURS_DATA.kurser;
+
+      throw new Error("Ingen kursdata hittades i assets/data/kurser-data.json eller assets/js/kurser-data.js");
+    }
+
+    function extractArray(data) {
+      if (Array.isArray(data)) return data;
+      if (data && Array.isArray(data.kurser)) return data.kurser;
+      if (data && Array.isArray(data.courses)) return data.courses;
+      if (data && Array.isArray(data.items)) return data.items;
+      return [];
+    }
+
+    function normalizeCourses(rawData) {
+      const arr = extractArray(rawData);
+
+      return arr.map((course, courseIndex) => {
+        const title =
+          course.titel ||
+          course.title ||
+          course.namn ||
+          course.name ||
+          course.kurs ||
+          `Kurs ${courseIndex + 1}`;
+
+        const description =
+          course.beskrivning ||
+          course.description ||
+          course.syfte ||
+          course.intro ||
+          "";
+
+        const id = slugify(course.id || title || ("kurs-" + (courseIndex + 1)));
+
+        const rawModules =
+          course.moduler ||
+          course.modules ||
+          course.innehall ||
+          course.content ||
+          [];
+
+        const modules = extractArray(rawModules.length ? rawModules : { items: rawModules }).map((module, moduleIndex) => {
+          const moduleTitle =
+            module.titel ||
+            module.title ||
+            module.namn ||
+            module.name ||
+            `Modul ${moduleIndex + 1}`;
+
+          const moduleText =
+            module.text ||
+            module.innehall ||
+            module.content ||
+            module.beskrivning ||
+            module.description ||
+            module.syfte ||
+            "";
+
+          const video =
+            module.video ||
+            module.videoUrl ||
+            module.videoURL ||
+            module.url ||
+            module.src ||
+            module.film ||
+            "";
+
+          const rawQuestions =
+            module.fragor ||
+            module.frågor ||
+            module.questions ||
+            module.quiz ||
+            [];
+
+          const questions = extractArray(rawQuestions.length ? rawQuestions : { items: rawQuestions }).map((question, qIndex) => {
+            const questionText =
+              question.fraga ||
+              question.fråga ||
+              question.question ||
+              question.text ||
+              question.titel ||
+              `Fråga ${qIndex + 1}`;
+
+            let options =
+              question.alternativ ||
+              question.options ||
+              question.svar ||
+              question.answers ||
+              [];
+
+            if (!Array.isArray(options) || !options.length) {
+              options = [
+                question.svarA || question.answerA || question.A || question.a,
+                question.svarB || question.answerB || question.B || question.b,
+                question.svarC || question.answerC || question.C || question.c,
+                question.svarD || question.answerD || question.D || question.d
+              ].filter(Boolean);
+            }
+
+            let correctIndex = -1;
+
+            if (typeof question.correctIndex === "number") {
+              correctIndex = question.correctIndex;
+            } else if (typeof question.rattIndex === "number") {
+              correctIndex = question.rattIndex;
+            } else if (typeof question.rättIndex === "number") {
+              correctIndex = question.rättIndex;
+            } else {
+              const correctValue =
+                question.rattSvar ||
+                question.rättSvar ||
+                question.correctAnswer ||
+                question.correct ||
+                question.rightAnswer ||
+                "";
+
+              if (["A", "B", "C", "D"].includes(String(correctValue).toUpperCase())) {
+                correctIndex = { A: 0, B: 1, C: 2, D: 3 }[String(correctValue).toUpperCase()];
+              } else if (options.length) {
+                const matchIndex = options.findIndex(opt => normalizeText(opt) === normalizeText(correctValue));
+                correctIndex = matchIndex;
+              }
+            }
+
+            return {
+              id: slugify(id + "-" + moduleTitle + "-fraga-" + (qIndex + 1)),
+              question: questionText,
+              options,
+              correctIndex
+            };
+          });
+
+          return {
+            id: slugify(id + "-" + moduleTitle),
+            moduleNumber: module.modulNummer || module.modulnummer || module.nr || (moduleIndex + 1),
+            title: moduleTitle,
+            content: moduleText,
+            video: video,
+            questions
+          };
+        });
+
+        return {
+          id,
+          title,
+          description,
+          modules
+        };
+      });
     }
 
     function getCourseProgress(courseId) {
@@ -727,149 +850,37 @@
       return courseProgress.modules[moduleId];
     }
 
-    async function loadExcelData() {
-      const response = await fetch(EXCEL_PATH, { cache: "no-store" });
-      if (!response.ok) {
-        throw new Error("Kunde inte läsa Excel-filen: " + EXCEL_PATH);
+    function getSelectedCourseFromStorage(courses) {
+      const selectedCourseIndex = localStorage.getItem("selectedCourseIndex");
+      const selectedCourse = localStorage.getItem("selectedCourse");
+      const selectedCourseId = localStorage.getItem("selectedCourseId");
+      const selectedCourseTitle = localStorage.getItem("selectedCourseTitle");
+
+      if (selectedCourseId) {
+        const found = courses.find(c => c.id === selectedCourseId);
+        if (found) return found.id;
       }
 
-      const arrayBuffer = await response.arrayBuffer();
-      const workbook = XLSX.read(arrayBuffer, { type: "array" });
+      if (selectedCourseTitle) {
+        const found = courses.find(c => normalizeText(c.title) === normalizeText(selectedCourseTitle));
+        if (found) return found.id;
+      }
 
-      const sheet1 = workbook.Sheets[workbook.SheetNames[0]];
-      const sheet2 = workbook.Sheets[workbook.SheetNames[1]];
+      if (selectedCourseIndex !== null && !isNaN(Number(selectedCourseIndex))) {
+        const idx = Number(selectedCourseIndex);
+        if (courses[idx]) return courses[idx].id;
+      }
 
-      const modulesRows = XLSX.utils.sheet_to_json(sheet1, { defval: "" });
-      const questionsRows = XLSX.utils.sheet_to_json(sheet2, { defval: "" });
+      if (selectedCourse !== null && !isNaN(Number(selectedCourse))) {
+        const idx = Number(selectedCourse);
+        if (courses[idx]) return courses[idx].id;
+      }
 
-      const coursesMap = new Map();
-
-      modulesRows.forEach((row, idx) => {
-        const courseLabel = row["Titel"] || row["titel"] || "";
-        const courseName = row["Kurs"] || row["kurs"] || "";
-        const moduleNumber = Number(row["ModulNummer"] || row["modulnummer"] || 0);
-        const content = row["Innehåll"] || row["innehåll"] || "";
-
-        if (!courseLabel || !courseName || !moduleNumber) return;
-
-        const courseId = slugify(courseLabel + "-" + courseName);
-        if (!coursesMap.has(courseId)) {
-          coursesMap.set(courseId, {
-            id: courseId,
-            courseLabel: String(courseLabel).trim(),
-            title: String(courseName).trim(),
-            courseNumber: extractCourseNumber(courseLabel),
-            intro: buildIntroFromCourseName(courseName),
-            modules: []
-          });
-        }
-
-        const course = coursesMap.get(courseId);
-        const moduleTitle = content && String(content).trim()
-          ? String(content).trim()
-          : `Modul ${moduleNumber}`;
-
-        course.modules.push({
-          id: slugify(courseId + "-modul-" + moduleNumber + "-" + moduleTitle),
-          moduleNumber,
-          title: moduleTitle,
-          content: generateModuleContent(courseName, moduleTitle),
-          videoCandidates: buildVideoCandidates(extractCourseNumber(courseLabel), moduleNumber)
-        });
-      });
-
-      const questionGroups = new Map();
-
-      questionsRows.forEach((row) => {
-        const moduleTitle = String(row["Modul"] || row["modul"] || "").trim();
-        const questionNumber = Number(row["FrågeNummer"] || row["frågenummer"] || 0);
-        const questionText = String(row["Frågor"] || row["frågor"] || "").trim();
-        const answerA = String(row["SvarA"] || row["svara"] || "").trim();
-        const answerB = String(row["SvarB"] || row["svarb"] || "").trim();
-        const answerC = String(row["SvarC"] || row["svarc"] || "").trim();
-        const answerD = String(row["SvarD"] || row["svard"] || "").trim();
-        const right = String(row["RättSvar"] || row["rättsvar"] || "").trim().toUpperCase();
-
-        if (!moduleTitle || !questionText) return;
-
-        const key = normalizeKey(moduleTitle);
-        if (!questionGroups.has(key)) questionGroups.set(key, []);
-
-        const options = [answerA, answerB, answerC, answerD].filter(Boolean);
-        const correctIndex = { A: 0, B: 1, C: 2, D: 3 }[right] ?? -1;
-
-        questionGroups.get(key).push({
-          questionNumber,
-          question: questionText,
-          options,
-          correctIndex
-        });
-      });
-
-      const courses = Array.from(coursesMap.values())
-        .sort((a, b) => (a.courseNumber || 999) - (b.courseNumber || 999))
-        .map(course => {
-          course.modules = course.modules
-            .sort((a, b) => a.moduleNumber - b.moduleNumber)
-            .map(module => {
-              const key = normalizeKey(module.title);
-              module.questions = (questionGroups.get(key) || []).sort((a, b) => a.questionNumber - b.questionNumber);
-              return module;
-            });
-
-          return course;
-        });
-
-      return courses;
-    }
-
-    function extractCourseNumber(label) {
-      const match = String(label || "").match(/kurs\s*(\d+)/i);
-      return match ? Number(match[1]) : 0;
-    }
-
-    function buildIntroFromCourseName(courseName) {
-      const map = {
-        "Microsoft Teams - Grund & Arbetssätt": "Rätt användning av Teams i vardagsarbetet.",
-        "Transkribering": "Säkerställa korrekt, effektiv och spårbar omvandling av tal till text.",
-        "Dokumentation (TFF)": "Säkerställa att information dokumenteras korrekt, strukturerat och enligt regelverk.",
-        "AI & CoPilot - Grunderna": "Skapa rätt förväntningar på AI och Copilot i arbetet.",
-        "Promptning i CoPilot (M365)": "Bygga bättre prompts för möten, texter och analys i Microsoft 365.",
-        "Skapa & Spara Dokument Korrekt": "Skapa, namnge, lagra och återanvänd dokument på rätt sätt.",
-        "Teams, SharePoint & Behörigheter": "Hantera åtkomst, delning och placering av information korrekt.",
-        "Informationsklassning & GDPR i M365": "Klassning, personuppgifter och korrekt hantering i M365.",
-        "Rätt verktyg för rätt ärende": "Välj rätt kanal, dokumentform och arbetssätt i vardagen.",
-        "Digital möteskultur": "Minska mötesbrus och skapa tydligare beslut, ansvar och uppföljning.",
-        "Från chatt till struktur": "Förvandla dialog till sökbar, spårbar och användbar struktur.",
-        "Diarieföring och arkivering (TFF)": "Koppla vardagsarbete till krav på registrering, arkiv och bevarande.",
-        "Styrning & Governance i M365 (TFF)": "Skapa ordning, ansvar och uppföljning för digitala arbetsytor.",
-        "Informationens livscykel": "Förstå hela flödet från skapande till bevarande eller gallring.",
-        "Arbeta processbaserat i M365": "Knyta verktyg, struktur och dokumentation till verksamhetens processer."
-      };
-      return map[courseName] || "Digital mikroutbildning i fem moduler.";
-    }
-
-    function generateModuleContent(courseName, moduleTitle) {
-      return `
-        <p><strong>${escapeHtml(moduleTitle)}</strong></p>
-        <p>Denna modul tillhör kursen <strong>${escapeHtml(courseName)}</strong>.</p>
-        <p>Arbeta igenom videon först och besvara därefter quizet. För att låsa upp nästa modul krävs minst <strong>80&nbsp;% rätt</strong>.</p>
-        <p>Resultat sparas lokalt i webbläsaren så att progressionen finns kvar mellan besök.</p>
-      `;
-    }
-
-    function buildVideoCandidates(courseNumber, moduleNumber) {
-      return [
-        `video/kurs-${courseNumber}-modul-${moduleNumber}.mp4`,
-        `video/kurs_${courseNumber}_modul_${moduleNumber}.mp4`,
-        `video/modul_${courseNumber}_${moduleNumber}.mp4`,
-        `video/modul-${courseNumber}-${moduleNumber}.mp4`,
-        `video/kurs${courseNumber}-modul${moduleNumber}.mp4`
-      ];
+      return courses[0] ? courses[0].id : null;
     }
 
     function filterCourses(searchTerm) {
-      const q = normalizeKey(searchTerm);
+      const q = normalizeText(searchTerm);
       if (!q) {
         state.filteredData = state.data;
         renderCourseList();
@@ -877,8 +888,8 @@
       }
 
       state.filteredData = state.data.filter(course => {
-        const inCourse = normalizeKey(course.title).includes(q) || normalizeKey(course.courseLabel).includes(q);
-        const inModules = course.modules.some(m => normalizeKey(m.title).includes(q));
+        const inCourse = normalizeText(course.title).includes(q);
+        const inModules = course.modules.some(m => normalizeText(m.title).includes(q));
         return inCourse || inModules;
       });
 
@@ -890,7 +901,6 @@
       wrap.innerHTML = "";
 
       state.filteredData.forEach(course => {
-        const progress = getCourseProgress(course.id);
         const moduleProgresses = course.modules.map(m => getModuleProgress(course.id, m.id));
         const passedCount = moduleProgresses.filter(m => m.passed).length;
 
@@ -898,12 +908,15 @@
         btn.type = "button";
         btn.className = "course-btn" + (state.selectedCourseId === course.id ? " active" : "");
         btn.innerHTML = `
-          <div class="course-btn-title">${escapeHtml(course.courseLabel)} – ${escapeHtml(course.title)}</div>
+          <div class="course-btn-title">${escapeHtml(course.title)}</div>
           <div class="course-btn-meta">${passedCount} / ${course.modules.length} moduler godkända</div>
         `;
+
         btn.addEventListener("click", () => {
           state.selectedCourseId = course.id;
           state.selectedModuleId = null;
+          localStorage.setItem("selectedCourseId", course.id);
+          localStorage.setItem("selectedCourseTitle", course.title);
           renderAll();
         });
 
@@ -937,8 +950,8 @@
     }
 
     function renderCourseView(course) {
-      document.getElementById("courseTitle").textContent = `${course.courseLabel} – ${course.title}`;
-      document.getElementById("courseIntro").textContent = course.intro;
+      document.getElementById("courseTitle").textContent = course.title;
+      document.getElementById("courseIntro").textContent = course.description || "Välj en modul för att starta.";
 
       const modulesGrid = document.getElementById("modulesGrid");
       const courseSummary = document.getElementById("courseSummary");
@@ -946,16 +959,16 @@
 
       const moduleProgresses = course.modules.map(m => getModuleProgress(course.id, m.id));
       const passedCount = moduleProgresses.filter(m => m.passed).length;
-
       const percent = Math.round((passedCount / Math.max(course.modules.length, 1)) * 100);
+
       document.getElementById("courseProgressFill").style.width = `${percent}%`;
       document.getElementById("courseProgressText").textContent = `${passedCount} / ${course.modules.length}`;
       document.getElementById("coursePassedText").textContent = String(passedCount);
 
       courseSummary.innerHTML = `
         <p><strong>${escapeHtml(course.title)}</strong></p>
-        <p>${escapeHtml(course.intro)}</p>
-        <p>Kursen innehåller <strong>${course.modules.length}</strong> moduler. Nästa modul låses upp först när föregående modul är godkänd med minst <strong>80&nbsp;% rätt</strong>.</p>
+        <p>${escapeHtml(course.description || "Ingen beskrivning finns ännu.")}</p>
+        <p>Kursen innehåller <strong>${course.modules.length}</strong> moduler. Minst <strong>80 % rätt</strong> krävs för att låsa upp nästa modul.</p>
       `;
 
       course.modules.forEach((module, index) => {
@@ -968,10 +981,11 @@
         card.innerHTML = `
           <div class="module-number">M${module.moduleNumber}</div>
           <div class="module-title">${escapeHtml(module.title)}</div>
-          <div class="module-desc">${escapeHtml(shorten(introTextFromModule(module.title), 120))}</div>
+          <div class="module-desc">${escapeHtml(shorten(module.content || "Öppna modulen för att visa innehåll.", 120))}</div>
           <div class="badge-row">
             <span class="badge">${module.questions.length} frågor</span>
-            ${moduleProgress.passed
+            ${
+              moduleProgress.passed
               ? `<span class="badge success">Godkänd ${moduleProgress.scorePercent}%</span>`
               : !prevPassed
                 ? `<span class="badge warning">Låst</span>`
@@ -995,10 +1009,6 @@
       });
     }
 
-    function introTextFromModule(title) {
-      return `Modulen behandlar ${title.toLowerCase()} och avslutas med quiz.`;
-    }
-
     function shorten(text, maxLen) {
       const s = String(text || "");
       return s.length > maxLen ? s.slice(0, maxLen - 1) + "…" : s;
@@ -1008,16 +1018,18 @@
       const module = course.modules.find(m => m.id === state.selectedModuleId);
       if (!module) return;
 
-      document.getElementById("courseTitle").textContent = `${course.courseLabel} – ${course.title}`;
-      document.getElementById("courseIntro").textContent = course.intro;
+      document.getElementById("courseTitle").textContent = course.title;
+      document.getElementById("courseIntro").textContent = course.description || "";
 
       const moduleProgress = getModuleProgress(course.id, module.id);
 
       document.getElementById("moduleTitle").textContent = module.title;
-      document.getElementById("moduleSubtitle").textContent = `${course.courseLabel} – Modul ${module.moduleNumber}`;
-      document.getElementById("moduleContent").innerHTML = module.content;
+      document.getElementById("moduleSubtitle").textContent = `${course.title} – Modul ${module.moduleNumber}`;
+      document.getElementById("moduleContent").innerHTML = module.content
+        ? `<p>${escapeHtml(module.content).replace(/\n/g, "<br>")}</p>`
+        : `<p>Inget modultext-innehåll finns ännu.</p>`;
 
-      setupVideo(module.videoCandidates);
+      setupVideo(module.video);
       setupQuiz(course, module);
 
       const currentIndex = course.modules.findIndex(m => m.id === module.id);
@@ -1026,7 +1038,7 @@
 
       if (nextModule && moduleProgress.passed) {
         unlockBtn.disabled = false;
-        unlockBtn.textContent = `Öppna nästa modul`;
+        unlockBtn.textContent = "Öppna nästa modul";
         unlockBtn.onclick = () => {
           state.selectedModuleId = nextModule.id;
           state.quiz.currentIndex = 0;
@@ -1042,30 +1054,27 @@
         unlockBtn.disabled = true;
         unlockBtn.textContent = "Nästa modul";
       }
+
+      document.getElementById("backToCourseBtn").onclick = () => {
+        state.selectedModuleId = null;
+        renderAll();
+      };
     }
 
-    function setupVideo(videoCandidates) {
+    function setupVideo(videoUrl) {
       const video = document.getElementById("moduleVideo");
       const placeholder = document.getElementById("videoPlaceholder");
-      const shell = document.getElementById("videoShell");
 
-      let idx = 0;
-
-      function tryNext() {
-        if (idx >= videoCandidates.length) {
-          video.style.display = "none";
-          placeholder.style.display = "block";
-          return;
-        }
-        const candidate = videoCandidates[idx++];
-        video.style.display = "block";
-        placeholder.style.display = "none";
-        video.src = candidate;
+      if (videoUrl) {
+        video.src = videoUrl;
+        video.classList.remove("hidden");
+        placeholder.classList.add("hidden");
+      } else {
+        video.removeAttribute("src");
         video.load();
+        video.classList.add("hidden");
+        placeholder.classList.remove("hidden");
       }
-
-      video.onerror = tryNext;
-      tryNext();
     }
 
     function setupQuiz(course, module) {
@@ -1080,26 +1089,22 @@
       const quizContainer = document.getElementById("quizContainer");
       const resultBox = document.getElementById("resultBox");
 
-      resultBox.style.display = "none";
+      resultBox.classList.add("hidden");
 
       if (!questions.length) {
-        noQuizBox.style.display = "block";
-        quizContainer.style.display = "none";
+        noQuizBox.classList.remove("hidden");
+        quizContainer.classList.add("hidden");
         return;
       }
 
-      noQuizBox.style.display = "none";
-      quizContainer.style.display = "block";
-
-      renderQuestion(course, module);
+      noQuizBox.classList.add("hidden");
+      quizContainer.classList.remove("hidden");
 
       document.getElementById("checkAnswerBtn").onclick = () => checkAnswer(course, module);
       document.getElementById("nextQuestionBtn").onclick = () => nextQuestion(course, module);
-      document.getElementById("retryQuestionBtn").onclick = () => retryQuestion();
-      document.getElementById("backToCourseBtn").onclick = () => {
-        state.selectedModuleId = null;
-        renderAll();
-      };
+      document.getElementById("retryQuestionBtn").onclick = retryQuestion;
+
+      renderQuestion(course, module);
     }
 
     function renderQuestion(course, module) {
@@ -1140,17 +1145,15 @@
     }
 
     function retryQuestion() {
-      if (state.quiz.checked) {
-        state.quiz.checked = false;
-      }
+      state.quiz.checked = false;
       state.quiz.selectedOptionIndex = null;
+
       document.getElementById("feedback").textContent = "";
       document.getElementById("feedback").className = "feedback";
       document.getElementById("nextQuestionBtn").disabled = true;
       document.getElementById("checkAnswerBtn").disabled = true;
 
-      const buttons = [...document.querySelectorAll(".option-btn")];
-      buttons.forEach(btn => {
+      document.querySelectorAll(".option-btn").forEach(btn => {
         btn.classList.remove("selected", "correct", "wrong");
       });
     }
@@ -1164,8 +1167,7 @@
       const selected = state.quiz.selectedOptionIndex;
       const isCorrect = selected === q.correctIndex;
 
-      const buttons = [...document.querySelectorAll(".option-btn")];
-      buttons.forEach((btn, idx) => {
+      document.querySelectorAll(".option-btn").forEach((btn, idx) => {
         btn.classList.remove("selected");
         if (idx === selected) {
           btn.classList.add(isCorrect ? "correct" : "wrong");
@@ -1215,24 +1217,14 @@
 
       const resultBox = document.getElementById("resultBox");
       const resultText = document.getElementById("resultText");
-      resultBox.style.display = "block";
 
-      if (passed) {
-        resultText.innerHTML = `
-          <p><strong>Godkänt.</strong></p>
-          <p>Du fick ${correct} av ${total} rätt (${percent} %).</p>
-          <p>Nästa modul är nu upplåst.</p>
-        `;
-      } else {
-        resultText.innerHTML = `
-          <p><strong>Inte godkänt ännu.</strong></p>
-          <p>Du fick ${correct} av ${total} rätt (${percent} %).</p>
-          <p>Du behöver minst 80 % för att låsa upp nästa modul. Öppna modulen igen för att göra om quizet.</p>
-        `;
-      }
+      resultBox.classList.remove("hidden");
+      resultText.innerHTML = passed
+        ? `<p><strong>Godkänt.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Nästa modul är nu upplåst.</p>`
+        : `<p><strong>Inte godkänt ännu.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Du behöver minst 80 % för att låsa upp nästa modul.</p>`;
 
       renderAll();
-      document.getElementById("resultBox").style.display = "block";
+      document.getElementById("resultBox").classList.remove("hidden");
     }
 
     function bindEvents() {
@@ -1252,12 +1244,10 @@
       try {
         bindEvents();
 
-        state.data = await loadExcelData();
+        const rawData = await loadRawData();
+        state.data = normalizeCourses(rawData);
         state.filteredData = state.data;
-
-        if (state.data.length) {
-          state.selectedCourseId = state.data[0].id;
-        }
+        state.selectedCourseId = getSelectedCourseFromStorage(state.data);
 
         document.getElementById("loading").style.display = "none";
         document.getElementById("app").style.display = "block";
@@ -1268,7 +1258,7 @@
           <div style="max-width:760px; padding:24px; background:#fff; border:1px solid #e5e7eb; border-radius:14px;">
             <h3 style="margin-top:0;">Kunde inte läsa kursdata</h3>
             <p style="color:#667085; line-height:1.7;">
-              Kontrollera att Excel-filen finns på sökvägen <strong>${EXCEL_PATH}</strong>.
+              Kontrollera att <strong>assets/data/kurser-data.json</strong> eller <strong>assets/js/kurser-data.js</strong> innehåller kursdata.
             </p>
             <pre style="white-space:pre-wrap; background:#f8fafc; padding:12px; border-radius:10px; border:1px solid #e5e7eb;">${escapeHtml(error.message)}</pre>
           </div>
