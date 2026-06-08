@@ -1,13 +1,151 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TFF Portal – Kurskatalog</title>
-  <link rel="stylesheet" href="assets/css/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TFF Utbildningsportal</title>
+
+<style>
+body {
+    margin:0;
+    font-family: "Segoe UI", Arial;
+    background:#f5f7fa;
+}
+
+header {
+    background:#0f172a;
+    color:#fff;
+    padding:20px;
+}
+
+h1 {
+    margin:0;
+}
+
+.container {
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card {
+    background:#fff;
+    border:1px solid #ddd;
+    padding:20px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.card:hover {
+    transform:translateY(-3px);
+}
+
+.title {
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.desc {
+    color:#555;
+}
+
+button {
+    margin-top:15px;
+    padding:10px 14px;
+    border:none;
+    background:#005a9c;
+    color:#fff;
+    border-radius:8px;
+    cursor:pointer;
+}
+</style>
+
 </head>
+
 <body>
-  <div id="app"></div>
-  <script src="assets/js/kurser-app.js"></script>
+
+<header>
+    <h1>TFF Utbildningsportal</h1>
+</header>
+
+<div class="container">
+
+    <h2>Välj utbildning</h2>
+
+    <div id="courseGrid" class="grid"></div>
+
+</div>
+
+<script>
+
+const EXCEL_PATH = "data/TFF_Moduler_och_Fragor_for_SharePoint.xlsx";
+
+async function loadCourses() {
+
+    const res = await fetch(EXCEL_PATH);
+    const buffer = await res.arrayBuffer();
+
+    const workbook = XLSX.read(buffer, { type:"array" });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    const rows = XLSX.utils.sheet_to_json(sheet);
+
+    const courses = {};
+
+    rows.forEach(r => {
+
+        const courseName = r["Kurs"];
+        const courseTitle = r["Titel"];
+
+        if (!courses[courseTitle]) {
+            courses[courseTitle] = {
+                title: courseTitle,
+                name: courseName
+            };
+        }
+    });
+
+    renderCourses(Object.values(courses));
+}
+
+function renderCourses(list) {
+
+    const grid = document.getElementById("courseGrid");
+    grid.innerHTML = "";
+
+    list.forEach((c, index) => {
+
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <div class="title">${c.title}</div>
+            <div class="desc">${c.name}</div>
+            <button>Starta kurs</button>
+        `;
+
+        card.onclick = () => {
+            localStorage.setItem("selectedCourseIndex", index);
+            window.location.href = "kurser.html";
+        };
+
+        grid.appendChild(card);
+    });
+}
+
+loadCourses();
+
+</script>
+
+<!-- SheetJS -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 </body>
 </html>
