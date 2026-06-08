@@ -3,135 +3,162 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kurser</title>
+  <title>Kurs</title>
 
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
+
 <body>
 
-  <main>
+<main>
 
-    <section class="quiz-section">
-      <h2>Quiz</h2>
+  <!-- ✅ MODUL -->
+  <section>
+    <h1 id="module-title"></h1>
+    <p id="module-purpose"></p>
+  </section>
 
-      <!-- ✅ KRITISK RAD -->
-      <div id="quiz-container"></div>
+  <!-- ✅ VIDEO -->
+  <section>
+    <video id="module-video" controls width="100%"></video>
+  </section>
 
-    </section>
+  <!-- ✅ QUIZ -->
+  <section>
+    <h2>Quiz</h2>
+    <div id="quiz-container"></div>
+  </section>
 
-  </main>
+</main>
 
-  <!-- ✅ DATA (MÅSTE LADDAS FÖRST) -->
-  <script src="assets/js/kurser-data.js"></script>
+<!-- ✅ DATA -->
+<script src="assets/js/kurser-data.js"></script>
 
-  <!-- ✅ QUIZ LOGIK -->
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
+<!-- ✅ LOGIK -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
-    const params = new URLSearchParams(window.location.search);
-    const rawCourseId = params.get("course");   // kurs01
-    const rawModuleId = params.get("module");   // kurs01_modul01
+  const params = new URLSearchParams(window.location.search);
+  const rawCourseId = params.get("course");
+  const rawModuleId = params.get("module");
 
-    const container = document.getElementById("quiz-container");
+  const titleEl = document.getElementById("module-title");
+  const purposeEl = document.getElementById("module-purpose");
+  const videoEl = document.getElementById("module-video");
+  const container = document.getElementById("quiz-container");
 
-    if (!container) {
-      console.error("quiz-container saknas");
-      return;
-    }
+  if (!titleEl || !purposeEl || !videoEl || !container) {
+    console.error("HTML-element saknas");
+    return;
+  }
 
-    container.innerHTML = "";
+  // ✅ ID FIX
+  function mapCourse(id) {
+    const m = id && id.match(/kurs(\d+)/);
+    return m ? "kurs" + parseInt(m[1], 10) : null;
+  }
 
-    // ✅ ID-MAPPING
-    function mapCourse(id) {
-      const match = id && id.match(/kurs(\d+)/);
-      return match ? "kurs" + parseInt(match[1], 10) : null;
-    }
+  function mapModule(id) {
+    const m = id && id.match(/kurs(\d+)_modul(\d+)/);
+    return m ? "k" + parseInt(m[1], 10) + "m" + parseInt(m[2], 10) : null;
+  }
 
-    function mapModule(id) {
-      const match = id && id.match(/kurs(\d+)_modul(\d+)/);
-      return match ? "k" + parseInt(match[1], 10) + "m" + parseInt(match[2], 10) : null;
-    }
+  const courseId = mapCourse(rawCourseId);
+  const moduleId = mapModule(rawModuleId);
 
-    const courseId = mapCourse(rawCourseId);
-    const moduleId = mapModule(rawModuleId);
+  if (!courseId || !moduleId) {
+    container.innerHTML = "<p>Felaktiga parametrar</p>";
+    return;
+  }
 
-    if (!courseId || !moduleId) {
-      container.innerHTML = "<p>Felaktiga parametrar i URL</p>";
-      return;
-    }
+  const course = kurserData.find(c => c.id === courseId);
+  if (!course) {
+    container.innerHTML = "<p>Kurs hittas inte</p>";
+    return;
+  }
 
-    // ✅ Hitta kurs
-    const course = kurserData.find(c => c.id === courseId);
+  const module = course.modules.find(m => m.id === moduleId);
+  if (!module) {
+    container.innerHTML = "<p>Modul hittas inte</p>";
+    return;
+  }
 
-    if (!course) {
-      container.innerHTML = "<p>Kurs hittas inte</p>";
-      return;
-    }
+  // ✅ MODULDATA
+  titleEl.textContent = module.title;
+  purposeEl.textContent = module.purpose;
 
-    // ✅ Hitta modul
-    const module = course.modules.find(m => m.id === moduleId);
+  if (module.video) {
+    videoEl.src = module.video;
+  }
 
-    if (!module || !module.questions) {
-      container.innerHTML = "<p>Ingen quiz hittades</p>";
-      return;
-    }
+  // ✅ QUIZ
+  const quiz = module.questions;
+  let answers = new Array(quiz.length).fill(null);
 
-    const quiz = module.questions;
-    let answers = new Array(quiz.length).fill(null);
+  quiz.forEach((q, index) => {
 
-    // ✅ Render quiz
-    quiz.forEach((q, index) => {
+    const div = document.createElement("div");
 
-      const div = document.createElement("div");
+    const title = document.createElement("h4");
+    title.textContent = (index + 1) + ". " + q.q;
+    div.appendChild(title);
 
-      const title = document.createElement("h4");
-      title.textContent = (index + 1) + ". " + q.q;
-      div.appendChild(title);
+    q.options.forEach((opt, i) => {
 
-      q.options.forEach((opt, i) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = opt;
+      btn.style.display = "block";
+      btn.style.margin = "5px 0";
 
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.textContent = opt;
-        btn.style.display = "block";
-        btn.style.margin = "5px 0";
+      btn.onclick = () => {
 
-        btn.onclick = () => {
+        // ✅ redan svarat → stoppa
+        if (answers[index] !== null) return;
 
-          answers[index] = i;
+        answers[index] = i;
 
-          const all = div.querySelectorAll("button");
-          all.forEach(b => b.style.background = "");
+        const buttons = div.querySelectorAll("button");
 
-          btn.style.background = "#d0e6ff";
-        };
+        buttons.forEach((b, idx) => {
 
-        div.appendChild(btn);
-      });
+          if (idx === q.correct) {
+            b.style.background = "green"; // ✅ rätt
+          } 
+          else if (idx === i) {
+            b.style.background = "red";   // ❌ fel
+          }
 
-      container.appendChild(div);
+          b.disabled = true; // ✅ lås
+        });
+      };
+
+      div.appendChild(btn);
     });
 
-    // ✅ Godkänn
-    const submitBtn = document.createElement("button");
-    submitBtn.textContent = "Godkänn quiz";
-    submitBtn.style.marginTop = "20px";
-
-    submitBtn.onclick = () => {
-
-      let score = 0;
-
-      quiz.forEach((q, i) => {
-        if (answers[i] === q.correct) score++;
-      });
-
-      alert("Resultat: " + score + " / " + quiz.length);
-    };
-
-    container.appendChild(submitBtn);
-
+    container.appendChild(div);
   });
-  </script>
+
+  // ✅ SUBMIT
+  const submitBtn = document.createElement("button");
+  submitBtn.textContent = "Godkänn quiz";
+  submitBtn.style.marginTop = "20px";
+
+  submitBtn.onclick = () => {
+
+    let score = 0;
+
+    quiz.forEach((q, i) => {
+      if (answers[i] === q.correct) score++;
+    });
+
+    alert("Resultat: " + score + " / " + quiz.length);
+  };
+
+  container.appendChild(submitBtn);
+
+});
+</script>
 
 </body>
 </html>
