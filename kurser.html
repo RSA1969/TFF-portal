@@ -1,170 +1,153 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
- Hej, Stephen vad kan jag hjälpa dig med?
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurser – TFF portal</title>
+<link rel="stylesheet" href="assets/css/styles.css">
 
-✅ Jag har rensat **din exakta kod** och fixat endast det som är fel.  
-👉 Nu finns **inga syntaxfel → quiz visas igen**
+<style>
+.container { max-width: 1100px; margin: auto; }
 
----
+.module {
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 20px;
+    background: #fff;
+}
 
-# ✅ DIN KOD – KORRIGERAD (ändrad endast där det var fel)
+.hidden { display: none; }
 
-👉 **Copy‑paste hela denna version**
+.quiz-option {
+    display: block;
+    margin: 6px 0;
+    padding: 8px;
+    background: #f3f3f3;
+    cursor: pointer;
+}
 
-```html
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kurs</title>
+.correct { background-color: #4CAF50; color: white; }
+.wrong { background-color: #f44336; color: white; }
 
-  <link rel="stylesheet" href="assets/css/styles.css">
-
-  <style>
-    main {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    button {
-      padding: 10px;
-      width: 100%;
-      text-align: left;
-    }
-
-    section {
-      margin-bottom: 30px;
-    }
-  </style>
+button {
+    margin-top: 10px;
+    padding: 10px 15px;
+}
+</style>
 
 </head>
 
 <body>
 
-<main>
+<header>
+    <h1>Kurser</h1>
+</header>
 
-  <section>
-    <h1 id="module-title"></h1>
-    <p id="module-purpose"></p>
-  </section>
+<main class="container">
 
-  <section>
-    <video id="module-video" controls width="100%"></video>
-  </section>
+    <!-- MODUL 1 -->
+    <div class="module" id="module1">
 
-  <section>
-    <h2>Quiz</h2>
-    <div id="quiz-container"></div>
-  </section>
+        <h2>Modul 1 – Introduktion</h2>
+
+        <video width="100%" controls>
+            <source src="video/modul1.mp4" type="video/mp4">
+        </video>
+
+        <p>Grundläggande introduktion.</p>
+
+        <div class="quiz" data-module="1">
+            <p>Fråga: Vad är rätt?</p>
+
+            <div class="quiz-option" data-correct="false">Svar A</div>
+            <div class="quiz-option" data-correct="true">Svar B</div>
+            <div class="quiz-option" data-correct="false">Svar C</div>
+
+            <button onclick="checkQuiz(1)">Kontrollera</button>
+        </div>
+
+    </div>
+
+    <!-- MODUL 2 -->
+    <div class="module hidden" id="module2">
+
+        <h2>Modul 2</h2>
+
+        <video width="100%" controls>
+            <source src="video/modul2.mp4" type="video/mp4">
+        </video>
+
+        <p>Fortsättning.</p>
+
+    </div>
 
 </main>
 
-<script src="assets/js/kurser-data.js"></script>
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
 
-  const params = new URLSearchParams(window.location.search);
-  const rawCourseId = params.get("course");
-  const rawModuleId = params.get("module");
+let scores = {};
 
-  const titleEl = document.getElementById("module-title");
-  const purposeEl = document.getElementById("module-purpose");
-  const videoEl = document.getElementById("module-video");
-  const container = document.getElementById("quiz-container");
+function checkQuiz(module) {
 
-  function mapCourse(id) {
-    const m = id && id.match(/kurs(\d+)/);
-    return m ? "kurs" + parseInt(m[1], 10) : null;
-  }
+    const quiz = document.querySelector(`.quiz[data-module='${module}']`);
+    const options = quiz.querySelectorAll(".quiz-option");
 
-  function mapModule(id) {
-    const m = id && id.match(/kurs(\d+)_modul(\d+)/);
-    return m ? "k" + parseInt(m[1], 10) + "m" + parseInt(m[2], 10) : null;
-  }
+    let correctCount = 0;
+    let total = options.length;
 
-  const courseId = mapCourse(rawCourseId);
-  const moduleId = mapModule(rawModuleId);
+    options.forEach(opt => {
 
-  const course = kurserData.find(c => c.id === courseId);
-  const module = course?.modules.find(m => m.id === moduleId);
+        opt.classList.remove("correct","wrong");
 
-  if (!module) {
-    container.innerHTML = "<p>Ingen modul hittades</p>";
-    return;
-  }
+        if (opt.classList.contains("selected")) {
 
-  titleEl.textContent = module.title;
-  purposeEl.textContent = module.purpose;
-  if (module.video) videoEl.src = module.video;
+            if (opt.dataset.correct === "true") {
+                opt.classList.add("correct");
+                correctCount++;
+            } else {
+                opt.classList.add("wrong");
+            }
 
-  const quiz = module.questions;
-  let answers = new Array(quiz.length).fill(null);
+        }
 
-  quiz.forEach((q, index) => {
+    });
 
-    const div = document.createElement("div");
+    let percent = (correctCount / 1) * 100;
 
-    const title = document.createElement("h4");
-    title.textContent = (index + 1) + ". " + q.q;
-    div.appendChild(title);
+    scores[module] = percent;
 
-    const buttons = [];
+    if (percent >= 80) {
+        unlockNext(module);
+    }
 
-    q.options.forEach((opt, i) => {
+}
 
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.textContent = opt;
+document.querySelectorAll(".quiz-option").forEach(opt => {
 
-      btn.onclick = () => {
+    opt.addEventListener("click", function () {
 
-        if (answers[index] === q.correct) return;
+        const parent = this.parentElement;
 
-        buttons.forEach(b => {
-          b.style.background = "";
+        parent.querySelectorAll(".quiz-option").forEach(o => {
+            o.classList.remove("selected","correct","wrong");
         });
 
-        answers[index] = i;
+        this.classList.add("selected");
 
-        if (i === q.correct) {
-          btn.style.background = "green";
-          buttons.forEach(b => b.disabled = true);
-        } else {
-          btn.style.background = "red";
-        }
-      };
-
-      buttons.push(btn);
-      div.appendChild(btn);
     });
-
-    container.appendChild(div);
-  });
-
-  const submitBtn = document.createElement("button");
-  submitBtn.textContent = "Godkänn quiz";
-
-  submitBtn.onclick = () => {
-
-    let score = 0;
-
-    quiz.forEach((q, i) => {
-      if (answers[i] === q.correct) score++;
-    });
-
-    // ✅ FIXAD RAD (detta var felet)
-    alert("Resultat: " + score + " / " + quiz.length);
-  };
-
-  container.appendChild(submitBtn);
 
 });
+
+function unlockNext(module) {
+
+    const next = document.getElementById("module" + (module + 1));
+
+    if (next) {
+        next.classList.remove("hidden");
+    }
+
+}
+
 </script>
 
 </body>
