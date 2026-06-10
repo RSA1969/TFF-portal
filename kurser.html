@@ -6,7 +6,11 @@
   <title>TFF Utbildningsportal – Kurser</title>
 
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <script src="assets/js/kurser-data.jsfa;
+  <script src="assets/js/kurser-data.js"></script>
+
+  <style>
+    :root{
+      --bg:#f5f7fa;
       --panel:#ffffff;
       --line:#d9dee5;
       --text:#1d2939;
@@ -617,7 +621,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_json_v7";
+    const STORAGE_KEY = "tff_portal_progress_json_v8";
 
     const COURSE_LOCAL_VIDEO_CANDIDATES = {
       "kurs-1": {
@@ -759,6 +763,21 @@
       }
     };
 
+    const FALLBACK_DATA = [
+      {
+        id: "kurs-1",
+        title: "Kurs 1 – MICROSOFT TEAMS",
+        description: "Reservdata om extern kursdata inte går att läsa.",
+        modules: [
+          { id: "kurs-1-modul-1", moduleNumber: 1, title: "Modul 1 – Vad är Teams", content: "Introduktion till vad Teams är.", rawVideo: "", localCandidates: COURSE_LOCAL_VIDEO_CANDIDATES["kurs-1"][1], questions: COURSE_QUIZ_FALLBACKS["kurs-1"][1] },
+          { id: "kurs-1-modul-2", moduleNumber: 2, title: "Modul 2 – Chat, kanal och möte", content: "Rätt val för rätt situation.", rawVideo: "", localCandidates: COURSE_LOCAL_VIDEO_CANDIDATES["kurs-1"][2], questions: COURSE_QUIZ_FALLBACKS["kurs-1"][2] },
+          { id: "kurs-1-modul-3", moduleNumber: 3, title: "Modul 3 – Fördjupning", content: "Fortsättning på arbetssätt i Teams.", rawVideo: "", localCandidates: COURSE_LOCAL_VIDEO_CANDIDATES["kurs-1"][3], questions: COURSE_QUIZ_FALLBACKS["kurs-1"][3] },
+          { id: "kurs-1-modul-4", moduleNumber: 4, title: "Modul 4 – Filer i Teams", content: "SharePoint i bakgrunden.", rawVideo: "", localCandidates: COURSE_LOCAL_VIDEO_CANDIDATES["kurs-1"][4], questions: COURSE_QUIZ_FALLBACKS["kurs-1"][4] },
+          { id: "kurs-1-modul-5", moduleNumber: 5, title: "Modul 5 – Vanliga misstag", content: "Undvik vanliga fel i användningen.", rawVideo: "", localCandidates: COURSE_LOCAL_VIDEO_CANDIDATES["kurs-1"][5], questions: COURSE_QUIZ_FALLBACKS["kurs-1"][5] }
+        ]
+      }
+    ];
+
     const state = {
       data: [],
       filteredData: [],
@@ -881,7 +900,7 @@
         if (res.ok) return await res.json();
       } catch {}
 
-      throw new Error("Ingen kursdata hittades i assets/js/kurser-data.js eller assets/data/kurser-data.json");
+      return FALLBACK_DATA;
     }
 
     function extractArray(data) {
@@ -954,6 +973,8 @@
 
     function normalizeCourses(rawData) {
       const arr = extractArray(rawData);
+
+      if (!arr.length) return FALLBACK_DATA;
 
       return arr.map((course, courseIndex) => {
         const title =
@@ -1322,6 +1343,11 @@
 
       const candidates = buildVideoCandidates(module);
 
+      if (!candidates.length) {
+        placeholder.classList.remove("hidden");
+        return;
+      }
+
       for (const candidate of candidates) {
         const exists = await urlExists(candidate);
         if (exists) {
@@ -1532,7 +1558,7 @@
       resultBox.classList.remove("hidden");
       resultText.innerHTML = passed
         ? `<p><strong>Godkänt.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Nästa modul är nu upplåst.</p>`
-        : `<p><strong>Inte godkänt ännu.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %). Du behöver minst 80 % för att låsa upp nästa modul.</p>`;
+        : `<p><strong>Inte godkänt ännu.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Du behöver minst 80 % för att låsa upp nästa modul.</p>`;
 
       refreshCourseStatus(course);
       renderCourseList();
@@ -1555,29 +1581,27 @@
     }
 
     async function init() {
+      bindEvents();
+
+      let rawData;
       try {
-        bindEvents();
-
-        const rawData = await loadRawData();
-        state.data = normalizeCourses(rawData);
-        state.filteredData = state.data;
-        state.selectedCourseId = getSelectedCourseFromStorage(state.data);
-
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("app").style.display = "block";
-
-        renderAll();
-      } catch (error) {
-        document.getElementById("loading").innerHTML = `
-          <div style="max-width:760px; padding:24px; background:#fff; border:1px solid #e5e7eb; border-radius:14px;">
-            <h3 style="margin-top:0;">Kunde inte läsa kursdata</h3>
-            <p style="color:#667085; line-height:1.7;">
-              Kontrollera att <strong>assets/js/kurser-data.js</strong> eller <strong>assets/data/kurser-data.json</strong> innehåller kursdata.
-            </p>
-            <pre style="white-space:pre-wrap; background:#f8fafc; padding:12px; border-radius:10px; border:1px solid #e5e7eb;">${escapeHtml(error.message)}</pre>
-          </div>
-        `;
+        rawData = await loadRawData();
+      } catch {
+        rawData = FALLBACK_DATA;
       }
+
+      state.data = normalizeCourses(rawData);
+      if (!Array.isArray(state.data) || !state.data.length) {
+        state.data = FALLBACK_DATA;
+      }
+
+      state.filteredData = state.data;
+      state.selectedCourseId = getSelectedCourseFromStorage(state.data);
+
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("app").style.display = "block";
+
+      renderAll();
     }
 
     init();
