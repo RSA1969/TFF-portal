@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="sv">
 <head>
   <meta charset="UTF-8" />
@@ -645,7 +645,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_all15_v3";
+    const STORAGE_KEY = "tff_portal_progress_all15_v4";
 
     const COURSE_DEFINITIONS = [
       {
@@ -654,8 +654,8 @@
         modules: [
           "Vad är Teams (och vad är det inte)",
           "Chat, kanal och möte – rätt val",
-          "Arbetssätt i Teams",
-          "Filer i Teams",
+          "Möten i Teams – roller & praxis",
+          "Filer i Teams (SharePoint i bakgrunden)",
           "Vanliga misstag i kommunal Teams-användning"
         ]
       },
@@ -870,16 +870,6 @@
       return String(text || "").trim().toLowerCase();
     }
 
-    function slugify(text) {
-      return String(text || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[–—]/g, "-")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-    }
-
     function resetQuizState(moduleId = null) {
       state.quiz = createEmptyQuizState(moduleId);
     }
@@ -905,15 +895,14 @@
       return courseProgress.modules[moduleId];
     }
 
-    function buildQuestionSet(courseTitle, moduleTitle, moduleNumber) {
-      const moduleText = `${courseTitle} – ${moduleTitle}`;
+    function buildQuestionSet() {
       const correctPattern = [0,1,2,3,0,1,2,3,0,1];
 
       return [
         {
-          question: `${moduleText}: Vad är huvudfokus i modul ${moduleNumber}?`,
+          question: "Vad är huvudfokus i denna modul?",
           options: [
-            `Att förstå grunderna i ${moduleTitle.toLowerCase()}`,
+            "Att förstå grunderna och arbeta strukturerat",
             "Att hoppa över gemensamma arbetssätt",
             "Att arbeta utan struktur",
             "Att undvika dokumentation helt"
@@ -921,7 +910,7 @@
           correctIndex: correctPattern[0]
         },
         {
-          question: `${moduleText}: Vilket arbetssätt är mest korrekt?`,
+          question: "Vilket arbetssätt är mest korrekt?",
           options: [
             "Att använda privata lösningar utan styrning",
             "Att följa tydliga rutiner och gemensam struktur",
@@ -931,7 +920,7 @@
           correctIndex: correctPattern[1]
         },
         {
-          question: `${moduleText}: Vad bör undvikas?`,
+          question: "Vad bör undvikas?",
           options: [
             "Tydlig ansvarsfördelning",
             "Gemensamma informationsytor",
@@ -941,7 +930,7 @@
           correctIndex: correctPattern[2]
         },
         {
-          question: `${moduleText}: Vad stödjer kvalitet och spårbarhet?`,
+          question: "Vad stödjer kvalitet och spårbarhet?",
           options: [
             "Muntliga överenskommelser utan notering",
             "Ostrukturerad lagring",
@@ -951,7 +940,7 @@
           correctIndex: correctPattern[3]
         },
         {
-          question: `${moduleText}: Vad är viktigt för efterlevnad?`,
+          question: "Vad är viktigt för efterlevnad?",
           options: [
             "Att arbeta enligt fastställda rutiner",
             "Att varje person gör på sitt eget sätt",
@@ -961,7 +950,7 @@
           correctIndex: correctPattern[4]
         },
         {
-          question: `${moduleText}: Vad ger bäst samarbete?`,
+          question: "Vad ger bäst samarbete?",
           options: [
             "Många separata kopior i e-post",
             "Gemensamma ytor, tydlighet och rätt verktyg",
@@ -971,7 +960,7 @@
           correctIndex: correctPattern[5]
         },
         {
-          question: `${moduleText}: Vad minskar risken för fel?`,
+          question: "Vad minskar risken för fel?",
           options: [
             "Ad hoc-beslut utan struktur",
             "Oklara roller",
@@ -981,17 +970,17 @@
           correctIndex: correctPattern[6]
         },
         {
-          question: `${moduleText}: Vilken slutsats är mest riktig?`,
+          question: "Vilken slutsats är mest riktig?",
           options: [
             "Det spelar ingen roll hur arbetet utförs",
             "Privata lösningar är alltid bäst",
             "Dokumentation behövs inte",
-            `God struktur är central i ${moduleTitle.toLowerCase()}`
+            "God struktur är avgörande"
           ],
           correctIndex: correctPattern[7]
         },
         {
-          question: `${moduleText}: Vad är bäst vid praktiskt arbete?`,
+          question: "Vad är bäst vid praktiskt arbete?",
           options: [
             "Att följa gemensam struktur och dokumenterade rutiner",
             "Att vänta med kvalitetssäkring till slutet",
@@ -1001,10 +990,10 @@
           correctIndex: correctPattern[8]
         },
         {
-          question: `${moduleText}: Vad är rätt sammanfattning av modulen?`,
+          question: "Vad är rätt sammanfattning?",
           options: [
             "Arbetssättet saknar betydelse",
-            `Rätt struktur, rätt verktyg och tydligt ansvar ger bättre resultat i ${moduleTitle.toLowerCase()}`,
+            "Rätt struktur och arbetssätt ger bättre resultat",
             "Dokumentation kan alltid hoppas över",
             "Uppföljning är onödigt"
           ],
@@ -1034,7 +1023,7 @@
               content: `${moduleTitle}. Här visas modulens innehåll och tillhörande quiz.`,
               videoType,
               videoUrl,
-              questions: buildQuestionSet(courseDef.title, moduleTitle, moduleNumber)
+              questions: buildQuestionSet()
             };
           })
         };
@@ -1423,7 +1412,11 @@
       const quizContainer = document.getElementById("quizContainer");
       const resultBox = document.getElementById("resultBox");
 
-      if (state.quiz.moduleId !== module.id || !Array.isArray(state.quiz.questions) || state.quiz.questions.length === 0) {
+      if (
+        state.quiz.moduleId !== module.id ||
+        !Array.isArray(state.quiz.questions) ||
+        state.quiz.questions.length === 0
+      ) {
         resetQuizState(module.id);
         state.quiz.questions = questions;
       }
@@ -1533,4 +1526,3 @@
   </script>
 </body>
 </html>
-``
