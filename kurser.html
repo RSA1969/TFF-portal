@@ -77,7 +77,9 @@
       outline: none;
     }
 
-    .field::placeholder { color: #cbd5e1; }
+    .field::placeholder {
+      color: #cbd5e1;
+    }
 
     .course-list {
       display: grid;
@@ -96,7 +98,9 @@
       transition: .15s ease;
     }
 
-    .course-btn:hover { background: rgba(255,255,255,.12); }
+    .course-btn:hover {
+      background: rgba(255,255,255,.12);
+    }
 
     .course-btn.active {
       background: #fff;
@@ -286,7 +290,9 @@
       color: #9a3412;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
 
     .module-header {
       display: flex;
@@ -328,12 +334,33 @@
       transition: .15s ease;
     }
 
-    .btn.primary { background: var(--primary); color: #fff; }
-    .btn.primary:hover { background: var(--primary2); }
-    .btn.secondary { background: #eef2f6; color: #223041; }
-    .btn.secondary:hover { background: #e4e9f0; }
-    .btn.success { background: var(--success); color: #fff; }
-    .btn[disabled] { opacity: .55; cursor: not-allowed; }
+    .btn.primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn.primary:hover {
+      background: var(--primary2);
+    }
+
+    .btn.secondary {
+      background: #eef2f6;
+      color: #223041;
+    }
+
+    .btn.secondary:hover {
+      background: #e4e9f0;
+    }
+
+    .btn.success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn[disabled] {
+      opacity: .55;
+      cursor: not-allowed;
+    }
 
     .video-shell {
       width: 100%;
@@ -425,16 +452,21 @@
       color: var(--text);
     }
 
-    .option-btn:hover { background: #f1f5f9; }
+    .option-btn:hover {
+      background: #f1f5f9;
+    }
+
     .option-btn.selected {
       border-color: #7aa7d8;
       background: #eaf4ff;
     }
+
     .option-btn.correct {
       border-color: #188038;
       background: #dff4e5;
       color: #0f5132;
     }
+
     .option-btn.wrong {
       border-color: #c62828;
       background: #fde7e9;
@@ -448,8 +480,13 @@
       margin: 10px 0 4px 0;
     }
 
-    .feedback.ok { color: var(--success); }
-    .feedback.fail { color: var(--danger); }
+    .feedback.ok {
+      color: var(--success);
+    }
+
+    .feedback.fail {
+      color: var(--danger);
+    }
 
     .quiz-actions {
       display: flex;
@@ -471,7 +508,10 @@
       font-size: 1rem;
     }
 
-    .muted { color: var(--muted); line-height: 1.6; }
+    .muted {
+      color: var(--muted);
+      line-height: 1.6;
+    }
 
     .empty-state {
       background: var(--panel);
@@ -492,16 +532,25 @@
     }
 
     @media (max-width: 1200px) {
-      .grid { grid-template-columns: 1fr; }
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     @media (max-width: 980px) {
-      .page { grid-template-columns: 1fr; }
+      .page {
+        grid-template-columns: 1fr;
+      }
+
       .sidebar {
         position: relative;
         height: auto;
       }
-      .main { padding: 18px; }
+
+      .main {
+        padding: 18px;
+      }
+
       .video-shell video,
       .video-shell iframe,
       .video-placeholder {
@@ -646,7 +695,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_all15_v6";
+    const STORAGE_KEY = "tff_portal_progress_all15_v7";
 
     const COURSE_DEFINITIONS = [
       {
@@ -897,8 +946,6 @@
     }
 
     function buildQuestionSet() {
-      const correctPattern = [0,1,2,3,0,1,2,3,0,1];
-
       return [
         {
           question: "Vad är huvudfokus i denna modul?",
@@ -908,7 +955,7 @@
             "Att arbeta utan struktur",
             "Att undvika dokumentation helt"
           ],
-          correctIndex: correctPattern[0]
+          correctIndex: 0
         },
         {
           question: "Vilket arbetssätt är mest korrekt?",
@@ -918,7 +965,7 @@
             "Att undvika uppföljning",
             "Att spara flera osynkade kopior"
           ],
-          correctIndex: correctPattern[1]
+          correctIndex: 1
         },
         {
           question: "Vad bör undvikas?",
@@ -928,7 +975,7 @@
             "Otydlighet och dubbelarbete",
             "Strukturerad hantering"
           ],
-          correctIndex: correctPattern[2]
+          correctIndex: 2
         },
         {
           question: "Vad stödjer kvalitet och spårbarhet?",
@@ -938,7 +985,7 @@
             "Privata versioner",
             "Dokumentation, ordning och tydligt ansvar"
           ],
-          correctIndex: correctPattern[3]
+          correctIndex: 3
         },
         {
           question: "Vad är viktigt för efterlevnad?",
@@ -948,7 +995,7 @@
             "Att undvika kontroll",
             "Att hoppa över uppföljning"
           ],
-          correctIndex: correctPattern[4]
+          correctIndex: 0
         },
         {
           question: "Vad ger bäst samarbete?",
@@ -958,7 +1005,7 @@
             "Ingen ansvarsfördelning",
             "Endast lokal lagring"
           ],
-          correctIndex: correctPattern[5]
+          correctIndex: 1
         },
         {
           question: "Vad minskar risken för fel?",
@@ -968,7 +1015,7 @@
             "Standardiserat arbetssätt och uppföljning",
             "Flera parallella arbetsmetoder"
           ],
-          correctIndex: correctPattern[6]
+          correctIndex: 2
         },
         {
           question: "Vilken slutsats är mest riktig?",
@@ -978,7 +1025,7 @@
             "Dokumentation behövs inte",
             "God struktur är avgörande"
           ],
-          correctIndex: correctPattern[7]
+          correctIndex: 3
         },
         {
           question: "Vad är bäst vid praktiskt arbete?",
@@ -988,7 +1035,7 @@
             "Att undvika versionshantering",
             "Att arbeta utan gemensamma principer"
           ],
-          correctIndex: correctPattern[8]
+          correctIndex: 0
         },
         {
           question: "Vad är rätt sammanfattning?",
@@ -998,7 +1045,7 @@
             "Dokumentation kan alltid hoppas över",
             "Uppföljning är onödigt"
           ],
-          correctIndex: correctPattern[9]
+          correctIndex: 1
         }
       ];
     }
@@ -1143,7 +1190,7 @@
       const iframe = document.getElementById("moduleIframe");
       const placeholder = document.getElementById("videoPlaceholder");
 
-      try { video.pause(); } catch (e) {}
+      try { video.pause(); } catch {}
 
       video.removeAttribute("src");
       video.load();
@@ -1508,14 +1555,11 @@
 
     function init() {
       bindEvents();
-
       state.data = buildData();
       state.filteredData = state.data;
       state.selectedCourseId = state.data[0].id;
-
       document.getElementById("loading").style.display = "none";
       document.getElementById("app").style.display = "block";
-
       renderAll();
     }
 
