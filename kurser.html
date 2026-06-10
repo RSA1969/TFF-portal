@@ -77,9 +77,7 @@
       outline: none;
     }
 
-    .field::placeholder {
-      color: #cbd5e1;
-    }
+    .field::placeholder { color: #cbd5e1; }
 
     .course-list {
       display: grid;
@@ -98,9 +96,7 @@
       transition: .15s ease;
     }
 
-    .course-btn:hover {
-      background: rgba(255,255,255,.12);
-    }
+    .course-btn:hover { background: rgba(255,255,255,.12); }
 
     .course-btn.active {
       background: #fff;
@@ -290,9 +286,7 @@
       color: #9a3412;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     .module-header {
       display: flex;
@@ -334,33 +328,12 @@
       transition: .15s ease;
     }
 
-    .btn.primary {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    .btn.primary:hover {
-      background: var(--primary2);
-    }
-
-    .btn.secondary {
-      background: #eef2f6;
-      color: #223041;
-    }
-
-    .btn.secondary:hover {
-      background: #e4e9f0;
-    }
-
-    .btn.success {
-      background: var(--success);
-      color: #fff;
-    }
-
-    .btn[disabled] {
-      opacity: .55;
-      cursor: not-allowed;
-    }
+    .btn.primary { background: var(--primary); color: #fff; }
+    .btn.primary:hover { background: var(--primary2); }
+    .btn.secondary { background: #eef2f6; color: #223041; }
+    .btn.secondary:hover { background: #e4e9f0; }
+    .btn.success { background: var(--success); color: #fff; }
+    .btn[disabled] { opacity: .55; cursor: not-allowed; }
 
     .video-shell {
       width: 100%;
@@ -452,21 +425,16 @@
       color: var(--text);
     }
 
-    .option-btn:hover {
-      background: #f1f5f9;
-    }
-
+    .option-btn:hover { background: #f1f5f9; }
     .option-btn.selected {
       border-color: #7aa7d8;
       background: #eaf4ff;
     }
-
     .option-btn.correct {
       border-color: #188038;
       background: #dff4e5;
       color: #0f5132;
     }
-
     .option-btn.wrong {
       border-color: #c62828;
       background: #fde7e9;
@@ -480,13 +448,8 @@
       margin: 10px 0 4px 0;
     }
 
-    .feedback.ok {
-      color: var(--success);
-    }
-
-    .feedback.fail {
-      color: var(--danger);
-    }
+    .feedback.ok { color: var(--success); }
+    .feedback.fail { color: var(--danger); }
 
     .quiz-actions {
       display: flex;
@@ -508,10 +471,7 @@
       font-size: 1rem;
     }
 
-    .muted {
-      color: var(--muted);
-      line-height: 1.6;
-    }
+    .muted { color: var(--muted); line-height: 1.6; }
 
     .empty-state {
       background: var(--panel);
@@ -532,25 +492,16 @@
     }
 
     @media (max-width: 1200px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
+      .grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 980px) {
-      .page {
-        grid-template-columns: 1fr;
-      }
-
+      .page { grid-template-columns: 1fr; }
       .sidebar {
         position: relative;
         height: auto;
       }
-
-      .main {
-        padding: 18px;
-      }
-
+      .main { padding: 18px; }
       .video-shell video,
       .video-shell iframe,
       .video-placeholder {
@@ -580,7 +531,7 @@
       <div class="sidebar-tools">
         <input id="courseSearch" class="field" type="search" placeholder="Sök kurs eller modul..." />
         <button id="resetProgressBtn" class="btn secondary" type="button">Nollställ progression</button>
-        <a href="utbildningar.html" class="btn secondary">Till startsidan</a>
+        <a href="https://rsa1969.github.io/TFF-portal/" class="btn secondary">Till startsidan</a>
         <a href="https://rsa1969.github.io/TFF-portal/utbildningar.html" class="btn secondary">Till Utbildningsportal</a>
       </div>
 
@@ -695,7 +646,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_all15_v5";
+    const STORAGE_KEY = "tff_portal_progress_all15_v6";
 
     const COURSE_DEFINITIONS = [
       {
@@ -1164,11 +1115,7 @@
           <div class="module-desc">${escapeHtml(module.content)}</div>
           <div class="badge-row">
             <span class="badge">${module.questions.length} frågor</span>
-            ${
-              module.videoUrl
-                ? `<span class="badge">Film</span>`
-                : `<span class="badge">Ingen film</span>`
-            }
+            ${module.videoUrl ? `<span class="badge">Film</span>` : `<span class="badge">Ingen film</span>`}
             ${
               moduleProgress.passed
                 ? `<span class="badge success">Godkänd ${moduleProgress.scorePercent}%</span>`
