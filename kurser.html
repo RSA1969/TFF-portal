@@ -348,8 +348,7 @@
       min-height: 320px;
     }
 
-    .video-shell video,
-    .video-shell iframe {
+    .video-shell video {
       display: block;
       width: 100%;
       height: 520px;
@@ -484,15 +483,13 @@
         height: auto;
       }
       .main { padding: 18px; }
-      .video-shell video,
-      .video-shell iframe {
+      .video-shell video {
         height: 360px;
       }
     }
 
     @media (max-width: 640px) {
-      .video-shell video,
-      .video-shell iframe {
+      .video-shell video {
         height: 240px;
       }
     }
@@ -570,15 +567,6 @@
             </div>
 
             <div class="video-shell" id="videoShell">
-              <iframe
-                id="moduleIframe"
-                class="hidden"
-                loading="lazy"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowfullscreen
-                referrerpolicy="strict-origin-when-cross-origin">
-              </iframe>
-
               <video id="moduleVideo" class="hidden" controls playsinline preload="metadata"></video>
 
               <div id="videoPlaceholder" class="video-placeholder hidden">
@@ -634,15 +622,15 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_json_v2";
+    const STORAGE_KEY = "tff_portal_progress_json_v3";
 
-    const COURSE_VIDEO_OVERRIDES = {
+    const COURSE_LOCAL_VIDEO_OVERRIDES = {
       "kurs-1": {
-        1: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%201%20Vad%20%C3%A4r%20Teams%20(och%20vad%20%C3%A4r%20det%20inte).mp4?csf=1&web=1&e=1BkUbj",
-        2: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%202%20Chat,%20kanal%20och%20m%C3%B6te%20%E2%80%93%20r%C3%A4tt%20val.mp4?csf=1&web=1&e=XxlPTg",
-        3: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%202%20Chat,%20kanal%20och%20m%C3%B6te%20%E2%80%93%20r%C3%A4tt%20val.mp4?csf=1&web=1&e=XxlPTg",
-        4: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%204%20Filer%20i%20Teams%20(SharePoint%20i%20bakgrunden).mp4?csf=1&web=1&e=9ITTNJ",
-        5: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%205%20Vanliga%20misstag%20i%20kommunal%20Teams%E2%80%91anv%C3%A4ndning.mp4?csf=1&web=1&e=UWrfeH"
+        1: "video/kurs1_modul1.mp4",
+        2: "video/kurs1_modul2.mp4",
+        3: "video/kurs1_modul3.mp4",
+        4: "video/kurs1_modul4.mp4",
+        5: "video/kurs1_modul5.mp4"
       }
     };
 
@@ -711,9 +699,9 @@
       return slug;
     }
 
-    function getOverrideVideo(courseTitle, moduleNumber) {
+    function getLocalOverrideVideo(courseTitle, moduleNumber) {
       const courseSlug = getCourseSlugFallback(courseTitle);
-      const byCourse = COURSE_VIDEO_OVERRIDES[courseSlug];
+      const byCourse = COURSE_LOCAL_VIDEO_OVERRIDES[courseSlug];
       if (!byCourse) return "";
       return byCourse[moduleNumber] || "";
     }
@@ -750,6 +738,66 @@
       return [];
     }
 
+    function normalizeQuestions(rawQuestions, courseId, moduleTitle) {
+      return extractArray(Array.isArray(rawQuestions) ? rawQuestions : { items: rawQuestions }).map((question, qIndex) => {
+        const questionText =
+          question.fraga ||
+          question.fråga ||
+          question.question ||
+          question.text ||
+          question.titel ||
+          `Fråga ${qIndex + 1}`;
+
+        let options =
+          question.alternativ ||
+          question.options ||
+          question.svar ||
+          question.answers ||
+          [];
+
+        if (!Array.isArray(options) || !options.length) {
+          options = [
+            question.svarA || question.answerA || question.A || question.a,
+            question.svarB || question.answerB || question.B || question.b,
+            question.svarC || question.answerC || question.C || question.c,
+            question.svarD || question.answerD || question.D || question.d
+          ].filter(Boolean);
+        }
+
+        let correctIndex = -1;
+
+        if (typeof question.correctIndex === "number") {
+          correctIndex = question.correctIndex;
+        } else if (typeof question.rattIndex === "number") {
+          correctIndex = question.rattIndex;
+        } else if (typeof question.rättIndex === "number") {
+          correctIndex = question.rättIndex;
+        } else {
+          const correctValue =
+            question.rattSvar ||
+            question.rättSvar ||
+            question.correctAnswer ||
+            question.correct ||
+            question.rightAnswer ||
+            "";
+
+          if (["A", "B", "C", "D"].includes(String(correctValue).toUpperCase())) {
+            correctIndex = { A: 0, B: 1, C: 2, D: 3 }[String(correctValue).toUpperCase()];
+          } else if (options.length) {
+            const matchIndex = options.findIndex(opt => normalizeText(opt) === normalizeText(correctValue));
+            correctIndex = matchIndex;
+          }
+        }
+
+        return {
+          id: slugify(courseId + "-" + moduleTitle + "-fraga-" + (qIndex + 1)),
+          question: questionText,
+          options,
+          correctIndex
+        };
+      });
+    }
+
     function normalizeCourses(rawData) {
       const arr = extractArray(rawData);
 
@@ -778,7 +826,7 @@
           course.content ||
           [];
 
-        const modules = extractArray(rawModules.length ? rawModules : { items: rawModules }).map((module, moduleIndex) => {
+        const modules = extractArray(Array.isArray(rawModules) ? rawModules : { items: rawModules }).map((module, moduleIndex) => {
           const moduleTitle =
             module.titel ||
             module.title ||
@@ -811,8 +859,12 @@
             module.film ||
             "";
 
-          const overrideVideo = getOverrideVideo(title, moduleNumber);
-          const video = decodeHtmlEntities(overrideVideo || dataVideo || "");
+          const localVideo =
+            module.localVideo ||
+            module.localvideo ||
+            module.videoLocal ||
+            getLocalOverrideVideo(title, moduleNumber) ||
+            "";
 
           const rawQuestions =
             module.fragor ||
@@ -821,70 +873,15 @@
             module.quiz ||
             [];
 
-          const questions = extractArray(rawQuestions.length ? rawQuestions : { items: rawQuestions }).map((question, qIndex) => {
-            const questionText =
-              question.fraga ||
-              question.fråga ||
-              question.question ||
-              question.text ||
-              question.titel ||
-              `Fråga ${qIndex + 1}`;
-
-            let options =
-              question.alternativ ||
-              question.options ||
-              question.svar ||
-              question.answers ||
-              [];
-
-            if (!Array.isArray(options) || !options.length) {
-              options = [
-                question.svarA || question.answerA || question.A || question.a,
-                question.svarB || question.answerB || question.B || question.b,
-                question.svarC || question.answerC || question.C || question.c,
-                question.svarD || question.answerD || question.D || question.d
-              ].filter(Boolean);
-            }
-
-            let correctIndex = -1;
-
-            if (typeof question.correctIndex === "number") {
-              correctIndex = question.correctIndex;
-            } else if (typeof question.rattIndex === "number") {
-              correctIndex = question.rattIndex;
-            } else if (typeof question.rättIndex === "number") {
-              correctIndex = question.rättIndex;
-            } else {
-              const correctValue =
-                question.rattSvar ||
-                question.rättSvar ||
-                question.correctAnswer ||
-                question.correct ||
-                question.rightAnswer ||
-                "";
-
-              if (["A", "B", "C", "D"].includes(String(correctValue).toUpperCase())) {
-                correctIndex = { A: 0, B: 1, C: 2, D: 3 }[String(correctValue).toUpperCase()];
-              } else if (options.length) {
-                const matchIndex = options.findIndex(opt => normalizeText(opt) === normalizeText(correctValue));
-                correctIndex = matchIndex;
-              }
-            }
-
-            return {
-              id: slugify(id + "-" + moduleTitle + "-fraga-" + (qIndex + 1)),
-              question: questionText,
-              options,
-              correctIndex
-            };
-          });
+          const questions = normalizeQuestions(rawQuestions, id, moduleTitle);
 
           return {
             id: slugify(id + "-" + moduleTitle),
             moduleNumber,
             title: moduleTitle,
             content: moduleText,
-            video,
+            video: decodeHtmlEntities(dataVideo || ""),
+            localVideo: decodeHtmlEntities(localVideo || ""),
             questions
           };
         });
@@ -994,7 +991,7 @@
         btn.addEventListener("click", () => {
           state.selectedCourseId = course.id;
           state.selectedModuleId = null;
-          state.quiz.finished = false;
+          resetQuizState();
           localStorage.setItem("selectedCourseId", course.id);
           localStorage.setItem("selectedCourseTitle", course.title);
           renderAll();
@@ -1071,14 +1068,7 @@
         if (prevPassed) {
           card.addEventListener("click", () => {
             state.selectedModuleId = module.id;
-            state.quiz.questions = [];
-            state.quiz.currentIndex = 0;
-            state.quiz.selectedOptionIndex = null;
-            state.quiz.checked = false;
-            state.quiz.correctCount = 0;
-            state.quiz.moduleId = module.id;
-            state.quiz.finished = false;
-            state.quiz.finalPercent = 0;
+            resetQuizState(module.id);
             renderAll();
           });
         }
@@ -1103,14 +1093,7 @@
         unlockBtn.textContent = "Öppna nästa modul";
         unlockBtn.onclick = () => {
           state.selectedModuleId = nextModule.id;
-          state.quiz.questions = [];
-          state.quiz.currentIndex = 0;
-          state.quiz.selectedOptionIndex = null;
-          state.quiz.checked = false;
-          state.quiz.correctCount = 0;
-          state.quiz.moduleId = nextModule.id;
-          state.quiz.finished = false;
-          state.quiz.finalPercent = 0;
+          resetQuizState(nextModule.id);
           renderAll();
         };
       } else if (!nextModule) {
@@ -1138,20 +1121,19 @@
         ? `<p>${escapeHtml(module.content).replace(/\n/g, "<br>")}</p>`
         : `<p>Inget modultext-innehåll finns ännu.</p>`;
 
-      setupVideo(module.video);
+      setupVideo(course, module);
       setupQuiz(course, module);
       setUnlockButton(course, module);
 
       document.getElementById("backToCourseBtn").onclick = () => {
         state.selectedModuleId = null;
-        state.quiz.finished = false;
+        resetQuizState();
         renderAll();
       };
     }
 
     function resetMediaPlayers() {
       const video = document.getElementById("moduleVideo");
-      const iframe = document.getElementById("moduleIframe");
       const placeholder = document.getElementById("videoPlaceholder");
 
       try { video.pause(); } catch {}
@@ -1159,34 +1141,40 @@
       video.load();
       video.classList.add("hidden");
 
-      iframe.removeAttribute("src");
-      iframe.classList.add("hidden");
-
       placeholder.classList.add("hidden");
     }
 
-    function setupVideo(videoUrl) {
+    function setupVideo(course, module) {
       const video = document.getElementById("moduleVideo");
-      const iframe = document.getElementById("moduleIframe");
       const placeholder = document.getElementById("videoPlaceholder");
 
       resetMediaPlayers();
 
-      const url = decodeHtmlEntities(String(videoUrl || "").trim());
+      const dataUrl = decodeHtmlEntities(String(module.video || "").trim());
+      const localUrl = decodeHtmlEntities(String(module.localVideo || "").trim());
 
-      if (!url) {
+      const urlToPlay = isSharePointStyleUrl(dataUrl)
+        ? localUrl
+        : (dataUrl || localUrl);
+
+      if (!urlToPlay) {
         placeholder.classList.remove("hidden");
         return;
       }
 
-      if (isSharePointStyleUrl(url)) {
-        iframe.src = url;
-        iframe.classList.remove("hidden");
-        return;
-      }
-
-      video.src = url;
+      video.src = urlToPlay;
       video.classList.remove("hidden");
+    }
+
+    function resetQuizState(moduleId = null) {
+      state.quiz.questions = [];
+      state.quiz.currentIndex = 0;
+      state.quiz.selectedOptionIndex = null;
+      state.quiz.checked = false;
+      state.quiz.correctCount = 0;
+      state.quiz.moduleId = moduleId;
+      state.quiz.finished = false;
+      state.quiz.finalPercent = 0;
     }
 
     function setupQuiz(course, module) {
@@ -1240,17 +1228,20 @@
       const index = state.quiz.currentIndex;
       const q = questions[index];
 
-      document.getElementById("quizProgress").textContent = `Fråga ${Math.min(index + 1, questions.length)} / ${questions.length}`;
-      document.getElementById("quizScoreLive").textContent = `Rätt hittills: ${state.quiz.correctCount}`;
-
+      const quizProgress = document.getElementById("quizProgress");
+      const quizScoreLive = document.getElementById("quizScoreLive");
+      const questionTitle = document.getElementById("questionTitle");
       const optionsBox = document.getElementById("optionsBox");
       const feedback = document.getElementById("feedback");
       const checkBtn = document.getElementById("checkAnswerBtn");
       const nextBtn = document.getElementById("nextQuestionBtn");
       const retryBtn = document.getElementById("retryQuestionBtn");
 
+      quizProgress.textContent = `Fråga ${Math.min(index + 1, questions.length)} / ${questions.length}`;
+      quizScoreLive.textContent = `Rätt hittills: ${state.quiz.correctCount}`;
+
       if (!q) {
-        document.getElementById("questionTitle").textContent = "Inga fler frågor.";
+        questionTitle.textContent = "Inga fler frågor.";
         optionsBox.innerHTML = "";
         feedback.textContent = "";
         checkBtn.disabled = true;
@@ -1259,7 +1250,7 @@
         return;
       }
 
-      document.getElementById("questionTitle").textContent = q.question;
+      questionTitle.textContent = q.question;
       optionsBox.innerHTML = "";
 
       if (finishedMode) {
@@ -1283,10 +1274,8 @@
         let className = "option-btn";
         if (state.quiz.selectedOptionIndex === optionIndex) className += " selected";
 
-        if (state.quiz.checked) {
-          if (optionIndex === state.quiz.selectedOptionIndex) {
-            className += (optionIndex === q.correctIndex ? " correct" : " wrong");
-          }
+        if (state.quiz.checked && optionIndex === state.quiz.selectedOptionIndex) {
+          className += (optionIndex === q.correctIndex ? " correct" : " wrong");
         }
 
         btn.className = className;
@@ -1400,14 +1389,7 @@
         localStorage.removeItem(STORAGE_KEY);
         state.progress = {};
         state.selectedModuleId = null;
-        state.quiz.questions = [];
-        state.quiz.currentIndex = 0;
-        state.quiz.selectedOptionIndex = null;
-        state.quiz.checked = false;
-        state.quiz.correctCount = 0;
-        state.quiz.moduleId = null;
-        state.quiz.finished = false;
-        state.quiz.finalPercent = 0;
+        resetQuizState();
         renderAll();
       });
     }
