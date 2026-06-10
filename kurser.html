@@ -6,11 +6,7 @@
   <title>TFF Utbildningsportal – Kurser</title>
 
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <script src="assets/js/kurser-data.js"></script>
-
-  <style>
-    :root{
-      --bg:#f5f7fa;
+  <script src="assets/js/kurser-data.jsfa;
       --panel:#ffffff;
       --line:#d9dee5;
       --text:#1d2939;
@@ -621,20 +617,33 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_json_v4";
+    const STORAGE_KEY = "tff_portal_progress_json_v7";
 
-    // Local fallback videos for Course 1
-    const COURSE_LOCAL_VIDEO_OVERRIDES = {
+    const COURSE_LOCAL_VIDEO_CANDIDATES = {
       "kurs-1": {
-        1: "video/Modul 1 Vad är Teams (och vad är det inte).mp4",
-        2: "video/Modul 2 Chat, kanal och möte – rätt val.mp4",
-        3: "video/Modul 2 Chat, kanal och möte – rätt val.mp4",
-        4: "video/Modul 4 Filer i Teams (SharePoint i bakgrunden).mp4",
-        5: "video/Modul 5 Vanliga misstag i kommunal Teams‑användning.mp4"
+        1: [
+          "video/Modul 1 Vad är Teams (och vad är det inte).mp4",
+          "video/kurs1_modul1.mp4"
+        ],
+        2: [
+          "video/Modul 2 Chat, kanal och möte – rätt val.mp4",
+          "video/kurs1_modul2.mp4"
+        ],
+        3: [
+          "video/Modul 2 Chat, kanal och möte – rätt val.mp4",
+          "video/kurs1_modul3.mp4"
+        ],
+        4: [
+          "video/Modul 4 Filer i Teams (SharePoint i bakgrunden).mp4",
+          "video/kurs1_modul4.mp4"
+        ],
+        5: [
+          "video/Modul 5 Vanliga misstag i kommunal Teams‑användning.mp4",
+          "video/kurs1_modul5.mp4"
+        ]
       }
     };
 
-    // Fallback quiz ONLY for Course 1 if data file has no questions
     const COURSE_QUIZ_FALLBACKS = {
       "kurs-1": {
         1: [
@@ -820,17 +829,21 @@
       return txt.value;
     }
 
+    function safeMediaSrc(url) {
+      return encodeURI(url).replace(/#/g, "%23");
+    }
+
     function getCourseSlugFallback(courseTitle) {
       const slug = slugify(courseTitle);
       if (slug.startsWith("kurs-1")) return "kurs-1";
       return slug;
     }
 
-    function getLocalOverrideVideo(courseTitle, moduleNumber) {
+    function getLocalCandidateVideos(courseTitle, moduleNumber) {
       const courseSlug = getCourseSlugFallback(courseTitle);
-      const byCourse = COURSE_LOCAL_VIDEO_OVERRIDES[courseSlug];
-      if (!byCourse) return "";
-      return byCourse[moduleNumber] || "";
+      const byCourse = COURSE_LOCAL_VIDEO_CANDIDATES[courseSlug];
+      if (!byCourse) return [];
+      return byCourse[moduleNumber] || [];
     }
 
     function getFallbackQuestions(courseTitle, moduleNumber) {
@@ -843,6 +856,15 @@
     function isSharePointStyleUrl(url) {
       const value = String(url || "").toLowerCase();
       return value.includes("sharepoint.com") || value.includes("office.com");
+    }
+
+    async function urlExists(url) {
+      try {
+        const res = await fetch(safeMediaSrc(url), { method: "HEAD", cache: "no-store" });
+        return res.ok;
+      } catch {
+        return false;
+      }
     }
 
     async function loadRawData() {
@@ -991,12 +1013,7 @@
             module.film ||
             "";
 
-          const localVideo =
-            module.localVideo ||
-            module.localvideo ||
-            module.videoLocal ||
-            getLocalOverrideVideo(title, moduleNumber) ||
-            "";
+          const localCandidates = getLocalCandidateVideos(title, moduleNumber);
 
           const rawQuestions =
             module.fragor ||
@@ -1016,8 +1033,8 @@
             moduleNumber,
             title: moduleTitle,
             content: moduleText,
-            video: decodeHtmlEntities(dataVideo || ""),
-            localVideo: decodeHtmlEntities(localVideo || ""),
+            rawVideo: decodeHtmlEntities(dataVideo || ""),
+            localCandidates,
             questions
           };
         });
@@ -1243,7 +1260,7 @@
       }
     }
 
-    function renderModuleView(course) {
+    async function renderModuleView(course) {
       const module = course.modules.find(m => m.id === state.selectedModuleId);
       if (!module) return;
 
@@ -1257,7 +1274,7 @@
         ? `<p>${escapeHtml(module.content).replace(/\n/g, "<br>")}</p>`
         : `<p>Inget modultext-innehåll finns ännu.</p>`;
 
-      setupVideo(module);
+      await setupVideo(module);
       setupQuiz(course, module);
       setUnlockButton(course, module);
 
@@ -1271,6 +1288,7 @@
     function resetMediaPlayers() {
       const video = document.getElementById("moduleVideo");
       const placeholder = document.getElementById("videoPlaceholder");
+      video.onerror = null;
 
       try { video.pause(); } catch {}
       video.removeAttribute("src");
@@ -1279,26 +1297,42 @@
       placeholder.classList.add("hidden");
     }
 
-    function setupVideo(module) {
+    function buildVideoCandidates(module) {
+      const candidates = [];
+      const rawVideo = decodeHtmlEntities(String(module.rawVideo || "").trim());
+
+      if (rawVideo && !isSharePointStyleUrl(rawVideo)) {
+        candidates.push(rawVideo);
+      }
+
+      for (const item of (module.localCandidates || [])) {
+        if (item && !candidates.includes(item)) {
+          candidates.push(item);
+        }
+      }
+
+      return candidates;
+    }
+
+    async function setupVideo(module) {
       const video = document.getElementById("moduleVideo");
       const placeholder = document.getElementById("videoPlaceholder");
 
       resetMediaPlayers();
 
-      const dataUrl = decodeHtmlEntities(String(module.video || "").trim());
-      const localUrl = decodeHtmlEntities(String(module.localVideo || "").trim());
+      const candidates = buildVideoCandidates(module);
 
-      const urlToPlay = isSharePointStyleUrl(dataUrl)
-        ? localUrl
-        : (dataUrl || localUrl);
-
-      if (!urlToPlay) {
-        placeholder.classList.remove("hidden");
-        return;
+      for (const candidate of candidates) {
+        const exists = await urlExists(candidate);
+        if (exists) {
+          video.src = safeMediaSrc(candidate);
+          video.classList.remove("hidden");
+          video.load();
+          return;
+        }
       }
 
-      video.src = urlToPlay;
-      video.classList.remove("hidden");
+      placeholder.classList.remove("hidden");
     }
 
     function setupQuiz(course, module) {
@@ -1331,7 +1365,7 @@
 
       document.getElementById("checkAnswerBtn").onclick = () => checkAnswer(course, module);
       document.getElementById("nextQuestionBtn").onclick = () => nextQuestion(course, module);
-      document.getElementById("retryQuestionBtn").onclick = () => retryQuestion(course, module);
+      document.getElementById("retryQuestionBtn").onclick = () => retryQuestion();
 
       if (state.quiz.finished) {
         const total = questions.length;
@@ -1377,30 +1411,17 @@
       questionTitle.textContent = q.question;
       optionsBox.innerHTML = "";
 
-      if (finishedMode) {
-        feedback.textContent = "Quiz avslutat.";
-        feedback.className = "feedback ok";
-        checkBtn.disabled = true;
-        nextBtn.disabled = true;
-        retryBtn.disabled = true;
-      } else {
-        feedback.textContent = "";
-        feedback.className = "feedback";
-        nextBtn.disabled = true;
-        retryBtn.disabled = false;
-        checkBtn.disabled = state.quiz.selectedOptionIndex === null;
-      }
-
       q.options.forEach((option, optionIndex) => {
         const btn = document.createElement("button");
         btn.type = "button";
 
-        let className = "option-btn";
-        if (state.quiz.selectedOptionIndex === optionIndex) className += " selected";
+        const isSelected = state.quiz.selectedOptionIndex === optionIndex;
+        const isChecked = state.quiz.checked;
+        const isCorrect = optionIndex === q.correctIndex;
 
-        if (state.quiz.checked && optionIndex === state.quiz.selectedOptionIndex) {
-          className += (optionIndex === q.correctIndex ? " correct" : " wrong");
-        }
+        let className = "option-btn";
+        if (isSelected && !isChecked) className += " selected";
+        if (isChecked && isSelected) className += isCorrect ? " correct" : " wrong";
 
         btn.className = className;
         btn.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
@@ -1413,6 +1434,25 @@
 
         optionsBox.appendChild(btn);
       });
+
+      if (finishedMode) {
+        feedback.textContent = "Quiz avslutat.";
+        feedback.className = "feedback ok";
+        checkBtn.disabled = true;
+        nextBtn.disabled = true;
+        retryBtn.disabled = true;
+        return;
+      }
+
+      if (state.quiz.checked) {
+        checkBtn.disabled = true;
+        nextBtn.disabled = false;
+        retryBtn.disabled = false;
+      } else {
+        checkBtn.disabled = state.quiz.selectedOptionIndex === null;
+        nextBtn.disabled = true;
+        retryBtn.disabled = false;
+      }
     }
 
     function retryQuestion() {
@@ -1421,10 +1461,9 @@
       state.quiz.checked = false;
       state.quiz.selectedOptionIndex = null;
 
-      document.getElementById("feedback").textContent = "";
-      document.getElementById("feedback").className = "feedback";
-      document.getElementById("nextQuestionBtn").disabled = true;
-      document.getElementById("checkAnswerBtn").disabled = true;
+      const feedback = document.getElementById("feedback");
+      feedback.textContent = "";
+      feedback.className = "feedback";
 
       renderQuestion(false);
     }
@@ -1448,9 +1487,6 @@
         feedback.className = "feedback fail";
       }
 
-      document.getElementById("nextQuestionBtn").disabled = false;
-      document.getElementById("checkAnswerBtn").disabled = true;
-
       renderQuestion(false);
     }
 
@@ -1461,6 +1497,11 @@
         state.quiz.currentIndex += 1;
         state.quiz.selectedOptionIndex = null;
         state.quiz.checked = false;
+
+        const feedback = document.getElementById("feedback");
+        feedback.textContent = "";
+        feedback.className = "feedback";
+
         renderQuestion(false);
         return;
       }
@@ -1491,17 +1532,12 @@
       resultBox.classList.remove("hidden");
       resultText.innerHTML = passed
         ? `<p><strong>Godkänt.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Nästa modul är nu upplåst.</p>`
-        : `<p><strong>Inte godkänt ännu.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Du behöver minst 80 % för att låsa upp nästa modul.</p>`;
+        : `<p><strong>Inte godkänt ännu.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %). Du behöver minst 80 % för att låsa upp nästa modul.</p>`;
 
       refreshCourseStatus(course);
       renderCourseList();
       setUnlockButton(course, module);
-
-      document.getElementById("checkAnswerBtn").disabled = true;
-      document.getElementById("nextQuestionBtn").disabled = true;
-      document.getElementById("retryQuestionBtn").disabled = true;
-      document.getElementById("feedback").textContent = passed ? "Quiz avslutat – godkänt." : "Quiz avslutat – inte godkänt.";
-      document.getElementById("feedback").className = passed ? "feedback ok" : "feedback fail";
+      renderQuestion(true);
     }
 
     function bindEvents() {
