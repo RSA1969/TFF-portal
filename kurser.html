@@ -6,6 +6,7 @@
   <title>TFF Utbildningsportal – Kurser</title>
 
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="assets/js/kurser-data.js"></script>
 
   <style>
     :root{
@@ -496,8 +497,6 @@
       }
     }
   </style>
-
-  <script src="assets/js/kurser-data.js"></script>
 </head>
 <body>
   <div class="page">
@@ -635,7 +634,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_json_v1";
+    const STORAGE_KEY = "tff_portal_progress_json_v2";
 
     const COURSE_VIDEO_OVERRIDES = {
       "kurs-1": {
@@ -657,7 +656,10 @@
         currentIndex: 0,
         selectedOptionIndex: null,
         checked: false,
-        correctCount: 0
+        correctCount: 0,
+        moduleId: null,
+        finished: false,
+        finalPercent: 0
       },
       progress: loadProgress()
     };
@@ -703,8 +705,14 @@
       return txt.value;
     }
 
+    function getCourseSlugFallback(courseTitle) {
+      const slug = slugify(courseTitle);
+      if (slug.startsWith("kurs-1")) return "kurs-1";
+      return slug;
+    }
+
     function getOverrideVideo(courseTitle, moduleNumber) {
-      const courseSlug = slugify(courseTitle);
+      const courseSlug = getCourseSlugFallback(courseTitle);
       const byCourse = COURSE_VIDEO_OVERRIDES[courseSlug];
       if (!byCourse) return "";
       return byCourse[moduleNumber] || "";
@@ -716,13 +724,6 @@
     }
 
     async function loadRawData() {
-      try {
-        const res = await fetch("assets/data/kurser-data.json", { cache: "no-store" });
-        if (res.ok) {
-          return await res.json();
-        }
-      } catch {}
-
       if (Array.isArray(window.kursData)) return window.kursData;
       if (Array.isArray(window.KURS_DATA)) return window.KURS_DATA;
       if (Array.isArray(window.kurserData)) return window.kurserData;
@@ -731,7 +732,14 @@
       if (window.kursData && Array.isArray(window.kursData.kurser)) return window.kursData.kurser;
       if (window.KURS_DATA && Array.isArray(window.KURS_DATA.kurser)) return window.KURS_DATA.kurser;
 
-      throw new Error("Ingen kursdata hittades i assets/data/kurser-data.json eller assets/js/kurser-data.js");
+      try {
+        const res = await fetch("assets/data/kurser-data.json", { cache: "no-store" });
+        if (res.ok) {
+          return await res.json();
+        }
+      } catch {}
+
+      throw new Error("Ingen kursdata hittades i assets/js/kurser-data.js eller assets/data/kurser-data.json");
     }
 
     function extractArray(data) {
@@ -804,7 +812,6 @@
             "";
 
           const overrideVideo = getOverrideVideo(title, moduleNumber);
-
           const video = decodeHtmlEntities(overrideVideo || dataVideo || "");
 
           const rawQuestions =
@@ -874,10 +881,10 @@
 
           return {
             id: slugify(id + "-" + moduleTitle),
-            moduleNumber: moduleNumber,
+            moduleNumber,
             title: moduleTitle,
             content: moduleText,
-            video: video,
+            video,
             questions
           };
         });
@@ -958,6 +965,16 @@
       renderCourseList();
     }
 
+    function refreshCourseStatus(course) {
+      const moduleProgresses = course.modules.map(m => getModuleProgress(course.id, m.id));
+      const passedCount = moduleProgresses.filter(m => m.passed).length;
+      const percent = Math.round((passedCount / Math.max(course.modules.length, 1)) * 100);
+
+      document.getElementById("courseProgressFill").style.width = `${percent}%`;
+      document.getElementById("courseProgressText").textContent = `${passedCount} / ${course.modules.length}`;
+      document.getElementById("coursePassedText").textContent = String(passedCount);
+    }
+
     function renderCourseList() {
       const wrap = document.getElementById("courseList");
       wrap.innerHTML = "";
@@ -977,6 +994,7 @@
         btn.addEventListener("click", () => {
           state.selectedCourseId = course.id;
           state.selectedModuleId = null;
+          state.quiz.finished = false;
           localStorage.setItem("selectedCourseId", course.id);
           localStorage.setItem("selectedCourseTitle", course.title);
           renderAll();
@@ -1019,13 +1037,7 @@
       const courseSummary = document.getElementById("courseSummary");
       modulesGrid.innerHTML = "";
 
-      const moduleProgresses = course.modules.map(m => getModuleProgress(course.id, m.id));
-      const passedCount = moduleProgresses.filter(m => m.passed).length;
-      const percent = Math.round((passedCount / Math.max(course.modules.length, 1)) * 100);
-
-      document.getElementById("courseProgressFill").style.width = `${percent}%`;
-      document.getElementById("courseProgressText").textContent = `${passedCount} / ${course.modules.length}`;
-      document.getElementById("coursePassedText").textContent = String(passedCount);
+      refreshCourseStatus(course);
 
       courseSummary.innerHTML = `
         <p><strong>${escapeHtml(course.title)}</strong></p>
@@ -1059,10 +1071,14 @@
         if (prevPassed) {
           card.addEventListener("click", () => {
             state.selectedModuleId = module.id;
+            state.quiz.questions = [];
             state.quiz.currentIndex = 0;
             state.quiz.selectedOptionIndex = null;
             state.quiz.checked = false;
             state.quiz.correctCount = 0;
+            state.quiz.moduleId = module.id;
+            state.quiz.finished = false;
+            state.quiz.finalPercent = 0;
             renderAll();
           });
         }
@@ -1076,24 +1092,8 @@
       return s.length > maxLen ? s.slice(0, maxLen - 1) + "…" : s;
     }
 
-    function renderModuleView(course) {
-      const module = course.modules.find(m => m.id === state.selectedModuleId);
-      if (!module) return;
-
-      document.getElementById("courseTitle").textContent = course.title;
-      document.getElementById("courseIntro").textContent = course.description || "";
-
+    function setUnlockButton(course, module) {
       const moduleProgress = getModuleProgress(course.id, module.id);
-
-      document.getElementById("moduleTitle").textContent = module.title;
-      document.getElementById("moduleSubtitle").textContent = `${course.title} – Modul ${module.moduleNumber}`;
-      document.getElementById("moduleContent").innerHTML = module.content
-        ? `<p>${escapeHtml(module.content).replace(/\n/g, "<br>")}</p>`
-        : `<p>Inget modultext-innehåll finns ännu.</p>`;
-
-      setupVideo(module.video);
-      setupQuiz(course, module);
-
       const currentIndex = course.modules.findIndex(m => m.id === module.id);
       const nextModule = course.modules[currentIndex + 1];
       const unlockBtn = document.getElementById("unlockNextBtn");
@@ -1103,22 +1103,48 @@
         unlockBtn.textContent = "Öppna nästa modul";
         unlockBtn.onclick = () => {
           state.selectedModuleId = nextModule.id;
+          state.quiz.questions = [];
           state.quiz.currentIndex = 0;
           state.quiz.selectedOptionIndex = null;
           state.quiz.checked = false;
           state.quiz.correctCount = 0;
+          state.quiz.moduleId = nextModule.id;
+          state.quiz.finished = false;
+          state.quiz.finalPercent = 0;
           renderAll();
         };
       } else if (!nextModule) {
         unlockBtn.disabled = true;
         unlockBtn.textContent = "Sista modulen";
+        unlockBtn.onclick = null;
       } else {
         unlockBtn.disabled = true;
         unlockBtn.textContent = "Nästa modul";
+        unlockBtn.onclick = null;
       }
+    }
+
+    function renderModuleView(course) {
+      const module = course.modules.find(m => m.id === state.selectedModuleId);
+      if (!module) return;
+
+      document.getElementById("courseTitle").textContent = course.title;
+      document.getElementById("courseIntro").textContent = course.description || "";
+      refreshCourseStatus(course);
+
+      document.getElementById("moduleTitle").textContent = module.title;
+      document.getElementById("moduleSubtitle").textContent = `${course.title} – Modul ${module.moduleNumber}`;
+      document.getElementById("moduleContent").innerHTML = module.content
+        ? `<p>${escapeHtml(module.content).replace(/\n/g, "<br>")}</p>`
+        : `<p>Inget modultext-innehåll finns ännu.</p>`;
+
+      setupVideo(module.video);
+      setupQuiz(course, module);
+      setUnlockButton(course, module);
 
       document.getElementById("backToCourseBtn").onclick = () => {
         state.selectedModuleId = null;
+        state.quiz.finished = false;
         renderAll();
       };
     }
@@ -1128,7 +1154,7 @@
       const iframe = document.getElementById("moduleIframe");
       const placeholder = document.getElementById("videoPlaceholder");
 
-      video.pause();
+      try { video.pause(); } catch {}
       video.removeAttribute("src");
       video.load();
       video.classList.add("hidden");
@@ -1165,19 +1191,24 @@
 
     function setupQuiz(course, module) {
       const questions = module.questions || [];
-      state.quiz.questions = questions;
-      state.quiz.currentIndex = 0;
-      state.quiz.selectedOptionIndex = null;
-      state.quiz.checked = false;
-      state.quiz.correctCount = 0;
-
       const noQuizBox = document.getElementById("noQuizBox");
       const quizContainer = document.getElementById("quizContainer");
       const resultBox = document.getElementById("resultBox");
+      const resultText = document.getElementById("resultText");
 
-      resultBox.classList.add("hidden");
+      if (state.quiz.moduleId !== module.id || !Array.isArray(state.quiz.questions) || state.quiz.questions.length === 0) {
+        state.quiz.questions = questions;
+        state.quiz.currentIndex = 0;
+        state.quiz.selectedOptionIndex = null;
+        state.quiz.checked = false;
+        state.quiz.correctCount = 0;
+        state.quiz.moduleId = module.id;
+        state.quiz.finished = false;
+        state.quiz.finalPercent = 0;
+      }
 
       if (!questions.length) {
+        resultBox.classList.add("hidden");
         noQuizBox.classList.remove("hidden");
         quizContainer.classList.add("hidden");
         return;
@@ -1188,49 +1219,92 @@
 
       document.getElementById("checkAnswerBtn").onclick = () => checkAnswer(course, module);
       document.getElementById("nextQuestionBtn").onclick = () => nextQuestion(course, module);
-      document.getElementById("retryQuestionBtn").onclick = retryQuestion;
+      document.getElementById("retryQuestionBtn").onclick = () => retryQuestion(course, module);
 
-      renderQuestion(course, module);
+      if (state.quiz.finished) {
+        const total = questions.length;
+        resultBox.classList.remove("hidden");
+        resultText.innerHTML = state.quiz.finalPercent >= 80
+          ? `<p><strong>Godkänt.</strong></p><p>Du fick ${state.quiz.correctCount} av ${total} rätt (${state.quiz.finalPercent} %).</p><p>Nästa modul är nu upplåst.</p>`
+          : `<p><strong>Inte godkänt ännu.</strong></p><p>Du fick ${state.quiz.correctCount} av ${total} rätt (${state.quiz.finalPercent} %).</p><p>Du behöver minst 80 % för att låsa upp nästa modul.</p>`;
+        renderQuestion(course, module, true);
+        return;
+      }
+
+      resultBox.classList.add("hidden");
+      renderQuestion(course, module, false);
     }
 
-    function renderQuestion(course, module) {
+    function renderQuestion(course, module, finishedMode = false) {
       const questions = state.quiz.questions;
       const index = state.quiz.currentIndex;
       const q = questions[index];
 
-      document.getElementById("quizProgress").textContent = `Fråga ${index + 1} / ${questions.length}`;
+      document.getElementById("quizProgress").textContent = `Fråga ${Math.min(index + 1, questions.length)} / ${questions.length}`;
       document.getElementById("quizScoreLive").textContent = `Rätt hittills: ${state.quiz.correctCount}`;
-      document.getElementById("questionTitle").textContent = q.question;
 
       const optionsBox = document.getElementById("optionsBox");
       const feedback = document.getElementById("feedback");
       const checkBtn = document.getElementById("checkAnswerBtn");
       const nextBtn = document.getElementById("nextQuestionBtn");
+      const retryBtn = document.getElementById("retryQuestionBtn");
 
-      feedback.textContent = "";
-      feedback.className = "feedback";
-      nextBtn.disabled = true;
-      checkBtn.disabled = state.quiz.selectedOptionIndex === null;
+      if (!q) {
+        document.getElementById("questionTitle").textContent = "Inga fler frågor.";
+        optionsBox.innerHTML = "";
+        feedback.textContent = "";
+        checkBtn.disabled = true;
+        nextBtn.disabled = true;
+        retryBtn.disabled = true;
+        return;
+      }
 
+      document.getElementById("questionTitle").textContent = q.question;
       optionsBox.innerHTML = "";
+
+      if (finishedMode) {
+        feedback.textContent = "Quiz avslutat.";
+        feedback.className = "feedback ok";
+        checkBtn.disabled = true;
+        nextBtn.disabled = true;
+        retryBtn.disabled = true;
+      } else {
+        feedback.textContent = "";
+        feedback.className = "feedback";
+        nextBtn.disabled = true;
+        retryBtn.disabled = false;
+        checkBtn.disabled = state.quiz.selectedOptionIndex === null;
+      }
 
       q.options.forEach((option, optionIndex) => {
         const btn = document.createElement("button");
         btn.type = "button";
-        btn.className = "option-btn" + (state.quiz.selectedOptionIndex === optionIndex ? " selected" : "");
+
+        let className = "option-btn";
+        if (state.quiz.selectedOptionIndex === optionIndex) className += " selected";
+
+        if (state.quiz.checked) {
+          if (optionIndex === state.quiz.selectedOptionIndex) {
+            className += (optionIndex === q.correctIndex ? " correct" : " wrong");
+          }
+        }
+
+        btn.className = className;
         btn.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
 
         btn.addEventListener("click", () => {
-          if (state.quiz.checked) return;
+          if (state.quiz.checked || finishedMode) return;
           state.quiz.selectedOptionIndex = optionIndex;
-          renderQuestion(course, module);
+          renderQuestion(course, module, false);
         });
 
         optionsBox.appendChild(btn);
       });
     }
 
-    function retryQuestion() {
+    function retryQuestion(course, module) {
+      if (state.quiz.finished) return;
+
       state.quiz.checked = false;
       state.quiz.selectedOptionIndex = null;
 
@@ -1239,26 +1313,17 @@
       document.getElementById("nextQuestionBtn").disabled = true;
       document.getElementById("checkAnswerBtn").disabled = true;
 
-      document.querySelectorAll(".option-btn").forEach(btn => {
-        btn.classList.remove("selected", "correct", "wrong");
-      });
+      renderQuestion(course, module, false);
     }
 
     function checkAnswer(course, module) {
-      if (state.quiz.selectedOptionIndex === null || state.quiz.checked) return;
+      if (state.quiz.selectedOptionIndex === null || state.quiz.checked || state.quiz.finished) return;
 
       state.quiz.checked = true;
 
       const q = state.quiz.questions[state.quiz.currentIndex];
       const selected = state.quiz.selectedOptionIndex;
       const isCorrect = selected === q.correctIndex;
-
-      document.querySelectorAll(".option-btn").forEach((btn, idx) => {
-        btn.classList.remove("selected");
-        if (idx === selected) {
-          btn.classList.add(isCorrect ? "correct" : "wrong");
-        }
-      });
 
       const feedback = document.getElementById("feedback");
       if (isCorrect) {
@@ -1271,16 +1336,19 @@
       }
 
       document.getElementById("nextQuestionBtn").disabled = false;
+      document.getElementById("checkAnswerBtn").disabled = true;
+
+      renderQuestion(course, module, false);
     }
 
     function nextQuestion(course, module) {
-      if (!state.quiz.checked) return;
+      if (!state.quiz.checked || state.quiz.finished) return;
 
       if (state.quiz.currentIndex < state.quiz.questions.length - 1) {
         state.quiz.currentIndex += 1;
         state.quiz.selectedOptionIndex = null;
         state.quiz.checked = false;
-        renderQuestion(course, module);
+        renderQuestion(course, module, false);
         return;
       }
 
@@ -1301,6 +1369,9 @@
       moduleProgress.completed = true;
       saveProgress();
 
+      state.quiz.finished = true;
+      state.quiz.finalPercent = percent;
+
       const resultBox = document.getElementById("resultBox");
       const resultText = document.getElementById("resultText");
 
@@ -1309,8 +1380,15 @@
         ? `<p><strong>Godkänt.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Nästa modul är nu upplåst.</p>`
         : `<p><strong>Inte godkänt ännu.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Du behöver minst 80 % för att låsa upp nästa modul.</p>`;
 
-      renderAll();
-      document.getElementById("resultBox").classList.remove("hidden");
+      refreshCourseStatus(course);
+      renderCourseList();
+      setUnlockButton(course, module);
+
+      document.getElementById("checkAnswerBtn").disabled = true;
+      document.getElementById("nextQuestionBtn").disabled = true;
+      document.getElementById("retryQuestionBtn").disabled = true;
+      document.getElementById("feedback").textContent = passed ? "Quiz avslutat – godkänt." : "Quiz avslutat – inte godkänt.";
+      document.getElementById("feedback").className = passed ? "feedback ok" : "feedback fail";
     }
 
     function bindEvents() {
@@ -1322,6 +1400,14 @@
         localStorage.removeItem(STORAGE_KEY);
         state.progress = {};
         state.selectedModuleId = null;
+        state.quiz.questions = [];
+        state.quiz.currentIndex = 0;
+        state.quiz.selectedOptionIndex = null;
+        state.quiz.checked = false;
+        state.quiz.correctCount = 0;
+        state.quiz.moduleId = null;
+        state.quiz.finished = false;
+        state.quiz.finalPercent = 0;
         renderAll();
       });
     }
@@ -1344,7 +1430,7 @@
           <div style="max-width:760px; padding:24px; background:#fff; border:1px solid #e5e7eb; border-radius:14px;">
             <h3 style="margin-top:0;">Kunde inte läsa kursdata</h3>
             <p style="color:#667085; line-height:1.7;">
-              Kontrollera att <strong>assets/data/kurser-data.json</strong> eller <strong>assets/js/kurser-data.js</strong> innehåller kursdata.
+              Kontrollera att <strong>assets/js/kurser-data.js</strong> eller <strong>assets/data/kurser-data.json</strong> innehåller kursdata.
             </p>
             <pre style="white-space:pre-wrap; background:#f8fafc; padding:12px; border-radius:10px; border:1px solid #e5e7eb;">${escapeHtml(error.message)}</pre>
           </div>
