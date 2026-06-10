@@ -344,13 +344,16 @@
       background: #0b1220;
       border: 1px solid #111827;
       margin-bottom: 16px;
+      min-height: 320px;
     }
 
-    .video-shell video {
+    .video-shell video,
+    .video-shell iframe {
       display: block;
       width: 100%;
-      max-height: 520px;
+      height: 520px;
       background: #000;
+      border: 0;
     }
 
     .video-placeholder {
@@ -480,10 +483,20 @@
         height: auto;
       }
       .main { padding: 18px; }
+      .video-shell video,
+      .video-shell iframe {
+        height: 360px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .video-shell video,
+      .video-shell iframe {
+        height: 240px;
+      }
     }
   </style>
 
-  <!-- Fallback om du redan använder global JS-data -->
   <script src="assets/js/kurser-data.js"></script>
 </head>
 <body>
@@ -558,7 +571,17 @@
             </div>
 
             <div class="video-shell" id="videoShell">
-              <video id="moduleVideo" controls playsinline preload="metadata"></video>
+              <iframe
+                id="moduleIframe"
+                class="hidden"
+                loading="lazy"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin">
+              </iframe>
+
+              <video id="moduleVideo" class="hidden" controls playsinline preload="metadata"></video>
+
               <div id="videoPlaceholder" class="video-placeholder hidden">
                 Ingen video hittades för denna modul.
               </div>
@@ -614,6 +637,16 @@
   <script>
     const STORAGE_KEY = "tff_portal_progress_json_v1";
 
+    const COURSE_VIDEO_OVERRIDES = {
+      "kurs-1": {
+        1: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%201%20Vad%20%C3%A4r%20Teams%20(och%20vad%20%C3%A4r%20det%20inte).mp4?csf=1&web=1&e=1BkUbj",
+        2: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%202%20Chat,%20kanal%20och%20m%C3%B6te%20%E2%80%93%20r%C3%A4tt%20val.mp4?csf=1&web=1&e=XxlPTg",
+        3: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%202%20Chat,%20kanal%20och%20m%C3%B6te%20%E2%80%93%20r%C3%A4tt%20val.mp4?csf=1&web=1&e=XxlPTg",
+        4: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%204%20Filer%20i%20Teams%20(SharePoint%20i%20bakgrunden).mp4?csf=1&web=1&e=9ITTNJ",
+        5: "https://halmstad.sharepoint.com/:v:/r/sites/TestavTeammedbibliotek/Delade%20dokument/Kurser/Kurs%201%20%E2%80%93%20MICROSOFT%20TEAMS%20-%20GRUND%20%26%20ARBETSS%C3%84T/Modul%205%20Vanliga%20misstag%20i%20kommunal%20Teams%E2%80%91anv%C3%A4ndning.mp4?csf=1&web=1&e=UWrfeH"
+      }
+    };
+
     const state = {
       data: [],
       filteredData: [],
@@ -662,6 +695,24 @@
 
     function normalizeText(text) {
       return String(text || "").trim().toLowerCase();
+    }
+
+    function decodeHtmlEntities(str) {
+      const txt = document.createElement("textarea");
+      txt.innerHTML = String(str || "");
+      return txt.value;
+    }
+
+    function getOverrideVideo(courseTitle, moduleNumber) {
+      const courseSlug = slugify(courseTitle);
+      const byCourse = COURSE_VIDEO_OVERRIDES[courseSlug];
+      if (!byCourse) return "";
+      return byCourse[moduleNumber] || "";
+    }
+
+    function isSharePointStyleUrl(url) {
+      const value = String(url || "").toLowerCase();
+      return value.includes("sharepoint.com") || value.includes("office.com");
     }
 
     async function loadRawData() {
@@ -736,7 +787,14 @@
             module.syfte ||
             "";
 
-          const video =
+          const moduleNumber = Number(
+            module.modulNummer ||
+            module.modulnummer ||
+            module.nr ||
+            (moduleIndex + 1)
+          );
+
+          const dataVideo =
             module.video ||
             module.videoUrl ||
             module.videoURL ||
@@ -744,6 +802,10 @@
             module.src ||
             module.film ||
             "";
+
+          const overrideVideo = getOverrideVideo(title, moduleNumber);
+
+          const video = decodeHtmlEntities(overrideVideo || dataVideo || "");
 
           const rawQuestions =
             module.fragor ||
@@ -812,7 +874,7 @@
 
           return {
             id: slugify(id + "-" + moduleTitle),
-            moduleNumber: module.modulNummer || module.modulnummer || module.nr || (moduleIndex + 1),
+            moduleNumber: moduleNumber,
             title: moduleTitle,
             content: moduleText,
             video: video,
@@ -1061,20 +1123,44 @@
       };
     }
 
-    function setupVideo(videoUrl) {
+    function resetMediaPlayers() {
       const video = document.getElementById("moduleVideo");
+      const iframe = document.getElementById("moduleIframe");
       const placeholder = document.getElementById("videoPlaceholder");
 
-      if (videoUrl) {
-        video.src = videoUrl;
-        video.classList.remove("hidden");
-        placeholder.classList.add("hidden");
-      } else {
-        video.removeAttribute("src");
-        video.load();
-        video.classList.add("hidden");
+      video.pause();
+      video.removeAttribute("src");
+      video.load();
+      video.classList.add("hidden");
+
+      iframe.removeAttribute("src");
+      iframe.classList.add("hidden");
+
+      placeholder.classList.add("hidden");
+    }
+
+    function setupVideo(videoUrl) {
+      const video = document.getElementById("moduleVideo");
+      const iframe = document.getElementById("moduleIframe");
+      const placeholder = document.getElementById("videoPlaceholder");
+
+      resetMediaPlayers();
+
+      const url = decodeHtmlEntities(String(videoUrl || "").trim());
+
+      if (!url) {
         placeholder.classList.remove("hidden");
+        return;
       }
+
+      if (isSharePointStyleUrl(url)) {
+        iframe.src = url;
+        iframe.classList.remove("hidden");
+        return;
+      }
+
+      video.src = url;
+      video.classList.remove("hidden");
     }
 
     function setupQuiz(course, module) {
