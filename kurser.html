@@ -255,7 +255,7 @@
       color: var(--muted);
       font-size: .92rem;
       line-height: 1.5;
-      min-height: 44px;
+      min-height: 50px;
     }
 
     .badge-row {
@@ -367,7 +367,7 @@
     }
 
     .video-placeholder-inner {
-      max-width: 620px;
+      max-width: 700px;
     }
 
     .video-placeholder-title {
@@ -645,27 +645,177 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_json_all15_v2";
+    const STORAGE_KEY = "tff_portal_progress_all15_v3";
 
-    const courseTitles = [
-      "Kurs 1 – MICROSOFT TEAMS",
-      "Kurs 2 – TRANSKRIBERING",
-      "Kurs 3 – DOKUMENTATION",
-      "Kurs 4 – AI & COPILOT",
-      "Kurs 5 – PROMPTNING",
-      "Kurs 6 – SKAPA OCH SPARA DOKUMENT",
-      "Kurs 7 – TEAMS & SHAREPOINT",
-      "Kurs 8 – GDPR",
-      "Kurs 9 – DIARIEFÖRING OCH ARKIVERING",
-      "Kurs 10 – INFORMATIONSSÄKERHET",
-      "Kurs 11 – NIS2",
-      "Kurs 12 – BRANDSKYDD",
-      "Kurs 13 – FÖRSTA HJÄLPEN",
-      "Kurs 14 – KVALITET OCH PROCESSER",
-      "Kurs 15 – AUTOMATION"
+    const COURSE_DEFINITIONS = [
+      {
+        title: "Kurs 1 – MICROSOFT TEAMS",
+        description: "Microsoft Teams i kommunal verksamhet med fokus på struktur, samarbete och korrekt användning.",
+        modules: [
+          "Vad är Teams (och vad är det inte)",
+          "Chat, kanal och möte – rätt val",
+          "Arbetssätt i Teams",
+          "Filer i Teams",
+          "Vanliga misstag i kommunal Teams-användning"
+        ]
+      },
+      {
+        title: "Kurs 2 – TRANSKRIBERING",
+        description: "Transkribering av möten och material på ett strukturerat och kvalitetssäkrat sätt.",
+        modules: [
+          "Vad är transkribering",
+          "När transkribering ska användas",
+          "Kvalitet i transkriberad text",
+          "Granskning och rättning",
+          "Lagring och uppföljning"
+        ]
+      },
+      {
+        title: "Kurs 3 – DOKUMENTATION",
+        description: "Dokumentation i offentlig verksamhet med tydlighet, spårbarhet och kvalitet.",
+        modules: [
+          "Syfte med dokumentation",
+          "Tydlig struktur i dokument",
+          "Ansvar och roller",
+          "Versioner och ändringar",
+          "Uppföljning och kvalitet"
+        ]
+      },
+      {
+        title: "Kurs 4 – AI & COPILOT",
+        description: "Introduktion till AI och Copilot med fokus på nytta, begränsningar och säker användning.",
+        modules: [
+          "Vad AI och Copilot är",
+          "När Copilot passar bra",
+          "Risker och begränsningar",
+          "Källkritik och kvalitetssäkring",
+          "Ansvarsfull användning"
+        ]
+      },
+      {
+        title: "Kurs 5 – PROMPTNING",
+        description: "Praktisk promptning för tydligare resultat, bättre kvalitet och effektivare arbete.",
+        modules: [
+          "Vad en bra prompt innehåller",
+          "Tydliga instruktioner",
+          "Kontext, mål och format",
+          "Iterativ förbättring",
+          "Vanliga promptmisstag"
+        ]
+      },
+      {
+        title: "Kurs 6 – SKAPA OCH SPARA DOKUMENT",
+        description: "Skapa, namnge, spara och hantera dokument på ett strukturerat sätt.",
+        modules: [
+          "Skapa dokument rätt från början",
+          "Filnamn och struktur",
+          "Spara på rätt plats",
+          "Delning och åtkomst",
+          "Arkivering och livscykel"
+        ]
+      },
+      {
+        title: "Kurs 7 – TEAMS & SHAREPOINT",
+        description: "Samspelet mellan Teams och SharePoint för samarbete, filer och informationshantering.",
+        modules: [
+          "Hur Teams och SharePoint hänger ihop",
+          "Dokumentbibliotek och mappar",
+          "Behörigheter och åtkomst",
+          "Samarbete i gemensamma ytor",
+          "Vanliga fel och hur de undviks"
+        ]
+      },
+      {
+        title: "Kurs 8 – GDPR",
+        description: "Grundläggande GDPR med fokus på personuppgifter, ansvar och korrekt hantering.",
+        modules: [
+          "Vad personuppgifter är",
+          "Rättslig grund och syfte",
+          "Minimering och korrekthet",
+          "Lagring, gallring och skydd",
+          "Incidenter och rapportering"
+        ]
+      },
+      {
+        title: "Kurs 9 – DIARIEFÖRING OCH ARKIVERING",
+        description: "Korrekt hantering av allmänna handlingar, diarieföring och arkivering.",
+        modules: [
+          "Allmän handling och registrering",
+          "Diarieföring i praktiken",
+          "Ordning och spårbarhet",
+          "Arkivering och bevarande",
+          "Vanliga fel och rätt arbetssätt"
+        ]
+      },
+      {
+        title: "Kurs 10 – INFORMATIONSSÄKERHET",
+        description: "Informationssäkerhet med fokus på skydd, tillgänglighet och korrekt hantering.",
+        modules: [
+          "Vad informationssäkerhet innebär",
+          "Konfidentialitet, riktighet, tillgänglighet",
+          "Säkert arbetssätt i vardagen",
+          "Behörigheter och åtkomst",
+          "Incidenter och rapportering"
+        ]
+      },
+      {
+        title: "Kurs 11 – NIS2",
+        description: "Introduktion till NIS2 och varför styrning, säkerhet och uppföljning är centralt.",
+        modules: [
+          "Vad NIS2 är",
+          "Ansvar och styrning",
+          "Riskhantering",
+          "Rapportering och uppföljning",
+          "Praktisk tillämpning"
+        ]
+      },
+      {
+        title: "Kurs 12 – BRANDSKYDD",
+        description: "Systematiskt brandskyddsarbete med roller, rutiner och förebyggande åtgärder.",
+        modules: [
+          "Grundläggande brandskydd",
+          "Förebyggande arbete",
+          "Utrustning och utrymning",
+          "Ansvar och rutiner",
+          "Kontroll och uppföljning"
+        ]
+      },
+      {
+        title: "Kurs 13 – FÖRSTA HJÄLPEN",
+        description: "Första hjälpen i verksamheten med fokus på larm, bedömning och tidiga åtgärder.",
+        modules: [
+          "Larma och skapa överblick",
+          "Akuta åtgärder",
+          "Hjärtstartare och HLR",
+          "Efter åtgärd och dokumentation",
+          "Övning och beredskap"
+        ]
+      },
+      {
+        title: "Kurs 14 – KVALITET OCH PROCESSER",
+        description: "Kvalitet, processer och förbättringsarbete i kommunal verksamhet.",
+        modules: [
+          "Vad kvalitet innebär",
+          "Processer och flöden",
+          "Roller, ansvar och uppföljning",
+          "Avvikelse och förbättring",
+          "Ständig utveckling"
+        ]
+      },
+      {
+        title: "Kurs 15 – AUTOMATION",
+        description: "Automation i vardagen med fokus på nytta, kontroll och hållbar förvaltning.",
+        modules: [
+          "Vad automation är",
+          "När automation passar",
+          "Flöden, data och regler",
+          "Risker och kontroller",
+          "Förvaltning och vidareutveckling"
+        ]
+      }
     ];
 
-    const course1Videos = {
+    const COURSE1_VIDEOS = {
       1: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAM56HkswSuTqBrEbVQQ5ePAWBcTcx6K49JZCSwLZIFgbE?e=VE3KoP",
       2: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAr_hBecxAwQb9p9XUahrG-AQQ6XbywLFqDweOoMt_sTI8?e=gBLfmw",
       3: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQCfj1MJmA4ATI5hT6kTWj3UAZFBBW-YGwurdSzUD8uVXQ0?e=S8J94O",
@@ -679,8 +829,12 @@
       selectedCourseId: null,
       selectedModuleId: null,
       progress: loadProgress(),
-      quiz: {
-        moduleId: null,
+      quiz: createEmptyQuizState()
+    };
+
+    function createEmptyQuizState(moduleId = null) {
+      return {
+        moduleId,
         questions: [],
         currentIndex: 0,
         selectedOptionIndex: null,
@@ -688,8 +842,8 @@
         correctCount: 0,
         finished: false,
         finalPercent: 0
-      }
-    };
+      };
+    }
 
     function loadProgress() {
       try {
@@ -716,17 +870,18 @@
       return String(text || "").trim().toLowerCase();
     }
 
+    function slugify(text) {
+      return String(text || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[–—]/g, "-")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
+
     function resetQuizState(moduleId = null) {
-      state.quiz = {
-        moduleId,
-        questions: [],
-        currentIndex: 0,
-        selectedOptionIndex: null,
-        checked: false,
-        correctCount: 0,
-        finished: false,
-        finalPercent: 0
-      };
+      state.quiz = createEmptyQuizState(moduleId);
     }
 
     function getCourseProgress(courseId) {
@@ -750,148 +905,138 @@
       return courseProgress.modules[moduleId];
     }
 
-    function makeQuestions(courseTitle, moduleNumber) {
-      const correctIndexes = [0,1,2,3,0,1,2,3,0,1];
+    function buildQuestionSet(courseTitle, moduleTitle, moduleNumber) {
+      const moduleText = `${courseTitle} – ${moduleTitle}`;
+      const correctPattern = [0,1,2,3,0,1,2,3,0,1];
 
       return [
         {
-          question: `${courseTitle}: Vad är huvudsyftet med modul ${moduleNumber}?`,
+          question: `${moduleText}: Vad är huvudfokus i modul ${moduleNumber}?`,
           options: [
-            "Att förstå grunderna och arbeta strukturerat",
-            "Att undvika samarbete helt",
-            "Att spara allt lokalt utan struktur",
-            "Att hoppa över dokumentation"
+            `Att förstå grunderna i ${moduleTitle.toLowerCase()}`,
+            "Att hoppa över gemensamma arbetssätt",
+            "Att arbeta utan struktur",
+            "Att undvika dokumentation helt"
           ],
-          correctIndex: correctIndexes[0]
+          correctIndex: correctPattern[0]
         },
         {
-          question: `${courseTitle}: Vilket arbetssätt är bäst?`,
+          question: `${moduleText}: Vilket arbetssätt är mest korrekt?`,
           options: [
-            "Slumpmässig hantering utan ansvar",
-            "Tydlig struktur och gemensamma rutiner",
-            "Många parallella kopior",
-            "Ingen uppföljning"
+            "Att använda privata lösningar utan styrning",
+            "Att följa tydliga rutiner och gemensam struktur",
+            "Att undvika uppföljning",
+            "Att spara flera osynkade kopior"
           ],
-          correctIndex: correctIndexes[1]
+          correctIndex: correctPattern[1]
         },
         {
-          question: `${courseTitle}: Vad bör undvikas?`,
+          question: `${moduleText}: Vad bör undvikas?`,
           options: [
             "Tydlig ansvarsfördelning",
-            "Gemensam information",
-            "Kaos och dubbelarbete",
-            "Strukturerad lagring"
+            "Gemensamma informationsytor",
+            "Otydlighet och dubbelarbete",
+            "Strukturerad hantering"
           ],
-          correctIndex: correctIndexes[2]
+          correctIndex: correctPattern[2]
         },
         {
-          question: `${courseTitle}: Vad stödjer kvalitet i arbetet?`,
+          question: `${moduleText}: Vad stödjer kvalitet och spårbarhet?`,
           options: [
-            "Otydliga instruktioner",
-            "Ingen versionskontroll",
-            "Privata kopior",
-            "Standardiserade arbetssätt"
-          ],
-          correctIndex: correctIndexes[3]
-        },
-        {
-          question: `${courseTitle}: Vad ger bäst spårbarhet?`,
-          options: [
-            "Dokumentation och ordning",
             "Muntliga överenskommelser utan notering",
-            "Lokal lagring utan namnstandard",
-            "Ostrukturerade mappar"
+            "Ostrukturerad lagring",
+            "Privata versioner",
+            "Dokumentation, ordning och tydligt ansvar"
           ],
-          correctIndex: correctIndexes[4]
+          correctIndex: correctPattern[3]
         },
         {
-          question: `${courseTitle}: Vad är mest effektivt?`,
+          question: `${moduleText}: Vad är viktigt för efterlevnad?`,
           options: [
-            "Alltid samma verktyg oavsett behov",
-            "Rätt verktyg för rätt syfte",
-            "Ingen planering",
-            "Separata privata lösningar"
+            "Att arbeta enligt fastställda rutiner",
+            "Att varje person gör på sitt eget sätt",
+            "Att undvika kontroll",
+            "Att hoppa över uppföljning"
           ],
-          correctIndex: correctIndexes[5]
+          correctIndex: correctPattern[4]
         },
         {
-          question: `${courseTitle}: Vad minskar risken för fel?`,
+          question: `${moduleText}: Vad ger bäst samarbete?`,
+          options: [
+            "Många separata kopior i e-post",
+            "Gemensamma ytor, tydlighet och rätt verktyg",
+            "Ingen ansvarsfördelning",
+            "Endast lokal lagring"
+          ],
+          correctIndex: correctPattern[5]
+        },
+        {
+          question: `${moduleText}: Vad minskar risken för fel?`,
           options: [
             "Ad hoc-beslut utan struktur",
-            "Dubbelregistrering",
-            "Tydliga principer och rutiner",
-            "Oklara ansvar"
+            "Oklara roller",
+            "Standardiserat arbetssätt och uppföljning",
+            "Flera parallella arbetsmetoder"
           ],
-          correctIndex: correctIndexes[6]
+          correctIndex: correctPattern[6]
         },
         {
-          question: `${courseTitle}: Vad är viktigt i samarbete?`,
+          question: `${moduleText}: Vilken slutsats är mest riktig?`,
           options: [
-            "Enbart personliga filer",
-            "Många mejlversioner",
-            "Ingen uppföljning",
-            "Gemensamma ytor och tydlighet"
-          ],
-          correctIndex: correctIndexes[7]
-        },
-        {
-          question: `${courseTitle}: Vad bidrar till efterlevnad?`,
-          options: [
-            "Struktur, dokumentation och uppföljning",
-            "Otydliga roller",
-            "Spontana arbetssätt utan kontroll",
-            "Ingen versionshistorik"
-          ],
-          correctIndex: correctIndexes[8]
-        },
-        {
-          question: `${courseTitle}: Vad är rätt slutsats från modul ${moduleNumber}?`,
-          options: [
-            "Det spelar ingen roll hur man arbetar",
-            "Ordning, struktur och rätt användning av verktyg är centralt",
+            "Det spelar ingen roll hur arbetet utförs",
             "Privata lösningar är alltid bäst",
-            "Dokumentation behövs inte"
+            "Dokumentation behövs inte",
+            `God struktur är central i ${moduleTitle.toLowerCase()}`
           ],
-          correctIndex: correctIndexes[9]
+          correctIndex: correctPattern[7]
+        },
+        {
+          question: `${moduleText}: Vad är bäst vid praktiskt arbete?`,
+          options: [
+            "Att följa gemensam struktur och dokumenterade rutiner",
+            "Att vänta med kvalitetssäkring till slutet",
+            "Att undvika versionshantering",
+            "Att arbeta utan gemensamma principer"
+          ],
+          correctIndex: correctPattern[8]
+        },
+        {
+          question: `${moduleText}: Vad är rätt sammanfattning av modulen?`,
+          options: [
+            "Arbetssättet saknar betydelse",
+            `Rätt struktur, rätt verktyg och tydligt ansvar ger bättre resultat i ${moduleTitle.toLowerCase()}`,
+            "Dokumentation kan alltid hoppas över",
+            "Uppföljning är onödigt"
+          ],
+          correctIndex: correctPattern[9]
         }
       ];
     }
 
     function buildData() {
-      return courseTitles.map((title, courseIndex) => {
+      return COURSE_DEFINITIONS.map((courseDef, courseIndex) => {
         const courseNumber = courseIndex + 1;
-
-        let moduleTitles = [
-          "Modul 1",
-          "Modul 2",
-          "Modul 3",
-          "Modul 4",
-          "Modul 5"
-        ];
-
-        if (courseNumber === 1) {
-          moduleTitles = [
-            "Vad är Teams (och vad är det inte)",
-            "Chat, kanal och möte – rätt val",
-            "Arbetssätt i Teams",
-            "Filer i Teams",
-            "Vanliga misstag i kommunal Teams-användning"
-          ];
-        }
 
         return {
           id: `kurs-${courseNumber}`,
-          title,
-          description: `${title} innehåller 5 moduler med film och kunskapskontroll.`,
-          modules: moduleTitles.map((moduleTitle, moduleIndex) => ({
-            id: `kurs-${courseNumber}-modul-${moduleIndex + 1}`,
-            moduleNumber: moduleIndex + 1,
-            title: moduleTitle,
-            content: `${moduleTitle}. Här visas modulens innehåll och tillhörande quiz.`,
-            videoType: courseNumber === 1 ? "sharepoint-link" : "none",
-            videoUrl: courseNumber === 1 ? course1Videos[moduleIndex + 1] : "",
-            questions: makeQuestions(title, moduleIndex + 1)
-          }))
+          courseNumber,
+          title: courseDef.title,
+          description: courseDef.description,
+          modules: courseDef.modules.map((moduleTitle, moduleIndex) => {
+            const moduleNumber = moduleIndex + 1;
+            const videoUrl = courseNumber === 1 ? (COURSE1_VIDEOS[moduleNumber] || "") : "";
+            const videoType = courseNumber === 1 ? "sharepoint-link" : "none";
+
+            return {
+              id: `kurs-${courseNumber}-modul-${moduleNumber}`,
+              moduleNumber,
+              title: moduleTitle,
+              content: `${moduleTitle}. Här visas modulens innehåll och tillhörande quiz.`,
+              videoType,
+              videoUrl,
+              questions: buildQuestionSet(courseDef.title, moduleTitle, moduleNumber)
+            };
+          })
         };
       });
     }
@@ -981,6 +1126,11 @@
           <div class="badge-row">
             <span class="badge">${module.questions.length} frågor</span>
             ${
+              module.videoUrl
+                ? `<span class="badge">Film</span>`
+                : `<span class="badge">Ingen film</span>`
+            }
+            ${
               moduleProgress.passed
                 ? `<span class="badge success">Godkänd ${moduleProgress.scorePercent}%</span>`
                 : !prevPassed
@@ -993,7 +1143,7 @@
         if (prevPassed) {
           card.addEventListener("click", () => {
             state.selectedModuleId = module.id;
-            resetQuizState(module.id);
+            resetQuizState();
             renderAll();
           });
         }
@@ -1077,16 +1227,7 @@
           `;
         };
         video.classList.remove("hidden");
-        return;
       }
-
-      placeholder.classList.remove("hidden");
-      placeholder.innerHTML = `
-        <div class="video-placeholder-inner">
-          <div class="video-placeholder-title">Ingen video tillgänglig</div>
-          <div class="video-placeholder-text">Denna modul saknar videokälla.</div>
-        </div>
-      `;
     }
 
     function setUnlockButton(course, module) {
@@ -1100,7 +1241,7 @@
         unlockBtn.textContent = "Öppna nästa modul";
         unlockBtn.onclick = () => {
           state.selectedModuleId = nextModule.id;
-          resetQuizState(nextModule.id);
+          resetQuizState();
           renderAll();
         };
       } else if (!nextModule) {
@@ -1212,6 +1353,7 @@
       const isCorrect = selected === q.correctIndex;
 
       const feedback = document.getElementById("feedback");
+
       if (isCorrect) {
         state.quiz.correctCount += 1;
         feedback.textContent = "Rätt svar.";
@@ -1276,12 +1418,12 @@
     }
 
     function setupQuiz(course, module) {
-      const questions = module.questions || [];
+      const questions = Array.isArray(module.questions) ? module.questions : [];
       const noQuizBox = document.getElementById("noQuizBox");
       const quizContainer = document.getElementById("quizContainer");
       const resultBox = document.getElementById("resultBox");
 
-      if (state.quiz.moduleId !== module.id) {
+      if (state.quiz.moduleId !== module.id || !Array.isArray(state.quiz.questions) || state.quiz.questions.length === 0) {
         resetQuizState(module.id);
         state.quiz.questions = questions;
       }
@@ -1291,6 +1433,14 @@
       if (!questions.length) {
         noQuizBox.classList.remove("hidden");
         quizContainer.classList.add("hidden");
+        document.getElementById("quizProgress").textContent = "Fråga 0 / 0";
+        document.getElementById("quizScoreLive").textContent = "Rätt hittills: 0";
+        document.getElementById("questionTitle").textContent = "Inga fler frågor.";
+        document.getElementById("optionsBox").innerHTML = "";
+        document.getElementById("feedback").textContent = "";
+        document.getElementById("checkAnswerBtn").disabled = true;
+        document.getElementById("nextQuestionBtn").disabled = true;
+        document.getElementById("retryQuestionBtn").disabled = true;
         return;
       }
 
@@ -1383,3 +1533,4 @@
   </script>
 </body>
 </html>
+``
