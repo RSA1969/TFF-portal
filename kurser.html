@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TFF Utbildningsportal – Kurser</title>
 
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <script src="assets/js/kurser-data.js"></script>
-
   <style>
     :root{
       --bg:#f5f7fa;
@@ -289,9 +286,7 @@
       color: #9a3412;
     }
 
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     .module-header {
       display: flex;
@@ -572,7 +567,7 @@
             </div>
 
             <div class="video-shell" id="videoShell">
-              <iframe id="moduleIframe" class="hidden" allowfullscreen></iframe>
+              <iframe id="moduleIframe" class="hidden" allow="autoplay; fullscreen" allowfullscreen></iframe>
               <video id="moduleVideo" class="hidden" controls playsinline preload="metadata"></video>
               <div id="videoPlaceholder" class="video-placeholder hidden">
                 Ingen video hittades för denna modul.
@@ -627,17 +622,9 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_json_v15_full";
+    const STORAGE_KEY = "tff_portal_progress_json_all15_v1";
 
-    const COURSE1_SHAREPOINT = {
-      1: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAM56HkswSuTqBrEbVQQ5ePAWBcTcx6K49JZCSwLZIFgbE?e=VE3KoP",
-      2: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAr_hBecxAwQb9p9XUahrG-AQQ6XbywLFqDweOoMt_sTI8?e=gBLfmw",
-      3: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQCfj1MJmA4ATI5hT6kTWj3UAZFBBW-YGwurdSzUD8uVXQ0?e=S8J94O",
-      4: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQDppBte4fxjT7ZVcRQBQO9JAZ2Rs5PzW_LMCTb8Il13YTU?e=DRxC7O",
-      5: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQB9i6z8AVGWQa86AhtGvIx5AWb6SDlaAQ2-AW3107ButB4?e=oqiHp0"
-    };
-
-    const COURSE_TITLES = [
+    const courseTitles = [
       "Kurs 1 – MICROSOFT TEAMS",
       "Kurs 2 – TRANSKRIBERING",
       "Kurs 3 – DOKUMENTATION",
@@ -647,65 +634,21 @@
       "Kurs 7 – TEAMS & SHAREPOINT",
       "Kurs 8 – GDPR",
       "Kurs 9 – DIARIEFÖRING OCH ARKIVERING",
-      "Kurs 10 – INFORMATIONSKLASSNING",
-      "Kurs 11 – NIS2 OCH CYBERSÄKERHET",
-      "Kurs 12 – SBA OCH BRANDSÄKERHET",
+      "Kurs 10 – INFORMATIONSSÄKERHET",
+      "Kurs 11 – NIS2",
+      "Kurs 12 – BRANDSKYDD",
       "Kurs 13 – FÖRSTA HJÄLPEN",
       "Kurs 14 – KVALITET OCH PROCESSER",
-      "Kurs 15 – AUTOMATION OCH DIGITALA FLÖDEN"
+      "Kurs 15 – AUTOMATION"
     ];
 
-    const MODULE_NAMES = [
-      "Modul 1",
-      "Modul 2",
-      "Modul 3",
-      "Modul 4",
-      "Modul 5"
-    ];
-
-    function makeDefaultQuestions(courseTitle, moduleNumber) {
-      return [
-        {
-          question: `${courseTitle}: vad är huvudsyftet i modul ${moduleNumber}?`,
-          options: [
-            "Att förstå grundprinciperna och arbeta strukturerat",
-            "Att avstå från dokumentation helt",
-            "Att spara allt lokalt utan gemensam struktur",
-            "Att undvika samarbete i Microsoft 365"
-          ],
-          correctIndex: 0
-        },
-        {
-          question: `${courseTitle}: vilket arbetssätt är bäst enligt modul ${moduleNumber}?`,
-          options: [
-            "Tydlig struktur, rätt arbetsyta och gemensamma rutiner",
-            "Slumpmässig hantering utan ansvar",
-            "Många parallella kopior av samma information",
-            "Att hoppa över uppföljning och kvalitetssäkring"
-          ],
-          correctIndex: 0
-        }
-      ];
-    }
-
-    function buildFallbackData() {
-      return COURSE_TITLES.map((title, courseIndex) => {
-        const courseNumber = courseIndex + 1;
-        return {
-          id: `kurs-${courseNumber}`,
-          title,
-          description: `Reservdata för ${title}.`,
-          modules: MODULE_NAMES.map((moduleName, moduleIndex) => ({
-            id: `kurs-${courseNumber}-modul-${moduleIndex + 1}`,
-            moduleNumber: moduleIndex + 1,
-            title: moduleName,
-            content: `${title} – ${moduleName}. Detta är reservinnehåll som gör att sidan fungerar även om extern data saknas.`,
-            videoUrl: courseNumber === 1 ? COURSE1_SHAREPOINT[moduleIndex + 1] : "",
-            questions: makeDefaultQuestions(title, moduleIndex + 1)
-          }))
-        };
-      });
-    }
+    const course1Videos = {
+      1: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAM56HkswSuTqBrEbVQQ5ePAWBcTcx6K49JZCSwLZIFgbE?e=VE3KoP",
+      2: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAr_hBecxAwQb9p9XUahrG-AQQ6XbywLFqDweOoMt_sTI8?e=gBLfmw",
+      3: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQCfj1MJmA4ATI5hT6kTWj3UAZFBBW-YGwurdSzUD8uVXQ0?e=S8J94O",
+      4: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQDppBte4fxjT7ZVcRQBQO9JAZ2Rs5PzW_LMCTb8Il13YTU?e=DRxC7O",
+      5: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQB9i6z8AVGWQa86AhtGvIx5AWb6SDlaAQ2-AW3107ButB4?e=oqiHp0"
+    };
 
     const state = {
       data: [],
@@ -760,17 +703,6 @@
         .replace(/^-+|-+$/g, "");
     }
 
-    function decodeHtmlEntities(str) {
-      const txt = document.createElement("textarea");
-      txt.innerHTML = String(str || "");
-      return txt.value;
-    }
-
-    function isSharePointUrl(url) {
-      const value = String(url || "").toLowerCase();
-      return value.includes("sharepoint.com") || value.includes("office.com");
-    }
-
     function resetQuizState(moduleId = null) {
       state.quiz = {
         moduleId,
@@ -805,179 +737,150 @@
       return courseProgress.modules[moduleId];
     }
 
-    function normalizeQuestions(rawQuestions, courseId, moduleTitle) {
-      const items = Array.isArray(rawQuestions) ? rawQuestions : [];
-      return items.map((question, qIndex) => {
-        const questionText =
-          question.question ||
-          question.fraga ||
-          question.fråga ||
-          question.text ||
-          `Fråga ${qIndex + 1}`;
-
-        let options =
-          question.options ||
-          question.alternativ ||
-          question.answers ||
-          question.svar ||
-          [];
-
-        if (!Array.isArray(options) || !options.length) {
-          options = [
-            question.A, question.B, question.C, question.D,
-            question.a, question.b, question.c, question.d,
-            question.svarA, question.svarB, question.svarC, question.svarD
-          ].filter(Boolean).slice(0, 4);
+    function makeQuestions(courseTitle, moduleNumber) {
+      return [
+        {
+          question: `${courseTitle}: Vad är huvudsyftet med modul ${moduleNumber}?`,
+          options: [
+            "Att förstå grunderna och arbeta strukturerat",
+            "Att undvika samarbete helt",
+            "Att spara allt lokalt utan struktur",
+            "Att hoppa över dokumentation"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vilket arbetssätt är bäst?`,
+          options: [
+            "Tydlig struktur och gemensamma rutiner",
+            "Slumpmässig hantering utan ansvar",
+            "Många parallella kopior",
+            "Ingen uppföljning"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vad bör undvikas?`,
+          options: [
+            "Kaos och dubbelarbete",
+            "Tydlig ansvarsfördelning",
+            "Gemensam information",
+            "Strukturerad lagring"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vad stödjer kvalitet i arbetet?`,
+          options: [
+            "Standardiserade arbetssätt",
+            "Otydliga instruktioner",
+            "Ingen versionskontroll",
+            "Privata kopior"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vad ger bäst spårbarhet?`,
+          options: [
+            "Dokumentation och ordning",
+            "Muntliga överenskommelser utan notering",
+            "Lokal lagring utan namnstandard",
+            "Ostrukturerade mappar"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vad är mest effektivt?`,
+          options: [
+            "Rätt verktyg för rätt syfte",
+            "Alltid samma verktyg oavsett behov",
+            "Ingen planering",
+            "Separata privata lösningar"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vad minskar risken för fel?`,
+          options: [
+            "Tydliga principer och rutiner",
+            "Ad hoc-beslut utan struktur",
+            "Dubbelregistrering",
+            "Oklara ansvar"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vad är viktigt i samarbete?`,
+          options: [
+            "Gemensamma ytor och tydlighet",
+            "Enbart personliga filer",
+            "Många mejlversioner",
+            "Ingen uppföljning"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vad bidrar till efterlevnad?`,
+          options: [
+            "Struktur, dokumentation och uppföljning",
+            "Otydliga roller",
+            "Spontana arbetssätt utan kontroll",
+            "Ingen versionshistorik"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: `${courseTitle}: Vad är rätt slutsats från modul ${moduleNumber}?`,
+          options: [
+            "Ordning, struktur och rätt användning av verktyg är centralt",
+            "Det spelar ingen roll hur man arbetar",
+            "Privata lösningar är alltid bäst",
+            "Dokumentation behövs inte"
+          ],
+          correctIndex: 0
         }
-
-        let correctIndex = 0;
-        if (typeof question.correctIndex === "number") {
-          correctIndex = question.correctIndex;
-        } else if (typeof question.rattIndex === "number") {
-          correctIndex = question.rattIndex;
-        } else if (typeof question.rättIndex === "number") {
-          correctIndex = question.rättIndex;
-        }
-
-        return {
-          id: slugify(`${courseId}-${moduleTitle}-fraga-${qIndex + 1}`),
-          question: questionText,
-          options,
-          correctIndex
-        };
-      });
+      ];
     }
 
-    function normalizeExternalData(rawData) {
-      const source = Array.isArray(rawData)
-        ? rawData
-        : Array.isArray(rawData?.kurser)
-          ? rawData.kurser
-          : Array.isArray(rawData?.courses)
-            ? rawData.courses
-            : [];
+    function buildData() {
+      return courseTitles.map((title, courseIndex) => {
+        const courseNumber = courseIndex + 1;
 
-      if (!source.length) return buildFallbackData();
+        let moduleTitles = [
+          "Modul 1",
+          "Modul 2",
+          "Modul 3",
+          "Modul 4",
+          "Modul 5"
+        ];
 
-      return source.map((course, courseIndex) => {
-        const title =
-          course.title ||
-          course.titel ||
-          course.name ||
-          course.namn ||
-          course.kurs ||
-          `Kurs ${courseIndex + 1}`;
-
-        const description =
-          course.description ||
-          course.beskrivning ||
-          course.intro ||
-          course.syfte ||
-          "";
-
-        const courseId = slugify(course.id || title || `kurs-${courseIndex + 1}`);
-
-        const modulesRaw =
-          course.modules ||
-          course.moduler ||
-          course.content ||
-          course.innehall ||
-          [];
-
-        const modules = (Array.isArray(modulesRaw) ? modulesRaw : []).map((module, moduleIndex) => {
-          const moduleNumber = Number(
-            module.moduleNumber ||
-            module.modulNummer ||
-            module.modulnummer ||
-            module.nr ||
-            moduleIndex + 1
-          );
-
-          const moduleTitle =
-            module.title ||
-            module.titel ||
-            module.name ||
-            module.namn ||
-            `Modul ${moduleNumber}`;
-
-          const moduleContent =
-            module.content ||
-            module.innehall ||
-            module.text ||
-            module.description ||
-            module.beskrivning ||
-            "";
-
-          const rawQuestions =
-            module.questions ||
-            module.fragor ||
-            module.frågor ||
-            module.quiz ||
-            [];
-
-          let questions = normalizeQuestions(rawQuestions, courseId, moduleTitle);
-          if (!questions.length) {
-            questions = makeDefaultQuestions(title, moduleNumber);
-          }
-
-          let videoUrl =
-            module.videoUrl ||
-            module.videoURL ||
-            module.video ||
-            module.url ||
-            module.src ||
-            module.film ||
-            "";
-
-          if (!videoUrl && courseIndex === 0) {
-            videoUrl = COURSE1_SHAREPOINT[moduleNumber] || "";
-          }
-
-          return {
-            id: slugify(`${courseId}-${moduleTitle}`),
-            moduleNumber,
-            title: moduleTitle,
-            content: moduleContent,
-            videoUrl: decodeHtmlEntities(videoUrl || ""),
-            questions
-          };
-        });
-
-        if (!modules.length) {
-          return buildFallbackData()[courseIndex] || buildFallbackData()[0];
+        if (courseNumber === 1) {
+          moduleTitles = [
+            "Vad är Teams (och vad är det inte)",
+            "Chat, kanal och möte – rätt val",
+            "Arbetssätt i Teams",
+            "Filer i Teams",
+            "Vanliga misstag i kommunal Teams-användning"
+          ];
         }
 
         return {
-          id: courseId,
+          id: `kurs-${courseNumber}`,
           title,
-          description,
-          modules
+          description: `${title} innehåller 5 moduler med film och kunskapskontroll.`,
+          modules: moduleTitles.map((moduleTitle, moduleIndex) => ({
+            id: `kurs-${courseNumber}-modul-${moduleIndex + 1}`,
+            moduleNumber: moduleIndex + 1,
+            title: moduleTitle,
+            content: `${moduleTitle}. Här visas modulens innehåll och tillhörande quiz.`,
+            videoType: courseNumber === 1 ? "iframe" : "video",
+            videoUrl: courseNumber === 1
+              ? course1Videos[moduleIndex + 1]
+              : `video/kurs${courseNumber}_modul${moduleIndex + 1}.mp4`,
+            questions: makeQuestions(title, moduleIndex + 1)
+          }))
         };
       });
-    }
-
-    async function loadData() {
-      try {
-        if (Array.isArray(window.kursData)) return normalizeExternalData(window.kursData);
-        if (Array.isArray(window.KURS_DATA)) return normalizeExternalData(window.KURS_DATA);
-        if (Array.isArray(window.kurserData)) return normalizeExternalData(window.kurserData);
-        if (Array.isArray(window.kurser)) return normalizeExternalData(window.kurser);
-
-        if (window.kursData && Array.isArray(window.kursData.kurser)) {
-          return normalizeExternalData(window.kursData.kurser);
-        }
-        if (window.KURS_DATA && Array.isArray(window.KURS_DATA.kurser)) {
-          return normalizeExternalData(window.KURS_DATA.kurser);
-        }
-
-        const response = await fetch("assets/data/kurser-data.json", { cache: "no-store" });
-        if (response.ok) {
-          const json = await response.json();
-          return normalizeExternalData(json);
-        }
-      } catch {}
-
-      return buildFallbackData();
     }
 
     function filterCourses(searchTerm) {
@@ -1038,7 +941,7 @@
 
     function renderCourseView(course) {
       document.getElementById("courseTitle").textContent = course.title;
-      document.getElementById("courseIntro").textContent = course.description || "Välj en modul för att starta.";
+      document.getElementById("courseIntro").textContent = course.description;
 
       const modulesGrid = document.getElementById("modulesGrid");
       const courseSummary = document.getElementById("courseSummary");
@@ -1048,7 +951,7 @@
 
       courseSummary.innerHTML = `
         <p><strong>${escapeHtml(course.title)}</strong></p>
-        <p>${escapeHtml(course.description || "Ingen beskrivning finns ännu.")}</p>
+        <p>${escapeHtml(course.description)}</p>
         <p>Kursen innehåller <strong>${course.modules.length}</strong> moduler. Minst <strong>80 % rätt</strong> krävs för att låsa upp nästa modul.</p>
       `;
 
@@ -1062,7 +965,7 @@
         card.innerHTML = `
           <div class="module-number">M${module.moduleNumber}</div>
           <div class="module-title">${escapeHtml(module.title)}</div>
-          <div class="module-desc">${escapeHtml(module.content || "Öppna modulen för att visa innehåll.")}</div>
+          <div class="module-desc">${escapeHtml(module.content)}</div>
           <div class="badge-row">
             <span class="badge">${module.questions.length} frågor</span>
             ${
@@ -1103,6 +1006,21 @@
       placeholder.classList.add("hidden");
     }
 
+    function convertSharePointToEmbed(url) {
+      if (!url) return "";
+      let embedUrl = url.trim();
+
+      if (embedUrl.includes(":v:/g/")) {
+        embedUrl = embedUrl.replace(":v:/g/", ":v:/r/");
+      }
+
+      if (!embedUrl.includes("embed=1")) {
+        embedUrl += (embedUrl.includes("?") ? "&" : "?") + "embed=1";
+      }
+
+      return embedUrl;
+    }
+
     function setupVideo(module) {
       const video = document.getElementById("moduleVideo");
       const iframe = document.getElementById("moduleIframe");
@@ -1110,20 +1028,22 @@
 
       resetMediaPlayers();
 
-      const url = String(module.videoUrl || "").trim();
-
-      if (!url) {
+      if (!module.videoUrl) {
         placeholder.classList.remove("hidden");
         return;
       }
 
-      if (isSharePointUrl(url)) {
-        iframe.src = url;
+      if (module.videoType === "iframe") {
+        iframe.src = convertSharePointToEmbed(module.videoUrl);
         iframe.classList.remove("hidden");
         return;
       }
 
-      video.src = url;
+      video.src = module.videoUrl;
+      video.onerror = () => {
+        video.classList.add("hidden");
+        placeholder.classList.remove("hidden");
+      };
       video.classList.remove("hidden");
     }
 
@@ -1226,8 +1146,10 @@
 
     function retryQuestion() {
       if (state.quiz.finished) return;
+
       state.quiz.checked = false;
       state.quiz.selectedOptionIndex = null;
+
       document.getElementById("feedback").textContent = "";
       document.getElementById("feedback").className = "feedback";
       renderQuestion();
@@ -1337,14 +1259,12 @@
       if (!module) return;
 
       document.getElementById("courseTitle").textContent = course.title;
-      document.getElementById("courseIntro").textContent = course.description || "";
+      document.getElementById("courseIntro").textContent = course.description;
       refreshCourseStatus(course);
 
       document.getElementById("moduleTitle").textContent = module.title;
       document.getElementById("moduleSubtitle").textContent = `${course.title} – Modul ${module.moduleNumber}`;
-      document.getElementById("moduleContent").innerHTML = module.content
-        ? `<p>${escapeHtml(module.content).replace(/\n/g, "<br>")}</p>`
-        : `<p>Inget modultext-innehåll finns ännu.</p>`;
+      document.getElementById("moduleContent").innerHTML = `<p>${escapeHtml(module.content)}</p>`;
 
       setupVideo(module);
       setupQuiz(course, module);
@@ -1396,28 +1316,17 @@
       });
     }
 
-    async function init() {
-      try {
-        bindEvents();
-        state.data = await loadData();
-        state.filteredData = state.data;
+    function init() {
+      bindEvents();
 
-        const savedId = localStorage.getItem("selectedCourseId");
-        const found = state.data.find(c => c.id === savedId);
-        state.selectedCourseId = found ? found.id : (state.data[0] ? state.data[0].id : null);
+      state.data = buildData();
+      state.filteredData = state.data;
+      state.selectedCourseId = state.data[0].id;
 
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("app").style.display = "block";
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("app").style.display = "block";
 
-        renderAll();
-      } catch (e) {
-        document.getElementById("loading").innerHTML = `
-          <div style="max-width:760px; padding:24px; background:#fff; border:1px solid #e5e7eb; border-radius:14px;">
-            <h3 style="margin-top:0;">Kunde inte starta sidan</h3>
-            <pre style="white-space:pre-wrap; background:#f8fafc; padding:12px; border-radius:10px; border:1px solid #e5e7eb;">${escapeHtml(e.message)}</pre>
-          </div>
-        `;
-      }
+      renderAll();
     }
 
     init();
