@@ -2,213 +2,133 @@
 <html lang="sv">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TFF Portal</title>
-
+<title>TFF Kurser</title>
 <style>
-body { margin:0; display:flex; font-family:Arial;}
-.sidebar {width:300px; background:#0f172a; color:white; padding:20px;}
-.main {flex:1; padding:20px;}
-.module {cursor:pointer; padding:10px; border:1px solid #ccc; margin:5px;}
-.option {border:1px solid #ccc; padding:10px; margin:5px; cursor:pointer;}
-.correct {background:#c8f7c5;}
-.wrong {background:#f7c5c5;}
+body {font-family: Arial; margin:0; background:#f4f4f4;}
+.container {max-width:1000px; margin:auto; padding:20px;}
+.card {background:#fff; padding:20px; margin-bottom:20px; border-radius:8px;}
+button {padding:10px; margin:5px;}
+iframe {width:100%; height:400px;}
+.hidden {display:none;}
 </style>
-
 </head>
-<body>
 
-<div class="sidebar" id="courses"></div>
-<div class="main" id="content"></div>
+<body>
+<div class="container">
+
+<h1>TFF Kurser</h1>
+
+<div id="course"></div>
+<div id="module"></div>
+<div id="video"></div>
+<div id="quiz"></div>
+
+</div>
 
 <script>
 
-/* =========================
-   DATA (15 KURSER)
-========================= */
-const courses = [];
+// DATA (15 kurser, 5 moduler, 10 frågor)
+const data = [];
 
-for(let c=1;c<=15;c++){
-  courses.push({
-    title:"Kurs "+c,
-    modules: Array.from({length:5},(_,m)=>({
-
-      title:"Modul "+(m+1),
-
-      video: c===1 ? getSharePointVideo(m+1) : "",
-
-      questions: createQuestions(c,m)
-
-    }))
-  });
-}
-
-/* =========================
-   SHAREPOINT VIDEO
-========================= */
-function getSharePointVideo(m){
-  const links = {
-    1:"https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAM56HkswSuTqBrEbVQQ5ePAWBcTcx6K49JZCSwLZIFgbE",
-    2:"https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAr_hBecxAwQb9p9XUahrG-AQQ6XbywLFqDweOoMt_sTI8",
-    3:"https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQCfj1MJmA4ATI5hT6kTWj3UAZFBBW-YGwurdSzUD8uVXQ0",
-    4:"https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQDppBte4fxjT7ZVcRQBQO9JAZ2Rs5PzW_LMCTb8Il13YTU",
-    5:"https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQB9i6z8AVGWQa86AhtGvIx5AWb6SDlaAQ2-AW3107ButB4"
-  };
-  return links[m];
-}
-
-/* =========================
-   SKAPA FRÅGOR (10)
-========================= */
-function createQuestions(c,m){
-
-  const correctDist = [0,1,2,3,0,1,2,3,1,2];
-
-  return Array.from({length:10},(_,i)=>{
-
-    const correct = correctDist[i];
-
-    return {
-      q:`Kurs ${c} Modul ${m+1} Fråga ${i+1}`,
-      a:[
-        "Korrekt svar",
-        "Alternativ B",
-        "Alternativ C",
-        "Alternativ D"
-      ],
-      correct: correct
+for (let c = 1; c <= 15; c++) {
+    const course = {
+        name: "Kurs " + c,
+        modules: []
     };
 
-  });
+    for (let m = 1; m <= 5; m++) {
+        const module = {
+            name: "Modul " + m,
+            video: "https://halmstad-my.sharepoint.com/", // byt till riktiga länkar
+            questions: []
+        };
+
+        for (let q = 1; q <= 10; q++) {
+            module.questions.push({
+                q: "Fråga " + q + " (K" + c + " M" + m + ")",
+                options: ["Alternativ 1", "Alternativ 2", "Alternativ 3", "Alternativ 4"],
+                correct: Math.floor(Math.random()*4)
+            });
+        }
+
+        course.modules.push(module);
+    }
+
+    data.push(course);
 }
 
-/* =========================
-   UI
-========================= */
+// STATE
+let currentCourse = null;
+let currentModule = null;
+let currentQuestion = 0;
 
-const coursesDiv = document.getElementById("courses");
-const content = document.getElementById("content");
-
-courses.forEach((c,i)=>{
-  const btn = document.createElement("div");
-  btn.innerText = c.title;
-  btn.className="module";
-  btn.onclick = ()=>showCourse(c);
-  coursesDiv.appendChild(btn);
-});
-
-/* =========================
-   VISA KURS
-========================= */
-
-function showCourse(course){
-
-  content.innerHTML = "<h2>"+course.title+"</h2>";
-
-  course.modules.forEach((m,i)=>{
-    const div = document.createElement("div");
-    div.innerText = m.title;
-    div.className="module";
-    div.onclick = ()=>showModule(course,i);
-    content.appendChild(div);
-  });
-
+// VISA KURSER
+function showCourses() {
+    let html = "<h2>Välj kurs</h2>";
+    data.forEach((c,i)=>{
+        html += `<button onclick="selectCourse(${i})">${c.name}</button>`;
+    });
+    document.getElementById("course").innerHTML = html;
 }
+showCourses();
 
-/* =========================
-   MODUL
-========================= */
+// VÄLJ KURS
+function selectCourse(i){
+    currentCourse = data[i];
+    currentModule = null;
 
-let qIndex=0;
-let score=0;
-
-function showModule(course,i){
-
-  const m = course.modules[i];
-
-  content.innerHTML = "<h2>"+m.title+"</h2>";
-
-  /* VIDEO */
-  if(m.video){
-    content.innerHTML += `
-      <p>Video:</p>
-      <a href="${m.video}" target="_blank">▶ Öppna video</a>
-    `;
-  }
-
-  /* QUIZ */
-  qIndex=0;
-  score=0;
-
-  const quizDiv = document.createElement("div");
-  content.appendChild(quizDiv);
-
-  renderQuestion(m,quizDiv);
-}
-
-/* =========================
-   QUIZ
-========================= */
-
-function renderQuestion(module,quizDiv){
-
-  if(qIndex >= module.questions.length){
-    quizDiv.innerHTML = "<h3>Resultat: "+score+" / "+module.questions.length+"</h3>";
-    return;
-  }
-
-  const q = module.questions[qIndex];
-
-  quizDiv.innerHTML = "<h3>"+q.q+"</h3>";
-
-  let selected = null;
-
-  q.a.forEach((ans,i)=>{
-
-    const el = document.createElement("div");
-    el.className="option";
-    el.innerText=ans;
-
-    el.onclick = ()=>{
-      selected=i;
-      document.querySelectorAll(".option").forEach(x=>x.style.border="1px solid #ccc");
-      el.style.border="2px solid blue";
-      checkBtn.disabled=false;
-    };
-
-    quizDiv.appendChild(el);
-  });
-
-  const checkBtn = document.createElement("button");
-  checkBtn.innerText="Kontrollera";
-  checkBtn.disabled=true;
-
-  checkBtn.onclick = ()=>{
-
-    const opts = document.querySelectorAll(".option");
-
-    opts.forEach((el,index)=>{
-      if(index===q.correct) el.classList.add("correct");
-      else if(index===selected) el.classList.add("wrong");
+    let html = `<h2>${currentCourse.name}</h2>`;
+    currentCourse.modules.forEach((m,i)=>{
+        html += `<button onclick="selectModule(${i})">${m.name}</button>`;
     });
 
-    if(selected === q.correct) score++;
+    document.getElementById("module").innerHTML = html;
+    document.getElementById("video").innerHTML = "";
+    document.getElementById("quiz").innerHTML = "";
+}
 
-    nextBtn.disabled=false;
-  };
+// VÄLJ MODUL
+function selectModule(i){
+    currentModule = currentCourse.modules[i];
+    currentQuestion = 0;
 
-  quizDiv.appendChild(checkBtn);
+    document.getElementById("video").innerHTML =
+        `<iframe src="${currentModule.video}"></iframe>
+        <button onclick="startQuiz()">Starta frågor</button>`;
+}
 
-  const nextBtn = document.createElement("button");
-  nextBtn.innerText="Nästa fråga";
-  nextBtn.disabled=true;
+// START QUIZ
+function startQuiz(){
+    showQuestion();
+}
 
-  nextBtn.onclick = ()=>{
-    qIndex++;
-    renderQuestion(module,quizDiv);
-  };
+// VISA FRÅGA
+function showQuestion(){
+    let q = currentModule.questions[currentQuestion];
 
-  quizDiv.appendChild(nextBtn);
+    let html = `<h3>${q.q}</h3>`;
+    q.options.forEach((opt,i)=>{
+        html += `<button onclick="answer(${i})">${opt}</button>`;
+    });
+
+    document.getElementById("quiz").innerHTML = html;
+}
+
+// SVAR
+function answer(i){
+    let correct = currentModule.questions[currentQuestion].correct;
+
+    if(i === correct){
+        currentQuestion++;
+
+        if(currentQuestion < currentModule.questions.length){
+            showQuestion();
+        } else {
+            document.getElementById("quiz").innerHTML = "<h3>Klart</h3>";
+        }
+    } else {
+        alert("Fel svar, försök igen");
+    }
 }
 
 </script>
