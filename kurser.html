@@ -6,42 +6,19 @@
 <title>TFF Utbildningsportal – Kurser</title>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  margin:0;
-  background:#f5f7fa;
+body{margin:0;font-family:Arial;background:#f5f7fa;}
+.page{display:grid;grid-template-columns:300px 1fr;height:100vh;}
+.sidebar{background:#0f172a;color:white;padding:20px;}
+.main{padding:20px;}
+
+.course-btn{
+  width:100%;padding:12px;margin-bottom:8px;border:none;
+  border-radius:8px;text-align:left;cursor:pointer;
 }
 
-.page {
-  display: grid;
-  grid-template-columns: 320px 1fr;
-  min-height: 100vh;
-}
+.course-btn.active{background:white;color:black;}
 
-.sidebar {
-  background:#0f172a;
-  color:white;
-  padding:20px;
-}
-
-.course-btn {
-  width:100%;
-  padding:12px;
-  margin-bottom:8px;
-  border:none;
-  border-radius:8px;
-  text-align:left;
-  cursor:pointer;
-}
-
-.course-btn.active {
-  background:white;
-  color:black;
-}
-
-.main {
-  padding:20px;
-}
+a{color:white;text-decoration:none}
 </style>
 </head>
 
@@ -54,21 +31,13 @@ body {
 
 <h2>TFF portal</h2>
 
-<div class="sidebar-tools">
+<input id="search" placeholder="Sök..." style="width:100%;padding:8px;margin-bottom:10px">
 
-<input id="courseSearch" placeholder="Sök kurs..." style="width:100%;padding:8px">
+<br>
 
-<button onclick="resetProgress()">Nollställ progression</button>
-
-<button onclick="logout()">Logga ut</button>
-
-<br><br>
-
-<!-- ✅ FIXAD LÄNK -->
-<a href="index.html" style="color:white;">Till startsidan</a><br>
-<a href="utbildningar.html" style="color:white;">Till utbildningssidan</a>
-
-</div>
+<!-- ✅ FIXADE LÄNKAR -->
+<a href="index.html">Till startsidan</a><br><br>
+<a href="utbildningar.html">Till utbildningssidan</a><br><br>
 
 <div id="courseList"></div>
 
@@ -78,7 +47,6 @@ body {
 <div class="main">
 
 <h2 id="courseTitle"></h2>
-
 <div id="modules"></div>
 
 </div>
@@ -87,52 +55,51 @@ body {
 
 <script>
 
-const SELECT_KEY = "tff_selected_course_id";
-
-/* ✅ ALLA 16 KURSER */
-const COURSES = [
-{ id:"kurs-1", name:"Kurs 1 – Microsoft Teams" },
-{ id:"kurs-2", name:"Kurs 2 – Transkribering" },
-{ id:"kurs-3", name:"Kurs 3 – Dokumentation" },
-{ id:"kurs-4", name:"Kurs 4 – AI & Copilot" },
-{ id:"kurs-5", name:"Kurs 5 – Promptning" },
-{ id:"kurs-6", name:"Kurs 6 – Dokument" },
-{ id:"kurs-7", name:"Kurs 7 – Teams & SharePoint" },
-{ id:"kurs-8", name:"Kurs 8 – GDPR" },
-{ id:"kurs-9", name:"Kurs 9 – Rätt verktyg" },
-{ id:"kurs-10", name:"Kurs 10 – Möteskultur" },
-{ id:"kurs-11", name:"Kurs 11 – Struktur" },
-{ id:"kurs-12", name:"Kurs 12 – Diarieföring" },
-{ id:"kurs-13", name:"Kurs 13 – Governance" },
-{ id:"kurs-14", name:"Kurs 14 – Livscykel" },
-{ id:"kurs-15", name:"Kurs 15 – Processarbete" },
+/* ✅ ALL DATA */
+const courses = [
+{ id:"kurs-1", title:"Kurs 1 – MICROSOFT TEAMS" },
+{ id:"kurs-2", title:"Kurs 2 – TRANSKRIBERING" },
+{ id:"kurs-3", title:"Kurs 3 – DOKUMENTATION" },
+{ id:"kurs-4", title:"Kurs 4 – AI & COPILOT" },
+{ id:"kurs-5", title:"Kurs 5 – PROMPTNING" },
+{ id:"kurs-6", title:"Kurs 6 – SKAPA DOKUMENT" },
+{ id:"kurs-7", title:"Kurs 7 – TEAMS & SHAREPOINT" },
+{ id:"kurs-8", title:"Kurs 8 – GDPR" },
+{ id:"kurs-9", title:"Kurs 9 – RÄTT VERKTYG" },
+{ id:"kurs-10", title:"Kurs 10 – MÖTESKULTUR" },
+{ id:"kurs-11", title:"Kurs 11 – STRUKTUR" },
+{ id:"kurs-12", title:"Kurs 12 – DIARIEFÖRING" },
+{ id:"kurs-13", title:"Kurs 13 – GOVERNANCE" },
+{ id:"kurs-14", title:"Kurs 14 – LIVSCYKEL" },
+{ id:"kurs-15", title:"Kurs 15 – PROCESSARBETE" },
 
 /* ✅ KURS 16 */
-{ id:"kurs-16", name:"Kurs 16 – Arbeta effektivt med din Copilot" }
-
+{ id:"kurs-16", title:"Kurs 16 – ARBETA EFFEKTIVT MED DIN PERSONLIGA COPILOT" }
 ];
 
-/* ✅ QUERY STÖD */
-function getCourseFromURL(){
-  const p = new URLSearchParams(window.location.search);
-  const c = p.get("course");
-  return c;
+/* ✅ HÄMTA RÄTT KURS */
+function getCourse() {
+  const url = new URLSearchParams(window.location.search).get("course");
+  const saved = localStorage.getItem("tff_selected_course_id");
+
+  return url || saved || "kurs-1";
 }
 
-let selected = getCourseFromURL() || localStorage.getItem(SELECT_KEY) || "kurs-1";
+let selected = getCourse();
 
-function renderCourses(){
+/* ✅ SIDOMENY */
+function renderCourses() {
   const list = document.getElementById("courseList");
   list.innerHTML="";
 
-  COURSES.forEach(c=>{
+  courses.forEach(c=>{
     const btn = document.createElement("button");
-    btn.className="course-btn"+(c.id===selected?" active":"");
-    btn.innerText=c.name;
+    btn.className = "course-btn"+(c.id===selected?" active":"");
+    btn.textContent = c.title;
 
-    btn.onclick=()=>{
-      selected=c.id;
-      localStorage.setItem(SELECT_KEY,c.id);
+    btn.onclick = ()=>{
+      selected = c.id;
+      localStorage.setItem("tff_selected_course_id", c.id);
       renderAll();
     };
 
@@ -140,30 +107,28 @@ function renderCourses(){
   });
 }
 
-function renderCourse(){
-  const course = COURSES.find(c=>c.id===selected);
-  document.getElementById("courseTitle").innerText = course.name;
+/* ✅ VISA KURS */
+function renderCourse() {
+  const course = courses.find(c=>c.id===selected);
+
+  document.getElementById("courseTitle").textContent = course.title;
 
   const modules = document.getElementById("modules");
   modules.innerHTML="";
 
   for(let i=1;i<=5;i++){
-    const div=document.createElement("div");
-    div.innerText="Modul "+i;
+    const div = document.createElement("div");
+    div.textContent = "Modul "+i;
     modules.appendChild(div);
   }
 }
 
+/* ✅ START */
 function renderAll(){
   renderCourses();
   renderCourse();
 }
 
-/* STUBS */
-function resetProgress(){localStorage.clear(); location.reload();}
-function logout(){alert("logout dummy");}
-
-/* INIT */
 renderAll();
 
 </script>
