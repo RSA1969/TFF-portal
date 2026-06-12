@@ -357,6 +357,11 @@
       color: #fff;
     }
 
+    .btn.danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
     .btn[disabled] {
       opacity: .55;
       cursor: not-allowed;
@@ -531,6 +536,68 @@
       font-size: 1rem;
     }
 
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.96);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.25);
+      padding: 28px;
+    }
+
+    .login-card h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.6rem;
+      color: #0f172a;
+    }
+
+    .login-card p {
+      margin: 0 0 18px 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      margin-bottom: 12px;
+      font-size: .95rem;
+      outline: none;
+    }
+
+    .login-input:focus {
+      border-color: var(--primary2);
+      box-shadow: 0 0 0 3px rgba(11,116,200,.12);
+    }
+
+    .login-error {
+      min-height: 22px;
+      color: var(--danger);
+      font-size: .9rem;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    .login-note {
+      margin-top: 14px;
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
     @media (max-width: 1200px) {
       .grid {
         grid-template-columns: 1fr;
@@ -570,6 +637,24 @@
   </style>
 </head>
 <body>
+
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h2>TFF utbildningsportal</h2>
+      <p>Logga in för att öppna kurser och moduler.</p>
+
+      <input id="username" class="login-input" type="text" placeholder="Användarnamn" autocomplete="username" />
+      <input id="password" class="login-input" type="password" placeholder="Lösenord" autocomplete="current-password" />
+
+      <button id="loginBtn" class="btn primary" type="button" style="width:100%;">Logga in</button>
+      <div id="loginError" class="login-error"></div>
+
+      <div class="login-note">
+        Enkel klientbaserad inloggning för GitHub Pages.
+      </div>
+    </div>
+  </div>
+
   <div class="page">
     <aside class="sidebar">
       <div class="brand">
@@ -580,6 +665,7 @@
       <div class="sidebar-tools">
         <input id="courseSearch" class="field" type="search" placeholder="Sök kurs eller modul..." />
         <button id="resetProgressBtn" class="btn secondary" type="button">Nollställ progression</button>
+        <button id="logoutBtn" class="btn danger" type="button">Logga ut</button>
         <a href="https://rsa1969.github.io/TFF-portal/" class="btn secondary">Till startsidan</a>
         <a href="https://rsa1969.github.io/TFF-portal/utbildningar.html" class="btn secondary">Till Utbildningsportal</a>
       </div>
@@ -695,7 +781,11 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_all16_v1";
+    const STORAGE_KEY = "tff_portal_progress_all16_v2";
+    const LOGIN_STORAGE_KEY = "tff_portal_logged_in";
+    const USERS = [
+      { username: "chef", password: "TF4321" }
+    ];
 
     const COURSE_DEFINITIONS = [
       {
@@ -1590,6 +1680,35 @@
       }
     }
 
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorEl = document.getElementById("loginError");
+
+      const found = USERS.find(user => user.username === username && user.password === password);
+
+      if (found) {
+        localStorage.setItem(LOGIN_STORAGE_KEY, "true");
+        document.getElementById("loginScreen").style.display = "none";
+        errorEl.textContent = "";
+        return;
+      }
+
+      errorEl.textContent = "Fel användarnamn eller lösenord.";
+    }
+
+    function checkLogin() {
+      const loggedIn = localStorage.getItem(LOGIN_STORAGE_KEY) === "true";
+      document.getElementById("loginScreen").style.display = loggedIn ? "none" : "flex";
+    }
+
+    function logout() {
+      localStorage.removeItem(LOGIN_STORAGE_KEY);
+      document.getElementById("password").value = "";
+      document.getElementById("loginError").textContent = "";
+      document.getElementById("loginScreen").style.display = "flex";
+    }
+
     function bindEvents() {
       document.getElementById("courseSearch").addEventListener("input", (e) => {
         filterCourses(e.target.value);
@@ -1602,6 +1721,17 @@
         resetQuizState();
         renderAll();
       });
+
+      document.getElementById("loginBtn").addEventListener("click", login);
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+
+      document.getElementById("username").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") login();
+      });
+
+      document.getElementById("password").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") login();
+      });
     }
 
     function init() {
@@ -1611,6 +1741,7 @@
       state.selectedCourseId = state.data[0].id;
       document.getElementById("loading").style.display = "none";
       document.getElementById("app").style.display = "block";
+      checkLogin();
       renderAll();
     }
 
