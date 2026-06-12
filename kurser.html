@@ -1,137 +1,1768 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TFF Utbildningsportal – Kurser</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TFF Utbildningsportal – Kurser</title>
 
-<style>
-body{margin:0;font-family:Arial;background:#f5f7fa;}
-.page{display:grid;grid-template-columns:300px 1fr;height:100vh;}
-.sidebar{background:#0f172a;color:white;padding:20px;}
-.main{padding:20px;}
+  <style>
+    :root{
+      --bg:#f5f7fa;
+      --panel:#ffffff;
+      --line:#d9dee5;
+      --text:#1d2939;
+      --muted:#667085;
+      --primary:#005a9c;
+      --primary2:#0b74c8;
+      --success:#188038;
+      --danger:#c62828;
+      --warning:#b26a00;
+      --locked:#98a2b3;
+      --shadow:0 1px 3px rgba(16,24,40,.08), 0 1px 2px rgba(16,24,40,.04);
+      --radius:14px;
+      --sidebar:340px;
+    }
 
-.course-btn{
-  width:100%;padding:12px;margin-bottom:8px;border:none;
-  border-radius:8px;text-align:left;cursor:pointer;
-}
+    * { box-sizing: border-box; }
 
-.course-btn.active{background:white;color:black;}
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
 
-a{color:white;text-decoration:none}
-</style>
+    .page {
+      display: grid;
+      grid-template-columns: var(--sidebar) 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: #0f172a;
+      color: #fff;
+      padding: 24px 18px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+    }
+
+    .brand h1 {
+      margin: 0 0 6px 0;
+      font-size: 1.35rem;
+    }
+
+    .brand p {
+      margin: 0;
+      color: #cbd5e1;
+      line-height: 1.5;
+      font-size: .92rem;
+    }
+
+    .sidebar-tools {
+      display: grid;
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .field {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      outline: none;
+    }
+
+    .field::placeholder {
+      color: #cbd5e1;
+    }
+
+    .course-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .course-btn {
+      width: 100%;
+      text-align: left;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      transition: .15s ease;
+    }
+
+    .course-btn:hover {
+      background: rgba(255,255,255,.12);
+    }
+
+    .course-btn.active {
+      background: #fff;
+      color: #0f172a;
+    }
+
+    .course-btn-title {
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+
+    .course-btn-meta {
+      font-size: .82rem;
+      opacity: .9;
+    }
+
+    .main {
+      padding: 28px;
+      max-width: 1450px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .title-wrap h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.8rem;
+      line-height: 1.2;
+    }
+
+    .title-wrap p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 80ch;
+      line-height: 1.6;
+    }
+
+    .status-panel {
+      min-width: 280px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .status-panel h3 {
+      margin: 0 0 10px 0;
+      font-size: 1rem;
+    }
+
+    .progress-line {
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 8px 0;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--primary), var(--primary2));
+      transition: width .25s ease;
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: .9rem;
+      margin-top: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .panel h3 {
+      margin: 0 0 14px 0;
+      font-size: 1.05rem;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .module-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      background: #fff;
+      cursor: pointer;
+      transition: .15s ease;
+    }
+
+    .module-card:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .module-card.locked {
+      opacity: .7;
+      cursor: not-allowed;
+      background: #f8fafc;
+    }
+
+    .module-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--primary);
+      font-size: .9rem;
+      margin-bottom: 12px;
+    }
+
+    .module-card.locked .module-number {
+      background: var(--locked);
+    }
+
+    .module-title {
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .module-desc {
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.5;
+      min-height: 50px;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: .78rem;
+      background: #eef4ff;
+      color: #124078;
+      border: 1px solid #d7e7ff;
+    }
+
+    .badge.success {
+      background: #ecfdf3;
+      border-color: #ccebd7;
+      color: #166534;
+    }
+
+    .badge.warning {
+      background: #fff7ed;
+      border-color: #fed7aa;
+      color: #9a3412;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .module-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .module-header h3 {
+      margin: 0 0 6px 0;
+      font-size: 1.25rem;
+      line-height: 1.3;
+    }
+
+    .module-header p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button.btn, a.btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: .15s ease;
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn.primary:hover {
+      background: var(--primary2);
+    }
+
+    .btn.secondary {
+      background: #eef2f6;
+      color: #223041;
+    }
+
+    .btn.secondary:hover {
+      background: #e4e9f0;
+    }
+
+    .btn.success {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .btn.danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn[disabled] {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
+    .video-shell {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0b1220;
+      border: 1px solid #111827;
+      margin-bottom: 16px;
+      min-height: 320px;
+    }
+
+    .video-shell video,
+    .video-shell iframe {
+      display: block;
+      width: 100%;
+      height: 520px;
+      background: #000;
+      border: 0;
+    }
+
+    .video-placeholder {
+      min-height: 520px;
+      padding: 22px;
+      color: #e5e7eb;
+      font-size: .95rem;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .video-placeholder-inner {
+      max-width: 700px;
+    }
+
+    .video-placeholder-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .video-placeholder-text {
+      color: #cbd5e1;
+      margin-bottom: 18px;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .question-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      background: #fff;
+      margin-bottom: 14px;
+    }
+
+    .question-title {
+      font-weight: 700;
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      border: 1px solid #d0d8e1;
+      border-radius: 12px;
+      padding: 13px 14px;
+      background: #f9fafb;
+      cursor: pointer;
+      transition: .12s ease;
+      line-height: 1.45;
+      color: var(--text);
+    }
+
+    .option-btn:hover {
+      background: #f1f5f9;
+    }
+
+    .option-btn.selected {
+      border-color: #7aa7d8;
+      background: #eaf4ff;
+    }
+
+    .option-btn.correct {
+      border-color: #188038;
+      background: #dff4e5;
+      color: #0f5132;
+    }
+
+    .option-btn.wrong {
+      border-color: #c62828;
+      background: #fde7e9;
+      color: #7f1d1d;
+    }
+
+    .feedback {
+      min-height: 24px;
+      font-size: .95rem;
+      font-weight: 600;
+      margin: 10px 0 4px 0;
+    }
+
+    .feedback.ok {
+      color: var(--success);
+    }
+
+    .feedback.fail {
+      color: var(--danger);
+    }
+
+    .quiz-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .result-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      background: #f8fafc;
+      margin-top: 16px;
+    }
+
+    .result-box h4 {
+      margin: 0 0 10px 0;
+      font-size: 1rem;
+    }
+
+    .muted {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .empty-state {
+      background: var(--panel);
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40vh;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.96);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.25);
+      padding: 28px;
+    }
+
+    .login-card h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.6rem;
+      color: #0f172a;
+    }
+
+    .login-card p {
+      margin: 0 0 18px 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      margin-bottom: 12px;
+      font-size: .95rem;
+      outline: none;
+    }
+
+    .login-input:focus {
+      border-color: var(--primary2);
+      box-shadow: 0 0 0 3px rgba(11,116,200,.12);
+    }
+
+    .login-error {
+      min-height: 22px;
+      color: var(--danger);
+      font-size: .9rem;
+      margin-top: 10px;
+      font-weight: 600;
+    }
+
+    .login-note {
+      margin-top: 14px;
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1200px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
+
+      .main {
+        padding: 18px;
+      }
+
+      .video-shell video,
+      .video-shell iframe,
+      .video-placeholder {
+        height: 360px;
+        min-height: 360px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .video-shell video,
+      .video-shell iframe,
+      .video-placeholder {
+        height: 240px;
+        min-height: 240px;
+      }
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="page">
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h2>TFF utbildningsportal</h2>
+      <p>Logga in för att öppna kurser och moduler.</p>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
+      <input id="username" class="login-input" type="text" placeholder="Användarnamn" autocomplete="username" />
+      <input id="password" class="login-input" type="password" placeholder="Lösenord" autocomplete="current-password" />
 
-<h2>TFF portal</h2>
+      <button id="loginBtn" class="btn primary" type="button" style="width:100%;">Logga in</button>
+      <div id="loginError" class="login-error"></div>
 
-<input id="search" placeholder="Sök..." style="width:100%;padding:8px;margin-bottom:10px">
+      <div class="login-note">
+        Enkel klientbaserad inloggning för GitHub Pages.
+      </div>
+    </div>
+  </div>
 
-<br>
+  <div class="page">
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>TFF utbildningsportal</h1>
+        <p>Kurser, moduler, video och kunskapskontroller med progression.</p>
+      </div>
 
-<!-- ✅ FIXADE LÄNKAR -->
-<a href="index.html">Till startsidan</a><br><br>
-<a href="utbildningar.html">Till utbildningssidan</a><br><br>
+      <div class="sidebar-tools">
+        <input id="courseSearch" class="field" type="search" placeholder="Sök kurs eller modul..." />
+        <button id="resetProgressBtn" class="btn secondary" type="button">Nollställ progression</button>
+        <button id="logoutBtn" class="btn danger" type="button">Logga ut</button>
+        <a href="index.html" class="btn secondary">Till startsidan</a>
+        <a href="utbildningar.html" class="btn secondary">Till Utbildningsportal</a>
+      </div>
 
-<div id="courseList"></div>
+      <div id="courseList" class="course-list"></div>
+    </aside>
 
-</div>
+    <main class="main">
+      <div id="loading" class="loading">Läser in kurser…</div>
 
-<!-- MAIN -->
-<div class="main">
+      <div id="app" style="display:none;">
+        <section class="topbar">
+          <div class="title-wrap">
+            <h2 id="courseTitle">Kurser</h2>
+            <p id="courseIntro">Välj en kurs i vänstermenyn.</p>
+          </div>
 
-<h2 id="courseTitle"></h2>
-<div id="modules"></div>
+          <div class="status-panel">
+            <h3>Kursstatus</h3>
+            <div class="progress-line">
+              <div id="courseProgressFill" class="progress-fill"></div>
+            </div>
+            <div class="status-row">
+              <span>Slutförda moduler</span>
+              <strong id="courseProgressText">0 / 0</strong>
+            </div>
+            <div class="status-row">
+              <span>Godkända quiz</span>
+              <strong id="coursePassedText">0</strong>
+            </div>
+          </div>
+        </section>
 
-</div>
+        <section id="courseView">
+          <div class="grid">
+            <div class="panel">
+              <h3>Moduler</h3>
+              <div id="modulesGrid" class="modules-grid"></div>
+            </div>
 
-</div>
+            <div class="panel">
+              <h3>Vald kurs</h3>
+              <div id="courseSummary" class="muted"></div>
+            </div>
+          </div>
+        </section>
 
-<script>
+        <section id="moduleView" class="hidden">
+          <div class="panel">
+            <div class="module-header">
+              <div>
+                <h3 id="moduleTitle">Modul</h3>
+                <p id="moduleSubtitle">Kurs / Modul</p>
+              </div>
 
-/* ✅ ALL DATA */
-const courses = [
-{ id:"kurs-1", title:"Kurs 1 – MICROSOFT TEAMS" },
-{ id:"kurs-2", title:"Kurs 2 – TRANSKRIBERING" },
-{ id:"kurs-3", title:"Kurs 3 – DOKUMENTATION" },
-{ id:"kurs-4", title:"Kurs 4 – AI & COPILOT" },
-{ id:"kurs-5", title:"Kurs 5 – PROMPTNING" },
-{ id:"kurs-6", title:"Kurs 6 – SKAPA DOKUMENT" },
-{ id:"kurs-7", title:"Kurs 7 – TEAMS & SHAREPOINT" },
-{ id:"kurs-8", title:"Kurs 8 – GDPR" },
-{ id:"kurs-9", title:"Kurs 9 – RÄTT VERKTYG" },
-{ id:"kurs-10", title:"Kurs 10 – MÖTESKULTUR" },
-{ id:"kurs-11", title:"Kurs 11 – STRUKTUR" },
-{ id:"kurs-12", title:"Kurs 12 – DIARIEFÖRING" },
-{ id:"kurs-13", title:"Kurs 13 – GOVERNANCE" },
-{ id:"kurs-14", title:"Kurs 14 – LIVSCYKEL" },
-{ id:"kurs-15", title:"Kurs 15 – PROCESSARBETE" },
+              <div class="btn-row">
+                <button id="backToCourseBtn" class="btn secondary" type="button">Tillbaka till kurs</button>
+                <button id="unlockNextBtn" class="btn success" type="button" disabled>Nästa modul</button>
+              </div>
+            </div>
 
-/* ✅ KURS 16 */
-{ id:"kurs-16", title:"Kurs 16 – ARBETA EFFEKTIVT MED DIN PERSONLIGA COPILOT" }
-];
+            <div class="video-shell" id="videoShell">
+              <iframe id="moduleIframe" class="hidden" allow="autoplay; fullscreen" allowfullscreen></iframe>
+              <video id="moduleVideo" class="hidden" controls playsinline preload="metadata"></video>
+              <div id="videoPlaceholder" class="video-placeholder hidden"></div>
+            </div>
 
-/* ✅ HÄMTA RÄTT KURS */
-function getCourse() {
-  const url = new URLSearchParams(window.location.search).get("course");
-  const saved = localStorage.getItem("tff_selected_course_id");
+            <div class="panel" style="padding:16px; background:#fcfcfd;">
+              <h3 style="margin-top:0;">Innehåll</h3>
+              <div id="moduleContent" class="muted"></div>
+            </div>
 
-  return url || saved || "kurs-1";
-}
+            <div class="panel" style="margin-top:16px;">
+              <h3 style="margin-top:0;">Quiz</h3>
 
-let selected = getCourse();
+              <div id="quizContainer">
+                <div class="quiz-meta">
+                  <span id="quizProgress">Fråga 0 / 0</span>
+                  <span id="quizScoreLive">Rätt hittills: 0</span>
+                </div>
 
-/* ✅ SIDOMENY */
-function renderCourses() {
-  const list = document.getElementById("courseList");
-  list.innerHTML="";
+                <div class="question-box">
+                  <div id="questionTitle" class="question-title">Laddar fråga…</div>
+                  <div id="optionsBox" class="options"></div>
+                  <div id="feedback" class="feedback"></div>
 
-  courses.forEach(c=>{
-    const btn = document.createElement("button");
-    btn.className = "course-btn"+(c.id===selected?" active":"");
-    btn.textContent = c.title;
+                  <div class="quiz-actions">
+                    <button id="checkAnswerBtn" class="btn primary" type="button" disabled>Kontrollera</button>
+                    <button id="nextQuestionBtn" class="btn secondary" type="button" disabled>Nästa fråga</button>
+                    <button id="retryQuestionBtn" class="btn secondary" type="button">Välj om svar</button>
+                  </div>
+                </div>
 
-    btn.onclick = ()=>{
-      selected = c.id;
-      localStorage.setItem("tff_selected_course_id", c.id);
-      renderAll();
+                <div id="resultBox" class="result-box hidden">
+                  <h4>Resultat</h4>
+                  <div id="resultText" class="muted"></div>
+                </div>
+              </div>
+
+              <div id="noQuizBox" class="muted hidden">
+                Inga frågor hittades för denna modul.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="emptyState" class="empty-state hidden">
+          <h3>Ingen kurs vald</h3>
+          <p class="muted">Välj en kurs i vänstermenyn för att visa moduler och quiz.</p>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "tff_portal_progress_all16_v2";
+    const LOGIN_STORAGE_KEY = "tff_portal_logged_in";
+    const SELECTED_COURSE_STORAGE_KEY = "tff_selected_course_id";
+
+    const USERS = [
+      { username: "chef", password: "TF4321" }
+    ];
+
+    const COURSE_DEFINITIONS = [
+      {
+        title: "Kurs 1 – MICROSOFT TEAMS",
+        description: "Microsoft Teams i kommunal verksamhet med fokus på struktur, samarbete och korrekt användning.",
+        modules: [
+          "Vad är Teams (och vad är det inte)",
+          "Chat, kanal och möte – rätt val",
+          "Möten i Teams – roller & praxis",
+          "Filer i Teams (SharePoint i bakgrunden)",
+          "Vanliga misstag i kommunal Teams-användning"
+        ]
+      },
+      {
+        title: "Kurs 2 – TRANSKRIBERING",
+        description: "Transkribering av möten och material på ett strukturerat och kvalitetssäkrat sätt.",
+        modules: [
+          "Vad är transkribering",
+          "När transkribering ska användas",
+          "Kvalitet i transkriberad text",
+          "Granskning och rättning",
+          "Lagring och uppföljning"
+        ]
+      },
+      {
+        title: "Kurs 3 – DOKUMENTATION",
+        description: "Dokumentation i offentlig verksamhet med tydlighet, spårbarhet och kvalitet.",
+        modules: [
+          "Syfte med dokumentation",
+          "Tydlig struktur i dokument",
+          "Ansvar och roller",
+          "Versioner och ändringar",
+          "Uppföljning och kvalitet"
+        ]
+      },
+      {
+        title: "Kurs 4 – AI & COPILOT",
+        description: "Introduktion till AI och Copilot med fokus på nytta, begränsningar och säker användning.",
+        modules: [
+          "Vad AI och Copilot är",
+          "När Copilot passar bra",
+          "Risker och begränsningar",
+          "Källkritik och kvalitetssäkring",
+          "Ansvarsfull användning"
+        ]
+      },
+      {
+        title: "Kurs 5 – PROMPTNING",
+        description: "Praktisk promptning för tydligare resultat, bättre kvalitet och effektivare arbete.",
+        modules: [
+          "Vad en bra prompt innehåller",
+          "Tydliga instruktioner",
+          "Kontext, mål och format",
+          "Iterativ förbättring",
+          "Vanliga promptmisstag"
+        ]
+      },
+      {
+        title: "Kurs 6 – SKAPA OCH SPARA DOKUMENT",
+        description: "Skapa, namnge, spara och hantera dokument på ett strukturerat sätt.",
+        modules: [
+          "Skapa dokument rätt från början",
+          "Filnamn och struktur",
+          "Spara på rätt plats",
+          "Delning och åtkomst",
+          "Arkivering och livscykel"
+        ]
+      },
+      {
+        title: "Kurs 7 – TEAMS & SHAREPOINT",
+        description: "Samspelet mellan Teams och SharePoint för samarbete, filer och informationshantering.",
+        modules: [
+          "Hur Teams och SharePoint hänger ihop",
+          "Dokumentbibliotek och mappar",
+          "Behörigheter och åtkomst",
+          "Samarbete i gemensamma ytor",
+          "Vanliga fel och hur de undviks"
+        ]
+      },
+      {
+        title: "Kurs 8 – GDPR",
+        description: "Grundläggande GDPR med fokus på personuppgifter, ansvar och korrekt hantering.",
+        modules: [
+          "Vad personuppgifter är",
+          "Rättslig grund och syfte",
+          "Minimering och korrekthet",
+          "Lagring, gallring och skydd",
+          "Incidenter och rapportering"
+        ]
+      },
+      {
+        title: "Kurs 9 – DIARIEFÖRING OCH ARKIVERING",
+        description: "Korrekt hantering av allmänna handlingar, diarieföring och arkivering.",
+        modules: [
+          "Allmän handling och registrering",
+          "Diarieföring i praktiken",
+          "Ordning och spårbarhet",
+          "Arkivering och bevarande",
+          "Vanliga fel och rätt arbetssätt"
+        ]
+      },
+      {
+        title: "Kurs 10 – INFORMATIONSSÄKERHET",
+        description: "Informationssäkerhet med fokus på skydd, tillgänglighet och korrekt hantering.",
+        modules: [
+          "Vad informationssäkerhet innebär",
+          "Konfidentialitet, riktighet, tillgänglighet",
+          "Säkert arbetssätt i vardagen",
+          "Behörigheter och åtkomst",
+          "Incidenter och rapportering"
+        ]
+      },
+      {
+        title: "Kurs 11 – NIS2",
+        description: "Introduktion till NIS2 och varför styrning, säkerhet och uppföljning är centralt.",
+        modules: [
+          "Vad NIS2 är",
+          "Ansvar och styrning",
+          "Riskhantering",
+          "Rapportering och uppföljning",
+          "Praktisk tillämpning"
+        ]
+      },
+      {
+        title: "Kurs 12 – BRANDSKYDD",
+        description: "Systematiskt brandskyddsarbete med roller, rutiner och förebyggande åtgärder.",
+        modules: [
+          "Grundläggande brandskydd",
+          "Förebyggande arbete",
+          "Utrustning och utrymning",
+          "Ansvar och rutiner",
+          "Kontroll och uppföljning"
+        ]
+      },
+      {
+        title: "Kurs 13 – FÖRSTA HJÄLPEN",
+        description: "Första hjälpen i verksamheten med fokus på larm, bedömning och tidiga åtgärder.",
+        modules: [
+          "Larma och skapa överblick",
+          "Akuta åtgärder",
+          "Hjärtstartare och HLR",
+          "Efter åtgärd och dokumentation",
+          "Övning och beredskap"
+        ]
+      },
+      {
+        title: "Kurs 14 – KVALITET OCH PROCESSER",
+        description: "Kvalitet, processer och förbättringsarbete i kommunal verksamhet.",
+        modules: [
+          "Vad kvalitet innebär",
+          "Processer och flöden",
+          "Roller, ansvar och uppföljning",
+          "Avvikelse och förbättring",
+          "Ständig utveckling"
+        ]
+      },
+      {
+        title: "Kurs 15 – AUTOMATION",
+        description: "Automation i vardagen med fokus på nytta, kontroll och hållbar förvaltning.",
+        modules: [
+          "Vad automation är",
+          "När automation passar",
+          "Flöden, data och regler",
+          "Risker och kontroller",
+          "Förvaltning och vidareutveckling"
+        ]
+      },
+      {
+        title: "Kurs 16 – ARBETA EFFEKTIVT MED DIN PERSONLIGA COPILOT",
+        description: "En praktisk kurs om hur du använder din personliga Copilot i vardagen för att arbeta mer strukturerat, professionellt och effektivt.",
+        modules: [
+          "Förstå din Copilot",
+          "Så lär du Copilot hur du arbetar",
+          "Skriva professionella e-post med Copilot",
+          "Skapa dokument (Word, PowerPoint, Excel)",
+          "Bygga din kompletta Copilot-setup"
+        ]
+      }
+    ];
+
+    const COURSE1_VIDEOS = {
+      1: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAM56HkswSuTqBrEbVQQ5ePAWBcTcx6K49JZCSwLZIFgbE?e=VE3KoP",
+      2: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAr_hBecxAwQb9p9XUahrG-AQQ6XbywLFqDweOoMt_sTI8?e=gBLfmw",
+      3: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQCfj1MJmA4ATI5hT6kTWj3UAZFBBW-YGwurdSzUD8uVXQ0?e=S8J94O",
+      4: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQDppBte4fxjT7ZVcRQBQO9JAZ2Rs5PzW_LMCTb8Il13YTU?e=DRxC7O",
+      5: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQB9i6z8AVGWQa86AhtGvIx5AWb6SDlaAQ2-AW3107ButB4?e=oqiHp0"
     };
 
-    list.appendChild(btn);
-  });
-}
+    const state = {
+      data: [],
+      filteredData: [],
+      selectedCourseId: null,
+      selectedModuleId: null,
+      progress: loadProgress(),
+      quiz: createEmptyQuizState()
+    };
 
-/* ✅ VISA KURS */
-function renderCourse() {
-  const course = courses.find(c=>c.id===selected);
+    function createEmptyQuizState(moduleId = null) {
+      return {
+        moduleId,
+        questions: [],
+        currentIndex: 0,
+        selectedOptionIndex: null,
+        checked: false,
+        correctCount: 0,
+        finished: false,
+        finalPercent: 0
+      };
+    }
 
-  document.getElementById("courseTitle").textContent = course.title;
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
 
-  const modules = document.getElementById("modules");
-  modules.innerHTML="";
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.progress));
+    }
 
-  for(let i=1;i<=5;i++){
-    const div = document.createElement("div");
-    div.textContent = "Modul "+i;
-    modules.appendChild(div);
-  }
-}
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
-/* ✅ START */
-function renderAll(){
-  renderCourses();
-  renderCourse();
-}
+    function normalizeText(text) {
+      return String(text || "").trim().toLowerCase();
+    }
 
-renderAll();
+    function resetQuizState(moduleId = null) {
+      state.quiz = createEmptyQuizState(moduleId);
+    }
 
-</script>
+    function getCourseProgress(courseId) {
+      if (!state.progress[courseId]) {
+        state.progress[courseId] = { modules: {} };
+      }
+      return state.progress[courseId];
+    }
 
+    function getModuleProgress(courseId, moduleId) {
+      const courseProgress = getCourseProgress(courseId);
+      if (!courseProgress.modules[moduleId]) {
+        courseProgress.modules[moduleId] = {
+          passed: false,
+          scorePercent: 0,
+          correctCount: 0,
+          totalQuestions: 0,
+          completed: false
+        };
+      }
+      return courseProgress.modules[moduleId];
+    }
+
+    function buildQuestionSet() {
+      return [
+        {
+          question: "Vad är huvudfokus i denna modul?",
+          options: [
+            "Att förstå grunderna och arbeta strukturerat",
+            "Att hoppa över gemensamma arbetssätt",
+            "Att arbeta utan struktur",
+            "Att undvika dokumentation helt"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: "Vilket arbetssätt är mest korrekt?",
+          options: [
+            "Att använda privata lösningar utan styrning",
+            "Att följa tydliga rutiner och gemensam struktur",
+            "Att undvika uppföljning",
+            "Att spara flera osynkade kopior"
+          ],
+          correctIndex: 1
+        },
+        {
+          question: "Vad bör undvikas?",
+          options: [
+            "Tydlig ansvarsfördelning",
+            "Gemensamma informationsytor",
+            "Otydlighet och dubbelarbete",
+            "Strukturerad hantering"
+          ],
+          correctIndex: 2
+        },
+        {
+          question: "Vad stödjer kvalitet och spårbarhet?",
+          options: [
+            "Muntliga överenskommelser utan notering",
+            "Ostrukturerad lagring",
+            "Privata versioner",
+            "Dokumentation, ordning och tydligt ansvar"
+          ],
+          correctIndex: 3
+        },
+        {
+          question: "Vad är viktigt för efterlevnad?",
+          options: [
+            "Att arbeta enligt fastställda rutiner",
+            "Att varje person gör på sitt eget sätt",
+            "Att undvika kontroll",
+            "Att hoppa över uppföljning"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: "Vad ger bäst samarbete?",
+          options: [
+            "Många separata kopior i e-post",
+            "Gemensamma ytor, tydlighet och rätt verktyg",
+            "Ingen ansvarsfördelning",
+            "Endast lokal lagring"
+          ],
+          correctIndex: 1
+        },
+        {
+          question: "Vad minskar risken för fel?",
+          options: [
+            "Ad hoc-beslut utan struktur",
+            "Oklara roller",
+            "Standardiserat arbetssätt och uppföljning",
+            "Flera parallella arbetsmetoder"
+          ],
+          correctIndex: 2
+        },
+        {
+          question: "Vilken slutsats är mest riktig?",
+          options: [
+            "Det spelar ingen roll hur arbetet utförs",
+            "Privata lösningar är alltid bäst",
+            "Dokumentation behövs inte",
+            "God struktur är avgörande"
+          ],
+          correctIndex: 3
+        },
+        {
+          question: "Vad är bäst vid praktiskt arbete?",
+          options: [
+            "Att följa gemensam struktur och dokumenterade rutiner",
+            "Att vänta med kvalitetssäkring till slutet",
+            "Att undvika versionshantering",
+            "Att arbeta utan gemensamma principer"
+          ],
+          correctIndex: 0
+        },
+        {
+          question: "Vad är rätt sammanfattning?",
+          options: [
+            "Arbetssättet saknar betydelse",
+            "Rätt struktur och arbetssätt ger bättre resultat",
+            "Dokumentation kan alltid hoppas över",
+            "Uppföljning är onödigt"
+          ],
+          correctIndex: 1
+        }
+      ];
+    }
+
+    function moduleHasQuiz(module) {
+      return Array.isArray(module.questions) && module.questions.length > 0;
+    }
+
+    function buildData() {
+      return COURSE_DEFINITIONS.map((courseDef, courseIndex) => {
+        const courseNumber = courseIndex + 1;
+
+        return {
+          id: `kurs-${courseNumber}`,
+          courseNumber,
+          title: courseDef.title,
+          description: courseDef.description,
+          modules: courseDef.modules.map((moduleTitle, moduleIndex) => {
+            const moduleNumber = moduleIndex + 1;
+            const videoUrl = courseNumber === 1 ? (COURSE1_VIDEOS[moduleNumber] || "") : "";
+            const videoType = courseNumber === 1 ? "sharepoint-link" : "none";
+
+            return {
+              id: `kurs-${courseNumber}-modul-${moduleNumber}`,
+              moduleNumber,
+              title: moduleTitle,
+              content: `${moduleTitle}. Här visas modulens innehåll och tillhörande material.`,
+              videoType,
+              videoUrl,
+              questions: courseNumber === 16 ? [] : buildQuestionSet()
+            };
+          })
+        };
+      });
+    }
+
+    function getPreferredCourseId() {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = params.get("course");
+      const fromStorage = localStorage.getItem(SELECTED_COURSE_STORAGE_KEY);
+
+      if (fromUrl && state.data.some(c => c.id === fromUrl)) return fromUrl;
+      if (fromStorage && state.data.some(c => c.id === fromStorage)) return fromStorage;
+
+      return state.data.length ? state.data[0].id : null;
+    }
+
+    function filterCourses(searchTerm) {
+      const q = normalizeText(searchTerm);
+
+      if (!q) {
+        state.filteredData = state.data;
+        renderCourseList();
+        return;
+      }
+
+      state.filteredData = state.data.filter(course => {
+        const inCourse = normalizeText(course.title).includes(q);
+        const inModules = course.modules.some(m => normalizeText(m.title).includes(q));
+        return inCourse || inModules;
+      });
+
+      renderCourseList();
+    }
+
+    function refreshCourseStatus(course) {
+      const moduleProgresses = course.modules.map(m => getModuleProgress(course.id, m.id));
+      const passedCount = moduleProgresses.filter(m => m.passed).length;
+      const percent = Math.round((passedCount / Math.max(course.modules.length, 1)) * 100);
+
+      document.getElementById("courseProgressFill").style.width = `${percent}%`;
+      document.getElementById("courseProgressText").textContent = `${passedCount} / ${course.modules.length}`;
+      document.getElementById("coursePassedText").textContent = String(passedCount);
+    }
+
+    function renderCourseList() {
+      const wrap = document.getElementById("courseList");
+      wrap.innerHTML = "";
+
+      state.filteredData.forEach(course => {
+        const moduleProgresses = course.modules.map(m => getModuleProgress(course.id, m.id));
+        const passedCount = moduleProgresses.filter(m => m.passed).length;
+
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "course-btn" + (state.selectedCourseId === course.id ? " active" : "");
+        btn.innerHTML = `
+          <div class="course-btn-title">${escapeHtml(course.title)}</div>
+          <div class="course-btn-meta">${passedCount} / ${course.modules.length} moduler godkända</div>
+        `;
+
+        btn.addEventListener("click", () => {
+          state.selectedCourseId = course.id;
+          state.selectedModuleId = null;
+          localStorage.setItem(SELECTED_COURSE_STORAGE_KEY, course.id);
+          resetQuizState();
+          renderAll();
+        });
+
+        wrap.appendChild(btn);
+      });
+    }
+
+    function renderCourseView(course) {
+      document.getElementById("courseTitle").textContent = course.title;
+      document.getElementById("courseIntro").textContent = course.description;
+
+      const modulesGrid = document.getElementById("modulesGrid");
+      const courseSummary = document.getElementById("courseSummary");
+      modulesGrid.innerHTML = "";
+
+      refreshCourseStatus(course);
+
+      const hasAnyQuiz = course.modules.some(m => moduleHasQuiz(m));
+
+      courseSummary.innerHTML = `
+        <p><strong>${escapeHtml(course.title)}</strong></p>
+        <p>${escapeHtml(course.description)}</p>
+        <p>Kursen innehåller <strong>${course.modules.length}</strong> moduler.${
+          hasAnyQuiz
+            ? " Minst <strong>80 % rätt</strong> krävs för att låsa upp nästa modul i moduler som har quiz."
+            : " Denna kurs innehåller <strong>inga quiz</strong>."
+        }</p>
+      `;
+
+      course.modules.forEach((module, index) => {
+        const prevModule = course.modules[index - 1];
+        const prevProgress = prevModule ? getModuleProgress(course.id, prevModule.id) : null;
+        const prevPassed = index === 0
+          ? true
+          : (!moduleHasQuiz(prevModule) || prevProgress.passed || prevProgress.completed);
+
+        const moduleProgress = getModuleProgress(course.id, module.id);
+        const hasQuiz = moduleHasQuiz(module);
+
+        const card = document.createElement("div");
+        card.className = "module-card" + (!prevPassed ? " locked" : "");
+        card.innerHTML = `
+          <div class="module-number">M${module.moduleNumber}</div>
+          <div class="module-title">${escapeHtml(module.title)}</div>
+          <div class="module-desc">${escapeHtml(module.content)}</div>
+          <div class="badge-row">
+            <span class="badge">${module.questions.length} frågor</span>
+            ${module.videoUrl ? `<span class="badge">Film</span>` : `<span class="badge">Ingen film</span>`}
+            ${
+              hasQuiz
+                ? (
+                    moduleProgress.passed
+                      ? `<span class="badge success">Godkänd ${moduleProgress.scorePercent}%</span>`
+                      : !prevPassed
+                        ? `<span class="badge warning">Låst</span>`
+                        : `<span class="badge">Ej godkänd</span>`
+                  )
+                : (
+                    moduleProgress.completed
+                      ? `<span class="badge success">Genomförd</span>`
+                      : !prevPassed
+                        ? `<span class="badge warning">Låst</span>`
+                        : `<span class="badge">Ingen quiz</span>`
+                  )
+            }
+          </div>
+        `;
+
+        if (prevPassed) {
+          card.addEventListener("click", () => {
+            state.selectedModuleId = module.id;
+            localStorage.setItem(SELECTED_COURSE_STORAGE_KEY, course.id);
+            resetQuizState();
+            renderAll();
+          });
+        }
+
+        modulesGrid.appendChild(card);
+      });
+    }
+
+    function resetMediaPlayers() {
+      const video = document.getElementById("moduleVideo");
+      const iframe = document.getElementById("moduleIframe");
+      const placeholder = document.getElementById("videoPlaceholder");
+
+      try { video.pause(); } catch {}
+
+      video.removeAttribute("src");
+      video.load();
+      video.classList.add("hidden");
+
+      iframe.removeAttribute("src");
+      iframe.classList.add("hidden");
+
+      placeholder.classList.add("hidden");
+      placeholder.innerHTML = "";
+    }
+
+    function openSharePointVideo(url) {
+      if (!url) return;
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function setupVideo(module) {
+      const video = document.getElementById("moduleVideo");
+      const iframe = document.getElementById("moduleIframe");
+      const placeholder = document.getElementById("videoPlaceholder");
+
+      resetMediaPlayers();
+
+      if (!module.videoUrl) {
+        placeholder.classList.remove("hidden");
+        placeholder.innerHTML = `
+          <div class="video-placeholder-inner">
+            <div class="video-placeholder-title">Ingen video kopplad</div>
+            <div class="video-placeholder-text">Det finns ingen film registrerad för denna modul ännu.</div>
+          </div>
+        `;
+        return;
+      }
+
+      if (module.videoType === "sharepoint-link") {
+        placeholder.classList.remove("hidden");
+        placeholder.innerHTML = `
+          <div class="video-placeholder-inner">
+            <div class="video-placeholder-title">Film för ${escapeHtml(module.title)}</div>
+            <div class="video-placeholder-text">
+              Denna SharePoint-film blockeras för inbäddning från GitHub Pages. Öppna filmen via knappen nedan.
+            </div>
+            <button class="btn primary" type="button" id="openVideoBtn">Öppna film</button>
+          </div>
+        `;
+        document.getElementById("openVideoBtn").onclick = () => openSharePointVideo(module.videoUrl);
+        return;
+      }
+
+      if (module.videoType === "iframe") {
+        iframe.src = module.videoUrl;
+        iframe.classList.remove("hidden");
+        return;
+      }
+
+      if (module.videoType === "video") {
+        video.src = module.videoUrl;
+        video.onerror = () => {
+          resetMediaPlayers();
+          placeholder.classList.remove("hidden");
+          placeholder.innerHTML = `
+            <div class="video-placeholder-inner">
+              <div class="video-placeholder-title">Kunde inte läsa videon</div>
+              <div class="video-placeholder-text">Kontrollera sökvägen till MP4-filen.</div>
+            </div>
+          `;
+        };
+        video.classList.remove("hidden");
+      }
+    }
+
+    function setUnlockButton(course, module) {
+      const moduleProgress = getModuleProgress(course.id, module.id);
+      const currentIndex = course.modules.findIndex(m => m.id === module.id);
+      const nextModule = course.modules[currentIndex + 1];
+      const unlockBtn = document.getElementById("unlockNextBtn");
+      const isDone = moduleHasQuiz(module)
+        ? moduleProgress.passed
+        : (moduleProgress.completed || moduleProgress.passed);
+
+      if (nextModule && isDone) {
+        unlockBtn.disabled = false;
+        unlockBtn.textContent = "Öppna nästa modul";
+        unlockBtn.onclick = () => {
+          state.selectedModuleId = nextModule.id;
+          localStorage.setItem(SELECTED_COURSE_STORAGE_KEY, course.id);
+          resetQuizState();
+          renderAll();
+        };
+      } else if (!nextModule) {
+        unlockBtn.disabled = true;
+        unlockBtn.textContent = "Sista modulen";
+      } else {
+        unlockBtn.disabled = true;
+        unlockBtn.textContent = "Nästa modul";
+      }
+    }
+
+    function renderQuestion() {
+      const questions = state.quiz.questions;
+      const index = state.quiz.currentIndex;
+      const q = questions[index];
+
+      const quizProgress = document.getElementById("quizProgress");
+      const quizScoreLive = document.getElementById("quizScoreLive");
+      const questionTitle = document.getElementById("questionTitle");
+      const optionsBox = document.getElementById("optionsBox");
+      const feedback = document.getElementById("feedback");
+      const checkBtn = document.getElementById("checkAnswerBtn");
+      const nextBtn = document.getElementById("nextQuestionBtn");
+      const retryBtn = document.getElementById("retryQuestionBtn");
+
+      quizProgress.textContent = `Fråga ${Math.min(index + 1, questions.length)} / ${questions.length}`;
+      quizScoreLive.textContent = `Rätt hittills: ${state.quiz.correctCount}`;
+
+      if (!q) {
+        questionTitle.textContent = "Inga fler frågor.";
+        optionsBox.innerHTML = "";
+        feedback.textContent = "";
+        checkBtn.disabled = true;
+        nextBtn.disabled = true;
+        retryBtn.disabled = true;
+        return;
+      }
+
+      questionTitle.textContent = q.question;
+      optionsBox.innerHTML = "";
+
+      q.options.forEach((option, optionIndex) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+
+        const isSelected = state.quiz.selectedOptionIndex === optionIndex;
+        const isChecked = state.quiz.checked;
+        const isCorrect = optionIndex === q.correctIndex;
+
+        let className = "option-btn";
+        if (isSelected && !isChecked) className += " selected";
+        if (isChecked) {
+          if (isCorrect) className += " correct";
+          else if (isSelected && !isCorrect) className += " wrong";
+        }
+
+        btn.className = className;
+        btn.textContent = `${String.fromCharCode(65 + optionIndex)}. ${option}`;
+
+        btn.addEventListener("click", () => {
+          if (state.quiz.checked || state.quiz.finished) return;
+          state.quiz.selectedOptionIndex = optionIndex;
+          renderQuestion();
+        });
+
+        optionsBox.appendChild(btn);
+      });
+
+      if (state.quiz.finished) {
+        feedback.textContent = "Quiz avslutat.";
+        feedback.className = "feedback ok";
+        checkBtn.disabled = true;
+        nextBtn.disabled = true;
+        retryBtn.disabled = true;
+        return;
+      }
+
+      if (state.quiz.checked) {
+        checkBtn.disabled = true;
+        nextBtn.disabled = false;
+        retryBtn.disabled = false;
+      } else {
+        checkBtn.disabled = state.quiz.selectedOptionIndex === null;
+        nextBtn.disabled = true;
+        retryBtn.disabled = false;
+      }
+    }
+
+    function retryQuestion() {
+      if (state.quiz.finished) return;
+
+      state.quiz.checked = false;
+      state.quiz.selectedOptionIndex = null;
+
+      const feedback = document.getElementById("feedback");
+      feedback.textContent = "";
+      feedback.className = "feedback";
+
+      renderQuestion();
+    }
+
+    function checkAnswer(course, module) {
+      if (state.quiz.selectedOptionIndex === null || state.quiz.checked || state.quiz.finished) return;
+
+      state.quiz.checked = true;
+
+      const q = state.quiz.questions[state.quiz.currentIndex];
+      const selected = state.quiz.selectedOptionIndex;
+      const isCorrect = selected === q.correctIndex;
+
+      const feedback = document.getElementById("feedback");
+
+      if (isCorrect) {
+        state.quiz.correctCount += 1;
+        feedback.textContent = "Rätt svar.";
+        feedback.className = "feedback ok";
+      } else {
+        feedback.textContent = "Fel svar. Du kan välja om svar innan du går vidare.";
+        feedback.className = "feedback fail";
+      }
+
+      renderQuestion();
+    }
+
+    function finalizeQuiz(course, module) {
+      const total = state.quiz.questions.length;
+      const correct = state.quiz.correctCount;
+      const percent = Math.round((correct / Math.max(total, 1)) * 100);
+      const passed = percent >= 80;
+
+      const moduleProgress = getModuleProgress(course.id, module.id);
+      moduleProgress.correctCount = correct;
+      moduleProgress.totalQuestions = total;
+      moduleProgress.scorePercent = percent;
+      moduleProgress.passed = passed;
+      moduleProgress.completed = true;
+
+      saveProgress();
+
+      state.quiz.finished = true;
+      state.quiz.finalPercent = percent;
+
+      const resultBox = document.getElementById("resultBox");
+      const resultText = document.getElementById("resultText");
+
+      resultBox.classList.remove("hidden");
+      resultText.innerHTML = passed
+        ? `<p><strong>Godkänt.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Nästa modul är nu upplåst.</p>`
+        : `<p><strong>Inte godkänt ännu.</strong></p><p>Du fick ${correct} av ${total} rätt (${percent} %).</p><p>Du behöver minst 80 % för att låsa upp nästa modul.</p>`;
+
+      refreshCourseStatus(course);
+      renderCourseList();
+      setUnlockButton(course, module);
+      renderQuestion();
+    }
+
+    function nextQuestion(course, module) {
+      if (!state.quiz.checked || state.quiz.finished) return;
+
+      if (state.quiz.currentIndex < state.quiz.questions.length - 1) {
+        state.quiz.currentIndex += 1;
+        state.quiz.selectedOptionIndex = null;
+        state.quiz.checked = false;
+
+        const feedback = document.getElementById("feedback");
+        feedback.textContent = "";
+        feedback.className = "feedback";
+
+        renderQuestion();
+        return;
+      }
+
+      finalizeQuiz(course, module);
+    }
+
+    function setupQuiz(course, module) {
+      const questions = Array.isArray(module.questions) ? module.questions : [];
+      const noQuizBox = document.getElementById("noQuizBox");
+      const quizContainer = document.getElementById("quizContainer");
+      const resultBox = document.getElementById("resultBox");
+
+      if (
+        state.quiz.moduleId !== module.id ||
+        !Array.isArray(state.quiz.questions) ||
+        state.quiz.questions.length === 0
+      ) {
+        resetQuizState(module.id);
+        state.quiz.questions = questions;
+      }
+
+      resultBox.classList.add("hidden");
+
+      if (!questions.length) {
+        const moduleProgress = getModuleProgress(course.id, module.id);
+        moduleProgress.completed = true;
+        moduleProgress.passed = true;
+        moduleProgress.scorePercent = 100;
+        moduleProgress.correctCount = 0;
+        moduleProgress.totalQuestions = 0;
+        saveProgress();
+
+        noQuizBox.classList.remove("hidden");
+        quizContainer.classList.add("hidden");
+        document.getElementById("quizProgress").textContent = "Fråga 0 / 0";
+        document.getElementById("quizScoreLive").textContent = "Rätt hittills: 0";
+        document.getElementById("questionTitle").textContent = "Inga fler frågor.";
+        document.getElementById("optionsBox").innerHTML = "";
+        document.getElementById("feedback").textContent = "";
+        document.getElementById("checkAnswerBtn").disabled = true;
+        document.getElementById("nextQuestionBtn").disabled = true;
+        document.getElementById("retryQuestionBtn").disabled = true;
+
+        refreshCourseStatus(course);
+        renderCourseList();
+        setUnlockButton(course, module);
+        return;
+      }
+
+      noQuizBox.classList.add("hidden");
+      quizContainer.classList.remove("hidden");
+
+      document.getElementById("checkAnswerBtn").onclick = () => checkAnswer(course, module);
+      document.getElementById("nextQuestionBtn").onclick = () => nextQuestion(course, module);
+      document.getElementById("retryQuestionBtn").onclick = () => retryQuestion();
+
+      renderQuestion();
+    }
+
+    function renderModuleView(course) {
+      const module = course.modules.find(m => m.id === state.selectedModuleId);
+      if (!module) return;
+
+      document.getElementById("courseTitle").textContent = course.title;
+      document.getElementById("courseIntro").textContent = course.description;
+      refreshCourseStatus(course);
+
+      document.getElementById("moduleTitle").textContent = module.title;
+      document.getElementById("moduleSubtitle").textContent = `${course.title} – Modul ${module.moduleNumber}`;
+      document.getElementById("moduleContent").innerHTML = `<p>${escapeHtml(module.content)}</p>`;
+
+      setupVideo(module);
+      setupQuiz(course, module);
+      setUnlockButton(course, module);
+
+      document.getElementById("backToCourseBtn").onclick = () => {
+        state.selectedModuleId = null;
+        localStorage.setItem(SELECTED_COURSE_STORAGE_KEY, course.id);
+        resetQuizState();
+        renderAll();
+      };
+    }
+
+    function renderAll() {
+      renderCourseList();
+
+      const course = state.data.find(c => c.id === state.selectedCourseId);
+
+      if (!course) {
+        document.getElementById("emptyState").classList.remove("hidden");
+        document.getElementById("courseView").classList.add("hidden");
+        document.getElementById("moduleView").classList.add("hidden");
+        return;
+      }
+
+      document.getElementById("emptyState").classList.add("hidden");
+
+      if (state.selectedModuleId) {
+        document.getElementById("courseView").classList.add("hidden");
+        document.getElementById("moduleView").classList.remove("hidden");
+        renderModuleView(course);
+      } else {
+        document.getElementById("courseView").classList.remove("hidden");
+        document.getElementById("moduleView").classList.add("hidden");
+        renderCourseView(course);
+      }
+    }
+
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorEl = document.getElementById("loginError");
+
+      const found = USERS.find(user => user.username === username && user.password === password);
+
+      if (found) {
+        localStorage.setItem(LOGIN_STORAGE_KEY, "true");
+        document.getElementById("loginScreen").style.display = "none";
+        errorEl.textContent = "";
+        return;
+      }
+
+      errorEl.textContent = "Fel användarnamn eller lösenord.";
+    }
+
+    function checkLogin() {
+      const loggedIn = localStorage.getItem(LOGIN_STORAGE_KEY) === "true";
+      document.getElementById("loginScreen").style.display = loggedIn ? "none" : "flex";
+    }
+
+    function logout() {
+      localStorage.removeItem(LOGIN_STORAGE_KEY);
+      document.getElementById("password").value = "";
+      document.getElementById("loginError").textContent = "";
+      document.getElementById("loginScreen").style.display = "flex";
+    }
+
+    function bindEvents() {
+      document.getElementById("courseSearch").addEventListener("input", (e) => {
+        filterCourses(e.target.value);
+      });
+
+      document.getElementById("resetProgressBtn").addEventListener("click", () => {
+        localStorage.removeItem(STORAGE_KEY);
+        state.progress = {};
+        state.selectedModuleId = null;
+        resetQuizState();
+        renderAll();
+      });
+
+      document.getElementById("loginBtn").addEventListener("click", login);
+      document.getElementById("logoutBtn").addEventListener("click", logout);
+
+      document.getElementById("username").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") login();
+      });
+
+      document.getElementById("password").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") login();
+      });
+    }
+
+    function init() {
+      bindEvents();
+      state.data = buildData();
+      state.filteredData = state.data;
+      state.selectedCourseId = getPreferredCourseId();
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("app").style.display = "block";
+      checkLogin();
+      renderAll();
+    }
+
+    init();
+  </script>
 </body>
 </html>
