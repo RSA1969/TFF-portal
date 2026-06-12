@@ -5,177 +5,464 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TFF Utbildningsportal</title>
 
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <script src="assets/js/kurser-data.js"></script>
+  assets/css/styles.css
+  assets/js/kurser-data.jsscript>
 
   <style>
-    body { margin:0; font-family:"Segoe UI", Arial; background:#f5f7fa; }
-    header { background:#0b1635; color:#fff; padding:28px 20px; }
-    header h1 { margin:0; font-size:2rem; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f5f7fa;
+      color: #1d2939;
+    }
 
-    .container { max-width:1280px; margin:auto; padding:28px; }
+    header {
+      background: #0b1635;
+      color: #fff;
+      padding: 28px 20px;
+    }
 
-    .topbar { display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+      line-height: 1.2;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 28px 20px 40px 20px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      text-decoration: none;
+      color: #124078;
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: #eef4ff;
+      border: 1px solid #d7e7ff;
+      border-radius: 10px;
+      padding: 8px 12px;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .back-btn:hover {
+      background: #e1edff;
+      border-color: #bfd8ff;
+    }
+
+    .topbar h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
 
     .search {
-      padding:12px;
-      border-radius:10px;
-      border:1px solid #d0d5dd;
-      width:320px;
+      width: 100%;
+      max-width: 420px;
+      padding: 12px 14px;
+      border: 1px solid #d0d5dd;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .search:focus {
+      border-color: #0b74c8;
+      box-shadow: 0 0 0 3px rgba(11, 116, 200, 0.12);
+    }
+
+    .status {
+      margin: 0 0 18px 0;
+      color: #667085;
+      font-size: 0.95rem;
     }
 
     .grid {
-      margin-top:20px;
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-      gap:20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
     }
 
     .card {
-      background:#fff;
-      border:1px solid #ddd;
-      border-radius:14px;
-      padding:18px;
-      cursor:pointer;
-      display:flex;
-      flex-direction:column;
+      background: #fff;
+      border: 1px solid #d9dee5;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
     }
 
     .card:hover {
-      box-shadow:0 8px 20px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.10);
+    }
+
+    .card-number {
+      display: inline-block;
+      margin-bottom: 12px;
+      background: #eef4ff;
+      color: #124078;
+      border: 1px solid #d7e7ff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .card-desc {
+      color: #667085;
+      line-height: 1.6;
+      min-height: 50px;
+      font-size: 0.95rem;
+      flex: 1;
+    }
+
+    .card-meta {
+      margin-top: 14px;
+      color: #475467;
+      font-size: 0.88rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .start-btn {
-      margin-top:auto;
-      background:#124078;
-      color:#fff;
-      border:none;
-      padding:10px;
-      border-radius:8px;
-      cursor:pointer;
+      background: #124078;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
     }
 
-    .status { margin-top:20px; color:#667085; }
+    .start-btn:hover {
+      background: #0f3460;
+    }
+
+    .empty {
+      background: #fff;
+      border: 1px dashed #d0d5dd;
+      border-radius: 14px;
+      padding: 28px;
+      text-align: center;
+      color: #667085;
+    }
+
+    .error {
+      background: #fff;
+      border: 1px solid #f3c7c7;
+      color: #7f1d1d;
+      border-radius: 14px;
+      padding: 18px;
+      line-height: 1.6;
+    }
+
+    .loading {
+      color: #667085;
+      padding: 12px 0 8px 0;
+    }
+
+    .error pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 12px;
+      background: #fff8f8;
+      border: 1px solid #f3c7c7;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
-
 <body>
+  <header>
+    <h1>TFF Utbildningsportal</h1>
+  </header>
 
-<header>
-  <h1>TFF Utbildningsportal</h1>
-</header>
-
-<main class="container">
-
-<div class="topbar">
-  <div>
-    <a href="index.html">← Tillbaka till startsidan</a>
-    <h2>Välj utbildning</h2>
-  </div>
-
-  <input id="searchInput" class="search" placeholder="Sök kurs..." />
-</div>
-
-<div id="status" class="status"></div>
-<div id="grid" class="grid"></div>
-
-</main>
-
-<script>
-let allCourses = [];
-
-/* ========= LOAD DATA (ROBUST VERSION) ========= */
-function loadCourses(){
-
-  console.log("Start loading courses");
-
-  if (window.kursData && Array.isArray(window.kursData)) {
-    allCourses = window.kursData;
-  }
-  else if (window.kurserData && Array.isArray(window.kurserData)) {
-    allCourses = window.kurserData;
-  }
-  else if (window.KURS_DATA && Array.isArray(window.KURS_DATA)) {
-    allCourses = window.KURS_DATA;
-  }
-  else if (window.kurser && Array.isArray(window.kurser)) {
-    allCourses = window.kurser;
-  }
-  else {
-    console.error("Ingen kursdata hittad i JS");
-    allCourses = [];
-  }
-
-  render(allCourses);
-}
-
-/* ========= RENDER ========= */
-function render(data){
-
-  document.getElementById("status").textContent =
-    data.length + " kurser hittades";
-
-  document.getElementById("grid").innerHTML =
-    data.map((c,i)=>`
-      <div class="card" data-index="${i}">
-        <h3>Kurs ${i+1} – ${c.titel || c.title}</h3>
-        <p>${c.beskrivning || c.description || ""}</p>
-        <span>${(c.moduler || []).length} moduler</span>
-
-        <button class="start-btn" data-index="${i}">
-          Starta kurs
-        </button>
+  <main class="container">
+    <section class="topbar">
+      <div class="topbar-left">
+        <a href="index.html" class="back-btn">← Tillbaka till startsidan</a>
+        <h2>Välj utbildning</h2>
       </div>
-    `).join("");
 
-  bindEvents();
-}
+      <input
+        id="searchInput"
+        class="search"
+        type="search"
+        placeholder="Sök kurs..."
+        aria-label="Sök kurs"
+      />
+    </section>
 
-/* ========= EVENTS ========= */
-function bindEvents(){
+    <div id="status" class="status">Läser in kurser...</div>
+    <div id="content" class="loading">Läser in data...</div>
+  </main>
 
-  document.querySelectorAll(".card").forEach(card=>{
-    card.onclick = (e)=>{
-      if(e.target.classList.contains("start-btn")) return;
-      openCourse(card.dataset.index);
-    };
-  });
+  <script>
+    const contentEl = document.getElementById("content");
+    const statusEl = document.getElementById("status");
+    const searchInput = document.getElementById("searchInput");
 
-  document.querySelectorAll(".start-btn").forEach(btn=>{
-    btn.onclick = (e)=>{
-      e.stopPropagation();
-      openCourse(btn.dataset.index);
-    };
-  });
-}
+    let allCourses = [];
 
-/* ========= OPEN COURSE ========= */
-function openCourse(i){
-  const course = allCourses[i];
-  if(!course) return;
+    function normalizeText(value) {
+      return String(value || "").trim();
+    }
 
-  localStorage.setItem("selectedCourse", JSON.stringify(course));
-  localStorage.setItem("courseIndex", i);
+    function slugify(text) {
+      return String(text || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[–—]/g, "-")
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+    }
 
-  window.location.href = "kurser.html";
-}
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
 
-/* ========= SEARCH ========= */
-document.getElementById("searchInput").addEventListener("input", e=>{
-  const q = e.target.value.toLowerCase();
+    function extractArray(data) {
+      if (Array.isArray(data)) return data;
+      if (data && Array.isArray(data.kurser)) return data.kurser;
+      if (data && Array.isArray(data.courses)) return data.courses;
+      if (data && Array.isArray(data.items)) return data.items;
+      if (data && Array.isArray(data.data)) return data.data;
+      return [];
+    }
 
-  const filtered = allCourses.filter(c =>
-    (c.titel || "").toLowerCase().includes(q) ||
-    (c.beskrivning || "").toLowerCase().includes(q)
-  );
+    async function loadRawData() {
+      try {
+        const response = await fetch("assets/data/kurser-data.json", { cache: "no-store" });
+        if (response.ok) {
+          const json = await response.json();
+          const arr = extractArray(json);
+          if (arr.length) return arr;
+          if (Array.isArray(json)) return json;
+        }
+      } catch (e) {
+        // fortsätt till fallback
+      }
 
-  render(filtered);
-});
+      if (Array.isArray(window.kursData)) return window.kursData;
+      if (Array.isArray(window.kurserData)) return window.kurserData;
+      if (Array.isArray(window.KURS_DATA)) return window.KURS_DATA;
+      if (Array.isArray(window.kurser)) return window.kurser;
 
-/* START */
-loadCourses();
+      if (window.kursData && Array.isArray(window.kursData.kurser)) return window.kursData.kurser;
+      if (window.kurserData && Array.isArray(window.kurserData.kurser)) return window.kurserData.kurser;
+      if (window.KURS_DATA && Array.isArray(window.KURS_DATA.kurser)) return window.KURS_DATA.kurser;
+      if (window.kurser && Array.isArray(window.kurser.kurser)) return window.kurser.kurser;
 
-</script>
+      throw new Error("Ingen kursdata hittades i assets/data/kurser-data.json eller assets/js/kurser-data.js.");
+    }
 
+    function normalizeCourses(rawData) {
+      const arr = extractArray(rawData).length ? extractArray(rawData) : (Array.isArray(rawData) ? rawData : []);
+
+      return arr.map((course, index) => {
+        const title =
+          course.titel ||
+          course.title ||
+          course.namn ||
+          course.name ||
+          course.kurs ||
+          `Kurs ${index + 1}`;
+
+        const description =
+          course.beskrivning ||
+          course.description ||
+          course.syfte ||
+          course.intro ||
+          "";
+
+        const rawModules =
+          course.moduler ||
+          course.modules ||
+          course.innehall ||
+          course.innehåll ||
+          [];
+
+        const modules = Array.isArray(rawModules) ? rawModules : extractArray(rawModules);
+
+        return {
+          id: normalizeText(course.id) || slugify(title),
+          index,
+          title: normalizeText(title),
+          description: normalizeText(description),
+          moduleCount: Array.isArray(modules) ? modules.length : 0,
+          raw: course
+        };
+      });
+    }
+
+    function openCourseByIndex(courseIndex) {
+      const selected = allCourses.find(c => Number(c.index) === Number(courseIndex));
+      if (!selected) return;
+
+      localStorage.setItem("selectedCourseIndex", String(selected.index));
+      localStorage.setItem("selectedCourse", String(selected.index));
+      localStorage.setItem("selectedCourseId", selected.id);
+      localStorage.setItem("selectedCourseTitle", selected.title);
+      localStorage.setItem("courseIndex", String(selected.index));
+
+      window.location.href = "kurser.html";
+    }
+
+    function renderCourses(courses) {
+      if (!courses.length) {
+        contentEl.className = "";
+        contentEl.innerHTML = `
+          <div class="empty">
+            Inga kurser hittades i kursdatan.
+          </div>
+        `;
+        statusEl.textContent = "0 kurser";
+        return;
+      }
+
+      statusEl.textContent = `${courses.length} kurser hittades`;
+      contentEl.className = "";
+
+      const html = `
+        <div class="grid">
+          ${courses.map(course => `
+            <article
+              class="card"
+              data-course-index="${course.index}"
+              role="button"
+              tabindex="0"
+              aria-label="Öppna ${escapeHtml(course.title)}"
+            >
+              <div class="card-number">Kurs ${course.index + 1}</div>
+              <div class="card-title">${escapeHtml(course.title)}</div>
+              <div class="card-desc">${escapeHtml(course.description || "Ingen beskrivning finns ännu.")}</div>
+              <div class="card-meta">
+                <span>${course.moduleCount} moduler</span>
+                <button class="start-btn" type="button" data-course-index="${course.index}">
+                  Starta kurs
+                </button>
+              </div>
+            </article>
+          `).join("")}
+        </div>
+      `;
+
+      contentEl.innerHTML = html;
+
+      contentEl.querySelectorAll(".card").forEach(card => {
+        card.addEventListener("click", (event) => {
+          if (event.target.closest(".start-btn")) return;
+          const courseIndex = Number(card.getAttribute("data-course-index"));
+          openCourseByIndex(courseIndex);
+        });
+
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            const courseIndex = Number(card.getAttribute("data-course-index"));
+            openCourseByIndex(courseIndex);
+          }
+        });
+      });
+
+      contentEl.querySelectorAll(".start-btn").forEach(button => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const courseIndex = Number(button.getAttribute("data-course-index"));
+          openCourseByIndex(courseIndex);
+        });
+      });
+    }
+
+    function filterAndRender() {
+      const q = normalizeText(searchInput.value).toLowerCase();
+
+      if (!q) {
+        renderCourses(allCourses);
+        return;
+      }
+
+      const filtered = allCourses.filter(course =>
+        normalizeText(course.title).toLowerCase().includes(q) ||
+        normalizeText(course.description).toLowerCase().includes(q)
+      );
+
+      renderCourses(filtered);
+    }
+
+    async function init() {
+      try {
+        const rawData = await loadRawData();
+        allCourses = normalizeCourses(rawData);
+        renderCourses(allCourses);
+        searchInput.addEventListener("input", filterAndRender);
+      } catch (error) {
+        statusEl.textContent = "Fel vid inläsning";
+        contentEl.className = "";
+        contentEl.innerHTML = `
+          <div class="error">
+            <strong>Kunde inte läsa kursdata.</strong>
+            <pre>${escapeHtml(error.message)}</pre>
+          </div>
+        `;
+      }
+    }
+
+    init();
+  </script>
 </body>
 </html>
