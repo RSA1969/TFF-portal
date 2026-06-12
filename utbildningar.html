@@ -6,6 +6,7 @@
   <title>TFF Utbildningsportal</title>
 
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <script src="assets/js/kurser-data.js"></script>
 
   <style>
     body {
@@ -42,15 +43,35 @@
       margin-bottom: 24px;
     }
 
-    .topbar h2 {
-      margin: 0 0 8px 0;
-      font-size: 1.25rem;
+    .topbar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .topbar p {
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      text-decoration: none;
+      color: #124078;
+      font-weight: 600;
+      font-size: 0.95rem;
+      background: #eef4ff;
+      border: 1px solid #d7e7ff;
+      border-radius: 10px;
+      padding: 8px 12px;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .back-btn:hover {
+      background: #e1edff;
+      border-color: #bfd8ff;
+    }
+
+    .topbar h2 {
       margin: 0;
-      color: #667085;
-      line-height: 1.6;
+      font-size: 1.25rem;
     }
 
     .search {
@@ -89,6 +110,9 @@
       box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
       transition: transform 0.15s ease, box-shadow 0.15s ease;
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
     }
 
     .card:hover {
@@ -106,6 +130,7 @@
       padding: 6px 10px;
       font-size: 0.8rem;
       font-weight: 700;
+      width: fit-content;
     }
 
     .card-title {
@@ -120,12 +145,34 @@
       line-height: 1.6;
       min-height: 50px;
       font-size: 0.95rem;
+      flex: 1;
     }
 
     .card-meta {
       margin-top: 14px;
       color: #475467;
       font-size: 0.88rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .start-btn {
+      background: #124078;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .start-btn:hover {
+      background: #0f3460;
     }
 
     .empty {
@@ -150,10 +197,28 @@
       color: #667085;
       padding: 12px 0 8px 0;
     }
-  </style>
 
-  <!-- Fallback om du vill använda global JS-data -->
-  <script src="assets/js/kurser-data.js"></script>
+    .error pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-top: 12px;
+      background: #fff8f8;
+      border: 1px solid #f3c7c7;
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .topbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search {
+        max-width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -162,7 +227,8 @@
 
   <main class="container">
     <section class="topbar">
-      <div>
+      <div class="topbar-left">
+        <a href="index.html" class="back-btn">← Tillbaka till startsidan</a>
         <h2>Välj utbildning</h2>
       </div>
 
@@ -214,6 +280,7 @@
       if (data && Array.isArray(data.kurser)) return data.kurser;
       if (data && Array.isArray(data.courses)) return data.courses;
       if (data && Array.isArray(data.items)) return data.items;
+      if (data && Array.isArray(data.data)) return data.data;
       return [];
     }
 
@@ -224,13 +291,16 @@
           return await response.json();
         }
       } catch (e) {
-        // fortsätt till fallback
+        // fallback nedan
       }
 
       if (Array.isArray(window.kursData)) return window.kursData;
       if (Array.isArray(window.kurserData)) return window.kurserData;
       if (Array.isArray(window.KURS_DATA)) return window.KURS_DATA;
+      if (Array.isArray(window.kurser)) return window.kurser;
+
       if (window.kursData && Array.isArray(window.kursData.kurser)) return window.kursData.kurser;
+      if (window.kurserData && Array.isArray(window.kurserData.kurser)) return window.kurserData.kurser;
       if (window.KURS_DATA && Array.isArray(window.KURS_DATA.kurser)) return window.KURS_DATA.kurser;
 
       throw new Error("Ingen kursdata hittades i assets/data/kurser-data.json eller assets/js/kurser-data.js.");
@@ -255,23 +325,42 @@
           course.intro ||
           "";
 
-        const modules =
-          extractArray(course.moduler) ||
-          extractArray(course.modules) ||
+        const rawModules =
+          course.moduler ||
+          course.modules ||
+          course.innehall ||
+          course.innehåll ||
           [];
 
+        const modules = Array.isArray(rawModules) ? rawModules : extractArray(rawModules);
+
         return {
-          id: course.id || slugify(title),
+          id: normalizeText(course.id) || slugify(title),
           index,
           title: normalizeText(title),
           description: normalizeText(description),
-          moduleCount: Array.isArray(modules) ? modules.length : 0
+          moduleCount: Array.isArray(modules) ? modules.length : 0,
+          raw: course
         };
       });
     }
 
+    function openCourseByIndex(courseIndex) {
+      const selected = allCourses.find(c => Number(c.index) === Number(courseIndex));
+      if (!selected) return;
+
+      localStorage.setItem("selectedCourseIndex", String(selected.index));
+      localStorage.setItem("selectedCourse", String(selected.index));
+      localStorage.setItem("selectedCourseId", selected.id);
+      localStorage.setItem("selectedCourseTitle", selected.title);
+      localStorage.setItem("courseIndex", String(selected.index));
+
+      window.location.href = "kurser.html";
+    }
+
     function renderCourses(courses) {
       if (!courses.length) {
+        contentEl.className = "";
         contentEl.innerHTML = `
           <div class="empty">
             Inga kurser hittades i kursdatan.
@@ -282,15 +371,27 @@
       }
 
       statusEl.textContent = `${courses.length} kurser hittades`;
+      contentEl.className = "";
 
       const html = `
         <div class="grid">
           ${courses.map(course => `
-            <article class="card" data-course-id="${escapeHtml(course.id)}" data-course-index="${course.index}">
+            <article
+              class="card"
+              data-course-index="${course.index}"
+              role="button"
+              tabindex="0"
+              aria-label="Öppna ${escapeHtml(course.title)}"
+            >
               <div class="card-number">Kurs ${course.index + 1}</div>
               <div class="card-title">${escapeHtml(course.title)}</div>
               <div class="card-desc">${escapeHtml(course.description || "Ingen beskrivning finns ännu.")}</div>
-              <div class="card-meta">${course.moduleCount} moduler</div>
+              <div class="card-meta">
+                <span>${course.moduleCount} moduler</span>
+                <button class="start-btn" type="button" data-course-index="${course.index}">
+                  Starta kurs
+                </button>
+              </div>
             </article>
           `).join("")}
         </div>
@@ -298,396 +399,61 @@
 
       contentEl.innerHTML = html;
 
-      document.querySelectorAll(".card").forEach(card => {
-        card.addEventListener("click", () => {
-          const courseId = card.getAttribute("data-course-id");
+      contentEl.querySelectorAll(".card").forEach(card => {
+        card.addEventListener("click", (event) => {
+          if (event.target.closest(".start-btn")) return;
           const courseIndex = Number(card.getAttribute("data-course-index"));
+          openCourseByIndex(courseIndex);
+        });
 
-Stephen, felet är nu tydligt:
-
-| Fel i bilden | Orsak |
-|---|---|
-| `GET ... assets/data/kurser-data.js 404` | Du laddar fel filväg |
-| `kursData is not defined` | JavaScript-filen laddades aldrig, därför finns ingen variabel |
-
-I repo-trädet syns att du har **`assets/data/kurser-data.json`** och **`assets/js/kurser-data.js`** — men **inte** `assets/data/kurser-data.js`. [1](https://github.com/RSA1969/TFF-portal/blob/main/kurser.html)
-
-## Gör så här
-**Ersätt hela `utbildningar.html` med koden nedan.**  
-Denna version:
-- läser först `assets/data/kurser-data.json`
-- fallbackar till `assets/js/kurser-data.js`
-- klarar flera olika JSON/JS-strukturer
-- sparar vald kurs så `kurser.html` kan öppna rätt kurs
-
-```html
-<!DOCTYPE html>
-<html lang="sv">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TFF Utbildningsportal</title>
-
-  <link rel="stylesheet" href="assets/css/styles.css" />
-  <script src="assets/js/kurser-data.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f5f7fa;
-      color: #1f2937;
-    }
-
-    header {
-      background: #0b1736;
-      color: #fff;
-      padding: 28px 20px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      font-weight: 700;
-    }
-
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 28px 20px 40px 20px;
-    }
-
-    .toprow {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .toprow h2 {
-      margin: 0;
-      font-size: 1.3rem;
-    }
-
-    .searchbox {
-      width: 100%;
-      max-width: 340px;
-    }
-
-    .searchbox input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid #d0d7de;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      background: #fff;
-    }
-
-    .status {
-      margin-bottom: 24px;
-      color: #667085;
-      font-size: 0.95rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background: #fff;
-      border: 1px solid #d9dee5;
-      border-radius: 14px;
-      padding: 18px;
-      cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(16, 24, 40, 0.08);
-    }
-
-    .card-title {
-      font-size: 1.02rem;
-      font-weight: 700;
-      line-height: 1.4;
-      margin-bottom: 10px;
-    }
-
-    .card-desc {
-      color: #667085;
-      font-size: 0.93rem;
-      line-height: 1.55;
-      min-height: 68px;
-      margin-bottom: 14px;
-    }
-
-    .card-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 6px 10px;
-      background: #eef4ff;
-      border: 1px solid #d8e7ff;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      color: #124078;
-    }
-
-    .start-btn {
-      border: none;
-      border-radius: 10px;
-      background: #005a9c;
-      color: white;
-      padding: 10px 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .start-btn:hover {
-      background: #0b74c8;
-    }
-
-    .empty,
-    .error,
-    .loading {
-      background: #fff;
-      border: 1px solid #d9dee5;
-      border-radius: 14px;
-      padding: 20px;
-      color: #667085;
-    }
-
-    .error {
-      border-color: #f0c4c4;
-      background: #fff8f8;
-      color: #8b1e1e;
-    }
-
-    pre {
-      white-space: pre-wrap;
-      word-break: break-word;
-      background: #f8fafc;
-      border: 1px solid #e5e7eb;
-      padding: 12px;
-      border-radius: 10px;
-      margin-top: 12px;
-      font-size: 0.88rem;
-      color: #334155;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <h1>TFF Utbildningsportal</h1>
-  </header>
-
-  <main class="container">
-    <div class="toprow">
-      <h2>Välj utbildning</h2>
-      <div class="searchbox">
-        <input id="searchInput" type="search" placeholder="Sök kurs..." />
-      </div>
-    </div>
-
-    <div id="status" class="status">Läser in kurser…</div>
-    <div id="content" class="loading">Läser in data…</div>
-  </main>
-
-  <script>
-    const JSON_PATH = "assets/data/kurser-data.json";
-    let ALL_COURSES = [];
-
-    function esc(value) {
-      return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
-    }
-
-    function norm(text) {
-      return String(text ?? "").trim().toLowerCase();
-    }
-
-    function slugify(text) {
-      return String(text ?? "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[–—]/g, "-")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-    }
-
-    function pickArray(data) {
-      if (Array.isArray(data)) return data;
-      if (data && Array.isArray(data.kurser)) return data.kurser;
-      if (data && Array.isArray(data.courses)) return data.courses;
-      if (data && Array.isArray(data.items)) return data.items;
-      if (data && Array.isArray(data.data)) return data.data;
-      return [];
-    }
-
-    function getGlobalCourseData() {
-      if (Array.isArray(window.kursData)) return window.kursData;
-      if (Array.isArray(window.kurserData)) return window.kurserData;
-      if (Array.isArray(window.KURS_DATA)) return window.KURS_DATA;
-      if (Array.isArray(window.kurser)) return window.kurser;
-
-      if (window.kursData && Array.isArray(window.kursData.kurser)) return window.kursData.kurser;
-      if (window.kurserData && Array.isArray(window.kurserData.kurser)) return window.kurserData.kurser;
-      if (window.KURS_DATA && Array.isArray(window.KURS_DATA.kurser)) return window.KURS_DATA.kurser;
-
-      return [];
-    }
-
-    function normalizeCourses(raw) {
-      const courses = pickArray(raw);
-
-      return courses.map((course, index) => {
-        const title =
-          course.titel ||
-          course.title ||
-          course.namn ||
-          course.name ||
-          course.kurs ||
-          `Kurs ${index + 1}`;
-
-        const description =
-          course.beskrivning ||
-          course.description ||
-          course.syfte ||
-          course.intro ||
-          "";
-
-        const rawModules =
-          course.moduler ||
-          course.modules ||
-          course.innehall ||
-          course.innehåll ||
-          [];
-
-        const modules = pickArray(rawModules).length
-          ? pickArray(rawModules)
-          : Array.isArray(rawModules) ? rawModules : [];
-
-        return {
-          id: slugify(course.id || title || `kurs-${index + 1}`),
-          title,
-          description,
-          moduleCount: modules.length || 0,
-          raw: course
-        };
+        card.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            const courseIndex = Number(card.getAttribute("data-course-index"));
+            openCourseByIndex(courseIndex);
+          }
+        });
       });
-    }
 
-    async function loadCourses() {
-      try {
-        const response = await fetch(JSON_PATH, { cache: "no-store" });
-
-        if (response.ok) {
-          const json = await response.json();
-          const normalized = normalizeCourses(json);
-          if (normalized.length) return normalized;
-        }
-      } catch (_) {}
-
-      const fallback = normalizeCourses(getGlobalCourseData());
-      if (fallback.length) return fallback;
-
-      throw new Error(
-        "Ingen läsbar kursdata hittades. Kontrollera assets/data/kurser-data.json eller assets/js/kurser-data.js."
-      );
-    }
-
-    function renderCourses(courses) {
-      const content = document.getElementById("content");
-      const status = document.getElementById("status");
-
-      if (!courses.length) {
-        status.textContent = "0 kurser hittades";
-        content.className = "empty";
-        content.innerHTML = "Ingen kursdata kunde visas.";
-        return;
-      }
-
-      status.textContent = `${courses.length} kurser hittades`;
-
-      content.className = "";
-      content.innerHTML = `
-        <div class="grid">
-          ${courses.map((course, index) => `
-            <article class="card" data-index="${index}">
-              <div class="card-title">${esc(course.title)}</div>
-              <div class="card-desc">${esc(course.description || "Ingen beskrivning tillgänglig.")}</div>
-              <div class="card-meta">
-                <span class="badge">${course.moduleCount} moduler</span>
-                <button class="start-btn" type="button">Starta kurs</button>
-              </div>
-            </article>
-          `).join("")}
-        </div>
-      `;
-
-      content.querySelectorAll(".card").forEach(card => {
-        card.addEventListener("click", () => {
-          const index = Number(card.dataset.index);
-          const selected = courses[index];
-
-          localStorage.setItem("selectedCourseIndex", String(index));
-          localStorage.setItem("selectedCourse", String(index));
-          localStorage.setItem("selectedCourseId", selected.id);
-          localStorage.setItem("selectedCourseTitle", selected.title);
-
-          window.location.href = "kurser.html";
+      contentEl.querySelectorAll(".start-btn").forEach(button => {
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          const courseIndex = Number(button.getAttribute("data-course-index"));
+          openCourseByIndex(courseIndex);
         });
       });
     }
 
     function filterAndRender() {
-      const q = norm(document.getElementById("searchInput").value);
+      const q = normalizeText(searchInput.value).toLowerCase();
+
       if (!q) {
-        renderCourses(ALL_COURSES);
+        renderCourses(allCourses);
         return;
       }
 
-      const filtered = ALL_COURSES.filter(course =>
-        norm(course.title).includes(q) ||
-        norm(course.description).includes(q)
+      const filtered = allCourses.filter(course =>
+        normalizeText(course.title).toLowerCase().includes(q) ||
+        normalizeText(course.description).toLowerCase().includes(q)
       );
 
       renderCourses(filtered);
     }
 
     async function init() {
-      const content = document.getElementById("content");
-
       try {
-        ALL_COURSES = await loadCourses();
-        renderCourses(ALL_COURSES);
-
-        document.getElementById("searchInput").addEventListener("input", filterAndRender);
+        const rawData = await loadRawData();
+        allCourses = normalizeCourses(rawData);
+        renderCourses(allCourses);
+        searchInput.addEventListener("input", filterAndRender);
       } catch (error) {
-        document.getElementById("status").textContent = "Fel vid inläsning";
-        content.className = "error";
-        content.innerHTML = `
-          <strong>Kunde inte läsa kursdata.</strong>
-          <pre>${esc(error.message)}</pre>
+        statusEl.textContent = "Fel vid inläsning";
+        contentEl.className = "";
+        contentEl.innerHTML = `
+          <div class="error">
+            <strong>Kunde inte läsa kursdata.</strong>
+            <pre>${escapeHtml(error.message)}</pre>
+          </div>
         `;
       }
     }
