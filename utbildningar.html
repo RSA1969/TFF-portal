@@ -4,465 +4,428 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TFF Utbildningsportal</title>
-
-  assets/css/styles.css
-  assets/js/kurser-data.jsscript>
-
   <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f5f7fa;
-      color: #1d2939;
+    :root{
+      --bg:#eef2f6;
+      --panel:#ffffff;
+      --text:#132238;
+      --muted:#5f6b7a;
+      --line:#cfd7e3;
+      --primary:#114a8b;
+      --primary-dark:#0c3a6c;
+      --soft:#eff5ff;
+      --soft-line:#cfe0ff;
+      --radius:14px;
+      --shadow:0 1px 2px rgba(16,24,40,.06),0 1px 3px rgba(16,24,40,.10);
     }
 
-    header {
-      background: #0b1635;
-      color: #fff;
-      padding: 28px 20px;
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      padding:0;
+      font-family:"Segoe UI", Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      line-height: 1.2;
-    }
-
-    .container {
-      max-width: 1280px;
+    .page{
+      max-width: 1600px;
       margin: 0 auto;
-      padding: 28px 20px 40px 20px;
+      padding: 24px 18px 28px;
     }
 
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:24px;
+      flex-wrap:wrap;
+      margin-bottom:18px;
     }
 
-    .topbar-left {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .left-tools{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
     }
 
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      width: fit-content;
-      text-decoration: none;
-      color: #124078;
-      font-weight: 600;
-      font-size: 0.95rem;
-      background: #eef4ff;
-      border: 1px solid #d7e7ff;
-      border-radius: 10px;
-      padding: 8px 12px;
-      transition: background 0.15s ease, border-color 0.15s ease;
+    .back-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid var(--soft-line);
+      background:var(--soft);
+      color:var(--primary);
+      text-decoration:none;
+      font-weight:600;
+      width:max-content;
     }
 
-    .back-btn:hover {
-      background: #e1edff;
-      border-color: #bfd8ff;
+    .back-btn:hover{
+      background:#e7f0ff;
     }
 
-    .topbar h2 {
-      margin: 0;
-      font-size: 1.25rem;
+    h1{
+      margin:0 0 8px 0;
+      font-size:1.95rem;
+      line-height:1.2;
+      color:#0f1f35;
     }
 
-    .search {
-      width: 100%;
-      max-width: 420px;
-      padding: 12px 14px;
-      border: 1px solid #d0d5dd;
-      border-radius: 10px;
-      background: #fff;
-      font-size: 1rem;
-      outline: none;
+    .sub{
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+      max-width:70ch;
     }
 
-    .search:focus {
-      border-color: #0b74c8;
-      box-shadow: 0 0 0 3px rgba(11, 116, 200, 0.12);
+    .search-wrap{
+      min-width:340px;
+      flex:0 0 340px;
     }
 
-    .status {
-      margin: 0 0 18px 0;
-      color: #667085;
-      font-size: 0.95rem;
+    .search{
+      width:100%;
+      height:50px;
+      padding:0 16px;
+      border-radius:12px;
+      border:1px solid #cfd7e3;
+      background:#fff;
+      color:var(--text);
+      font-size:1rem;
+      outline:none;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
+    .search:focus{
+      border-color:#9bb8e5;
+      box-shadow:0 0 0 4px rgba(17,74,139,.08);
     }
 
-    .card {
-      background: #fff;
-      border: 1px solid #d9dee5;
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      min-height: 220px;
+    h2{
+      margin:8px 0 8px 0;
+      font-size:1.55rem;
+      line-height:1.2;
+      color:#10243d;
     }
 
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(16, 24, 40, 0.10);
+    .count{
+      margin:0 0 16px 0;
+      color:var(--muted);
+      font-size:1rem;
     }
 
-    .card-number {
-      display: inline-block;
-      margin-bottom: 12px;
-      background: #eef4ff;
-      color: #124078;
-      border: 1px solid #d7e7ff;
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      width: fit-content;
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(305px, 1fr));
+      gap:16px;
     }
 
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      line-height: 1.4;
-      margin-bottom: 8px;
+    .card{
+      min-height:210px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      padding:18px 16px 16px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
 
-    .card-desc {
-      color: #667085;
-      line-height: 1.6;
-      min-height: 50px;
-      font-size: 0.95rem;
-      flex: 1;
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:30px;
+      padding:0 12px;
+      border-radius:999px;
+      background:var(--soft);
+      color:var(--primary);
+      border:1px solid var(--soft-line);
+      font-size:.82rem;
+      font-weight:700;
+      width:max-content;
+      margin-bottom:14px;
     }
 
-    .card-meta {
-      margin-top: 14px;
-      color: #475467;
-      font-size: 0.88rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+    .card-title{
+      margin:0 0 10px 0;
+      font-size:1.02rem;
+      line-height:1.45;
+      font-weight:800;
+      text-transform:none;
+      color:#0f2138;
     }
 
-    .start-btn {
-      background: #124078;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s ease;
+    .card-desc{
+      margin:0;
+      color:#586577;
+      line-height:1.65;
+      font-size:.98rem;
+      min-height:72px;
     }
 
-    .start-btn:hover {
-      background: #0f3460;
+    .card-footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-top:20px;
     }
 
-    .empty {
-      background: #fff;
-      border: 1px dashed #d0d5dd;
-      border-radius: 14px;
-      padding: 28px;
-      text-align: center;
-      color: #667085;
+    .meta{
+      color:#586577;
+      font-size:.95rem;
     }
 
-    .error {
-      background: #fff;
-      border: 1px solid #f3c7c7;
-      color: #7f1d1d;
-      border-radius: 14px;
-      padding: 18px;
-      line-height: 1.6;
+    .start-btn{
+      border:none;
+      border-radius:10px;
+      background:var(--primary);
+      color:#fff;
+      padding:11px 16px;
+      font-weight:700;
+      cursor:pointer;
+      white-space:nowrap;
     }
 
-    .loading {
-      color: #667085;
-      padding: 12px 0 8px 0;
+    .start-btn:hover{
+      background:var(--primary-dark);
     }
 
-    .error pre {
-      white-space: pre-wrap;
-      word-break: break-word;
-      margin-top: 12px;
-      background: #fff8f8;
-      border: 1px solid #f3c7c7;
-      border-radius: 10px;
-      padding: 12px;
+    .empty{
+      display:none;
+      padding:28px;
+      border:1px dashed var(--line);
+      border-radius:16px;
+      background:#fff;
+      color:var(--muted);
+      text-align:center;
     }
 
-    @media (max-width: 768px) {
-      .topbar {
-        flex-direction: column;
-        align-items: stretch;
+    @media (max-width:900px){
+      .search-wrap{
+        min-width:100%;
+        flex:1 1 100%;
       }
 
-      .search {
-        max-width: 100%;
+      .grid{
+        grid-template-columns:1fr;
       }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>TFF Utbildningsportal</h1>
-  </header>
+  <div class="page">
+    <div class="topbar">
+      <div class="left-tools">
+        <a class="back-btn" href="index.html">← Tillbaka till startsidan</a>
 
-  <main class="container">
-    <section class="topbar">
-      <div class="topbar-left">
-        <a href="index.html" class="back-btn">← Tillbaka till startsidan</a>
-        <h2>Välj utbildning</h2>
+        <div>
+          <h2>Välj utbildning</h2>
+          <p class="count" id="courseCount">16 kurser hittades</p>
+        </div>
       </div>
 
-      <input
-        id="searchInput"
-        class="search"
-        type="search"
-        placeholder="Sök kurs..."
-        aria-label="Sök kurs"
-      />
-    </section>
+      <div class="search-wrap">
+        <input
+          id="courseSearch"
+          class="search"
+          type="search"
+          placeholder="Sök kurs..."
+          aria-label="Sök kurs"
+        />
+      </div>
+    </div>
 
-    <div id="status" class="status">Läser in kurser...</div>
-    <div id="content" class="loading">Läser in data...</div>
-  </main>
+    <div id="courseGrid" class="grid"></div>
+    <div id="emptyState" class="empty">Inga kurser matchar sökningen.</div>
+  </div>
 
   <script>
-    const contentEl = document.getElementById("content");
-    const statusEl = document.getElementById("status");
-    const searchInput = document.getElementById("searchInput");
+    const COURSES = [
+      {
+        id: 1,
+        label: "Kurs 1",
+        title: "Kurs 1 – MICROSOFT TEAMS",
+        description: "Rätt användning av Teams i vardagsarbetet.",
+        modules: 5
+      },
+      {
+        id: 2,
+        label: "Kurs 2",
+        title: "Kurs 2 – TRANSKRIBERING",
+        description: "Effektiv och spårbar omvandling av tal till text.",
+        modules: 5
+      },
+      {
+        id: 3,
+        label: "Kurs 3",
+        title: "Kurs 3 – DOKUMENTATION",
+        description: "Strukturerad dokumentation enligt regelverk.",
+        modules: 5
+      },
+      {
+        id: 4,
+        label: "Kurs 4",
+        title: "Kurs 4 – AI & COPILOT",
+        description: "Grunderna i AI och Copilot i arbetet.",
+        modules: 5
+      },
+      {
+        id: 5,
+        label: "Kurs 5",
+        title: "Kurs 5 – PROMPTNING",
+        description: "Skriva effektiva prompts i Microsoft 365.",
+        modules: 5
+      },
+      {
+        id: 6,
+        label: "Kurs 6",
+        title: "Kurs 6 – SKAPA OCH SPARA DOKUMENT",
+        description: "Korrekt dokumenthantering i vardagen.",
+        modules: 5
+      },
+      {
+        id: 7,
+        label: "Kurs 7",
+        title: "Kurs 7 – TEAMS & SHAREPOINT",
+        description: "Rätt struktur, lagring och behörigheter.",
+        modules: 5
+      },
+      {
+        id: 8,
+        label: "Kurs 8",
+        title: "Kurs 8 – GDPR",
+        description: "Rätt hantering av information och personuppgifter.",
+        modules: 5
+      },
+      {
+        id: 9,
+        label: "Kurs 9",
+        title: "Kurs 9 – RÄTT VERKTYG",
+        description: "Välja rätt verktyg för rätt arbete.",
+        modules: 5
+      },
+      {
+        id: 10,
+        label: "Kurs 10",
+        title: "Kurs 10 – MÖTESKULTUR",
+        description: "Effektiva digitala möten med tydliga resultat.",
+        modules: 5
+      },
+      {
+        id: 11,
+        label: "Kurs 11",
+        title: "Kurs 11 – FRÅN CHATT TILL STRUKTUR",
+        description: "Göra kunskap beständig och återanvändbar.",
+        modules: 5
+      },
+      {
+        id: 12,
+        label: "Kurs 12",
+        title: "Kurs 12 – DIARIEFÖRING",
+        description: "Korrekt hantering av allmänna handlingar och dokument.",
+        modules: 5
+      },
+      {
+        id: 13,
+        label: "Kurs 13",
+        title: "Kurs 13 – GOVERNANCE",
+        description: "Styrning, struktur och uppföljning i M365.",
+        modules: 5
+      },
+      {
+        id: 14,
+        label: "Kurs 14",
+        title: "Kurs 14 – LIVSCYKEL",
+        description: "Informationshantering genom hela livscykeln.",
+        modules: 5
+      },
+      {
+        id: 15,
+        label: "Kurs 15",
+        title: "Kurs 15 – PROCESSARBETE",
+        description: "Processbaserat arbetssätt i digital miljö.",
+        modules: 5
+      },
+      {
+        id: 16,
+        label: "Kurs 16",
+        title: "Kurs 16 – ARBETA EFFEKTIVT MED DIN PERSONLIGA COPILOT",
+        description: "En praktisk kurs om hur du använder din personliga Copilot i vardagen för att arbeta mer strukturerat, professionellt och effektivt.",
+        modules: 5
+      }
+    ];
 
-    let allCourses = [];
+    function renderCourses(list) {
+      const grid = document.getElementById("courseGrid");
+      const count = document.getElementById("courseCount");
+      const empty = document.getElementById("emptyState");
 
-    function normalizeText(value) {
-      return String(value || "").trim();
-    }
+      grid.innerHTML = "";
+      count.textContent = `${list.length} kurser hittades`;
 
-    function slugify(text) {
-      return String(text || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[–—]/g, "-")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
-    }
-
-    function escapeHtml(str) {
-      return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    function extractArray(data) {
-      if (Array.isArray(data)) return data;
-      if (data && Array.isArray(data.kurser)) return data.kurser;
-      if (data && Array.isArray(data.courses)) return data.courses;
-      if (data && Array.isArray(data.items)) return data.items;
-      if (data && Array.isArray(data.data)) return data.data;
-      return [];
-    }
-
-    async function loadRawData() {
-      try {
-        const response = await fetch("assets/data/kurser-data.json", { cache: "no-store" });
-        if (response.ok) {
-          const json = await response.json();
-          const arr = extractArray(json);
-          if (arr.length) return arr;
-          if (Array.isArray(json)) return json;
-        }
-      } catch (e) {
-        // fortsätt till fallback
+      if (!list.length) {
+        empty.style.display = "block";
+        return;
       }
 
-      if (Array.isArray(window.kursData)) return window.kursData;
-      if (Array.isArray(window.kurserData)) return window.kurserData;
-      if (Array.isArray(window.KURS_DATA)) return window.KURS_DATA;
-      if (Array.isArray(window.kurser)) return window.kurser;
+      empty.style.display = "none";
 
-      if (window.kursData && Array.isArray(window.kursData.kurser)) return window.kursData.kurser;
-      if (window.kurserData && Array.isArray(window.kurserData.kurser)) return window.kurserData.kurser;
-      if (window.KURS_DATA && Array.isArray(window.KURS_DATA.kurser)) return window.KURS_DATA.kurser;
-      if (window.kurser && Array.isArray(window.kurser.kurser)) return window.kurser.kurser;
+      list.forEach(course => {
+        const card = document.createElement("article");
+        card.className = "card";
 
-      throw new Error("Ingen kursdata hittades i assets/data/kurser-data.json eller assets/js/kurser-data.js.");
-    }
-
-    function normalizeCourses(rawData) {
-      const arr = extractArray(rawData).length ? extractArray(rawData) : (Array.isArray(rawData) ? rawData : []);
-
-      return arr.map((course, index) => {
-        const title =
-          course.titel ||
-          course.title ||
-          course.namn ||
-          course.name ||
-          course.kurs ||
-          `Kurs ${index + 1}`;
-
-        const description =
-          course.beskrivning ||
-          course.description ||
-          course.syfte ||
-          course.intro ||
-          "";
-
-        const rawModules =
-          course.moduler ||
-          course.modules ||
-          course.innehall ||
-          course.innehåll ||
-          [];
-
-        const modules = Array.isArray(rawModules) ? rawModules : extractArray(rawModules);
-
-        return {
-          id: normalizeText(course.id) || slugify(title),
-          index,
-          title: normalizeText(title),
-          description: normalizeText(description),
-          moduleCount: Array.isArray(modules) ? modules.length : 0,
-          raw: course
-        };
-      });
-    }
-
-    function openCourseByIndex(courseIndex) {
-      const selected = allCourses.find(c => Number(c.index) === Number(courseIndex));
-      if (!selected) return;
-
-      localStorage.setItem("selectedCourseIndex", String(selected.index));
-      localStorage.setItem("selectedCourse", String(selected.index));
-      localStorage.setItem("selectedCourseId", selected.id);
-      localStorage.setItem("selectedCourseTitle", selected.title);
-      localStorage.setItem("courseIndex", String(selected.index));
-
-      window.location.href = "kurser.html";
-    }
-
-    function renderCourses(courses) {
-      if (!courses.length) {
-        contentEl.className = "";
-        contentEl.innerHTML = `
-          <div class="empty">
-            Inga kurser hittades i kursdatan.
+        card.innerHTML = `
+          <div>
+            <div class="tag">${course.label}</div>
+            <h3 class="card-title">${course.title}</h3>
+            <p class="card-desc">${course.description}</p>
+          </div>
+          <div class="card-footer">
+            <div class="meta">${course.modules} moduler</div>
+            <button class="start-btn" type="button" data-course-id="${course.id}">Starta kurs</button>
           </div>
         `;
-        statusEl.textContent = "0 kurser";
-        return;
-      }
 
-      statusEl.textContent = `${courses.length} kurser hittades`;
-      contentEl.className = "";
-
-      const html = `
-        <div class="grid">
-          ${courses.map(course => `
-            <article
-              class="card"
-              data-course-index="${course.index}"
-              role="button"
-              tabindex="0"
-              aria-label="Öppna ${escapeHtml(course.title)}"
-            >
-              <div class="card-number">Kurs ${course.index + 1}</div>
-              <div class="card-title">${escapeHtml(course.title)}</div>
-              <div class="card-desc">${escapeHtml(course.description || "Ingen beskrivning finns ännu.")}</div>
-              <div class="card-meta">
-                <span>${course.moduleCount} moduler</span>
-                <button class="start-btn" type="button" data-course-index="${course.index}">
-                  Starta kurs
-                </button>
-              </div>
-            </article>
-          `).join("")}
-        </div>
-      `;
-
-      contentEl.innerHTML = html;
-
-      contentEl.querySelectorAll(".card").forEach(card => {
-        card.addEventListener("click", (event) => {
-          if (event.target.closest(".start-btn")) return;
-          const courseIndex = Number(card.getAttribute("data-course-index"));
-          openCourseByIndex(courseIndex);
-        });
-
-        card.addEventListener("keydown", (event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            const courseIndex = Number(card.getAttribute("data-course-index"));
-            openCourseByIndex(courseIndex);
-          }
-        });
+        grid.appendChild(card);
       });
 
-      contentEl.querySelectorAll(".start-btn").forEach(button => {
-        button.addEventListener("click", (event) => {
-          event.stopPropagation();
-          const courseIndex = Number(button.getAttribute("data-course-index"));
-          openCourseByIndex(courseIndex);
+      grid.querySelectorAll(".start-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-course-id");
+          localStorage.setItem("tff_selected_course_id", `kurs-${id}`);
+          window.location.href = `kurser.html?course=kurs-${id}`;
         });
       });
     }
 
-    function filterAndRender() {
-      const q = normalizeText(searchInput.value).toLowerCase();
+    function filterCourses(value) {
+      const q = String(value || "").trim().toLowerCase();
 
       if (!q) {
-        renderCourses(allCourses);
+        renderCourses(COURSES);
         return;
       }
 
-      const filtered = allCourses.filter(course =>
-        normalizeText(course.title).toLowerCase().includes(q) ||
-        normalizeText(course.description).toLowerCase().includes(q)
-      );
+      const filtered = COURSES.filter(course => {
+        return course.title.toLowerCase().includes(q) ||
+               course.description.toLowerCase().includes(q) ||
+               course.label.toLowerCase().includes(q);
+      });
 
       renderCourses(filtered);
     }
 
-    async function init() {
-      try {
-        const rawData = await loadRawData();
-        allCourses = normalizeCourses(rawData);
-        renderCourses(allCourses);
-        searchInput.addEventListener("input", filterAndRender);
-      } catch (error) {
-        statusEl.textContent = "Fel vid inläsning";
-        contentEl.className = "";
-        contentEl.innerHTML = `
-          <div class="error">
-            <strong>Kunde inte läsa kursdata.</strong>
-            <pre>${escapeHtml(error.message)}</pre>
-          </div>
-        `;
-      }
-    }
+    document.getElementById("courseSearch").addEventListener("input", e => {
+      filterCourses(e.target.value);
+    });
 
-    init();
+    renderCourses(COURSES);
   </script>
 </body>
 </html>
