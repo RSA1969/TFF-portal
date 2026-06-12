@@ -666,8 +666,8 @@
         <input id="courseSearch" class="field" type="search" placeholder="Sök kurs eller modul..." />
         <button id="resetProgressBtn" class="btn secondary" type="button">Nollställ progression</button>
         <button id="logoutBtn" class="btn danger" type="button">Logga ut</button>
-        <a href="https://rsa1969.github.io/TFF-portal/" class="btn secondary">Till startsidan</a>
-        <a href="https://rsa1969.github.io/TFF-portal/utbildningar.html" class="btn secondary">Till Utbildningsportal</a>
+        <a href="index.html" class="btn secondary">Till startsidan</a>
+        <a href="utbildningar.html" class="btn secondary">Till Utbildningsportal</a>
       </div>
 
       <div id="courseList" class="course-list"></div>
@@ -783,6 +783,8 @@
   <script>
     const STORAGE_KEY = "tff_portal_progress_all16_v2";
     const LOGIN_STORAGE_KEY = "tff_portal_logged_in";
+    const SELECTED_COURSE_STORAGE_KEY = "tff_selected_course_id";
+
     const USERS = [
       { username: "chef", password: "TF4321" }
     ];
@@ -1183,6 +1185,17 @@
       });
     }
 
+    function getPreferredCourseId() {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = params.get("course");
+      const fromStorage = localStorage.getItem(SELECTED_COURSE_STORAGE_KEY);
+
+      if (fromUrl && state.data.some(c => c.id === fromUrl)) return fromUrl;
+      if (fromStorage && state.data.some(c => c.id === fromStorage)) return fromStorage;
+
+      return state.data.length ? state.data[0].id : null;
+    }
+
     function filterCourses(searchTerm) {
       const q = normalizeText(searchTerm);
 
@@ -1230,6 +1243,7 @@
         btn.addEventListener("click", () => {
           state.selectedCourseId = course.id;
           state.selectedModuleId = null;
+          localStorage.setItem(SELECTED_COURSE_STORAGE_KEY, course.id);
           resetQuizState();
           renderAll();
         });
@@ -1302,6 +1316,7 @@
         if (prevPassed) {
           card.addEventListener("click", () => {
             state.selectedModuleId = module.id;
+            localStorage.setItem(SELECTED_COURSE_STORAGE_KEY, course.id);
             resetQuizState();
             renderAll();
           });
@@ -1403,6 +1418,7 @@
         unlockBtn.textContent = "Öppna nästa modul";
         unlockBtn.onclick = () => {
           state.selectedModuleId = nextModule.id;
+          localStorage.setItem(SELECTED_COURSE_STORAGE_KEY, course.id);
           resetQuizState();
           renderAll();
         };
@@ -1650,6 +1666,7 @@
 
       document.getElementById("backToCourseBtn").onclick = () => {
         state.selectedModuleId = null;
+        localStorage.setItem(SELECTED_COURSE_STORAGE_KEY, course.id);
         resetQuizState();
         renderAll();
       };
@@ -1738,7 +1755,7 @@
       bindEvents();
       state.data = buildData();
       state.filteredData = state.data;
-      state.selectedCourseId = state.data[0].id;
+      state.selectedCourseId = getPreferredCourseId();
       document.getElementById("loading").style.display = "none";
       document.getElementById("app").style.display = "block";
       checkLogin();
