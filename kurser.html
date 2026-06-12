@@ -695,7 +695,7 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tff_portal_progress_all15_v7";
+    const STORAGE_KEY = "tff_portal_progress_all16_v1";
 
     const COURSE_DEFINITIONS = [
       {
@@ -861,6 +861,17 @@
           "Flöden, data och regler",
           "Risker och kontroller",
           "Förvaltning och vidareutveckling"
+        ]
+      },
+      {
+        title: "Kurs 16 – ARBETA EFFEKTIVT MED DIN PERSONLIGA COPILOT",
+        description: "En praktisk kurs om hur du använder din personliga Copilot i vardagen för att arbeta mer strukturerat, professionellt och effektivt.",
+        modules: [
+          "Förstå din Copilot",
+          "Så lär du Copilot hur du arbetar",
+          "Skriva professionella e-post med Copilot",
+          "Skapa dokument (Word, PowerPoint, Excel)",
+          "Bygga din kompletta Copilot-setup"
         ]
       }
     ];
@@ -1050,6 +1061,10 @@
       ];
     }
 
+    function moduleHasQuiz(module) {
+      return Array.isArray(module.questions) && module.questions.length > 0;
+    }
+
     function buildData() {
       return COURSE_DEFINITIONS.map((courseDef, courseIndex) => {
         const courseNumber = courseIndex + 1;
@@ -1068,10 +1083,10 @@
               id: `kurs-${courseNumber}-modul-${moduleNumber}`,
               moduleNumber,
               title: moduleTitle,
-              content: `${moduleTitle}. Här visas modulens innehåll och tillhörande quiz.`,
+              content: `${moduleTitle}. Här visas modulens innehåll och tillhörande material.`,
               videoType,
               videoUrl,
-              questions: buildQuestionSet()
+              questions: courseNumber === 16 ? [] : buildQuestionSet()
             };
           })
         };
@@ -1143,16 +1158,27 @@
 
       refreshCourseStatus(course);
 
+      const hasAnyQuiz = course.modules.some(m => moduleHasQuiz(m));
+
       courseSummary.innerHTML = `
         <p><strong>${escapeHtml(course.title)}</strong></p>
         <p>${escapeHtml(course.description)}</p>
-        <p>Kursen innehåller <strong>${course.modules.length}</strong> moduler. Minst <strong>80 % rätt</strong> krävs för att låsa upp nästa modul.</p>
+        <p>Kursen innehåller <strong>${course.modules.length}</strong> moduler.${
+          hasAnyQuiz
+            ? " Minst <strong>80 % rätt</strong> krävs för att låsa upp nästa modul i moduler som har quiz."
+            : " Denna kurs innehåller <strong>inga quiz</strong>."
+        }</p>
       `;
 
       course.modules.forEach((module, index) => {
         const prevModule = course.modules[index - 1];
-        const prevPassed = index === 0 ? true : getModuleProgress(course.id, prevModule.id).passed;
+        const prevProgress = prevModule ? getModuleProgress(course.id, prevModule.id) : null;
+        const prevPassed = index === 0
+          ? true
+          : (!moduleHasQuiz(prevModule) || prevProgress.passed || prevProgress.completed);
+
         const moduleProgress = getModuleProgress(course.id, module.id);
+        const hasQuiz = moduleHasQuiz(module);
 
         const card = document.createElement("div");
         card.className = "module-card" + (!prevPassed ? " locked" : "");
@@ -1164,11 +1190,21 @@
             <span class="badge">${module.questions.length} frågor</span>
             ${module.videoUrl ? `<span class="badge">Film</span>` : `<span class="badge">Ingen film</span>`}
             ${
-              moduleProgress.passed
-                ? `<span class="badge success">Godkänd ${moduleProgress.scorePercent}%</span>`
-                : !prevPassed
-                  ? `<span class="badge warning">Låst</span>`
-                  : `<span class="badge">Ej godkänd</span>`
+              hasQuiz
+                ? (
+                    moduleProgress.passed
+                      ? `<span class="badge success">Godkänd ${moduleProgress.scorePercent}%</span>`
+                      : !prevPassed
+                        ? `<span class="badge warning">Låst</span>`
+                        : `<span class="badge">Ej godkänd</span>`
+                  )
+                : (
+                    moduleProgress.completed
+                      ? `<span class="badge success">Genomförd</span>`
+                      : !prevPassed
+                        ? `<span class="badge warning">Låst</span>`
+                        : `<span class="badge">Ingen quiz</span>`
+                  )
             }
           </div>
         `;
@@ -1268,8 +1304,11 @@
       const currentIndex = course.modules.findIndex(m => m.id === module.id);
       const nextModule = course.modules[currentIndex + 1];
       const unlockBtn = document.getElementById("unlockNextBtn");
+      const isDone = moduleHasQuiz(module)
+        ? moduleProgress.passed
+        : (moduleProgress.completed || moduleProgress.passed);
 
-      if (nextModule && moduleProgress.passed) {
+      if (nextModule && isDone) {
         unlockBtn.disabled = false;
         unlockBtn.textContent = "Öppna nästa modul";
         unlockBtn.onclick = () => {
@@ -1468,6 +1507,14 @@
       resultBox.classList.add("hidden");
 
       if (!questions.length) {
+        const moduleProgress = getModuleProgress(course.id, module.id);
+        moduleProgress.completed = true;
+        moduleProgress.passed = true;
+        moduleProgress.scorePercent = 100;
+        moduleProgress.correctCount = 0;
+        moduleProgress.totalQuestions = 0;
+        saveProgress();
+
         noQuizBox.classList.remove("hidden");
         quizContainer.classList.add("hidden");
         document.getElementById("quizProgress").textContent = "Fråga 0 / 0";
@@ -1478,6 +1525,10 @@
         document.getElementById("checkAnswerBtn").disabled = true;
         document.getElementById("nextQuestionBtn").disabled = true;
         document.getElementById("retryQuestionBtn").disabled = true;
+
+        refreshCourseStatus(course);
+        renderCourseList();
+        setUnlockButton(course, module);
         return;
       }
 
