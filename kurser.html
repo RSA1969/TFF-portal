@@ -976,6 +976,14 @@
       5: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQB9i6z8AVGWQa86AhtGvIx5AWb6SDlaAQ2-AW3107ButB4?e=oqiHp0"
     };
 
+    const COURSE2_VIDEOS = {
+      1: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQB9RACb9sWcRqBM8T5dcDhPAUn7GAfP2R5MoDLaTzPCqKc?e=3YJj9h",
+      2: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQBGD65KJ_l1QItEbD6JBhJrAe7JhxIWRI07YC2ktBXI2vQ?e=eBxHz9",
+      3: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQD7dRuF9IeCQYxTq3A2gAjWAa6gC5yADmb35IwcVjlBrpo?e=UYCu7v",
+      4: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQAEbmzF0GPMS5JPgUNdRZOlAfVBj7S6JUVhMlESjsu5p_4?e=ohD4NN",
+      5: "https://halmstad-my.sharepoint.com/:v:/g/personal/stephen_muller_halmstad_se/IQBO4dAGdmBlTKJbPuUBIF4-AbP53XD8GKTUJItg2pzBRnQ?e=ZT6gkw"
+    };
+
     const state = {
       data: [],
       filteredData: [],
@@ -1168,8 +1176,17 @@
           description: courseDef.description,
           modules: courseDef.modules.map((moduleTitle, moduleIndex) => {
             const moduleNumber = moduleIndex + 1;
-            const videoUrl = courseNumber === 1 ? (COURSE1_VIDEOS[moduleNumber] || "") : "";
-            const videoType = courseNumber === 1 ? "sharepoint-link" : "none";
+
+            let videoUrl = "";
+            let videoType = "none";
+
+            if (courseNumber === 1) {
+              videoUrl = COURSE1_VIDEOS[moduleNumber] || "";
+              videoType = videoUrl ? "sharepoint-link" : "none";
+            } else if (courseNumber === 2) {
+              videoUrl = COURSE2_VIDEOS[moduleNumber] || "";
+              videoType = videoUrl ? "sharepoint-link" : "none";
+            }
 
             return {
               id: `kurs-${courseNumber}-modul-${moduleNumber}`,
